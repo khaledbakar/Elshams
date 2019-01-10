@@ -8,7 +8,10 @@
 
 import UIKit
 
-class SigninVC: UIViewController {
+class SigninVC: UIViewController ,  UITextFieldDelegate  {
+    @IBOutlet weak var signInView: UIView!
+    
+    @IBOutlet weak var signInScrollView: UIScrollView!
     @IBOutlet weak var userNameInputlTxt: UITextField!
     @IBOutlet weak var userNameLbl: UILabel!
     @IBOutlet weak var userNameError: UILabel!
@@ -27,9 +30,151 @@ class SigninVC: UIViewController {
         userProfileImg.clipsToBounds = true
         userNameError.isHidden = true
         passwordError.isHidden = true
-    
+        userNameInputlTxt.delegate = self
+        passwordInputTxt.delegate = self
 
+
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(RegisterationVC.viewTapped(gestureRecognizer:)))
+        view.addGestureRecognizer(tapGesture)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
     }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+    }
+    @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer)  {
+        if userNameInputlTxt.text == "" {
+            userNameLbl.isHidden = true
+        }
+        if passwordInputTxt.text == "" {
+            passwordLbl.isHidden = true
+        }
+        view.endEditing(true)
+        
+    }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+        self.signInView.endEditing(true)
+        self.signInScrollView.endEditing(true)
+        
+        if userNameInputlTxt.text == "" {
+            userNameLbl.isHidden = true
+        }
+        if passwordInputTxt.text == "" {
+            passwordLbl.isHidden = true
+        }
+        view.frame.origin.y = 0
+    }
+    
+    func hideKyebad() {
+        passwordInputTxt.resignFirstResponder()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        passwordError.isHidden = true
+        userNameError.isHidden = true
+        userNameLbl.isHidden = true
+        passwordLbl.isHidden = true
+    }
+    
+    @objc func keyboardWillChange(notification: Notification){
+        guard let keyboardRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+            return
+        }
+        if  notification.name == Notification.Name.UIKeyboardWillShow ||
+            notification.name == Notification.Name.UIKeyboardWillChangeFrame {
+            view.frame.origin.y = -keyboardRect.height
+        } else {
+            view.frame.origin.y = 0
+        }
+        print("Keyboard will show \(notification.name.rawValue)")
+        //   view.frame.origin.y = -150
+    }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        passwordError.isHidden = true
+        userNameError.isHidden = true
+        if textField.isEqual(userNameInputlTxt) {
+            userNameLbl.isHidden = false
+            if passwordInputTxt.text == "" {
+                passwordLbl.isHidden = true
+            }
+        }
+        else if textField.isEqual(passwordInputTxt) {
+            passwordLbl.isHidden = false
+            if userNameInputlTxt.text == "" {
+                userNameLbl.isHidden = true
+            }
+        }
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        // self.view.endEditing(true)
+        hideKyebad()
+        signInMethod()
+
+        return true
+    }
+    
+    
+    func signInMethod() {
+        let username = userNameInputlTxt.text?.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+        let pass = passwordInputTxt.text
+       /* if (username == UserAccount.first?.username  && pass == UserAccount.first?.password )
+        {
+            userNameFk = username
+            SigninVC.fkUserName = username!
+            userFkNa = ["userAcc" : "\(username!)"]
+            userDefaults.set(userFkNa, forKey: "fkuseradmin")
+            performSegue(withIdentifier: "signin", sender: nil)
+            userDefaults.set(false, forKey: "userLoggedin")
+            
+            userNameInputlTxt.text = ""
+            passwordInputTxt.text = ""
+        }  else */
+         if (username == "admin" && pass == "admin") {
+           // userNameFk = username
+          //  SigninVC.fkUserName = username!
+         //   userFkNa = ["userAcc" : "admin" ]
+           // userDefaults.set(userFkNa, forKey: "fkuseradmin")
+           // userDefaults.set(false, forKey: "userLoggedin")
+            performSegue(withIdentifier: "skipnav", sender: nil)
+            
+            userNameInputlTxt.text = ""
+            passwordInputTxt.text = ""
+        }
+    /*    else if (username == UserAccount.first?.username  && pass != UserAccount.first?.password )
+        {
+            lblError.isHidden = false
+            lblError.text = "Wrong password!"
+            
+        }
+        else if (username != UserAccount.first?.username  && pass == UserAccount.first?.password ) //mlosh lazma 8albn w msh mntky
+        {
+            lblError.isHidden = false
+            lblError.text = "Wrong Username!"
+            
+        } */
+        else {
+            userNameError.isHidden = false
+            passwordError.isHidden = false
+            userNameError.text = "Wrong Username !"
+            passwordError.text = "Wrong Username !"
+        }
+        hideKyebad()
+      /*  let sourceLoc = locationManger.location?.coordinate
+        SigninVC.myLocLatit = (sourceLoc?.latitude)!
+        SigninVC.myLocLang = (sourceLoc?.longitude)! */
+        
+    }
+    
     @IBAction func skipLogin(_ sender: Any) {
         performSegue(withIdentifier: "skipnav", sender: nil)
     }
@@ -38,6 +183,7 @@ class SigninVC: UIViewController {
     }
     
     @IBAction func logIn(_ sender: Any) {
+    signInMethod()
     }
     
 }

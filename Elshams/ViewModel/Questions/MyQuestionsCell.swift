@@ -25,6 +25,9 @@ class MyQuestionsCell: UITableViewCell {
     func setMyQuestionCell(QuestionList:QuestionsData)  {
         questionTxt.text = QuestionList.questions
         answerTxt.text = QuestionList.answer
+        if answerTxt.text == "No Answer"{
+            answerTxt.textColor = UIColor.red
+        }
         
     }
 

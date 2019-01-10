@@ -8,7 +8,8 @@
 
 import UIKit
 
-class RegisterationVC: UIViewController {
+class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINavigationControllerDelegate , UITextFieldDelegate  {
+    
     @IBOutlet weak var emaiInputlTxt: UITextField!
     @IBOutlet weak var emailLbl: UILabel!
     @IBOutlet weak var emailError: UILabel!
@@ -29,10 +30,13 @@ class RegisterationVC: UIViewController {
     @IBOutlet weak var othersLbl: UILabel!
     @IBOutlet weak var othersInputTxt: UITextField!
     
+    var imagePicker: UIImagePickerController!
     @IBOutlet weak var profileImage: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
         profileImage.layer.cornerRadius = profileImage.frame.width / 2
         profileImage.clipsToBounds = true
         emailError.isHidden = true
@@ -40,11 +44,163 @@ class RegisterationVC: UIViewController {
         phoneError.isHidden = true
         othersError.isHidden = true
         jobTitleError.isHidden = true
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(RegisterationVC.viewTapped(gestureRecognizer:)))
+        view.addGestureRecognizer(tapGesture)
 
     }
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+    }
     
+    
+    func hideKyebad() {
+        passwordInputTxt.resignFirstResponder()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+        view.frame.origin.y = 0
+        
+    }
+    
+    @objc func keyboardWillChange(notification: Notification){
+        guard let keyboardRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+            return
+        }
+        if  notification.name == Notification.Name.UIKeyboardWillShow ||
+            notification.name == Notification.Name.UIKeyboardWillChangeFrame {
+            view.frame.origin.y = -100
+        } else {
+            view.frame.origin.y = 0
+        }
+        print("Keyboard will show \(notification.name.rawValue)")
+        //  view.frame.origin.y = -150
+    }
+    
+    func isValidEmail(emailID:String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailTest.evaluate(with: emailID)
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField.isEqual(emaiInputlTxt){
+            emailError.isHidden = true
+            emailLbl.isHidden = false
+        }
+        else if textField.isEqual(passwordInputTxt){
+            passwordError.isHidden = true
+            passwordLbl.isHidden = false
+        }
+      /*  else if textField.isEqual(lblEmail){
+            lblEmailError.isHidden = true
+            lblShowEmail.isHidden = false
+        } */
+    }
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        //Email Validation
+      /*  if textField.isEqual(emaiInputlTxt){
+            guard let email = emaiInputlTxt.text, emaiInputlTxt.text?.characters.count != 0  else {
+                lblEmailError.isHidden = false
+                lblEmailError.text = "Please enter your email"
+                validEmail = false
+                return false
+            }
+            
+            if isValidEmail(emailID: email) == false {
+                lblEmailError.isHidden = false
+                lblEmailError.text = "Please enter valid email address"
+                validEmail = false
+                
+            } else {
+                emailTrim = email
+                validEmail = true
+                lblEmailError.isHidden = true
+            }
+        }
+            //UserName Validation
+        else if textField.isEqual(lblUserName) {
+            userTriming = lblUserName.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+            if userTriming != "" && userTriming != nil && userTriming != "null" && userTriming?.characters.count != 0  {
+                loadUserName(UserNameDouble: userTriming!)
+                if(userTriming == UserAccountDouble.first?.username){
+                    lblUserError.text = "Already have this account!"
+                    lblUserError.isHidden = false
+                    validUserName = false
+                }
+                else if (userTriming?.characters.count)! > 50 {
+                    lblUserError.text = "Long UserName!"
+                    lblUserError.isHidden = false
+                    validUserName = false
+                }
+                else {
+                    lblUserError.isHidden = true
+                    validUserName = true
+                }
+            }
+                //Password Validation
+            else {
+                lblUserError.text = "please enter your name"
+                lblShowFullName.isHidden = true
+                lblUserError.isHidden = false
+                validUserName = false
+            }
+        }
+        else if textField.isEqual(lblPassword){
+            passwordTriming = lblPassword.text
+            if passwordTriming?.trimmingCharacters(in: .whitespacesAndNewlines) != "" && passwordTriming != nil && passwordTriming != "null" && (passwordTriming?.characters.count)! != 0 && (passwordTriming?.characters.count)! >= 6 {
+                validPassword = true
+            } else if (passwordTriming?.characters.count)! < 6 {
+                lblPassError.text = "password at least 6!"
+                lblPassError.isHidden = false
+                lblShowPassword.isHidden = true
+                validPassword = false
+            }
+            else {
+                lblPassError.text = "please enter your password!"
+                lblPassError.isHidden = false
+                lblShowPassword.isHidden = true
+                validPassword = false
+                //Darsh Abo Nassar
+            }
+        }*/
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        hideKyebad()
+        self.view.endEditing(true)
+        return true
+    }
+    
+    @IBAction func ImageSelect(_ sender: Any) {
+        present(imagePicker,animated: true , completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage{
+            profileImage.image = image
+        }
+        imagePicker.dismiss(animated: true, completion: nil)
+    }
+    
+    
+    @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer)  {
+        view.endEditing(true)
+    }
 
     @IBAction func register(_ sender: Any) {
+    }
+    
+    @IBAction func btnAddImage(_ sender: Any) {
     }
     
     @IBAction func close(_ sender: Any) {
