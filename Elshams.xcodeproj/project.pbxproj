@@ -92,6 +92,8 @@
 		04BE00F921D0F02000809834 /* AllEventsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BE00F821D0F02000809834 /* AllEventsVC.swift */; };
 		04BE00FB21D0F09500809834 /* AllEventsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BE00FA21D0F09500809834 /* AllEventsCell.swift */; };
 		04BE00FD21D0F26A00809834 /* EventsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BE00FC21D0F26A00809834 /* EventsData.swift */; };
+		04E994F621EB438E006070B3 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E994F521EB438E006070B3 /* Service.swift */; };
+		04E994F821EB89D2006070B3 /* MdcText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E994F721EB89D2006070B3 /* MdcText.swift */; };
 		04FFB80121CFBBFD002009A4 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FFB80021CFBBFD002009A4 /* SettingsCell.swift */; };
 		04FFB80321CFBC70002009A4 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FFB80221CFBC70002009A4 /* SettingsVC.swift */; };
 		06844E6888BEFC487C09BF7F /* Pods_Elshams.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEBFA8C522D427FC10C666C8 /* Pods_Elshams.framework */; };
@@ -185,6 +187,8 @@
 		04BE00F821D0F02000809834 /* AllEventsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllEventsVC.swift; sourceTree = "<group>"; };
 		04BE00FA21D0F09500809834 /* AllEventsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllEventsCell.swift; sourceTree = "<group>"; };
 		04BE00FC21D0F26A00809834 /* EventsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsData.swift; sourceTree = "<group>"; };
+		04E994F521EB438E006070B3 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
+		04E994F721EB89D2006070B3 /* MdcText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MdcText.swift; sourceTree = "<group>"; };
 		04FFB80021CFBBFD002009A4 /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
 		04FFB80221CFBC70002009A4 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		1FC2F569DD00C559F052E3B2 /* Pods-Elshams.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Elshams.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Elshams/Pods-Elshams.debug.xcconfig"; sourceTree = "<group>"; };
@@ -261,6 +265,7 @@
 		0466C05321B55AF600C9C555 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				04E994F221EB431C006070B3 /* NetworkLayer */,
 				0466C05421B55B1100C9C555 /* CompanyItems.swift */,
 				0466C05B21B5717E00C9C555 /* CollectioViewItems.swift */,
 				0466C07021B590E900C9C555 /* ProgramAgendaItems.swift */,
@@ -418,6 +423,7 @@
 			isa = PBXGroup;
 			children = (
 				047970D921CFF46400C5BAFD /* UIColor.swift */,
+				04E994F721EB89D2006070B3 /* MdcText.swift */,
 			);
 			path = Extentions;
 			sourceTree = "<group>";
@@ -467,6 +473,14 @@
 				04BE00FA21D0F09500809834 /* AllEventsCell.swift */,
 			);
 			path = AllEvents;
+			sourceTree = "<group>";
+		};
+		04E994F221EB431C006070B3 /* NetworkLayer */ = {
+			isa = PBXGroup;
+			children = (
+				04E994F521EB438E006070B3 /* Service.swift */,
+			);
+			path = NetworkLayer;
 			sourceTree = "<group>";
 		};
 		04FFB7FF21CFBBD6002009A4 /* Settings */ = {
@@ -680,10 +694,12 @@
 				045EF19621B95FBD009DCA7A /* AllQuestionsVC.swift in Sources */,
 				0466C04E21B54D0200C9C555 /* FavouriteAgentsVC.swift in Sources */,
 				0466C07E21B691A500C9C555 /* NotificationCell.swift in Sources */,
+				04E994F621EB438E006070B3 /* Service.swift in Sources */,
 				0469B49821AC1674000A337B /* Elshams.xcdatamodeld in Sources */,
 				0466C06D21B58B5D00C9C555 /* SpeakersCell.swift in Sources */,
 				0466C05A21B56EC900C9C555 /* EventsCell.swift in Sources */,
 				04B872B221AD93A500C6629E /* MainTapCompanies.swift in Sources */,
+				04E994F821EB89D2006070B3 /* MdcText.swift in Sources */,
 				0416E75321B00FE1004E7368 /* MainAgentContainer.swift in Sources */,
 				0466C08521B6A90800C9C555 /* SigninVC.swift in Sources */,
 				0469B49021AC1674000A337B /* AppDelegate.swift in Sources */,

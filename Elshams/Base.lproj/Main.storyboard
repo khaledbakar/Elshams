@@ -25,9 +25,9 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="670"/>
                                         <subviews>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="USERNAME" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6OW-Jo-QP1" customClass="MDCTextField">
-                                                <rect key="frame" x="16" y="275" width="343" height="20"/>
+                                                <rect key="frame" x="16" y="275" width="343" height="31"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="20" id="L8D-Hi-QtZ">
+                                                    <constraint firstAttribute="height" constant="31" id="L8D-Hi-QtZ">
                                                         <variation key="heightClass=regular-widthClass=regular" constant="40"/>
                                                     </constraint>
                                                 </constraints>
@@ -39,9 +39,12 @@
                                                 </variation>
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="PASSWORD" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="nmA-Zq-jgY" customClass="MDCTextField">
-                                                <rect key="frame" x="16" y="332" width="343" height="20"/>
+                                                <rect key="frame" x="16" y="332" width="343" height="30"/>
+                                                <accessibility key="accessibilityConfiguration">
+                                                    <accessibilityTraits key="traits" image="YES" keyboardKey="YES"/>
+                                                </accessibility>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="20" id="ZkF-2R-q5S">
+                                                    <constraint firstAttribute="height" constant="30" id="ZkF-2R-q5S">
                                                         <variation key="heightClass=regular-widthClass=regular" constant="40"/>
                                                     </constraint>
                                                 </constraints>
@@ -201,7 +204,7 @@
                                         </subviews>
                                         <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
-                                            <constraint firstItem="Un6-Fg-FrR" firstAttribute="top" secondItem="6OW-Jo-QP1" secondAttribute="bottom" constant="30" id="2aW-9x-3gO"/>
+                                            <constraint firstItem="Un6-Fg-FrR" firstAttribute="top" secondItem="6OW-Jo-QP1" secondAttribute="bottom" constant="19" id="2aW-9x-3gO"/>
                                             <constraint firstAttribute="trailing" secondItem="Etq-Ya-che" secondAttribute="trailing" constant="52" id="4H4-b7-THM"/>
                                             <constraint firstItem="nmA-Zq-jgY" firstAttribute="top" secondItem="tmk-cm-O6H" secondAttribute="bottom" constant="-13" id="B4S-7c-mTx"/>
                                             <constraint firstItem="tmk-cm-O6H" firstAttribute="leading" secondItem="Gtw-FY-Oyx" secondAttribute="leadingMargin" constant="4" id="C7s-1h-mAS"/>
@@ -217,7 +220,7 @@
                                             <constraint firstItem="Da9-us-vQF" firstAttribute="leading" secondItem="1Me-V6-M9S" secondAttribute="trailing" constant="1" id="Pt0-Ns-M3I"/>
                                             <constraint firstItem="1Me-V6-M9S" firstAttribute="centerX" secondItem="Etq-Ya-che" secondAttribute="centerX" constant="-35" id="Q8x-Bn-RI5"/>
                                             <constraint firstItem="tmk-cm-O6H" firstAttribute="top" secondItem="Un6-Fg-FrR" secondAttribute="bottom" constant="-5" id="SEa-2u-OcB"/>
-                                            <constraint firstItem="TRE-2A-ww7" firstAttribute="top" secondItem="nmA-Zq-jgY" secondAttribute="bottom" constant="15" id="Yng-Cq-S6t">
+                                            <constraint firstItem="TRE-2A-ww7" firstAttribute="top" secondItem="nmA-Zq-jgY" secondAttribute="bottom" constant="5" id="Yng-Cq-S6t">
                                                 <variation key="heightClass=regular-widthClass=regular" constant="30"/>
                                             </constraint>
                                             <constraint firstItem="1Me-V6-M9S" firstAttribute="top" secondItem="Etq-Ya-che" secondAttribute="bottom" constant="16" id="Z9X-JJ-4yL"/>
@@ -225,7 +228,7 @@
                                             <constraint firstItem="NS2-9a-5kr" firstAttribute="top" secondItem="Gtw-FY-Oyx" secondAttribute="top" constant="56" id="jCi-CQ-WZp"/>
                                             <constraint firstAttribute="bottom" secondItem="Da9-us-vQF" secondAttribute="bottom" constant="117" id="kni-Sz-knX"/>
                                             <constraint firstItem="snx-qE-h2A" firstAttribute="leading" secondItem="Gtw-FY-Oyx" secondAttribute="leadingMargin" constant="4" id="mGH-dd-wSx"/>
-                                            <constraint firstItem="Tq7-jx-36I" firstAttribute="top" secondItem="nmA-Zq-jgY" secondAttribute="bottom" constant="10" id="mnv-T6-Y5c"/>
+                                            <constraint firstItem="Tq7-jx-36I" firstAttribute="top" secondItem="nmA-Zq-jgY" secondAttribute="bottom" id="mnv-T6-Y5c"/>
                                             <constraint firstItem="OdM-iR-V29" firstAttribute="top" secondItem="Gtw-FY-Oyx" secondAttribute="top" constant="4" id="nyL-FR-iSy"/>
                                             <constraint firstItem="6OW-Jo-QP1" firstAttribute="top" secondItem="snx-qE-h2A" secondAttribute="bottom" constant="-14" id="rsj-hj-G4y"/>
                                             <constraint firstItem="Tq7-jx-36I" firstAttribute="leading" secondItem="Gtw-FY-Oyx" secondAttribute="leading" constant="16" id="ufV-Zv-EZ6"/>
@@ -1084,7 +1087,7 @@
                                     <constraint firstAttribute="width" constant="240" id="QfZ-fn-wVd"/>
                                 </constraints>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="Tgg-wr-Sa5" customClass="SideMenuCell" customModule="Elshams" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" id="Tgg-wr-Sa5" customClass="SideMenuCell" customModule="Elshams" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="240" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Tgg-wr-Sa5" id="CTe-zz-N1x">

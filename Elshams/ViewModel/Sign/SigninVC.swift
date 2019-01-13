@@ -7,30 +7,79 @@
 //
 
 import UIKit
+import  MaterialComponents.MaterialTextFields
+//import  MaterialComponents.MDCTextInputControllerFilled
 
-class SigninVC: UIViewController ,  UITextFieldDelegate  {
+class SigninVC: UIViewController { // ,  UITextFieldDelegate
     @IBOutlet weak var signInView: UIView!
     
     @IBOutlet weak var signInScrollView: UIScrollView!
-    @IBOutlet weak var userNameInputlTxt: UITextField!
+  
+    @IBOutlet weak var userNameInputlTxt: MDCTextField!
+    var textFieldControllerFloating = MDCTextInputControllerUnderline()
+
+    
     @IBOutlet weak var userNameLbl: UILabel!
     @IBOutlet weak var userNameError: UILabel!
     
     @IBOutlet weak var userProfileImg: UIImageView!
     @IBOutlet weak var passwordLbl: UILabel!
-    @IBOutlet weak var passwordInputTxt: UITextField!
+    @IBOutlet weak var passwordInputTxt: MDCTextField!
+    //@IBOutlet weak var passwordInputTxt: UITextField!
+
     @IBOutlet weak var passwordError: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+       // userNameInputlTxt = MDCTextField()
+        userNameInputlTxt.placeholder = "Name"
+        userNameInputlTxt.isEnabled = true
+        userNameInputlTxt.isUserInteractionEnabled = true
+        userNameInputlTxt.clearButtonMode = .whileEditing
+     //   userNameInputlTxt.tintColor = UIColor.white
+      //  userNameInputlTxt.textColor = UIColor.lightGray
+   //     userNameInputlTxt.cursorColor = UIColor.darkGray
+
+      //  userNameInputlTxt.keyboardAppearance =
+        
+        textFieldControllerFloating = MDCTextInputControllerUnderline(textInput: userNameInputlTxt)
+      //  textFieldControllerFloating.helperText = "Enter a name"
+        textFieldControllerFloating.leadingUnderlineLabelTextColor = UIColor.darkGray       // The helper text
+        textFieldControllerFloating.trailingUnderlineLabelTextColor = UIColor.green
+        textFieldControllerFloating.inlinePlaceholderColor = UIColor.white
+      //  textFieldControllerFloating.textco = UIColor.white              // inline label
+// inline label
+       // textFieldControllerFloating.borderFillColor = UIColor.white
+        textFieldControllerFloating.isFloatingEnabled = true
+        
+        textFieldControllerFloating.activeColor = UIColor.lightGray               // active label & underline
+        textFieldControllerFloating.floatingPlaceholderActiveColor = UIColor.white
+        textFieldControllerFloating.normalColor = UIColor.white                         // default underline
+        textFieldControllerFloating.errorColor = UIColor.red  
+        
+      //  textFieldControllerFloating.floatingPlaceholderNormalColor = UIColor.white
+      //  textFieldControllerFloating.leadingico
+      //  userNameInputlTxt.textColor = UIColor.white
         userNameInputlTxt.textColor = UIColor.white
+       // userNameInputlTxt.tou
+        //userNameInputlTxt.keyboardAppearance =
+        MdcText.mdcTextField(textFInput: passwordInputTxt, Placeholder: "PASSWORD")
         passwordInputTxt.textColor = UIColor.white
+        
         userProfileImg.layer.cornerRadius = userProfileImg.frame.width / 2
         userProfileImg.clipsToBounds = true
         userNameError.isHidden = true
         passwordError.isHidden = true
-        userNameInputlTxt.delegate = self
+        userNameLbl.isHidden = true
+        passwordLbl.isHidden = true
+       // let textFieldFloating = MDCMultilineTextField()
+        
+       // scrollView.addSubview(textFieldFloating)
+        
+      // let textFieldControllerFloating = MDCTextInputControllerUnderline(textInput: textFieldFloating)
+      //  textFieldControllerFloating.i
+      /*  userNameInputlTxt.delegate = self
         passwordInputTxt.delegate = self
 
 
@@ -40,10 +89,10 @@ class SigninVC: UIViewController ,  UITextFieldDelegate  {
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil) */
     }
     
-    deinit {
+  /*  deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
@@ -122,6 +171,7 @@ class SigninVC: UIViewController ,  UITextFieldDelegate  {
 
         return true
     }
+    */
     
     
     func signInMethod() {
@@ -168,7 +218,7 @@ class SigninVC: UIViewController ,  UITextFieldDelegate  {
             userNameError.text = "Wrong Username !"
             passwordError.text = "Wrong Username !"
         }
-        hideKyebad()
+      //  hideKyebad()
       /*  let sourceLoc = locationManger.location?.coordinate
         SigninVC.myLocLatit = (sourceLoc?.latitude)!
         SigninVC.myLocLang = (sourceLoc?.longitude)! */
