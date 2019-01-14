@@ -11,6 +11,8 @@ import UIKit
 class MyFavouritesCell: UITableViewCell {
     @IBOutlet weak var locationIcon: UIImageView!
     @IBOutlet weak var timeIcon: UIImageView!
+    
+    @IBOutlet weak var favourIcon: UIImageView!
     @IBOutlet weak var programAgendaName: UILabel!
     @IBOutlet weak var programAgendaTime: UILabel!
     @IBOutlet weak var programAgendaLocation: UILabel!
@@ -36,7 +38,11 @@ class MyFavouritesCell: UITableViewCell {
         speakerOneImage.clipsToBounds = true
         speakerTwoImage.layer.cornerRadius = locationIcon.frame.width / 2
         speakerTwoImage.clipsToBounds = true
-        
+        if AgendaProgram.favouriteSession == true {
+            favourIcon.image = UIImage(named: "favour")
+        }else {
+            favourIcon.image = UIImage(named: "favour.unlike")
+        }
         timeIcon.image = UIImage(named: "time-fav")
         locationIcon.image = UIImage(named: "location_fav")
 

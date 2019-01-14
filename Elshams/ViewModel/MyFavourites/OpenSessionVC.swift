@@ -21,6 +21,7 @@ class OpenSessionVC: UIViewController {
     @IBOutlet weak var speakerName: UILabel!
     @IBOutlet weak var speakerJobTitle: UILabel!
     @IBOutlet weak var speakerProfile: UIImageView!
+    @IBOutlet weak var favouriteIcon: UIImageView!
     
     @IBOutlet weak var backQuestion: UIImageView!
     @IBOutlet weak var nextQuestion: UIImageView!
@@ -46,6 +47,14 @@ class OpenSessionVC: UIViewController {
             self.navigationItem.title = "My Favourite"
 
         }
+        
+        if singleItem!.favouriteSession == true {
+            favouriteIcon.image = UIImage(named: "like-session")
+        }else {
+            favouriteIcon.image = UIImage(named: "unlike-session")
+        }
+        
+        
         viewFavBack.layer.cornerRadius = viewFavBack.frame.width / 2
         viewFavBack.clipsToBounds = true
         

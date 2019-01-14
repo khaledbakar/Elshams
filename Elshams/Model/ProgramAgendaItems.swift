@@ -13,10 +13,11 @@ class ProgramAgendaItems {
     var agendaDate : String?
     var endTime : String?
     var progLocation : String?
+    var favouriteSession : Bool?
     var speakerOneImage :String?
     var speakerTwoImage :String?
 
-    init(ProgramName:String,StartTime:String,EndTime:String,ProgLocation:String,SpImageOne:String,SpImageTwo:String,AgendaDate:String) {
+    init(ProgramName:String,StartTime:String,EndTime:String,ProgLocation:String,SpImageOne:String,SpImageTwo:String,AgendaDate:String,FavouriteSession:Bool) {
         self.name = ProgramName
         self.startTime = StartTime
         self.endTime = EndTime
@@ -24,6 +25,7 @@ class ProgramAgendaItems {
         self.speakerOneImage = SpImageOne
         self.speakerTwoImage = SpImageTwo
         self.agendaDate = AgendaDate
+        self.favouriteSession = FavouriteSession
         
         
     }

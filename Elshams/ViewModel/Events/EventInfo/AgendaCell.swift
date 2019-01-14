@@ -9,6 +9,7 @@
 import UIKit
 
 class AgendaCell: UITableViewCell {
+    @IBOutlet weak var favourIcon: UIImageView!
     @IBOutlet weak var locationIcon: UIImageView!
     @IBOutlet weak var timeIcon: UIImageView!
     @IBOutlet weak var programAgendaName: UILabel!
@@ -46,6 +47,11 @@ class AgendaCell: UITableViewCell {
         programAgendaLocation.text = AgendaProgram.progLocation
         speakerOneImage.image = UIImage(named: "\((AgendaProgram.speakerOneImage)!)")
         speakerTwoImage.image = UIImage(named: "\((AgendaProgram.speakerTwoImage)!)")
+        if AgendaProgram.favouriteSession == true {
+            favourIcon.image = UIImage(named: "favour")
+        }else {
+            favourIcon.image = UIImage(named: "favour.unlike")
+        }
         switch IndexPath % 3 {
         case 0:
             cellColor.backgroundColor = UIColor.orange

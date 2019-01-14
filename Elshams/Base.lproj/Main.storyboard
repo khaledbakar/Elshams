@@ -2513,7 +2513,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="favour.unlike" translatesAutoresizingMaskIntoConstraints="NO" id="czA-63-Sc6">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="favour" translatesAutoresizingMaskIntoConstraints="NO" id="czA-63-Sc6">
                                                     <rect key="frame" x="312" y="23" width="20" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                                 </imageView>
@@ -2542,6 +2542,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="cellColor" destination="sUa-X9-yCa" id="GHv-yI-yuT"/>
+                                            <outlet property="favourIcon" destination="czA-63-Sc6" id="mD3-tb-Scx"/>
                                             <outlet property="locationIcon" destination="5mk-cT-oFG" id="PYo-vS-1Tc"/>
                                             <outlet property="programAgendaLocation" destination="sWg-PK-3rs" id="qHV-pA-DBc"/>
                                             <outlet property="programAgendaName" destination="98l-hV-fae" id="i8W-tz-CJd"/>
@@ -4134,6 +4135,7 @@
                     <connections>
                         <outlet property="backQuestion" destination="g3o-sU-FaY" id="dP7-kR-Km6"/>
                         <outlet property="eventDescribtion" destination="Z2H-LM-dNW" id="1lP-Ts-vqn"/>
+                        <outlet property="favouriteIcon" destination="w9D-51-Yoz" id="a2c-tt-Pf1"/>
                         <outlet property="nextQuestion" destination="ziH-25-K74" id="lB2-8n-qK1"/>
                         <outlet property="questionAnsContainer" destination="f7b-B5-lfE" id="EeW-wQ-wQl"/>
                         <outlet property="questionsTxt" destination="jjR-v8-PF7" id="GLB-Ac-E3M"/>
@@ -4287,6 +4289,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="cellColor" destination="GU1-ze-Vd6" id="qrW-hr-7FU"/>
+                                            <outlet property="favourIcon" destination="BxH-MZ-50i" id="8RQ-I2-fmD"/>
                                             <outlet property="locationIcon" destination="O03-PV-xPN" id="F6k-cK-naO"/>
                                             <outlet property="programAgendaLocation" destination="xFe-g2-TVu" id="3S2-Fo-nh4"/>
                                             <outlet property="programAgendaName" destination="afh-gH-x0U" id="oVq-fx-KQd"/>
@@ -5622,6 +5625,7 @@
         <image name="email" width="21.5" height="21.5"/>
         <image name="facebook_ic" width="100" height="100"/>
         <image name="fav_resic" width="75" height="75"/>
+        <image name="favour" width="16" height="14.5"/>
         <image name="favour.unlike" width="17.5" height="15.5"/>
         <image name="grid" width="17" height="16"/>
         <image name="home" width="18.5" height="20"/>
@@ -5646,7 +5650,7 @@
         <image name="website" width="21" height="19.5"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="fR8-yW-xPq"/>
+        <segue reference="23a-bl-lRt"/>
         <segue reference="yp8-y2-jte"/>
     </inferredMetricsTieBreakers>
 </document>
