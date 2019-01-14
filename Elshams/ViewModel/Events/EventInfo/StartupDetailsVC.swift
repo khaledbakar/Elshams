@@ -98,8 +98,8 @@ class StartupDetailsVC: UIViewController {
             btnCheck.setTitle("\(index)", for: .normal)
             btnCheck.isSelected = false
             btnCheck.addTarget(self, action: #selector(butClic(_:)), for: .touchUpInside)
-            btnCheck.setImage(UIImage(named: "uns"), for: UIControlState.normal)
-            btnCheck.setImage(UIImage(named: "s"), for: UIControlState.selected)
+            btnCheck.setImage(UIImage(named: "unCheck"), for: UIControlState.normal)
+            btnCheck.setImage(UIImage(named: "check-1"), for: UIControlState.selected)
             btnCheck.tag = index + 1
             
             popUpView.addSubview(lblApointmet)

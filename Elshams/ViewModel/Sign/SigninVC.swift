@@ -56,7 +56,7 @@ class SigninVC: UIViewController { // ,  UITextFieldDelegate
         textFieldControllerFloating.activeColor = UIColor.lightGray               // active label & underline
         textFieldControllerFloating.floatingPlaceholderActiveColor = UIColor.white
         textFieldControllerFloating.normalColor = UIColor.white                         // default underline
-        textFieldControllerFloating.errorColor = UIColor.red  
+        textFieldControllerFloating.errorColor = UIColor.red
         
       //  textFieldControllerFloating.floatingPlaceholderNormalColor = UIColor.white
       //  textFieldControllerFloating.leadingico
@@ -70,7 +70,7 @@ class SigninVC: UIViewController { // ,  UITextFieldDelegate
         userProfileImg.layer.cornerRadius = userProfileImg.frame.width / 2
         userProfileImg.clipsToBounds = true
         userNameError.isHidden = true
-        passwordError.isHidden = true
+        passwordError.isHidden = true 
         userNameLbl.isHidden = true
         passwordLbl.isHidden = true
        // let textFieldFloating = MDCMultilineTextField()
