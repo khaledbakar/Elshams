@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class SpeakerProfileVC: UIViewController {
     var singleItem:Speakers?
@@ -38,14 +39,42 @@ class SpeakerProfileVC: UIViewController {
         speakerPhone.text = singleItem?.phone
         speakerFacebook.text = singleItem?.facebookLink
         speakerWebsite.text = singleItem?.website
-      
+        
+       // speakerPhone.addGestureRecognizer(<#T##gestureRecognizer: UIGestureRecognizer##UIGestureRecognizer#>)
+        let tapCall = UITapGestureRecognizer(target: self, action: #selector(SpeakerProfileVC.tapCallFunc))
+        speakerPhone.isUserInteractionEnabled = true
+        speakerPhone.addGestureRecognizer(tapCall)
+        
+        let tapLink = UITapGestureRecognizer(target: self, action: #selector(SpeakerProfileVC.tapOpenLinkFunc))
+        speakerWebsite.isUserInteractionEnabled = true
+  //      speakerFacebook.isUserInteractionEnabled = true
+
+        speakerWebsite.addGestureRecognizer(tapLink)
+      //  speakerFacebook.addGestureRecognizer(tapLink)
+
         speakerProfileImg.image = UIImage(named: "\((singleItem?.speakerImage)!)")
         speakerJobTitle.text = singleItem?.jobTitle
         
         
 
     }
-    
+    @objc func tapCallFunc(sender:UIGestureRecognizer) {
+        guard let numberString = singleItem?.phone,let url = URL(string: "telprompt://\(numberString)")
+            else {
+            return
+        }
+        UIApplication.shared.open(url)
+        
+    }
   
+    @objc func tapOpenLinkFunc(sender:UIGestureRecognizer) {
+        guard let url = URL(string: (singleItem?.website)!)
+            else {
+                return
+        }
+        let safariVC = SFSafariViewController(url: url)
+        present(safariVC, animated: true, completion: nil)
+        
+    }
     
 }

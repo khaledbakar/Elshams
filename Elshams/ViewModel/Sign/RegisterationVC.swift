@@ -10,6 +10,7 @@ import UIKit
 
 class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINavigationControllerDelegate , UITextFieldDelegate  {
     
+
     @IBOutlet weak var emaiInputlTxt: UITextField!
     @IBOutlet weak var emailLbl: UILabel!
     @IBOutlet weak var emailError: UILabel!
@@ -45,6 +46,9 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
         othersError.isHidden = true
         jobTitleError.isHidden = true
         
+        imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -61,6 +65,7 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
     }
     
     
+   
     func hideKyebad() {
         passwordInputTxt.resignFirstResponder()
     }
@@ -181,13 +186,15 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
         return true
     }
     
-    @IBAction func ImageSelect(_ sender: Any) {
+   
+    @IBAction func imageSelect(_ sender: Any) {
         present(imagePicker,animated: true , completion: nil)
+        
     }
-    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage{
             profileImage.image = image
+            
         }
         imagePicker.dismiss(animated: true, completion: nil)
     }
@@ -200,8 +207,7 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
     @IBAction func register(_ sender: Any) {
     }
     
-    @IBAction func btnAddImage(_ sender: Any) {
-    }
+ 
     
     @IBAction func close(_ sender: Any) {
         dismiss(animated: true, completion: nil)

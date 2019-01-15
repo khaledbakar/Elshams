@@ -47,5 +47,9 @@
 	<true/>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Your image is safe in timeline</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Your camera image is safe in timeline</string>
 </dict>
 </plist>

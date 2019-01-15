@@ -10,7 +10,7 @@ import UIKit
 import  MaterialComponents.MaterialTextFields
 //import  MaterialComponents.MDCTextInputControllerFilled
 
-class SigninVC: UIViewController { // ,  UITextFieldDelegate
+class SigninVC: UIViewController ,  UITextFieldDelegate { 
     @IBOutlet weak var signInView: UIView!
     
     @IBOutlet weak var signInScrollView: UIScrollView!
@@ -19,11 +19,11 @@ class SigninVC: UIViewController { // ,  UITextFieldDelegate
     var textFieldControllerFloating = MDCTextInputControllerUnderline()
 
     
-    @IBOutlet weak var userNameLbl: UILabel!
+  //  @IBOutlet weak var userNameLbl: UILabel!
     @IBOutlet weak var userNameError: UILabel!
     
     @IBOutlet weak var userProfileImg: UIImageView!
-    @IBOutlet weak var passwordLbl: UILabel!
+  //  @IBOutlet weak var passwordLbl: UILabel!
     @IBOutlet weak var passwordInputTxt: MDCTextField!
     //@IBOutlet weak var passwordInputTxt: UITextField!
 
@@ -71,15 +71,15 @@ class SigninVC: UIViewController { // ,  UITextFieldDelegate
         userProfileImg.clipsToBounds = true
         userNameError.isHidden = true
         passwordError.isHidden = true 
-        userNameLbl.isHidden = true
-        passwordLbl.isHidden = true
+      //  userNameLbl.isHidden = true
+     //   passwordLbl.isHidden = true
        // let textFieldFloating = MDCMultilineTextField()
         
        // scrollView.addSubview(textFieldFloating)
         
       // let textFieldControllerFloating = MDCTextInputControllerUnderline(textInput: textFieldFloating)
       //  textFieldControllerFloating.i
-      /*  userNameInputlTxt.delegate = self
+        userNameInputlTxt.delegate = self
         passwordInputTxt.delegate = self
 
 
@@ -89,20 +89,20 @@ class SigninVC: UIViewController { // ,  UITextFieldDelegate
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil) */
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
     }
     
-  /*  deinit {
+    deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
     }
     @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer)  {
         if userNameInputlTxt.text == "" {
-            userNameLbl.isHidden = true
+           // userNameLbl.isHidden = true
         }
         if passwordInputTxt.text == "" {
-            passwordLbl.isHidden = true
+           // passwordLbl.isHidden = true
         }
         view.endEditing(true)
         
@@ -113,10 +113,10 @@ class SigninVC: UIViewController { // ,  UITextFieldDelegate
         self.signInScrollView.endEditing(true)
         
         if userNameInputlTxt.text == "" {
-            userNameLbl.isHidden = true
+           // userNameLbl.isHidden = true
         }
         if passwordInputTxt.text == "" {
-            passwordLbl.isHidden = true
+           // passwordLbl.isHidden = true
         }
         view.frame.origin.y = 0
     }
@@ -128,8 +128,8 @@ class SigninVC: UIViewController { // ,  UITextFieldDelegate
     override func viewWillAppear(_ animated: Bool) {
         passwordError.isHidden = true
         userNameError.isHidden = true
-        userNameLbl.isHidden = true
-        passwordLbl.isHidden = true
+      //  userNameLbl.isHidden = true
+     //   passwordLbl.isHidden = true
     }
     
     @objc func keyboardWillChange(notification: Notification){
@@ -150,15 +150,15 @@ class SigninVC: UIViewController { // ,  UITextFieldDelegate
         passwordError.isHidden = true
         userNameError.isHidden = true
         if textField.isEqual(userNameInputlTxt) {
-            userNameLbl.isHidden = false
+          //  userNameLbl.isHidden = false
             if passwordInputTxt.text == "" {
-                passwordLbl.isHidden = true
+              //  passwordLbl.isHidden = true
             }
         }
         else if textField.isEqual(passwordInputTxt) {
-            passwordLbl.isHidden = false
+           // passwordLbl.isHidden = false
             if userNameInputlTxt.text == "" {
-                userNameLbl.isHidden = true
+           //     userNameLbl.isHidden = true
             }
         }
         return true
@@ -171,7 +171,7 @@ class SigninVC: UIViewController { // ,  UITextFieldDelegate
 
         return true
     }
-    */
+    
     
     
     func signInMethod() {

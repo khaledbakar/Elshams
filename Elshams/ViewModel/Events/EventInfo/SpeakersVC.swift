@@ -26,8 +26,8 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
             MenuViewController.speakerEventOrMenu = false
         }
         speakerList.append(Speakers(SpeakerName: "Khaled bakar", JobTitle: "Programmer", jobDescribition: "IOSDeveloper", SpImage: "profile1", FacebookInLink: "facebook.com/khaledbakar.12", Phone: "01060136503", Mail: "kzaky@ikdynamics.com", About: "one of the most importanat people in the life he hasn't title job his name is a title", Website: "www.khaledbakar.com"))
-          speakerList.append(Speakers(SpeakerName: "Khaled bakar", JobTitle: "Programmer", jobDescribition: "IOSDeveloper", SpImage: "profile2", FacebookInLink: "facebook.com/khaledbakar.12", Phone: "01060136503", Mail: "kzaky@ikdynamics.com", About: "one of the most importanat people in the life he hasn't title job his name is a title", Website: "www.khaledbakar.com"))
-          speakerList.append(Speakers(SpeakerName: "saad hamo", JobTitle: "Programmer", jobDescribition: "IOSDeveloper", SpImage: "avatar", FacebookInLink: "facebook.com/khaledbakar.12", Phone: "01060136503", Mail: "kzaky@ikdynamics.com", About: "one of the most importanat people in the life he hasn't title job his name is a title", Website: "www.khaledbakar.com"))
+          speakerList.append(Speakers(SpeakerName: "Khaled bakar", JobTitle: "Programmer", jobDescribition: "IOSDeveloper", SpImage: "profile2", FacebookInLink: "facebook.com/khaledbakar.12", Phone: "01060136503", Mail: "kzaky@ikdynamics.com", About: "one of the most importanat people in the life he hasn't title job his name is a title", Website: "www.google.com"))
+        speakerList.append(Speakers(SpeakerName: "saad hamo", JobTitle: "Programmer", jobDescribition: "IOSDeveloper", SpImage: "avatar", FacebookInLink: "facebook.com/khaledbakar.12", Phone: "01060136503", Mail: "kzaky@ikdynamics.com", About: "one of the most importanat people in the life he hasn't title job his name is a title", Website: "https://www.facebook.com"))
         speakerCollectionView.isHidden = true
 
     }
