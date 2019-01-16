@@ -47,19 +47,32 @@ class StartupDetailsVC: UIViewController {
     var frameTxtAboutRescaduale = CGRect(x: 60.0, y: 34, width: 281, height: 55) */
 
     @IBOutlet weak var profieView: UIView!
-    
+   static var  sechadualeBTNSend : Bool?
     var appointmentSelect:String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        popUpContainerView.isHidden = true
-        rescadualeView.isHidden = true
-      //  informationTopConstraint.constant = profieView.bottomAnchor.con - 46
-       // rescadualeView.frame = frameRescadule
-       // defaultFrame()
-        
-        informationTopConstraint.constant = -46
+     
+        if singleItem?.pendingApointment == true {
+            afterRescadualeFrame()
+        }
        
+       else if singleItem?.acceptedApointment == true {
+            afterRescadualeFrame()
+            //btn.is momken a3ml hidden l btn el rescaduale bs ana msh 3aml kda w shayf eno 3adi
+            
+        } else {
+            defaultFrame()
+
+        }
+        if StartupDetailsVC.sechadualeBTNSend == true {
+             popUpContainerView.isHidden = false
+        } else
+        {
+             popUpContainerView.isHidden = true
+        }
+        StartupDetailsVC.sechadualeBTNSend = false
+
         startUpLogo.layer.cornerRadius = startUpLogo.frame.width / 2
         startUpLogo.clipsToBounds = true
         startUpLogo.image = UIImage(named: (singleItem?.startupImage)!)
@@ -72,16 +85,7 @@ class StartupDetailsVC: UIViewController {
         startUpLinkedIn.text = singleItem?.startUpLinkedIn
         aboutStartUp.text = singleItem?.startUpAbout
         btnRightBar()
-        // self.navigationController.col
-        // startUpLinkedIn.constraints.
-
-      /*  rescadualeView.translatesAutoresizingMaskIntoConstraints = false
-        let horizontalConstraint = NSLayoutConstraint(item: rescadualeView, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1, constant: 0)
-        let verticalConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view, attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1, constant: 0)
-        let widthConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 100)
-        let heightConstraint = NSLayoutConstraint(item: newView, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: 100)
-        view.addConstraints([horizontalConstraint, verticalConstraint, widthConstraint, heightConstraint]) */
-        
+       
         //PopUp View
         for index in 0..<appointmentBooking.count {
             frame.origin.x = 55
@@ -108,21 +112,21 @@ class StartupDetailsVC: UIViewController {
     }
     
     func defaultFrame() {
-      /*  informationView.frame = frameInformationDefalut
-        aboutView.frame = frameAbout
-        aboutStartUp.frame = frameTxtAbout */
+      
+        rescadualeView.isHidden = true
+        informationTopConstraint.constant = -46
+        
     }
     
     func afterRescadualeFrame() {
-     /*   informationView.frame = frameInformationRescaduale
-        aboutView.frame = frameAboutRescaduale
-        aboutStartUp.frame = frameTxtAboutRescaduale */
+     
+        popUpContainerView.isHidden = true
+        rescadualeView.isHidden = false
+        informationTopConstraint.constant = 65
     }
     @IBAction func cancelAppointment(_ sender: Any) {
-       // defaultFrame()
-       // afterRescadualeFrame()
-        rescadualeView.isHidden = true
-        informationTopConstraint.constant = -46
+        defaultFrame()
+       
         btnRightBar()
     }
     
@@ -164,10 +168,8 @@ class StartupDetailsVC: UIViewController {
     
     
     @IBAction func savePopUpData(_ sender: Any) {
-        popUpContainerView.isHidden = true
-        rescadualeView.isHidden = false
-        informationTopConstraint.constant = 65
-      //  afterRescadualeFrame()
+        
+       afterRescadualeFrame()
         let btnSearch = UIButton(type: UIButton.ButtonType.system)
         let customBarItem = UIBarButtonItem(customView: btnSearch)
         self.navigationItem.rightBarButtonItem = customBarItem

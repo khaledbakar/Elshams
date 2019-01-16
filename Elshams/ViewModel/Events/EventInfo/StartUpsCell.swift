@@ -31,5 +31,5 @@ class StartUpsCell: UITableViewCell {
         startupImage.image = UIImage(named: "\((startupsList.startupImage)!)")
         print( "\((startupsList.startupImage)!)")
     }
-
+    
 }

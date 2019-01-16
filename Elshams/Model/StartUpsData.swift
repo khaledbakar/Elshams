@@ -8,9 +8,12 @@ class StartUpsData {
     var startUpPhone :String?
     var startUpMail :String?
     var startUpAbout :String?
+    var acceptedApointment : Bool?
+    var pendingApointment : Bool?
 
 
-init(StartupName:String,StartupAddress:String,StartupImage:String,StartUpLinkedIn:String,StartUpPhone:String,StartUpMail:String,StartUpAbout:String) {
+
+init(StartupName:String,StartupAddress:String,StartupImage:String,StartUpLinkedIn:String,StartUpPhone:String,StartUpMail:String,StartUpAbout:String,AcceptedApointment:Bool,PendingApointment:Bool) {
         self.name = StartupName
         self.startupAddress = StartupAddress
         self.startupImage = StartupImage
@@ -18,6 +21,9 @@ init(StartupName:String,StartupAddress:String,StartupImage:String,StartUpLinkedI
         self.startUpPhone = StartUpPhone
         self.startUpMail = StartUpMail
         self.startUpAbout = StartUpAbout
+        self.acceptedApointment = AcceptedApointment
+        self.pendingApointment = PendingApointment
+    
 
     }
 }

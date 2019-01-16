@@ -11,7 +11,8 @@ import XLPagerTabStrip
 
 class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource {
     var startUpList = Array<StartUpsData>()
-
+    @IBOutlet weak var startupTableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if MenuViewController.startupEventOrMenu == true {
@@ -20,9 +21,11 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
             self.navigationItem.title = "Startups"
             MenuViewController.startupEventOrMenu = false
             }
-        startUpList.append(StartUpsData(StartupName: "El7ag Bakar", StartupAddress: "1 Tahrir Square,cairo,Egypt", StartupImage: "profile1", StartUpLinkedIn: "khaled.zaki12", StartUpPhone: "01060136503", StartUpMail: "kzakyy@ikdynamics.com", StartUpAbout: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, "))
+        startUpList.append(StartUpsData(StartupName: "El7ag Bakar", StartupAddress: "1 Tahrir Square,cairo,Egypt", StartupImage: "profile1", StartUpLinkedIn: "khaled.zaki12", StartUpPhone: "01060136503", StartUpMail: "kzakyy@ikdynamics.com", StartUpAbout: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, ", AcceptedApointment: true, PendingApointment: false))
         
-       startUpList.append(StartUpsData(StartupName: "MedGram", StartupAddress: "18A Obour Bulidings,cairo,Egypt", StartupImage: "avatar", StartUpLinkedIn: "khaled.zaki12", StartUpPhone: "01060136503", StartUpMail: "kzakyy@ikdynamics.com", StartUpAbout: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, "))
+        startUpList.append(StartUpsData(StartupName: "MedGram", StartupAddress: "18A Obour Bulidings,cairo,Egypt", StartupImage: "avatar", StartUpLinkedIn: "khaled.zaki12", StartUpPhone: "01060136503", StartUpMail: "kzakyy@ikdynamics.com", StartUpAbout: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, ", AcceptedApointment: false, PendingApointment: true))
+        
+        startUpList.append(StartUpsData(StartupName: "MedGram", StartupAddress: "18A Obour Bulidings,cairo,Egypt", StartupImage: "avatar", StartUpLinkedIn: "khaled.zaki12", StartUpPhone: "01060136503", StartUpMail: "kzakyy@ikdynamics.com", StartUpAbout: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, ", AcceptedApointment: false, PendingApointment: false))
 
     }
     
@@ -43,6 +46,13 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
         print("gooooood")
     }
     
+    @IBAction func btnSechaduale(_ sender: Any) {
+        let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to:self.startupTableView)
+        let indexPath = self.startupTableView.indexPathForRow(at: buttonPosition)
+        StartupDetailsVC.sechadualeBTNSend = true
+        performSegue(withIdentifier: "startupdetail", sender: startUpList[indexPath!.row])
+       
+    }
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }

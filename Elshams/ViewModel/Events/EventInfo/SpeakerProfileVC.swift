@@ -8,6 +8,7 @@
 
 import UIKit
 import SafariServices
+import MessageUI
 
 class SpeakerProfileVC: UIViewController {
     var singleItem:Speakers?
@@ -47,17 +48,72 @@ class SpeakerProfileVC: UIViewController {
         
         let tapLink = UITapGestureRecognizer(target: self, action: #selector(SpeakerProfileVC.tapOpenLinkFunc))
         speakerWebsite.isUserInteractionEnabled = true
-  //      speakerFacebook.isUserInteractionEnabled = true
-
         speakerWebsite.addGestureRecognizer(tapLink)
+         //      speakerFacebook.isUserInteractionEnabled = true
       //  speakerFacebook.addGestureRecognizer(tapLink)
-
+        
+        let tapMail = UITapGestureRecognizer(target: self, action: #selector(SpeakerProfileVC.tapMailFunc))
+        speakerEmail.isUserInteractionEnabled = true
+        speakerEmail.addGestureRecognizer(tapMail)
+        
+        let tapFacebook = UITapGestureRecognizer(target: self, action: #selector(SpeakerProfileVC.tapFacebookLinkFunc))
+        speakerFacebook.isUserInteractionEnabled = true
+        speakerFacebook.addGestureRecognizer(tapFacebook)
+        
         speakerProfileImg.image = UIImage(named: "\((singleItem?.speakerImage)!)")
         speakerJobTitle.text = singleItem?.jobTitle
         
         
 
     }
+    
+    @objc func tapFacebookLinkFunc(sender:UIGestureRecognizer) {
+        if let openURL = URL(string: "twitter://"){
+        let canOpen = UIApplication.shared.canOpenURL(openURL)
+            print("\(canOpen)")
+        }
+       // let apppName = "Facebook"
+         //let apppName = "fb://feed"
+        let apppName = "fb"
+
+        let appScheme = "\(apppName)://profile"
+       // let appScheme = "\(apppName)://trikaofficial" can't open specficprofile
+       /* let appName = "whatsapp"
+         The link you need to open is “https://api.whatsapp.com/send?phone=YourPhoneNumberHere”
+        ://khaledbakarphotography
+         https://stackoverflow.com/questions/5707722/what-are-all-the-custom-url-schemes-supported-by-the-facebook-iphone-app
+         profile?id=%@10000008024279
+         profiles/[facebookID]
+         let appScheme = "\(apppName)://send?phone=+201146803004"
+
+        let appScheme = "\(appName)://send?phone=\+233204344223" */
+
+        let appSchemeUrl = URL(string: appScheme)
+       
+        if UIApplication.shared.canOpenURL(appSchemeUrl! as URL) {
+            UIApplication.shared.open(appSchemeUrl!, options: [:], completionHandler: nil)
+        }
+        else {
+            let alert = UIAlertController(title: "\(apppName) Error...", message: "the app named \(apppName) not found,please install it fia app store.", preferredStyle: .alert )
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    @objc func tapMailFunc(sender:UIGestureRecognizer) {
+        guard MFMailComposeViewController.canSendMail()
+            else {
+                return
+        }
+        let compser = MFMailComposeViewController()
+        compser.mailComposeDelegate = self
+        compser.setToRecipients([(singleItem?.mail)!])
+        compser.setSubject("Event User Want to connect")
+        compser.setMessageBody("i love your session ana want to connect with you in other deal", isHTML: false)
+        present(compser, animated: true, completion: nil)
+        
+    }
+    
     @objc func tapCallFunc(sender:UIGestureRecognizer) {
         guard let numberString = singleItem?.phone,let url = URL(string: "telprompt://\(numberString)")
             else {
@@ -77,4 +133,26 @@ class SpeakerProfileVC: UIViewController {
         
     }
     
+}
+
+extension SpeakerProfileVC : MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        if let _ = error {
+            //show error alert
+            controller.dismiss(animated: true, completion: nil)
+        }
+        switch  result {
+        case .cancelled:
+            print("cancelled")
+        case .failed:
+            print("failed")
+        case .saved:
+                print("saved")
+        case .sent:
+            print("sent")
+       
+    }
+        controller.dismiss(animated: true, completion: nil)
+
+    }
 }
