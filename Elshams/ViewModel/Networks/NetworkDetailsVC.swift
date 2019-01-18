@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import SafariServices
+import MessageUI
 
 class NetworkDetailsVC: UIViewController {
     
@@ -40,26 +42,93 @@ class NetworkDetailsVC: UIViewController {
         profileImg.image = UIImage(named: "\((singleItem?.networkImage)!)")
         viewAbout.frame = frameAbout
         
-       // self.navigationController?.navigationBar.tintColor = UIColor.black
-       // self.navigationController?.navigationBar.barStyle = .black
-      /*  let navStyles = UINavigationBar.appearance()
-        // This will set the color of the text for the back buttons.
-        navStyles.tintColor = .black
-        // This will set the background color for navBar
-        navStyles.barTintColor = .black */
-        //self.navigationItem.setHidesBackButton(true, animated: true)
-        //self.navigationItem.backBarButtonItem.
+        let tapCall = UITapGestureRecognizer(target: self, action: #selector(NetworkDetailsVC.tapCallFunc))
+        profilePhone.isUserInteractionEnabled = true
+        profilePhone.addGestureRecognizer(tapCall)
+    
+        let tapMail = UITapGestureRecognizer(target: self, action: #selector(NetworkDetailsVC.tapMailFunc))
+        profileEMail.isUserInteractionEnabled = true
+        profileEMail.addGestureRecognizer(tapMail)
+        
+        let tapLinkedIn = UITapGestureRecognizer(target: self, action: #selector(NetworkDetailsVC.tapLinkedinFunc))
+        profileLinkedIn.isUserInteractionEnabled = true
+        profileLinkedIn.addGestureRecognizer(tapLinkedIn)
+      
     }
     
-    /*
-    @IBAction func ba(_ sender: Any) {
-       // removeFromParentViewController()
-        dismiss(animated: true, completion: nil)
+    @objc func tapLinkedinFunc(sender:UIGestureRecognizer) {
+        if let openURL = URL(string: "twitter://"){
+            let canOpen = UIApplication.shared.canOpenURL(openURL)
+        }
+        let apppName = "linkedin"
+        let appScheme = "\(apppName)://"
+        let appSchemeUrl = URL(string: appScheme)
+        
+        if UIApplication.shared.canOpenURL(appSchemeUrl! as URL) {
+            UIApplication.shared.open(appSchemeUrl!, options: [:], completionHandler: nil)
+        }
+        else {
+            let alert = UIAlertController(title: "\(apppName) Error...", message: "the app named \(apppName) not found,please install it fia app store.", preferredStyle: .alert )
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
     }
+    
+    @objc func tapMailFunc(sender:UIGestureRecognizer) {
+        guard MFMailComposeViewController.canSendMail()
+            else {
+                return
+        }
+        let compser = MFMailComposeViewController()
+        compser.mailComposeDelegate = self
+        compser.setToRecipients([(singleItem?.mail)!])
+        compser.setSubject("Event User Want to connect")
+        compser.setMessageBody("i love your session ana want to connect with you in other deal", isHTML: false)
+        present(compser, animated: true, completion: nil)
+        
+    }
+    
+    @objc func tapCallFunc(sender:UIGestureRecognizer) {
+        PhoneCall.makeCall(PhoneNumber: (singleItem?.phone)!)
+    
+    }
+ 
+    /*
+    @objc func tapOpenLinkFunc(sender:UIGestureRecognizer) {
+        guard let url = URL(string: (singleItem?.website)!)
+            else {
+                return
+        }
+        let safariVC = SFSafariViewController(url: url)
+        present(safariVC, animated: true, completion: nil)
+        
+    }
+    
     */
-  /*  func k() {
-        //self.navigationItem.backBarButtonItem.
-        removeFromParentViewController()
-    } */
+    
+    
+  
 
+}
+
+extension NetworkDetailsVC : MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        if let _ = error {
+            //show error alert
+            controller.dismiss(animated: true, completion: nil)
+        }
+        switch  result {
+        case .cancelled:
+            print("cancelled")
+        case .failed:
+            print("failed")
+        case .saved:
+            print("saved")
+        case .sent:
+            print("sent")
+            
+        }
+        controller.dismiss(animated: true, completion: nil)
+        
+    }
 }

@@ -12,7 +12,7 @@ import XLPagerTabStrip
 class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate {
     @IBOutlet weak var tableViewAgenda: UITableView!
     
-    var agendaList = Array<ProgramAgendaItems>()
+  static  var agendaList = Array<ProgramAgendaItems>()
     var agendaDate = Array<String>()
     var agendaAllDate = Array<String>()
 
@@ -26,19 +26,15 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
         MenuViewController.agendaEventOrMenu = false
     }
    
-    agendaList.append(ProgramAgendaItems(ProgramName: "Regestration and Networking", StartTime: "8AM", EndTime: "10AM", ProgLocation: "hall", SpImageOne: "avatar", SpImageTwo: "avatar",AgendaDate:"Monday,March 8", FavouriteSession: true))
-    agendaList.append(ProgramAgendaItems(ProgramName: "Regestration and Networking", StartTime: "11AM", EndTime: "11.30AM", ProgLocation: "cinema", SpImageOne: "avatar", SpImageTwo: "avatar",AgendaDate:"Monday,March 8", FavouriteSession: false))
-    agendaList.append(ProgramAgendaItems(ProgramName: "New Reg", StartTime: "11AM", EndTime: "11.30AM", ProgLocation: "cinema", SpImageOne: "avatar", SpImageTwo: "avatar",AgendaDate:"Monday,March 9", FavouriteSession: true))
-
     var secCount = 0
-    for index in 0..<agendaList.count {
-      agendaDate.append("\((agendaList[index].agendaDate)!)")
-        if (agendaAllDate.contains((agendaList[index].agendaDate)!)) {
+    for index in 0..<AgendaVC.agendaList.count {
+        agendaDate.append("\((AgendaVC.agendaList[index].agendaDate)!)")
+        if (agendaAllDate.contains((AgendaVC.agendaList[index].agendaDate)!)) {
             
             secCount = secCount + 1
             continue
         } else {
-            agendaAllDate.append((agendaList[index].agendaDate)!)
+            agendaAllDate.append((AgendaVC.agendaList[index].agendaDate)!)
             secCount = 1
         }
     }
@@ -109,7 +105,7 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
  
         for i in 0..<agendaAllDate.count {
             if indexPath.section == i {
-                let filt = agendaList.filter { ($0.agendaDate?.contains(agendaAllDate[i]))! }
+                let filt = AgendaVC.agendaList.filter { ($0.agendaDate?.contains(agendaAllDate[i]))! }
                 cell.setAgendaCell(AgendaProgram: filt[indexPath.row], IndexPath: indexPath.row)
                 break
             }
@@ -122,7 +118,7 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         OpenSessionVC.AgednaOrFavourite = true
-        performSegue(withIdentifier: "opensession", sender: agendaList[indexPath.row])
+        performSegue(withIdentifier: "opensession", sender: AgendaVC.agendaList[indexPath.row])
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

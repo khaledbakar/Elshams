@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0410D75521F0BBED005A304E /* PhoneCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0410D75421F0BBED005A304E /* PhoneCall.swift */; };
+		0410D75721F0BD79005A304E /* OpenSafariLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0410D75621F0BD79005A304E /* OpenSafariLink.swift */; };
 		0416E74F21ADABBC004E7368 /* TabTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0416E74E21ADABBC004E7368 /* TabTestViewController.swift */; };
 		0416E75321B00FE1004E7368 /* MainAgentContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0416E75221B00FE1004E7368 /* MainAgentContainer.swift */; };
 		0429799F21DB8DBC0041039E /* ViewConTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0429799E21DB8DBC0041039E /* ViewConTableViewCell.swift */; };
@@ -101,6 +103,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0410D75421F0BBED005A304E /* PhoneCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneCall.swift; sourceTree = "<group>"; };
+		0410D75621F0BD79005A304E /* OpenSafariLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSafariLink.swift; sourceTree = "<group>"; };
 		0416E74E21ADABBC004E7368 /* TabTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTestViewController.swift; sourceTree = "<group>"; };
 		0416E75221B00FE1004E7368 /* MainAgentContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAgentContainer.swift; sourceTree = "<group>"; };
 		0429799E21DB8DBC0041039E /* ViewConTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewConTableViewCell.swift; sourceTree = "<group>"; };
@@ -210,6 +214,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0410D75321F0BBAC005A304E /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				0410D75421F0BBED005A304E /* PhoneCall.swift */,
+				0410D75621F0BD79005A304E /* OpenSafariLink.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		0416E75021AE99F9004E7368 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -405,6 +418,7 @@
 		0469B48E21AC1674000A337B /* Elshams */ = {
 			isa = PBXGroup;
 			children = (
+				0410D75321F0BBAC005A304E /* Services */,
 				047970D821CFF3F200C5BAFD /* Extentions */,
 				0466C05321B55AF600C9C555 /* Model */,
 				0416E75021AE99F9004E7368 /* View */,
@@ -675,6 +689,7 @@
 				045EF19121B93C24009DCA7A /* AcceptedCell.swift in Sources */,
 				0466C03A21B0268800C9C555 /* BaseCompMenuCell.swift in Sources */,
 				0439DAC721C111510041CDCB /* AllNewsCell.swift in Sources */,
+				0410D75521F0BBED005A304E /* PhoneCall.swift in Sources */,
 				0466C07A21B6906B00C9C555 /* NotificationsVC.swift in Sources */,
 				04BE00FD21D0F26A00809834 /* EventsData.swift in Sources */,
 				0466C08921B6AC1300C9C555 /* RegisterationVC.swift in Sources */,
@@ -714,6 +729,7 @@
 				0466C08221B6990500C9C555 /* Settings.swift in Sources */,
 				0466C03C21B026CB00C9C555 /* MenuCompCell.swift in Sources */,
 				0466C06721B57B2700C9C555 /* SponsersVC.swift in Sources */,
+				0410D75721F0BD79005A304E /* OpenSafariLink.swift in Sources */,
 				0466C09D21B7E20C00C9C555 /* AgendaMainVC.swift in Sources */,
 				0466C09721B6E16200C9C555 /* SideMenuDetailCell.swift in Sources */,
 				0466C06121B57AA000C9C555 /* AboutEvent.swift in Sources */,

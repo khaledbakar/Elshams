@@ -126,6 +126,10 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
     
     @IBAction func moreSpeaker(_ sender: Any) {
         MenuViewController.speakerEventOrMenu = true
+        Service.getService(url: "http://66.226.74.85:4002/api/", callback: { (response) in
+            print("this is json")
+            print(response)
+        })
 
         performSegue(withIdentifier: "speakerpage", sender: nil)
     }

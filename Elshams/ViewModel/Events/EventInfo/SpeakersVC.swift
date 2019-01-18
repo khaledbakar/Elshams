@@ -16,7 +16,7 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
     @IBOutlet weak var speakerTableView: UITableView!
     @IBOutlet weak var speakerCollectionView: UICollectionView!
     
-    var speakerList = Array<Speakers>()
+    static var speakerList = Array<Speakers>()
     override func viewDidLoad() {
         super.viewDidLoad()
         if MenuViewController.speakerEventOrMenu == true {
@@ -25,9 +25,7 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
             self.navigationItem.title = "Speakers"
             MenuViewController.speakerEventOrMenu = false
         }
-        speakerList.append(Speakers(SpeakerName: "Khaled bakar", JobTitle: "Programmer", jobDescribition: "IOSDeveloper", SpImage: "profile1", FacebookInLink: "facebook.com/khaledbakar.12", Phone: "01060136503", Mail: "kzaky@ikdynamics.com", About: "one of the most importanat people in the life he hasn't title job his name is a title", Website: "www.khaledbakar.com"))
-          speakerList.append(Speakers(SpeakerName: "Khaled bakar", JobTitle: "Programmer", jobDescribition: "IOSDeveloper", SpImage: "profile2", FacebookInLink: "facebook.com/khaledbakar.12", Phone: "01060136503", Mail: "kzaky@ikdynamics.com", About: "one of the most importanat people in the life he hasn't title job his name is a title", Website: "www.google.com"))
-        speakerList.append(Speakers(SpeakerName: "saad hamo", JobTitle: "Programmer", jobDescribition: "IOSDeveloper", SpImage: "avatar", FacebookInLink: "facebook.com/khaledbakar.12", Phone: "01060136503", Mail: "kzaky@ikdynamics.com", About: "one of the most importanat people in the life he hasn't title job his name is a title", Website: "https://www.facebook.com"))
+         
         speakerCollectionView.isHidden = true
 
     }
@@ -52,13 +50,13 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
         return 1
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return speakerList.count
+        return SpeakersVC.speakerList.count
     }
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "speakercolview", for: indexPath) as! SpeakerCollectionViewCell
-        cell.setSpeakerColCell(speakerList: speakerList[indexPath.row])
+        cell.setSpeakerColCell(speakerList: SpeakersVC.speakerList[indexPath.row])
         return cell
     }
     
@@ -67,17 +65,17 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return speakerList.count
+        return SpeakersVC.speakerList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "speakercell") as! SpeakersCell
-        cell.setSpeakerCell(speakerList: speakerList[indexPath.row])
+        cell.setSpeakerCell(speakerList: SpeakersVC.speakerList[indexPath.row])
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "speakersprofile", sender: speakerList[indexPath.row])
+        performSegue(withIdentifier: "speakersprofile", sender: SpeakersVC.speakerList[indexPath.row])
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

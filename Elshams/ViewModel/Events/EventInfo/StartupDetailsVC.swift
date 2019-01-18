@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import SafariServices
+import MessageUI
 
 class StartupDetailsVC: UIViewController {
     var singleItem : StartUpsData?
@@ -32,19 +34,6 @@ class StartupDetailsVC: UIViewController {
     @IBOutlet weak var informationTopConstraint: NSLayoutConstraint!
     var frame = CGRect(x: 0, y: 0, width: 0, height: 0)
     var frameBtn = CGRect(x: 0, y: 0, width: 0, height: 0)
-    
-  /*  var frameRescadule = CGRect(x: 8.0, y: 215.0, width: 358.0, height: 91.0)
-    
-    var frameInformationDefalut = CGRect(x: 8.0, y: 215.0, width: 359.0, height: 164.0)
-    var frameInformationRescaduale = CGRect(x: 8.0, y: 318.0, width: 359.0, height: 164.0)
-  //  var frameInformationRescaduale = CGRect(x: 8.0, y: 207.0, width: 359.0, height: 164.0)
-    
-    var frameAbout = CGRect(x: 8.0, y: 391, width: 358.0, height: 200.0)
-    var frameAboutRescaduale = CGRect(x: 8.0, y: 494, width: 359.0, height: 100.0)
-  //  var frameAboutRescaduale = CGRect(x: 8.0, y: 383, width: 359.0, height: 100.0)
-
-    var frameTxtAbout = CGRect(x: 60.0, y: 34, width: 281, height: 120)
-    var frameTxtAboutRescaduale = CGRect(x: 60.0, y: 34, width: 281, height: 55) */
 
     @IBOutlet weak var profieView: UIView!
    static var  sechadualeBTNSend : Bool?
@@ -76,9 +65,6 @@ class StartupDetailsVC: UIViewController {
         startUpLogo.layer.cornerRadius = startUpLogo.frame.width / 2
         startUpLogo.clipsToBounds = true
         startUpLogo.image = UIImage(named: (singleItem?.startupImage)!)
-      
-      
-       
         startUpName.text = singleItem?.name
         startUpMail.text = singleItem?.startUpMail
         startUpPhone.text = singleItem?.startUpPhone
@@ -109,7 +95,72 @@ class StartupDetailsVC: UIViewController {
             popUpView.addSubview(lblApointmet)
             popUpView.addSubview(btnCheck)
         }
+        let tapCall = UITapGestureRecognizer(target: self, action: #selector(StartupDetailsVC.tapCallFunc))
+        startUpPhone.isUserInteractionEnabled = true
+        startUpPhone.addGestureRecognizer(tapCall)
+        
+        
+     /*   let tapLink = UITapGestureRecognizer(target: self, action: #selector(StartupDetailsVC.tapOpenLinkFunc))
+        startUpLinkedIn.isUserInteractionEnabled = true
+        speakerWebsite.addGestureRecognizer(tapLink) */
+      
+        
+        let tapMail = UITapGestureRecognizer(target: self, action: #selector(StartupDetailsVC.tapMailFunc))
+        startUpMail.isUserInteractionEnabled = true
+        startUpMail.addGestureRecognizer(tapMail)
+        
+        let tapLinkedIn = UITapGestureRecognizer(target: self, action: #selector(StartupDetailsVC.tapLinkedInFunc))
+        startUpLinkedIn.isUserInteractionEnabled = true
+        startUpLinkedIn.addGestureRecognizer(tapLinkedIn)
     }
+    
+    @objc func tapLinkedInFunc(sender:UIGestureRecognizer) {
+        if let openURL = URL(string: "twitter://"){
+            let canOpen = UIApplication.shared.canOpenURL(openURL)
+            print("\(canOpen)")
+        }
+        let apppName = "linkedin"
+        let appScheme = "\(apppName)://"
+        let appSchemeUrl = URL(string: appScheme)
+        
+        if UIApplication.shared.canOpenURL(appSchemeUrl! as URL) {
+            UIApplication.shared.open(appSchemeUrl!, options: [:], completionHandler: nil)
+        }
+        else {
+            let alert = UIAlertController(title: "\(apppName) Error...", message: "the app named \(apppName) not found,please install it fia app store.", preferredStyle: .alert )
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    @objc func tapMailFunc(sender:UIGestureRecognizer) {
+        guard MFMailComposeViewController.canSendMail()
+            else {
+                return
+        }
+        let compser = MFMailComposeViewController()
+        compser.mailComposeDelegate = self
+        compser.setToRecipients([(singleItem?.startUpMail)!])
+        compser.setSubject("Event User Want to connect")
+        compser.setMessageBody("i love your session ana want to connect with you in other deal", isHTML: false)
+        present(compser, animated: true, completion: nil)
+        
+    }
+    
+    @objc func tapCallFunc(sender:UIGestureRecognizer) {
+        PhoneCall.makeCall(PhoneNumber: (singleItem?.startUpPhone)!)
+    }
+    
+   /* @objc func tapOpenLinkFunc(sender:UIGestureRecognizer) {
+        guard let url = URL(string: (singleItem?.website)!)
+            else {
+                return
+        }
+        let safariVC = SFSafariViewController(url: url)
+        present(safariVC, animated: true, completion: nil)
+        
+    } */
+    
     
     func defaultFrame() {
       
@@ -181,6 +232,26 @@ class StartupDetailsVC: UIViewController {
         popUpContainerView.isHidden = true
 
     }
-    
+}
 
+extension StartupDetailsVC : MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        if let _ = error {
+            //show error alert
+            controller.dismiss(animated: true, completion: nil)
+        }
+        switch  result {
+        case .cancelled:
+            print("cancelled")
+        case .failed:
+            print("failed")
+        case .saved:
+            print("saved")
+        case .sent:
+            print("sent")
+            
+        }
+        controller.dismiss(animated: true, completion: nil)
+        
+    }
 }

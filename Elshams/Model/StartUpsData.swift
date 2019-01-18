@@ -10,10 +10,10 @@ class StartUpsData {
     var startUpAbout :String?
     var acceptedApointment : Bool?
     var pendingApointment : Bool?
-
-
-
-init(StartupName:String,StartupAddress:String,StartupImage:String,StartUpLinkedIn:String,StartUpPhone:String,StartUpMail:String,StartUpAbout:String,AcceptedApointment:Bool,PendingApointment:Bool) {
+    var acceptedApointmentStr : String?
+    var pendingApointmentStr : String?
+    var id_startUp : Int?
+    init(StartupName:String,StartupAddress:String,StartupImage:String,StartUpLinkedIn:String,StartUpPhone:String,StartUpMail:String,StartUpAbout:String,AcceptedApointment:Bool,PendingApointment:Bool,AcceptedApointmentStr:String,PendingApointmentStr:String,Id_StartUp:Int) {
         self.name = StartupName
         self.startupAddress = StartupAddress
         self.startupImage = StartupImage
@@ -23,7 +23,9 @@ init(StartupName:String,StartupAddress:String,StartupImage:String,StartUpLinkedI
         self.startUpAbout = StartUpAbout
         self.acceptedApointment = AcceptedApointment
         self.pendingApointment = PendingApointment
-    
+        self.acceptedApointmentStr = AcceptedApointmentStr
+        self.pendingApointmentStr = PendingApointmentStr
+        self.id_startUp = Id_StartUp
 
     }
 }

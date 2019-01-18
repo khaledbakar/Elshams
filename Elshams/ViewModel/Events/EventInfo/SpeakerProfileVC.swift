@@ -29,6 +29,8 @@ class SpeakerProfileVC: UIViewController {
     @IBOutlet weak var activeNow: UILabel!
     @IBOutlet weak var speakerJobTitle: UILabel!
     @IBOutlet weak var speakerProfileImg: UIImageView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         speakerProfileImg.layer.cornerRadius = speakerProfileImg.frame.width / 2
@@ -40,6 +42,15 @@ class SpeakerProfileVC: UIViewController {
         speakerPhone.text = singleItem?.phone
         speakerFacebook.text = singleItem?.facebookLink
         speakerWebsite.text = singleItem?.website
+        if singleItem?.activeOrNot == true {
+            connectColor.backgroundColor  = UIColor.green
+            activeNow.text = "Now"
+        }
+        else {
+            connectColor.backgroundColor = UIColor.red
+            activeNow.text = "Offline"
+
+        }
         
        // speakerPhone.addGestureRecognizer(<#T##gestureRecognizer: UIGestureRecognizer##UIGestureRecognizer#>)
         let tapCall = UITapGestureRecognizer(target: self, action: #selector(SpeakerProfileVC.tapCallFunc))
@@ -115,12 +126,12 @@ class SpeakerProfileVC: UIViewController {
     }
     
     @objc func tapCallFunc(sender:UIGestureRecognizer) {
-        guard let numberString = singleItem?.phone,let url = URL(string: "telprompt://\(numberString)")
+        PhoneCall.makeCall(PhoneNumber: (singleItem?.phone)!)
+       /* guard let numberString = singleItem?.phone,let url = URL(string: "telprompt://\(numberString)")
             else {
             return
         }
-        UIApplication.shared.open(url)
-        
+        UIApplication.shared.open(url) */
     }
   
     @objc func tapOpenLinkFunc(sender:UIGestureRecognizer) {

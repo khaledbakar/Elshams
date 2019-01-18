@@ -9,9 +9,10 @@
 import UIKit
 
 class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewDataSource {
-    var agendaFavList = Array<ProgramAgendaItems>()
+ //   var agendaFavList = Array<ProgramAgendaItems>()
     var agendaDate = Array<String>()
     var agendaAllDate = Array<String>()
+    var filterFavour = AgendaVC.agendaList.filter { (($0.favouriteSessionStr?.contains("true"))!)}
 
     @IBOutlet weak var tableViewFavAgenda: UITableView!
     override func viewDidLoad() {
@@ -19,20 +20,20 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
         addSlideMenuButton()
       //  btnRightBar()
         self.navigationItem.title = "My Favourites"
-        agendaFavList.append(ProgramAgendaItems(ProgramName: "Regestration and Networking", StartTime: "8AM", EndTime: "10AM", ProgLocation: "hall", SpImageOne: "avatar", SpImageTwo: "avatar",AgendaDate:"Monday,March 7", FavouriteSession: true))
+     /*   agendaFavList.append(ProgramAgendaItems(ProgramName: "Regestration and Networking", StartTime: "8AM", EndTime: "10AM", ProgLocation: "hall", SpImageOne: "avatar", SpImageTwo: "avatar",AgendaDate:"Monday,March 7", FavouriteSession: true))
         agendaFavList.append(ProgramAgendaItems(ProgramName: "Regestration and Networking", StartTime: "11AM", EndTime: "11.30AM", ProgLocation: "cinema", SpImageOne: "avatar", SpImageTwo: "avatar", AgendaDate: "Tuesday,March 8", FavouriteSession: true))
         
-        agendaFavList.append(ProgramAgendaItems(ProgramName: "New Reg", StartTime: "11AM", EndTime: "11.30AM", ProgLocation: "cinema", SpImageOne: "avatar", SpImageTwo: "avatar",AgendaDate:"Monday,March 9", FavouriteSession: true))
+        agendaFavList.append(ProgramAgendaItems(ProgramName: "New Reg", StartTime: "11AM", EndTime: "11.30AM", ProgLocation: "cinema", SpImageOne: "avatar", SpImageTwo: "avatar",AgendaDate:"Monday,March 9", FavouriteSession: true)) */
         
         var secCount = 0
-        for index in 0..<agendaFavList.count {
-            agendaDate.append("\((agendaFavList[index].agendaDate)!)")
-            if (agendaAllDate.contains((agendaFavList[index].agendaDate)!)) {
+        for index in 0..<filterFavour.count {
+            agendaDate.append("\((filterFavour[index].agendaDate)!)")
+            if (agendaAllDate.contains((filterFavour[index].agendaDate)!)) {
                 
                 secCount = secCount + 1
                 continue
             } else {
-                agendaAllDate.append((agendaFavList[index].agendaDate)!)
+                agendaAllDate.append((filterFavour[index].agendaDate)!)
                 secCount = 1
             }
         }
@@ -102,7 +103,7 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
 
         for i in 0..<agendaAllDate.count {
             if indexPath.section == i {
-                let filt = agendaFavList.filter { ($0.agendaDate?.contains(agendaAllDate[i]))! }
+                let filt = filterFavour.filter { ($0.agendaDate?.contains(agendaAllDate[i]))! }
                 cell.setAgendaCell(AgendaProgram: filt[indexPath.row], IndexPath: indexPath.row)
                 break
             }
@@ -115,7 +116,8 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         OpenSessionVC.AgednaOrFavourite = false
-        performSegue(withIdentifier: "openfavsession", sender: agendaFavList[indexPath.row])
+        // el mafrood ab3t filt
+        performSegue(withIdentifier: "openfavsession", sender: filterFavour[indexPath.row])
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

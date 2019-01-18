@@ -4002,7 +4002,7 @@
                                                 </constraints>
                                             </imageView>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="back" translatesAutoresizingMaskIntoConstraints="NO" id="ziH-25-K74">
-                                                <rect key="frame" x="138" y="455.5" width="16" height="16"/>
+                                                <rect key="frame" x="147" y="455.5" width="16" height="16"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="16" id="5L4-Vs-9Db"/>
                                                     <constraint firstAttribute="height" constant="16" id="sCP-Vj-1yX"/>
@@ -4015,13 +4015,24 @@
                                                         <rect key="frame" x="20" y="20" width="30" height="30"/>
                                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </imageView>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YUI-tP-dMa">
+                                                        <rect key="frame" x="20" y="20" width="30" height="30"/>
+                                                        <connections>
+                                                            <action selector="btnFavouriteSession:" destination="RVH-Tt-yM8" eventType="touchUpInside" id="tcX-5y-nfZ"/>
+                                                        </connections>
+                                                    </button>
                                                 </subviews>
                                                 <color key="backgroundColor" red="0.76072472333908081" green="0.76097744703292847" blue="0.75252479314804077" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="70" id="4gg-iH-d7a"/>
+                                                    <constraint firstItem="YUI-tP-dMa" firstAttribute="width" secondItem="w9D-51-Yoz" secondAttribute="width" id="7fR-fS-dqf"/>
+                                                    <constraint firstItem="YUI-tP-dMa" firstAttribute="top" secondItem="w9D-51-Yoz" secondAttribute="top" id="BFV-ud-lZw"/>
                                                     <constraint firstItem="w9D-51-Yoz" firstAttribute="top" secondItem="jGh-un-wr8" secondAttribute="top" constant="20" id="EJN-aU-3Q1"/>
+                                                    <constraint firstItem="YUI-tP-dMa" firstAttribute="height" secondItem="w9D-51-Yoz" secondAttribute="height" id="O3g-L7-5jT"/>
+                                                    <constraint firstItem="YUI-tP-dMa" firstAttribute="trailing" secondItem="w9D-51-Yoz" secondAttribute="trailing" id="Va0-Zw-XpG"/>
                                                     <constraint firstAttribute="trailing" secondItem="w9D-51-Yoz" secondAttribute="trailing" constant="20" id="Yxh-SV-MXN"/>
                                                     <constraint firstAttribute="bottom" secondItem="w9D-51-Yoz" secondAttribute="bottom" constant="20" id="hhC-Mk-Qps"/>
+                                                    <constraint firstItem="YUI-tP-dMa" firstAttribute="leading" secondItem="w9D-51-Yoz" secondAttribute="leading" id="rH4-ET-4Im"/>
                                                     <constraint firstItem="w9D-51-Yoz" firstAttribute="leading" secondItem="jGh-un-wr8" secondAttribute="leading" constant="20" id="siv-BK-WY0"/>
                                                     <constraint firstAttribute="width" constant="70" id="zna-Hd-fb7"/>
                                                 </constraints>
@@ -4035,7 +4046,7 @@
                                                 </constraints>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F40-fY-g4Q">
-                                                <rect key="frame" x="138" y="456" width="16" height="16"/>
+                                                <rect key="frame" x="148" y="456" width="16" height="16"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <connections>
                                                     <action selector="nextQuestionBtn:" destination="RVH-Tt-yM8" eventType="touchUpInside" id="162-rh-4we"/>
@@ -4057,7 +4068,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleAspectFit" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0AW-0a-Mng">
-                                                <rect key="frame" x="114" y="447" width="30" height="34"/>
+                                                <rect key="frame" x="121" y="455" width="16" height="16"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <connections>
                                                     <action selector="backQuestionBtn:" destination="RVH-Tt-yM8" eventType="touchUpInside" id="PFa-a3-e9j"/>
@@ -4098,7 +4109,7 @@
                                             <constraint firstItem="0B1-q1-F7r" firstAttribute="top" secondItem="rLX-p7-rxR" secondAttribute="bottom" constant="14" id="sqs-Z4-zcc"/>
                                             <constraint firstItem="SM5-yd-dkt" firstAttribute="leading" secondItem="25c-OL-K8c" secondAttribute="leading" constant="28" id="svK-Hj-zai"/>
                                             <constraint firstAttribute="trailing" secondItem="jGh-un-wr8" secondAttribute="trailing" constant="22" id="tjj-ig-3ed"/>
-                                            <constraint firstItem="ziH-25-K74" firstAttribute="leading" secondItem="g3o-sU-FaY" secondAttribute="trailing" constant="1" id="vnU-Rh-OsB"/>
+                                            <constraint firstItem="ziH-25-K74" firstAttribute="leading" secondItem="g3o-sU-FaY" secondAttribute="trailing" constant="10" id="vnU-Rh-OsB"/>
                                             <constraint firstItem="LI7-0w-cy7" firstAttribute="centerX" secondItem="25c-OL-K8c" secondAttribute="centerX" id="wJZ-oL-RVY"/>
                                             <constraint firstAttribute="height" constant="740" id="wdU-XJ-KCY"/>
                                             <constraint firstItem="XIO-0X-ccx" firstAttribute="leading" secondItem="rLX-p7-rxR" secondAttribute="trailing" constant="12" id="wwE-hg-2Sg"/>
@@ -5014,7 +5025,7 @@
                                                         <color key="titleColor" red="0.92156862750000001" green="0.92549019610000005" blue="0.94901960780000005" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="btnCancelAppointment:" destination="iAG-oc-Ura" eventType="touchUpInside" id="nop-Rz-oca"/>
+                                                        <action selector="btnCancelAppointment:" destination="IUr-Ps-vVZ" eventType="touchUpInside" id="StM-Gb-xZv"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -5056,6 +5067,7 @@
                         <viewLayoutGuide key="safeArea" id="M79-1z-xGb"/>
                     </view>
                     <connections>
+                        <outlet property="acceptedTableView" destination="FZB-oS-Jr6" id="bqh-vP-8Wf"/>
                         <segue destination="ghk-GE-GAb" kind="show" identifier="acceptedstartup" id="kIZ-Rh-Hi3"/>
                     </connections>
                 </viewController>
@@ -5083,7 +5095,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rest" translatesAutoresizingMaskIntoConstraints="NO" id="EV5-lj-3Ug">
-                                                    <rect key="frame" x="18" y="15.5" width="49" height="48.5"/>
+                                                    <rect key="frame" x="18" y="15.5" width="49" height="49"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="48.5" id="709-sB-92Q"/>
                                                         <constraint firstAttribute="width" constant="49" id="cUk-KZ-kSS"/>
@@ -5121,7 +5133,7 @@
                                                         <color key="titleColor" red="0.92156862750000001" green="0.92549019610000005" blue="0.94901960780000005" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="btnRescudule:" destination="L4j-Aa-Atb" eventType="touchUpInside" id="Nrf-8p-RBD"/>
+                                                        <action selector="btnRescudule:" destination="XSb-CV-V8V" eventType="touchUpInside" id="HXD-TQ-kQb"/>
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o23-40-CVx">
@@ -5136,7 +5148,7 @@
                                                         <color key="titleColor" red="0.92156862750000001" green="0.92549019610000005" blue="0.94901960780000005" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="btnCancel:" destination="L4j-Aa-Atb" eventType="touchUpInside" id="RJm-AZ-Uqq"/>
+                                                        <action selector="btnCancel:" destination="XSb-CV-V8V" eventType="touchUpInside" id="5aD-f5-wdN"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -5179,6 +5191,7 @@
                         <viewLayoutGuide key="safeArea" id="Ykg-TE-5k4"/>
                     </view>
                     <connections>
+                        <outlet property="pendingTableView" destination="scw-LY-sKd" id="zjt-VO-RBT"/>
                         <segue destination="ghk-GE-GAb" kind="show" identifier="pendingstartup" id="FqZ-fl-RpC"/>
                     </connections>
                 </viewController>
@@ -5652,7 +5665,7 @@
         <image name="website" width="21" height="19.5"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="xsD-td-520"/>
+        <segue reference="FqZ-fl-RpC"/>
         <segue reference="23a-bl-lRt"/>
         <segue reference="yp8-y2-jte"/>
     </inferredMetricsTieBreakers>

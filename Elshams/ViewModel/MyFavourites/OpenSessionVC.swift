@@ -53,8 +53,25 @@ class OpenSessionVC: UIViewController {
         }else {
             favouriteIcon.image = UIImage(named: "unlike-session")
         }
+        sessionTitle.text = singleItem?.name
+        sessionDate.text = singleItem?.agendaDate
+        sessionTime.text = singleItem?.startTime
+        sessionLocation.text = singleItem?.progLocation
+        sessionDescribtion.text = singleItem?.describtion
+   //     let speakerSingleFilter = SpeakersVC.speakerList[(singleItem?.speaker_FK_Id)!]
+        let filterspeaker = SpeakersVC.speakerList.filter { (($0.speaker_id_str!.contains((singleItem?.speaker_FK_Id_Str)!)))}
+        let filtFirst = filterspeaker.first
+
+      /*  let speakerSingle = SpeakersVC.speakerList[(singleItem?.speaker_FK_Id)!]
+        speakerName.text = speakerSingle.name
+        speakerProfile.image = UIImage(named: speakerSingle.speakerImage!)
+        speakerJobTitle.text = speakerSingle.jobTitle */
+        speakerName.text = filtFirst?.name
+        speakerProfile.image = UIImage(named: (filtFirst?.speakerImage)!)
+        speakerJobTitle.text = filtFirst?.jobTitle
         
-        
+        speakerProfile.layer.cornerRadius = speakerProfile.frame.width / 2
+        speakerProfile.clipsToBounds = true
         viewFavBack.layer.cornerRadius = viewFavBack.frame.width / 2
         viewFavBack.clipsToBounds = true
         
@@ -164,5 +181,20 @@ class OpenSessionVC: UIViewController {
     @IBAction func vote(_ sender: Any) {
     }
     
+    @IBAction func btnFavouriteSession(_ sender: Any) {
+        if singleItem?.favouriteSession == true {
+            singleItem?.favouriteSession = false
+            singleItem?.favouriteSessionStr = "false"
+            favouriteIcon.image = UIImage(named: "unlike-session")
 
+        }else {
+            favouriteIcon.image = UIImage(named: "like-session")
+            singleItem?.favouriteSession = true
+            singleItem?.favouriteSessionStr = "true"
+
+           // AgendaVC.agendaList[singleItem.id]
+
+        }
+    }
+    
 }
