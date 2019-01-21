@@ -9,6 +9,8 @@
 import UIKit
 import SafariServices
 import MessageUI
+import AlamofireImage
+import Alamofire
 
 class NetworkDetailsVC: UIViewController {
     
@@ -31,15 +33,15 @@ class NetworkDetailsVC: UIViewController {
         super.viewDidLoad()
         profileName.text = (singleItem?.name)!
         profileJobTitle.text = (singleItem?.jobTitle)!
-        profileAbout.text = (singleItem?.about)!
+    /*    profileAbout.text = (singleItem?.about)!
         profileEMail.text = (singleItem?.mail)!
         profilePhone.text = (singleItem?.phone)!
         profileLinkedIn.text = (singleItem?.linkedInLink)!
-        
-        print((singleItem?.jobTitle)!)
+        */
+        imgUrl(imgUrl: (singleItem?.imageUrl)!)
         profileImg.layer.cornerRadius = profileImg.frame.width / 2
         profileImg.clipsToBounds = true
-        profileImg.image = UIImage(named: "\((singleItem?.networkImage)!)")
+     //   profileImg.image = UIImage(named: "\((singleItem?.networkImage)!)")
         viewAbout.frame = frameAbout
         
         let tapCall = UITapGestureRecognizer(target: self, action: #selector(NetworkDetailsVC.tapCallFunc))
@@ -55,7 +57,18 @@ class NetworkDetailsVC: UIViewController {
         profileLinkedIn.addGestureRecognizer(tapLinkedIn)
       
     }
-    
+    func imgUrl(imgUrl:String)  {
+        if let imagUrlAl = imgUrl as? String {
+            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
+                print(response)
+                if let image = response.result.value {
+                    DispatchQueue.main.async{
+                        self.profileImg.image = image
+                    }
+                }
+            })
+        }
+    }
     @objc func tapLinkedinFunc(sender:UIGestureRecognizer) {
         if let openURL = URL(string: "twitter://"){
             let canOpen = UIApplication.shared.canOpenURL(openURL)
@@ -81,7 +94,7 @@ class NetworkDetailsVC: UIViewController {
         }
         let compser = MFMailComposeViewController()
         compser.mailComposeDelegate = self
-        compser.setToRecipients([(singleItem?.mail)!])
+      //  compser.setToRecipients([(singleItem?.mail)!])
         compser.setSubject("Event User Want to connect")
         compser.setMessageBody("i love your session ana want to connect with you in other deal", isHTML: false)
         present(compser, animated: true, completion: nil)
@@ -89,9 +102,10 @@ class NetworkDetailsVC: UIViewController {
     }
     
     @objc func tapCallFunc(sender:UIGestureRecognizer) {
-        PhoneCall.makeCall(PhoneNumber: (singleItem?.phone)!)
+       // PhoneCall.makeCall(PhoneNumber: (singleItem?.phone)!)
     
     }
+    
  
     /*
     @objc func tapOpenLinkFunc(sender:UIGestureRecognizer) {

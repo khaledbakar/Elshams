@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AlamofireImage
+import Alamofire
 
 class NetworksCell: UITableViewCell {
 
@@ -26,14 +28,27 @@ class NetworksCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
+    func imgUrl(imgUrl:String)  {
+        if let imagUrlAl = imgUrl as? String {
+            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
+                print(response)
+                if let image = response.result.value {
+                    DispatchQueue.main.async{
+                        self.networkImage.image = image
+                    }
+                }
+            })
+        }
+    }
     func setNetworkCell(networkList:Networks) {
         networkName.text = networkList.name
         networkJobTitle.text = networkList.jobTitle
-        networkJobDescribtion.text = networkList.jobDescribition
+        networkJobDescribtion.text = networkList.companyName
+    //    networkJobDescribtion.text = networkList.jobDescribition
+       imgUrl(imgUrl: networkList.imageUrl!)
         networkImage.layer.cornerRadius = networkImage.frame.width / 2
         networkImage.clipsToBounds = true
-        networkImage.image = UIImage(named: "\((networkList.networkImage)!)")
+     //   networkImage.image = UIImage(named: "\((networkList.networkImage)!)")
      // add constraint progmmaticaly 
         //   networkImage.add
         

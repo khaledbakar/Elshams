@@ -8,18 +8,86 @@
 
 import UIKit
 import XLPagerTabStrip
+import Alamofire
+import AlamofireImage
+import SwiftyJSON
 
 class NetworksVC: BaseViewController , UITableViewDataSource , UITableViewDelegate {
-    var networkList = Array<Networks>()
-
+    var  networkList = Array<Networks>()
+    @IBOutlet weak var tableVIewNetwork: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addSlideMenuButton()
   // self.UINavigationBar.color
         self.navigationItem.title = "Networks"
+        Service.getService(url: "http://66.226.74.85:4002/api/Event/getNetwork") {
+            (response) in
+            print(response)
+            let result = JSON(response)
 
-        networkList.append(Networks(NetworkName: "Khaled Bakar", JobTitle: "Programmer", jobDescribition: "IOSDeveloper", SpImage: "profile2", LinkedInLink: "Khaled.bakar12", Phone: "01060136503", Mail: "khaledbakar7@gmai.com", About: "one of the most importanat people in the life he hasn't title job his name is a title"))
+            var iDNotNull = true
+            var index = 0
+            while iDNotNull {
+                let network_ID = result[index]["ID"].string
+                let network_Name = result[index]["name"].string
+                let network_JobTitle = result[index]["jobTitle"].string
+                let network_CompanyName = result[index]["companyName"].string
+                let network_ImageUrl = result[index]["imageUrl"].string
+                let network_RequestSenderID = result[index]["requestSenderID"].string
+                let network_RequestStatus = result[index]["requestStatus"].string
+                if network_Name == nil || network_Name?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || network_Name == "null" {
+                    iDNotNull = false
+                    break
+                }
+                self.networkList.append(Networks(NetworkName: network_Name ?? "noname", JobTitle: network_JobTitle ?? "null", ImageUrl: network_ImageUrl ?? "null", CompanyName: network_CompanyName ?? "null", NetworkID: network_ID ?? "null", RequestStatus: network_RequestStatus ?? "null", RequestSenderID: network_RequestSenderID ?? "null"))
+                index = index + 1
+                self.tableVIewNetwork.reloadData()
+            }
+          //  print((self.networkList[2].name)!)
+        }
+        
+       // loadData()
+      // print((networkList[0].name)!)
 
+
+      /*  networkList.append(Networks(NetworkName: "Khaled Bakar", JobTitle: "Programmer", jobDescribition: "IOSDeveloper", SpImage: "profile2", LinkedInLink: "Khaled.bakar12", Phone: "01060136503", Mail: "khaledbakar7@gmai.com", About: "one of the most importanat people in the life he hasn't title job his name is a title"))
+        */
+
+    }
+    
+    func loadData() {
+        DispatchQueue.main.async {
+            Alamofire.request("http://66.226.74.85:4002/api/Event/getNetwork").responseJSON(completionHandler:
+                { (response) in
+                    //  print("this is json")
+                    // print(response)
+                    switch response.result{
+                    case.success(let value) :
+                        let result = JSON(value)
+                        // print(result[0])
+                        var iDNotNull = true
+                        var index = 0
+                        while iDNotNull {
+                            let network_ID = result[index]["ID"].string
+                            let network_Name = result[index]["name"].string
+                            let network_JobTitle = result[index]["jobTitle"].string
+                            let network_CompanyName = result[index]["companyName"].string
+                            let network_ImageUrl = result[index]["imageUrl"].string
+                            let network_RequestSenderID = result[index]["requestSenderID"].string
+                            let network_RequestStatus = result[index]["requestStatus"].string
+                            if network_Name == nil || network_Name?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || network_Name == "null" {
+                                iDNotNull = false
+                                break
+                            }
+                            self.networkList.append(Networks(NetworkName: network_Name ?? "noname", JobTitle: network_JobTitle ?? "null", ImageUrl: network_ImageUrl ?? "null", CompanyName: network_CompanyName ?? "null", NetworkID: network_ID ?? "null", RequestStatus: network_RequestStatus ?? "null", RequestSenderID: network_RequestSenderID ?? "null"))
+                            index = index + 1
+                        }
+                    case.failure(let error):
+                        print(error.localizedDescription)
+                    }
+            })
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
