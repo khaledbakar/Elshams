@@ -7,12 +7,15 @@
 //
 
 import UIKit
+import AlamofireImage
+import Alamofire
+import SwiftyJSON
 
 class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewDataSource {
  //   var agendaFavList = Array<ProgramAgendaItems>()
     var agendaDate = Array<String>()
     var agendaAllDate = Array<String>()
-    var filterFavour = AgendaVC.agendaList.filter { (($0.favouriteSessionStr?.contains("true"))!)}
+  //  var filterFavour = AgendaVC.agendaList.filter { (($0.favouriteSessionStr?.contains("true"))!)}
 
     @IBOutlet weak var tableViewFavAgenda: UITableView!
     override func viewDidLoad() {
@@ -20,23 +23,10 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
         addSlideMenuButton()
       //  btnRightBar()
         self.navigationItem.title = "My Favourites"
-     /*   agendaFavList.append(ProgramAgendaItems(ProgramName: "Regestration and Networking", StartTime: "8AM", EndTime: "10AM", ProgLocation: "hall", SpImageOne: "avatar", SpImageTwo: "avatar",AgendaDate:"Monday,March 7", FavouriteSession: true))
-        agendaFavList.append(ProgramAgendaItems(ProgramName: "Regestration and Networking", StartTime: "11AM", EndTime: "11.30AM", ProgLocation: "cinema", SpImageOne: "avatar", SpImageTwo: "avatar", AgendaDate: "Tuesday,March 8", FavouriteSession: true))
-        
-        agendaFavList.append(ProgramAgendaItems(ProgramName: "New Reg", StartTime: "11AM", EndTime: "11.30AM", ProgLocation: "cinema", SpImageOne: "avatar", SpImageTwo: "avatar",AgendaDate:"Monday,March 9", FavouriteSession: true)) */
-        
+    
+        loadFavourSessionsData()
         var secCount = 0
-        for index in 0..<filterFavour.count {
-            agendaDate.append("\((filterFavour[index].agendaDate)!)")
-            if (agendaAllDate.contains((filterFavour[index].agendaDate)!)) {
-                
-                secCount = secCount + 1
-                continue
-            } else {
-                agendaAllDate.append((filterFavour[index].agendaDate)!)
-                secCount = 1
-            }
-        }
+      
         
         for indFilter in 0..<agendaAllDate.count {
             let filter = agendaDate.filter { $0.contains(agendaAllDate[indFilter]) }
@@ -44,6 +34,13 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
         }
     }
     
+   func loadFavourSessionsData(){
+    Service.getServiceWithAuth(url: "http://66.226.74.85:4002/api/Event/getAllfavourate"){
+        (response) in
+        print(response)
+        let result = JSON(response)
+    }
+    }
     func btnRightBar()  {
         let btnSearch = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.search, target: nil, action:  #selector(searchTool))
         //  btnSearch.setImage(UIImage(named: "fav_resic"), for: UIControl.State())
@@ -101,7 +98,7 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "myfavacell") as! MyFavouritesCell
 
-        for i in 0..<agendaAllDate.count {
+     /*   for i in 0..<agendaAllDate.count {
             if indexPath.section == i {
                 let filt = filterFavour.filter { ($0.agendaDate?.contains(agendaAllDate[i]))! }
                 cell.setAgendaCell(AgendaProgram: filt[indexPath.row], IndexPath: indexPath.row)
@@ -111,13 +108,14 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
                 continue
             }
         }
+        */
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         OpenSessionVC.AgednaOrFavourite = false
         // el mafrood ab3t filt
-        performSegue(withIdentifier: "openfavsession", sender: filterFavour[indexPath.row])
+    //    performSegue(withIdentifier: "openfavsession", sender: filterFavour[indexPath.row])
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

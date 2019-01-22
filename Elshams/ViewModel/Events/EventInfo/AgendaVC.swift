@@ -8,11 +8,17 @@
 
 import UIKit
 import XLPagerTabStrip
+import Alamofire
+import AlamofireImage
+import SwiftyJSON
 
 class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate {
     @IBOutlet weak var tableViewAgenda: UITableView!
-    
-  static  var agendaList = Array<ProgramAgendaItems>()
+    @IBOutlet weak var activeLoader: UIActivityIndicatorView!
+
+ // static  var agendaList = Array<ProgramAgendaItems>()
+    var agendaSessionList = Array<ProgramAgendaItems>()
+    var agendaHeadList = Array<AgendaHeadData>()
     var agendaDate = Array<String>()
     var agendaAllDate = Array<String>()
 
@@ -22,19 +28,24 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
     if MenuViewController.agendaEventOrMenu == true {
         addSlideMenuButton()
        // btnRightBar()
+        tableViewAgenda.isHidden = true
+        activeLoader.startAnimating()
         self.navigationItem.title = "Agenda"
         MenuViewController.agendaEventOrMenu = false
     }
+    loadTableData()
    
     var secCount = 0
-    for index in 0..<AgendaVC.agendaList.count {
-        agendaDate.append("\((AgendaVC.agendaList[index].agendaDate)!)")
-        if (agendaAllDate.contains((AgendaVC.agendaList[index].agendaDate)!)) {
+  //  for index in 0..<AgendaVC.agendaSessionList.count {
+      for index in 0..<agendaSessionList.count {
+
+        agendaDate.append("\((agendaSessionList[index].agendaDate)!)")
+        if (agendaAllDate.contains((agendaSessionList[index].agendaDate)!)) {
             
             secCount = secCount + 1
             continue
         } else {
-            agendaAllDate.append((AgendaVC.agendaList[index].agendaDate)!)
+            agendaAllDate.append((agendaSessionList[index].agendaDate)!)
             secCount = 1
         }
     }
@@ -45,6 +56,54 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
     }
     }
     
+    
+    func loadTableData()  {
+        Service.getService(url: "http://66.226.74.85:4002/api/Event/getAgenda") {
+            (response) in
+            print(response)
+            let result = JSON(response)
+            
+            var iDNotNull = true
+            var index = 0
+            while iDNotNull {
+                let agenda_Type = result[index]["type"].string
+
+                 if agenda_Type == nil || agenda_Type?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
+                  agenda_Type == "null"{
+                    iDNotNull = false
+                    break
+                 }
+                let agenda_ID = result[index]["Id"].string
+                let agenda_rondomColor = result[index]["rondomColor"].string
+                let agenda_date = result[index]["date"].string
+                let agenda_sessionTitle = result[index]["sessionTitle"].string
+                let agenda_dateTitle = result[index]["title"].string
+                let agenda_Speakers = result[index]["speakers"].dictionaryObject
+                let agenda_Time = result[index]["time"].string
+                let agenda_SessionLocation = result[index]["location"].string
+                let agenda_isFavourate = result[index]["isFavourate"].bool
+                let agenda_IsFavourate_String = "\(agenda_isFavourate)"
+
+                
+                if agenda_Type == "head" {
+                    self.agendaHeadList.append(AgendaHeadData(HeadTitle: agenda_dateTitle ?? "title", HeadDate: agenda_date ?? "date", HeadType: agenda_Type ?? "type"))
+                }
+                else if agenda_Type == "session" {
+                    self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "Title", SessionTime: agenda_Time ?? "Time", SessionLocation: agenda_SessionLocation ?? "location", SpeakersSession: agenda_Speakers ?? [
+                        "ID" : "314",
+                        "imageUrl" : "http:-b01d-582382a5795e.jpg"]
+                         , AgendaDate: agenda_date ?? "date", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String , RondomColor: agenda_rondomColor ?? "red", AgendaType: agenda_Type ?? "session"))
+                }
+                index = index + 1
+                self.tableViewAgenda.reloadData()
+                self.activeLoader.isHidden = true
+                self.activeLoader.stopAnimating()
+                self.tableViewAgenda.isHidden = false
+            }
+            //  print((self.networkList[2].name)!)
+        }
+        
+    }
     func btnRightBar()  {
         let btnSearch = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.search, target: nil, action:  #selector(searchTool))
         //  btnSearch.setImage(UIImage(named: "fav_resic"), for: UIControl.State())
@@ -60,10 +119,12 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
         print("gooooood")
     }
     func numberOfSections(in tableView: UITableView) -> Int {
-        return agendaAllDate.count
+      //  return agendaAllDate.count
+        return agendaHeadList.count
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-         return  agendaAllDate[section]
+        // return  agendaAllDate[section]
+        return agendaHeadList[section].headTitle
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -81,10 +142,10 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     
-        var counter = 1
-        for i in 1..<agendaAllDate.count + 1{
-            if section == i - 1 {
-                let filter = agendaDate.filter { $0.contains(agendaAllDate[i - 1]) }
+       var counter = 1
+        for i in 0..<agendaHeadList.count {
+            if section == i  {
+                let filter = agendaSessionList.filter { (($0.agendaDate?.contains(agendaHeadList[i].headDate as! String))!) }
                 print(filter.count)
                 counter = filter.count
                 break
@@ -94,6 +155,7 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
             }
         }
          return counter
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -103,9 +165,9 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "agendacell") as! AgendaCell
  
-        for i in 0..<agendaAllDate.count {
+        for i in 0..<agendaHeadList.count {
             if indexPath.section == i {
-                let filt = AgendaVC.agendaList.filter { ($0.agendaDate?.contains(agendaAllDate[i]))! }
+               let filt = agendaSessionList.filter { (($0.agendaDate?.contains(agendaHeadList[i].headDate as! String))!) } //{ ($0.agendaDate?.contains(agendaAllDate[i]))! }
                 cell.setAgendaCell(AgendaProgram: filt[indexPath.row], IndexPath: indexPath.row)
                 break
             }
@@ -118,7 +180,7 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         OpenSessionVC.AgednaOrFavourite = true
-        performSegue(withIdentifier: "opensession", sender: AgendaVC.agendaList[indexPath.row])
+        performSegue(withIdentifier: "opensession", sender: agendaSessionList[indexPath.row])
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -136,3 +198,32 @@ extension AgendaVC : IndicatorInfoProvider {
         return IndicatorInfo(title: "Agenda")
 }
 }
+
+
+/*   if network_Name == nil || network_Name?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
+ if agenda_type == "head"{
+ agendaDateGr
+ }*/
+
+/*    self.agendaList.append(ProgramAgendaItems(ProgramName: <#T##String#>, StartTime: <#T##String#>, EndTime: <#T##String#>, ProgLocation: <#T##String#>, SpImageOne: <#T##String#>, SpImageTwo: <#T##String#>, AgendaDate: <#T##String#>, FavouriteSession: <#T##Bool#>, FavouriteSessionStr: <#T##String#>, Describtion: <#T##String#>, Speaker_FK_Id: <#T##Int#>, Speaker_FK_Id_Str: <#T##String#>))
+ */
+/*  network_Name == "null" {
+ iDNotNull = false
+ break
+ } */
+
+//number of row in section
+/* var counter = 1
+ for i in 1..<agendaAllDate.count + 1{
+ if section == i - 1 {
+ let filter = agendaDate.filter { $0.contains(agendaAllDate[i - 1]) }
+ print(filter.count)
+ counter = filter.count
+ break
+ }
+ else {
+ continue
+ }
+ }
+ return counter */
+

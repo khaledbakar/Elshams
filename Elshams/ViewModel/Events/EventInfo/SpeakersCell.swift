@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alamofire
+import AlamofireImage
 
 class SpeakersCell: UITableViewCell {
 
@@ -23,14 +25,30 @@ class SpeakersCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
     }
+    func imgUrl(imgUrl:String)  {
+        
+        if let imagUrlAl = imgUrl as? String {
+            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
+                print(response)
+                if let image = response.result.value {
+                    DispatchQueue.main.async{
+                        
+                        self.speakerImage.image = image
+                    }
+                }
+            })
+        }
+    }
     
     func setSpeakerCell(speakerList:Speakers) {
         speakerImage.layer.cornerRadius = speakerImage.frame.width / 2
         speakerImage.clipsToBounds = true
         speakerName.text = speakerList.name
         speakerJobTitle.text = speakerList.jobTitle
-        speakerJobDescribtion.text = speakerList.jobDescribition
-        speakerImage.image = UIImage(named: "\((speakerList.speakerImage)!)")
+        speakerJobDescribtion.text = speakerList.companyName
+        imgUrl(imgUrl: (speakerList.speakerImageUrl)!)
+        
+       // speakerImage.image = UIImage(named: "\((speakerList.speakerImage)!)")
     }
 
 }

@@ -8,16 +8,22 @@
 
 import Foundation
 class Sponsers {
-    var name : String?
+    var sponserID : String?
+    var sponserName : String?
     var sponserAddress : String?
-    var sponserImage :String?
-    var sponsersponserRank : String?
-
+    var sponserImageUrl :String?
+    var sponserAbout : String?
+    var contectInforamtion :[String:Any]?
+    var sponsertype :[String:Any]?
     
-    init(SponserName:String,SponserAddress:String,SponserImage:String,SponsersponserRank:String) {
-        self.name = SponserName
+
+    init(SponserName:String,SponserAddress:String,SponserImageURL:String,SponserAbout:String,SponserID:String,ContectInforamtion :[String:Any],Sponsertype :[String:Any]) {
+        self.sponserName = SponserName
         self.sponserAddress = SponserAddress
-        self.sponserImage = SponserImage
-        self.sponsersponserRank = SponsersponserRank
+        self.sponserImageUrl = SponserImageURL
+        self.sponserAbout = SponserAbout
+        self.sponserID = SponserID
+        self.sponsertype = Sponsertype
+        self.contectInforamtion = ContectInforamtion
     }
 }

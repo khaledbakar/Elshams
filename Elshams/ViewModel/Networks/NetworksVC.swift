@@ -16,16 +16,31 @@ class NetworksVC: BaseViewController , UITableViewDataSource , UITableViewDelega
     var  networkList = Array<Networks>()
     @IBOutlet weak var tableVIewNetwork: UITableView!
     
+    @IBOutlet weak var activeLoader: UIActivityIndicatorView!
     override func viewDidLoad() {
         super.viewDidLoad()
         addSlideMenuButton()
   // self.UINavigationBar.color
+        tableVIewNetwork.isHidden = true
+        activeLoader.startAnimating()
+
         self.navigationItem.title = "Networks"
+        loadTableData()
+       // loadData()
+      // print((networkList[0].name)!)
+
+
+      /*  networkList.append(Networks(NetworkName: "Khaled Bakar", JobTitle: "Programmer", jobDescribition: "IOSDeveloper", SpImage: "profile2", LinkedInLink: "Khaled.bakar12", Phone: "01060136503", Mail: "khaledbakar7@gmai.com", About: "one of the most importanat people in the life he hasn't title job his name is a title"))
+        */
+
+    }
+    
+    func loadTableData()  {
         Service.getService(url: "http://66.226.74.85:4002/api/Event/getNetwork") {
             (response) in
             print(response)
             let result = JSON(response)
-
+            
             var iDNotNull = true
             var index = 0
             while iDNotNull {
@@ -43,19 +58,14 @@ class NetworksVC: BaseViewController , UITableViewDataSource , UITableViewDelega
                 self.networkList.append(Networks(NetworkName: network_Name ?? "noname", JobTitle: network_JobTitle ?? "null", ImageUrl: network_ImageUrl ?? "null", CompanyName: network_CompanyName ?? "null", NetworkID: network_ID ?? "null", RequestStatus: network_RequestStatus ?? "null", RequestSenderID: network_RequestSenderID ?? "null"))
                 index = index + 1
                 self.tableVIewNetwork.reloadData()
+                self.activeLoader.isHidden = true
+                self.activeLoader.stopAnimating()
+                self.tableVIewNetwork.isHidden = false
             }
-          //  print((self.networkList[2].name)!)
+            //  print((self.networkList[2].name)!)
         }
         
-       // loadData()
-      // print((networkList[0].name)!)
-
-
-      /*  networkList.append(Networks(NetworkName: "Khaled Bakar", JobTitle: "Programmer", jobDescribition: "IOSDeveloper", SpImage: "profile2", LinkedInLink: "Khaled.bakar12", Phone: "01060136503", Mail: "khaledbakar7@gmai.com", About: "one of the most importanat people in the life he hasn't title job his name is a title"))
-        */
-
     }
-    
     func loadData() {
         DispatchQueue.main.async {
             Alamofire.request("http://66.226.74.85:4002/api/Event/getNetwork").responseJSON(completionHandler:

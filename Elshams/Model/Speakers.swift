@@ -9,33 +9,36 @@
 import Foundation
 class Speakers {
     var name : String?
-    var speaker_id : Int?
-    var speaker_id_str : String?
-
+    var speaker_id : String?
+    var about :String?
     var jobTitle : String?
+    var companyName : String?
+    var contectInforamtion :[String:Any]?
+    var speakerImageUrl :String?
+/*
     var jobDescribition : String?
-    var speakerImage :String?
     var facebookLink :String?
     var phone :String?
     var mail :String?
-    var about :String?
     var website :String?
-    var activeOrNot :Bool?
+    var activeOrNot :Bool?*/
 
 
-    init(SpeakerName:String,JobTitle:String,jobDescribition:String,SpImage:String,FacebookInLink:String,Phone:String,Mail:String,About:String,Website:String,ActiveOrNot:Bool,Speaker_id : Int,Speaker_id_Str : String) {
+    init(SpeakerName:String,JobTitle:String,CompanyName:String,SpImageUrl:String,Speaker_id : String,ContectInforamtion:[String:Any],About:String) {  //,FacebookInLink:String,Phone:String,Mail:String,About:String,Website:String,ActiveOrNot:Bool
         self.name = SpeakerName
-        self.jobDescribition = JobTitle
-        self.jobTitle = jobDescribition
-        self.speakerImage = SpImage
-        self.facebookLink = FacebookInLink
-        self.phone = Phone
-        self.mail = Mail
         self.about = About
-        self.website = Website
-        self.activeOrNot = ActiveOrNot
+        self.jobTitle = JobTitle
+        self.speakerImageUrl = SpImageUrl
         self.speaker_id = Speaker_id
-        self.speaker_id_str = Speaker_id_Str
+        self.contectInforamtion = ContectInforamtion
+        self.companyName = CompanyName
+        /* self.facebookLink = FacebookInLink
+         self.phone = Phone
+         self.mail = Mail
+         // self.jobDescribition = jobDescribition
+
+         self.website = Website
+         self.activeOrNot = ActiveOrNot */
 
     }
 }

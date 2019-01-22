@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alamofire
+import AlamofireImage
 
 class SponsersCell: UITableViewCell {
 
@@ -22,12 +24,27 @@ class SponsersCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
     }
+    func imgUrl(imgUrl:String)  {
+        
+        if let imagUrlAl = imgUrl as? String {
+            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
+                print(response)
+                if let image = response.result.value {
+                    DispatchQueue.main.async{
+                        
+                        self.sponserImage.image = image
+                    }
+                }
+            })
+        }
+    }
     func setSponserCell(sponsersList:Sponsers) {
         sponserImage.layer.cornerRadius = sponserImage.frame.width / 2
         sponserImage.clipsToBounds = true
-        sponserName.text = sponsersList.name
+        sponserName.text = sponsersList.sponserName
         sponserAddress.text = sponsersList.sponserAddress
-        sponserImage.image = UIImage(named: "\((sponsersList.sponserImage)!)")
+        imgUrl(imgUrl: (sponsersList.sponserImageUrl)!)
+       // sponserImage.image = UIImage(named: "\((sponsersList.sponserImage)!)")
     }
 
 }

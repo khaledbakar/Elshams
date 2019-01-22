@@ -97,6 +97,7 @@
 		04E994F621EB438E006070B3 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E994F521EB438E006070B3 /* Service.swift */; };
 		04E994F821EB89D2006070B3 /* MdcText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E994F721EB89D2006070B3 /* MdcText.swift */; };
 		04E994FA21ECB7B0006070B3 /* AgendaSectionDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E994F921ECB7B0006070B3 /* AgendaSectionDate.swift */; };
+		04FE210621F755AB0027DDB3 /* AgendaHeadData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FE210521F755AB0027DDB3 /* AgendaHeadData.swift */; };
 		04FFB80121CFBBFD002009A4 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FFB80021CFBBFD002009A4 /* SettingsCell.swift */; };
 		04FFB80321CFBC70002009A4 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FFB80221CFBC70002009A4 /* SettingsVC.swift */; };
 		06844E6888BEFC487C09BF7F /* Pods_Elshams.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEBFA8C522D427FC10C666C8 /* Pods_Elshams.framework */; };
@@ -195,6 +196,7 @@
 		04E994F521EB438E006070B3 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		04E994F721EB89D2006070B3 /* MdcText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MdcText.swift; sourceTree = "<group>"; };
 		04E994F921ECB7B0006070B3 /* AgendaSectionDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgendaSectionDate.swift; sourceTree = "<group>"; };
+		04FE210521F755AB0027DDB3 /* AgendaHeadData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgendaHeadData.swift; sourceTree = "<group>"; };
 		04FFB80021CFBBFD002009A4 /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
 		04FFB80221CFBC70002009A4 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		1FC2F569DD00C559F052E3B2 /* Pods-Elshams.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Elshams.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Elshams/Pods-Elshams.debug.xcconfig"; sourceTree = "<group>"; };
@@ -295,6 +297,7 @@
 				0439DAD021C68ACD0041CDCB /* NewsFeedData.swift */,
 				04BE00FC21D0F26A00809834 /* EventsData.swift */,
 				04E994F921ECB7B0006070B3 /* AgendaSectionDate.swift */,
+				04FE210521F755AB0027DDB3 /* AgendaHeadData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -674,6 +677,7 @@
 				0466C06F21B58B8100C9C555 /* SponsersCell.swift in Sources */,
 				0466C06321B57AE000C9C555 /* AgendaVC.swift in Sources */,
 				04B872A721AD536500C6629E /* SelectFavCompVC.swift in Sources */,
+				04FE210621F755AB0027DDB3 /* AgendaHeadData.swift in Sources */,
 				045EF19821B95FE8009DCA7A /* MyQuestions.swift in Sources */,
 				0466C0AC21B81DB100C9C555 /* OpenSessionVC.swift in Sources */,
 				0466C09021B6CBE300C9C555 /* MenuViewController.swift in Sources */,

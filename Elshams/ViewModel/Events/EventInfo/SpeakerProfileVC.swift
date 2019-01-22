@@ -38,7 +38,7 @@ class SpeakerProfileVC: UIViewController {
         connectColor.layer.cornerRadius = connectColor.frame.width / 2
         connectColor.clipsToBounds = true
         speakerName.text = singleItem?.name
-        speakerEmail.text = singleItem?.mail
+     /*   speakerEmail.text = singleItem?.mail
         speakerPhone.text = singleItem?.phone
         speakerFacebook.text = singleItem?.facebookLink
         speakerWebsite.text = singleItem?.website
@@ -51,7 +51,7 @@ class SpeakerProfileVC: UIViewController {
             activeNow.text = "Offline"
 
         }
-        
+        */
        // speakerPhone.addGestureRecognizer(<#T##gestureRecognizer: UIGestureRecognizer##UIGestureRecognizer#>)
         let tapCall = UITapGestureRecognizer(target: self, action: #selector(SpeakerProfileVC.tapCallFunc))
         speakerPhone.isUserInteractionEnabled = true
@@ -71,7 +71,7 @@ class SpeakerProfileVC: UIViewController {
         speakerFacebook.isUserInteractionEnabled = true
         speakerFacebook.addGestureRecognizer(tapFacebook)
         
-        speakerProfileImg.image = UIImage(named: "\((singleItem?.speakerImage)!)")
+     //   speakerProfileImg.image = UIImage(named: "\((singleItem?.speakerImage)!)")
         speakerJobTitle.text = singleItem?.jobTitle
         
         
@@ -118,7 +118,7 @@ class SpeakerProfileVC: UIViewController {
         }
         let compser = MFMailComposeViewController()
         compser.mailComposeDelegate = self
-        compser.setToRecipients([(singleItem?.mail)!])
+      //  compser.setToRecipients([(singleItem?.mail)!])
         compser.setSubject("Event User Want to connect")
         compser.setMessageBody("i love your session ana want to connect with you in other deal", isHTML: false)
         present(compser, animated: true, completion: nil)
@@ -126,7 +126,7 @@ class SpeakerProfileVC: UIViewController {
     }
     
     @objc func tapCallFunc(sender:UIGestureRecognizer) {
-        PhoneCall.makeCall(PhoneNumber: (singleItem?.phone)!)
+     //   PhoneCall.makeCall(PhoneNumber: (singleItem?.phone)!)
        /* guard let numberString = singleItem?.phone,let url = URL(string: "telprompt://\(numberString)")
             else {
             return
@@ -135,12 +135,12 @@ class SpeakerProfileVC: UIViewController {
     }
   
     @objc func tapOpenLinkFunc(sender:UIGestureRecognizer) {
-        guard let url = URL(string: (singleItem?.website)!)
+      /*  guard let url = URL(string: (singleItem?.website)!)
             else {
                 return
         }
         let safariVC = SFSafariViewController(url: url)
-        present(safariVC, animated: true, completion: nil)
+        present(safariVC, animated: true, completion: nil) */
         
     }
     

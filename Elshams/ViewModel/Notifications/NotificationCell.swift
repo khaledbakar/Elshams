@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AlamofireImage
+import Alamofire
 
 class NotificationCell: UITableViewCell {
 
@@ -24,10 +26,25 @@ class NotificationCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    func imgUrl(imgUrl:String)  {
+        if let imagUrlAl = imgUrl as? String {
+            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
+                print(response)
+                if let image = response.result.value {
+                    DispatchQueue.main.async{
+                        self.notificationImage.image = image
+                    }
+                }
+            })
+        }
+    }
     func setNotificationCell(NotificationList:Notifications)  {
-        notificationTitle.text = NotificationList.notificationName
-        notificationDetail.text = NotificationList.notificationDetail
-        notificationImage.image = UIImage(named: "\((NotificationList.notificationImageUrl)!)")
+        notificationTitle.text = NotificationList.notification_Title
+        notificationDetail.text = NotificationList.notification_Body
+        imgUrl(imgUrl: (NotificationList.notification_ImageUrl)!)
+        notificationImage.layer.cornerRadius = notificationImage.frame.width / 2
+        notificationImage.clipsToBounds = true
+     //   notificationImage.image = UIImage(named: "\((NotificationList.notificationImageUrl)!)")
     }
 
 }

@@ -40,11 +40,11 @@ class AgendaMainCell: UITableViewCell {
         timeIcon.image = UIImage(named: "facebook_ic")
         locationIcon.image = UIImage(named: "facebook_ic")
         
-        programAgendaName.text = AgendaProgram.name
-        programAgendaTime.text = "\(AgendaProgram.startTime) - \(AgendaProgram.endTime)"
+        programAgendaName.text = AgendaProgram.seseionTitle
+        programAgendaTime.text = "\(AgendaProgram.sessionTime)"
         programAgendaLocation.text = AgendaProgram.progLocation
-        speakerOneImage.image = UIImage(named: "\((AgendaProgram.speakerOneImage)!)")
-        speakerTwoImage.image = UIImage(named: "\((AgendaProgram.speakerTwoImage)!)")
+       // speakerOneImage.image = UIImage(named: "\((AgendaProgram.speakerOneImage)!)")
+       // speakerTwoImage.image = UIImage(named: "\((AgendaProgram.speakerTwoImage)!)")
         switch IndexPath % 3 {
         case 0:
             cellColor.backgroundColor = UIColor.orange

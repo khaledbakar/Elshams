@@ -34,10 +34,10 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
 
         //speaker static list
         
-        SpeakersVC.speakerList.removeAll()
+     /*   SpeakersVC.speakerList.removeAll()
         SpeakersVC.speakerList.append(Speakers(SpeakerName: "Khaled bakar", JobTitle: "Programmer", jobDescribition: "IOSDeveloper", SpImage: "profile1", FacebookInLink: "facebook.com/khaledbakar.12", Phone: "01060136503", Mail: "kzaky@ikdynamics.com", About: "one of the most importanat people in the life he hasn't title job his name is a title", Website: "www.khaledbakar.com", ActiveOrNot: true, Speaker_id: 0, Speaker_id_Str: "0"))
         SpeakersVC.speakerList.append(Speakers(SpeakerName: "Khaled bakar", JobTitle: "Programmer", jobDescribition: "IOSDeveloper", SpImage: "profile2", FacebookInLink: "facebook.com/khaledbakar.12", Phone: "01060136503", Mail: "kzaky@ikdynamics.com", About: "one of the most importanat people in the life he hasn't title job his name is a title", Website: "www.google.com", ActiveOrNot: true, Speaker_id: 1, Speaker_id_Str: "1"))
-        SpeakersVC.speakerList.append(Speakers(SpeakerName: "saad hamo", JobTitle: "Programmer", jobDescribition: "IOSDeveloper", SpImage: "avatar", FacebookInLink: "facebook.com/khaledbakar.12", Phone: "01060136503", Mail: "kzaky@ikdynamics.com", About: "one of the most importanat people in the life he hasn't title job his name is a title", Website: "https://www.facebook.com", ActiveOrNot: false, Speaker_id: 2, Speaker_id_Str: "2"))
+        SpeakersVC.speakerList.append(Speakers(SpeakerName: "saad hamo", JobTitle: "Programmer", jobDescribition: "IOSDeveloper", SpImage: "avatar", FacebookInLink: "facebook.com/khaledbakar.12", Phone: "01060136503", Mail: "kzaky@ikdynamics.com", About: "one of the most importanat people in the life he hasn't title job his name is a title", Website: "https://www.facebook.com", ActiveOrNot: false, Speaker_id: 2, Speaker_id_Str: "2")) */
         
         //startup static list
         //3shan bttkrr 3ayz 7l
@@ -52,12 +52,12 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
         StartUps.startUpList.append(StartUpsData(StartupName: "El7ag Bakar", StartupAddress: "1 Tahrir Square,cairo,Egypt", StartupImage: "profile1", StartUpLinkedIn: "khaled.zaki12", StartUpPhone: "01060136503", StartUpMail: "kzakyy@ikdynamics.com", StartUpAbout: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, ", AcceptedApointment: true, PendingApointment: false, AcceptedApointmentStr: "true", PendingApointmentStr: "false", Id_StartUp: 4))
 
         //agendaa
-        
+        /*
         AgendaVC.agendaList.removeAll()
         AgendaVC.agendaList.append(ProgramAgendaItems(ProgramName: "Regestration and Networking", StartTime: "8AM", EndTime: "10AM", ProgLocation: "hall", SpImageOne: "avatar", SpImageTwo: "avatar",AgendaDate:"Monday,March 8", FavouriteSession: true, FavouriteSessionStr: "true", Describtion: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore ", Speaker_FK_Id: 2, Speaker_FK_Id_Str: "2"))
         AgendaVC.agendaList.append(ProgramAgendaItems(ProgramName: "Ministers from the Cambinet Economic Group and selected", StartTime: "11AM", EndTime: "11.30AM", ProgLocation: "cinema", SpImageOne: "avatar", SpImageTwo: "avatar",AgendaDate:"Monday,March 8", FavouriteSession: false, FavouriteSessionStr: "false", Describtion: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore ", Speaker_FK_Id: 1, Speaker_FK_Id_Str: "1"))
         AgendaVC.agendaList.append(ProgramAgendaItems(ProgramName: "New Reg", StartTime: "11AM", EndTime: "11.30AM", ProgLocation: "cinema", SpImageOne: "avatar", SpImageTwo: "avatar",AgendaDate:"Monday,March 9", FavouriteSession: true, FavouriteSessionStr: "true", Describtion: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore ", Speaker_FK_Id: 1, Speaker_FK_Id_Str: "1"))
-
+        */
         
        // userNameInputlTxt = MDCTextField()
         userNameInputlTxt.placeholder = "Name"

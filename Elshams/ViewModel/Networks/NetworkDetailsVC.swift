@@ -11,12 +11,13 @@ import SafariServices
 import MessageUI
 import AlamofireImage
 import Alamofire
+import SwiftyJSON
 
 class NetworkDetailsVC: UIViewController {
     
     @IBOutlet weak var viewAbout: UIView!
     @IBOutlet weak var viewProfile: UIView!
-    
+    let reachabilityManager = NetworkReachabilityManager(host: "https://baseURL.com")!
     var singleItem:Networks?
     
     @IBOutlet weak var profileJobTitle: UILabel!
@@ -31,7 +32,7 @@ class NetworkDetailsVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        profileName.text = (singleItem?.name)!
+      /*  profileName.text = (singleItem?.name)!
         profileJobTitle.text = (singleItem?.jobTitle)!
     /*    profileAbout.text = (singleItem?.about)!
         profileEMail.text = (singleItem?.mail)!
@@ -42,6 +43,10 @@ class NetworkDetailsVC: UIViewController {
         profileImg.layer.cornerRadius = profileImg.frame.width / 2
         profileImg.clipsToBounds = true
      //   profileImg.image = UIImage(named: "\((singleItem?.networkImage)!)")
+        */
+        loadSetData(personId: (singleItem?.network_Id)!)
+        profileImg.layer.cornerRadius = profileImg.frame.width / 2
+        profileImg.clipsToBounds = true
         viewAbout.frame = frameAbout
         
         let tapCall = UITapGestureRecognizer(target: self, action: #selector(NetworkDetailsVC.tapCallFunc))
@@ -56,6 +61,54 @@ class NetworkDetailsVC: UIViewController {
         profileLinkedIn.isUserInteractionEnabled = true
         profileLinkedIn.addGestureRecognizer(tapLinkedIn)
       
+    }
+    
+ /*   func getServiceWithAuth(url: String, callback: @escaping (JSON?) -> ()) {
+        
+        if !reachabilityManager.isReachable {
+            callback(nil)
+            
+        } else {
+            let header : HTTPHeaders = ["Authorization": "token"] // Customize it as needed
+            Alamofire.request(url, headers: header).responseJSON { (response) in
+                switch response.result {
+                case .success(let value):
+                    let json = JSON(value)
+                    callback(json)
+                case .failure(let error):
+                    print(error)
+                    callback(nil)
+                }
+            }
+        }
+    }
+    */
+    func  loadSetData(personId:String)  {
+
+        
+        Service.getServiceWithAuth(url: "http://66.226.74.85:4002/api/Event/getPersonDetails/\(personId)"){  // callback: <#T##(JSON?) -> ()#>)
+        //Service.getService(url: "http://66.226.74.85:4002/api/Event/getPersonDetails/\(personId)"){
+              (response) in
+            print(response)
+            let result = JSON(response)
+                let network_ID = result["ID"].string
+                let network_Name = result["name"].string
+                let network_JobTitle = result["jobTitle"].string
+                let network_CompanyName = result["companyName"].string
+                let network_ImageUrl = result["imageUrl"].string
+                let network_Email = result["ContectInforamtion"]["Email"].string
+                let network_Linkedin = result["ContectInforamtion"]["linkedin"].string
+                let network_Phone = result["ContectInforamtion"]["phone"].string
+                let network_about = result["about"].string
+            self.profileName.text = network_Name
+            self.imgUrl(imgUrl: network_ImageUrl!)
+            self.profileAbout.text = network_about
+            self.profileEMail.text = network_Email
+            self.profilePhone.text = network_Phone
+            self.profileLinkedIn.text = network_Linkedin
+            self.profileJobTitle.text = network_JobTitle
+
+        }
     }
     func imgUrl(imgUrl:String)  {
         if let imagUrlAl = imgUrl as? String {

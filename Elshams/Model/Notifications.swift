@@ -8,14 +8,20 @@
 
 import Foundation
 class Notifications {
-    var notificationName : String?
-    var notificationDetail : String?
-    var notificationImageUrl : String?
+    var notification_Title : String?
+    var notification_ID : String?
+    var notification_Body : String?
+    var notification_Status : String?
+    var notification_Type : String?
+    var notification_ImageUrl : String?
 
-    init(NotificationName:String,NotificationDetails:String,NotitficationImageUrl:String) {
-        self.notificationName = NotificationName
-        self.notificationDetail = NotificationDetails
-        self.notificationImageUrl = NotitficationImageUrl
+    init(NotificationTitle:String,NotificationID:String,NotitficationImageUrl:String,NotificationStatus:String,NotificationType:String,NotificationBody:String) {
+        self.notification_Title = NotificationTitle
+        self.notification_ID = NotificationID
+        self.notification_Body = NotificationBody
+        self.notification_Status = NotificationStatus
+        self.notification_ImageUrl = NotitficationImageUrl
+        self.notification_Type = NotificationType
         
     }
 }
