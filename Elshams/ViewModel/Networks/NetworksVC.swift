@@ -36,7 +36,7 @@ class NetworksVC: BaseViewController , UITableViewDataSource , UITableViewDelega
     }
     
     func loadTableData()  {
-        Service.getService(url: "http://66.226.74.85:4002/api/Event/getNetwork") {
+        Service.getServiceWithAuth(url: URLs.getNetwork) {
             (response) in
             print(response)
             let result = JSON(response)
@@ -67,14 +67,15 @@ class NetworksVC: BaseViewController , UITableViewDataSource , UITableViewDelega
         
     }
     func loadData() {
-        DispatchQueue.main.async {
-            Alamofire.request("http://66.226.74.85:4002/api/Event/getNetwork").responseJSON(completionHandler:
-                { (response) in
+        //DispatchQueue.main.async {
+         //   Alamofire.request(URLs.getNetwork).responseJSON(completionHandler:
+        Service.getServiceWithAuth(url: URLs.getNetwork){
+                 (response) in
                     //  print("this is json")
                     // print(response)
-                    switch response.result{
-                    case.success(let value) :
-                        let result = JSON(value)
+                 //   switch response.result{
+                  //  case.success(let value) :
+                        let result = JSON(response)
                         // print(result[0])
                         var iDNotNull = true
                         var index = 0
@@ -86,17 +87,17 @@ class NetworksVC: BaseViewController , UITableViewDataSource , UITableViewDelega
                             let network_ImageUrl = result[index]["imageUrl"].string
                             let network_RequestSenderID = result[index]["requestSenderID"].string
                             let network_RequestStatus = result[index]["requestStatus"].string
-                            if network_Name == nil || network_Name?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || network_Name == "null" {
+                            if network_Name == nil || network_Name?.trimmed == "" || network_Name == "null" {
                                 iDNotNull = false
                                 break
                             }
                             self.networkList.append(Networks(NetworkName: network_Name ?? "noname", JobTitle: network_JobTitle ?? "null", ImageUrl: network_ImageUrl ?? "null", CompanyName: network_CompanyName ?? "null", NetworkID: network_ID ?? "null", RequestStatus: network_RequestStatus ?? "null", RequestSenderID: network_RequestSenderID ?? "null"))
                             index = index + 1
                         }
-                    case.failure(let error):
-                        print(error.localizedDescription)
-                    }
-            })
+                 //   case.failure(let error):
+                   //     print(error.localizedDescription)
+                  //  }
+         //   })
         }
     }
     

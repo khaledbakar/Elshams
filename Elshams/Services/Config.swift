@@ -16,6 +16,8 @@ struct URLs {
     static let login = main + "/account/Login"
     static let register = main + "/account/register"
     static let getNetwork = main + "/Event/getNetwork"
+    static let getPersonDetails = main + "/Event/getPersonDetails"
+
     static let getAgenda = main + "/Event/getAgenda"
     static let getAllSpeaker = main + "/Event/getAllSpeaker"
     static let getAllSponsors = main + "/Event/getAllSponsors"

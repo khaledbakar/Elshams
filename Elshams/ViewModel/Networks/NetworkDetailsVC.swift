@@ -85,7 +85,7 @@ class NetworkDetailsVC: UIViewController {
     */
     func  loadSetData(personId:String)  {
 
-        Service.getServiceWithAuth(url: "http://66.226.74.85:4002/api/Event/getPersonDetails/\(personId)"){  // callback: <#T##(JSON?) -> ()#>)
+        Service.getServiceWithAuth(url: "\(URLs.getPersonDetails)/\(personId)"){  // callback: <#T##(JSON?) -> ()#>)
         //Service.getService(url: "http://66.226.74.85:4002/api/Event/getPersonDetails/\(personId)"){
               (response) in
             print(response)
