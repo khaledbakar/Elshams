@@ -13,7 +13,8 @@ class AcceptedVC: BaseViewController , UITableViewDataSource ,UITableViewDelegat
  
     @IBOutlet weak var acceptedTableView: UITableView!
     //  var startUpList = Array<StartUpsData>()
-    var filterAccepted = StartUps.startUpList.filter { ($0.acceptedApointmentStr?.contains("true"))!}
+    var filterAccepted = Array<StartUpsData>()
+        //StartUps.startUpList.filter { ($0.acceptedApointmentStr?.contains("true"))!}
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,12 +47,12 @@ class AcceptedVC: BaseViewController , UITableViewDataSource ,UITableViewDelegat
     @IBAction func btnCancelAppointment(_ sender: Any) {
         let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to:self.acceptedTableView)
         let indexPath = self.acceptedTableView.indexPathForRow(at: buttonPosition)
-        let selectedId = filterAccepted[indexPath!.row].id_startUp
+      //  let selectedId = filterAccepted[indexPath!.row].id_startUp
        
-        StartUps.startUpList[selectedId!].acceptedApointment = false
+      /*  StartUps.startUpList[selectedId!].acceptedApointment = false
         StartUps.startUpList[selectedId!].acceptedApointmentStr = "false"
         
-        filterAccepted.remove(at: (indexPath?.row)!)
+        filterAccepted.remove(at: (indexPath?.row)!) */
         acceptedTableView.reloadData()
      //   StartupDetailsVC.sechadualeBTNSend = true
        // performSegue(withIdentifier: "startupdetail", sender: StartUps.startUpList[indexPath!.row])

@@ -21,6 +21,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UIApplication.shared.statusBarStyle = .lightContent
 
+        if let  apiToken  = Helper.getApiToken() {
+        print("Api token \(apiToken)")
+      //      let t = UIStoryboard(name: "Main", bundle: nil)
+        let tab = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NavTimeLine") //NavTimeLine   TimeLine
+            window?.rootViewController = tab
+        }
         // Override point for customization after application launch.
         return true
     }

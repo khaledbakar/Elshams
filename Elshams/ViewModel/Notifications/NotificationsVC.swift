@@ -30,7 +30,7 @@ class NotificationsVC: BaseViewController , UITableViewDataSource , UITableViewD
     }
     
     func loadNotifyData()  {
-        Service.getServiceWithAuth(url: "http://66.226.74.85:4002/api/Event/getAllNotification"){
+        Service.getServiceWithAuth(url: URLs.getAllNotification){
        // Service.getService(url: "http://66.226.74.85:4002/api/Event/getAllNotification") {
             (response) in
             print(response)

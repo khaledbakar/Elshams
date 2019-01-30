@@ -8,6 +8,9 @@
 
 import UIKit
 import  MaterialComponents.MaterialTextFields
+import SwiftyJSON
+import Alamofire
+import AlamofireImage
 //import  MaterialComponents.MDCTextInputControllerFilled
 
 class SigninVC: UIViewController ,  UITextFieldDelegate { 
@@ -41,7 +44,7 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
         
         //startup static list
         //3shan bttkrr 3ayz 7l
-        StartUps.startUpList.removeAll()
+     /*   StartUps.startUpList.removeAll()
         
         StartUps.startUpList.append(StartUpsData(StartupName: "El7ag Bakar", StartupAddress: "1 Tahrir Square,cairo,Egypt", StartupImage: "profile1", StartUpLinkedIn: "khaled.zaki12", StartUpPhone: "01060136503", StartUpMail: "kzakyy@ikdynamics.com", StartUpAbout: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, ", AcceptedApointment: true, PendingApointment: false, AcceptedApointmentStr: "true", PendingApointmentStr: "false", Id_StartUp: 0))
         
@@ -49,7 +52,7 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
         StartUps.startUpList.append(StartUpsData(StartupName: "MedGram", StartupAddress: "18A Obour Bulidings,cairo,Egypt", StartupImage: "avatar", StartUpLinkedIn: "khaled.zaki12", StartUpPhone: "01060136503", StartUpMail: "kzakyy@ikdynamics.com", StartUpAbout: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, ", AcceptedApointment: false, PendingApointment: true, AcceptedApointmentStr: "false", PendingApointmentStr: "true", Id_StartUp: 2))
         
         StartUps.startUpList.append(StartUpsData(StartupName: "MedGram", StartupAddress: "18A Obour Bulidings,cairo,Egypt", StartupImage: "avatar", StartUpLinkedIn: "khaled.zaki12", StartUpPhone: "01060136503", StartUpMail: "kzakyy@ikdynamics.com", StartUpAbout: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, ", AcceptedApointment: false, PendingApointment: false, AcceptedApointmentStr: "false", PendingApointmentStr: "false", Id_StartUp: 3))
-        StartUps.startUpList.append(StartUpsData(StartupName: "El7ag Bakar", StartupAddress: "1 Tahrir Square,cairo,Egypt", StartupImage: "profile1", StartUpLinkedIn: "khaled.zaki12", StartUpPhone: "01060136503", StartUpMail: "kzakyy@ikdynamics.com", StartUpAbout: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, ", AcceptedApointment: true, PendingApointment: false, AcceptedApointmentStr: "true", PendingApointmentStr: "false", Id_StartUp: 4))
+        StartUps.startUpList.append(StartUpsData(StartupName: "El7ag Bakar", StartupAddress: "1 Tahrir Square,cairo,Egypt", StartupImage: "profile1", StartUpLinkedIn: "khaled.zaki12", StartUpPhone: "01060136503", StartUpMail: "kzakyy@ikdynamics.com", StartUpAbout: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, ", AcceptedApointment: true, PendingApointment: false, AcceptedApointmentStr: "true", PendingApointmentStr: "false", Id_StartUp: 4)) */
 
         //agendaa
         /*
@@ -199,57 +202,24 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
         return true
     }
     
-    
-    
     func signInMethod() {
+        guard let email = userNameInputlTxt.text, !email.isEmpty else { return }
+        guard let password = passwordInputTxt.text, !password.isEmpty else { return }
         let username = userNameInputlTxt.text?.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         let pass = passwordInputTxt.text
-       /* if (username == UserAccount.first?.username  && pass == UserAccount.first?.password )
-        {
-            userNameFk = username
-            SigninVC.fkUserName = username!
-            userFkNa = ["userAcc" : "\(username!)"]
-            userDefaults.set(userFkNa, forKey: "fkuseradmin")
-            performSegue(withIdentifier: "signin", sender: nil)
-            userDefaults.set(false, forKey: "userLoggedin")
-            
-            userNameInputlTxt.text = ""
-            passwordInputTxt.text = ""
-        }  else */
+        API.login(Email: email, Password: password) { (error: Error?,succes:Bool) in
+            if succes {
+                print("Succes")
+                self.performSegue(withIdentifier: "skipnav", sender: nil)
+            }
+            else {
+            }
+        }
          if (username == "admin" && pass == "admin") {
-           // userNameFk = username
-          //  SigninVC.fkUserName = username!
-         //   userFkNa = ["userAcc" : "admin" ]
-           // userDefaults.set(userFkNa, forKey: "fkuseradmin")
-           // userDefaults.set(false, forKey: "userLoggedin")
             performSegue(withIdentifier: "skipnav", sender: nil)
-            
             userNameInputlTxt.text = ""
             passwordInputTxt.text = ""
         }
-    /*    else if (username == UserAccount.first?.username  && pass != UserAccount.first?.password )
-        {
-            lblError.isHidden = false
-            lblError.text = "Wrong password!"
-            
-        }
-        else if (username != UserAccount.first?.username  && pass == UserAccount.first?.password ) //mlosh lazma 8albn w msh mntky
-        {
-            lblError.isHidden = false
-            lblError.text = "Wrong Username!"
-            
-        } */
-        else {
-            userNameError.isHidden = false
-            passwordError.isHidden = false
-            userNameError.text = "Wrong Username !"
-            passwordError.text = "Wrong Username !"
-        }
-      //  hideKyebad()
-      /*  let sourceLoc = locationManger.location?.coordinate
-        SigninVC.myLocLatit = (sourceLoc?.latitude)!
-        SigninVC.myLocLang = (sourceLoc?.longitude)! */
-        
     }
     
     @IBAction func skipLogin(_ sender: Any) {

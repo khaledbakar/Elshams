@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alamofire
+import AlamofireImage
 
 class StartUpsCell: UITableViewCell {
 
@@ -23,13 +25,29 @@ class StartUpsCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    func imgUrl(imgUrl:String)  {
+        
+        if let imagUrlAl = imgUrl as? String {
+            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
+                print(response)
+                if let image = response.result.value {
+                    DispatchQueue.main.async{
+                        self.startupImage.image = image
+                    }
+                }
+            })
+        }
+    }
+
     func setStartupCell(startupsList:StartUpsData) {
         startupImage.layer.cornerRadius = startupImage.frame.width / 2
         startupImage.clipsToBounds = true
-        startupName.text = startupsList.name
-        startupAddress.text = startupsList.startupAddress
-        startupImage.image = UIImage(named: "\((startupsList.startupImage)!)")
-        print( "\((startupsList.startupImage)!)")
+        startupName.text = startupsList.startupName
+        imgUrl(imgUrl: (startupsList.startupImageUrl)!)
+     //   startupAddress.text = startupsList.
+       // startupImage.image = UIImage(named: "\((startupsList.startupImage)!)")
+     //   print( "\((startupsList.startupImage)!)")
     }
     
 }

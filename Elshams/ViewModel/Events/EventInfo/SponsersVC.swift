@@ -36,7 +36,7 @@ class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSour
     }
     
     func loadAllSponserData()  {
-        Service.getService(url: "http://66.226.74.85:4002/api/Event/getNetwork") {
+        Service.getService(url: URLs.getAllSponsors) {
             (response) in
             print(response)
             

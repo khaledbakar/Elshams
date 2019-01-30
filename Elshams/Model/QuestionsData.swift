@@ -10,16 +10,15 @@ import UIKit
 
 class QuestionsData {   
         var questions : String?
+        var questionsID : String?
         var answer : String?
-        var answerArr :[String]?
-        var idQuset : Int?
-    
-    
-    init(Questions:String,Answer:String,AnswerArr:[String],IdQuset:Int) {
+       // var answerArr :[String]?
+        var questionTimeStamp : String?
+    init(Questions:String,Answer:String,QuestionsID:String,QuestionTimeStamp:String) { //,AnswerArr:[String]
             self.questions = Questions
             self.answer = Answer
-            self.answerArr = AnswerArr
-            self.idQuset = IdQuset
+            self.questionsID = QuestionsID
+            self.questionTimeStamp = QuestionTimeStamp
         
         }
 }

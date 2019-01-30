@@ -13,7 +13,8 @@ class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegat
 
     @IBOutlet weak var pendingTableView: UITableView!
     //var startUpList = Array<StartUpsData>()
-  var filterPending = StartUps.startUpList.filter { (($0.pendingApointmentStr?.contains("true"))!)}
+  var filterPending = Array<StartUpsData>()
+  //  startUpList.filter { (($0.pendingApointmentStr?.contains("true"))!)}
 
 
     override func viewDidLoad() {
@@ -56,11 +57,11 @@ class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegat
     @IBAction func btnCancel(_ sender: Any) {
         let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to:self.pendingTableView)
         let indexPath = self.pendingTableView.indexPathForRow(at: buttonPosition)
-        let selectedId = filterPending[indexPath!.row].id_startUp
+    /*    let selectedId = filterPending[indexPath!.row].id_startUp
         
         StartUps.startUpList[selectedId!].pendingApointment = false
         StartUps.startUpList[selectedId!].pendingApointmentStr = "false"
-       
+       */
         filterPending.remove(at: (indexPath?.row)!)
         pendingTableView.reloadData()
         

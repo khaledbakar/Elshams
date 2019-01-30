@@ -37,8 +37,9 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
     }
     
     func loadAllSpeakerData()  {
-        Service.getService(url: "http://66.226.74.85:4002/api/Event/getNetwork") {
+        Service.getService(url: URLs.getAllSpeaker) {
             (response) in
+            
             print(response)
             let json = JSON(response)
             let result = json["AllSpeaker"]

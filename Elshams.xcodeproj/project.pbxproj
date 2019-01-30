@@ -18,6 +18,10 @@
 		0439DACD21C410760041CDCB /* SpeakerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0439DACC21C410760041CDCB /* SpeakerCollectionViewCell.swift */; };
 		0439DACF21C68A510041CDCB /* NewFeedsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0439DACE21C68A510041CDCB /* NewFeedsCell.swift */; };
 		0439DAD121C68ACD0041CDCB /* NewsFeedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0439DAD021C68ACD0041CDCB /* NewsFeedData.swift */; };
+		044C648121FF2B0A00434BB1 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044C648021FF2B0A00434BB1 /* Helper.swift */; };
+		044C648321FF342600434BB1 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044C648221FF342600434BB1 /* Config.swift */; };
+		044C648521FF3A4900434BB1 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044C648421FF3A4900434BB1 /* API.swift */; };
+		044C648721FF571500434BB1 /* String-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044C648621FF571500434BB1 /* String-Extension.swift */; };
 		045EF18621B8590D009DCA7A /* StartUpsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045EF18521B8590D009DCA7A /* StartUpsData.swift */; };
 		045EF18821B85C22009DCA7A /* StartupDetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045EF18721B85C22009DCA7A /* StartupDetailsVC.swift */; };
 		045EF18B21B93AFC009DCA7A /* PendingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045EF18A21B93AFC009DCA7A /* PendingVC.swift */; };
@@ -84,6 +88,7 @@
 		0469B49D21AC1675000A337B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0469B49B21AC1675000A337B /* LaunchScreen.storyboard */; };
 		047970DA21CFF46400C5BAFD /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047970D921CFF46400C5BAFD /* UIColor.swift */; };
 		049BF7BC21CBBFF70086F569 /* SponserCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049BF7BB21CBBFF70086F569 /* SponserCollectionViewCell.swift */; };
+		04B2C5A82200C1B70039D6AD /* AvailableAppointment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B2C5A72200C1B70039D6AD /* AvailableAppointment.swift */; };
 		04B872A721AD536500C6629E /* SelectFavCompVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B872A621AD536500C6629E /* SelectFavCompVC.swift */; };
 		04B872A921AD539800C6629E /* SelectFavCompCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B872A821AD539800C6629E /* SelectFavCompCVC.swift */; };
 		04B872AB21AD6E8F00C6629E /* SideMenuContainerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B872AA21AD6E8F00C6629E /* SideMenuContainerVC.swift */; };
@@ -115,6 +120,10 @@
 		0439DACC21C410760041CDCB /* SpeakerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeakerCollectionViewCell.swift; sourceTree = "<group>"; };
 		0439DACE21C68A510041CDCB /* NewFeedsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFeedsCell.swift; sourceTree = "<group>"; };
 		0439DAD021C68ACD0041CDCB /* NewsFeedData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFeedData.swift; sourceTree = "<group>"; };
+		044C648021FF2B0A00434BB1 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		044C648221FF342600434BB1 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		044C648421FF3A4900434BB1 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		044C648621FF571500434BB1 /* String-Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String-Extension.swift"; sourceTree = "<group>"; };
 		045EF18521B8590D009DCA7A /* StartUpsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartUpsData.swift; sourceTree = "<group>"; };
 		045EF18721B85C22009DCA7A /* StartupDetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartupDetailsVC.swift; sourceTree = "<group>"; };
 		045EF18A21B93AFC009DCA7A /* PendingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingVC.swift; sourceTree = "<group>"; };
@@ -183,6 +192,7 @@
 		0469B49E21AC1675000A337B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		047970D921CFF46400C5BAFD /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		049BF7BB21CBBFF70086F569 /* SponserCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponserCollectionViewCell.swift; sourceTree = "<group>"; };
+		04B2C5A72200C1B70039D6AD /* AvailableAppointment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableAppointment.swift; sourceTree = "<group>"; };
 		04B872A621AD536500C6629E /* SelectFavCompVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectFavCompVC.swift; sourceTree = "<group>"; };
 		04B872A821AD539800C6629E /* SelectFavCompCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectFavCompCVC.swift; sourceTree = "<group>"; };
 		04B872AA21AD6E8F00C6629E /* SideMenuContainerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuContainerVC.swift; sourceTree = "<group>"; };
@@ -221,6 +231,9 @@
 			children = (
 				0410D75421F0BBED005A304E /* PhoneCall.swift */,
 				0410D75621F0BD79005A304E /* OpenSafariLink.swift */,
+				044C648021FF2B0A00434BB1 /* Helper.swift */,
+				044C648221FF342600434BB1 /* Config.swift */,
+				044C648421FF3A4900434BB1 /* API.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -298,6 +311,7 @@
 				04BE00FC21D0F26A00809834 /* EventsData.swift */,
 				04E994F921ECB7B0006070B3 /* AgendaSectionDate.swift */,
 				04FE210521F755AB0027DDB3 /* AgendaHeadData.swift */,
+				04B2C5A72200C1B70039D6AD /* AvailableAppointment.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -444,6 +458,7 @@
 			children = (
 				047970D921CFF46400C5BAFD /* UIColor.swift */,
 				04E994F721EB89D2006070B3 /* MdcText.swift */,
+				044C648621FF571500434BB1 /* String-Extension.swift */,
 			);
 			path = Extentions;
 			sourceTree = "<group>";
@@ -688,12 +703,16 @@
 				04B872A921AD539800C6629E /* SelectFavCompCVC.swift in Sources */,
 				0466C08021B6970200C9C555 /* Notifications.swift in Sources */,
 				0439DAC921C112700041CDCB /* NewsDetails.swift in Sources */,
+				044C648121FF2B0A00434BB1 /* Helper.swift in Sources */,
 				045EF19E21B96098009DCA7A /* AllQuestionsCell.swift in Sources */,
 				0439DACF21C68A510041CDCB /* NewFeedsCell.swift in Sources */,
+				04B2C5A82200C1B70039D6AD /* AvailableAppointment.swift in Sources */,
 				045EF19121B93C24009DCA7A /* AcceptedCell.swift in Sources */,
 				0466C03A21B0268800C9C555 /* BaseCompMenuCell.swift in Sources */,
+				044C648321FF342600434BB1 /* Config.swift in Sources */,
 				0439DAC721C111510041CDCB /* AllNewsCell.swift in Sources */,
 				0410D75521F0BBED005A304E /* PhoneCall.swift in Sources */,
+				044C648721FF571500434BB1 /* String-Extension.swift in Sources */,
 				0466C07A21B6906B00C9C555 /* NotificationsVC.swift in Sources */,
 				04BE00FD21D0F26A00809834 /* EventsData.swift in Sources */,
 				0466C08921B6AC1300C9C555 /* RegisterationVC.swift in Sources */,
@@ -735,6 +754,7 @@
 				0466C06721B57B2700C9C555 /* SponsersVC.swift in Sources */,
 				0410D75721F0BD79005A304E /* OpenSafariLink.swift in Sources */,
 				0466C09D21B7E20C00C9C555 /* AgendaMainVC.swift in Sources */,
+				044C648521FF3A4900434BB1 /* API.swift in Sources */,
 				0466C09721B6E16200C9C555 /* SideMenuDetailCell.swift in Sources */,
 				0466C06121B57AA000C9C555 /* AboutEvent.swift in Sources */,
 				0466C09F21B7E25400C9C555 /* NetworksVC.swift in Sources */,

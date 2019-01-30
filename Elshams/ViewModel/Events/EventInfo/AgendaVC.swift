@@ -58,7 +58,7 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
     
     
     func loadTableData()  {
-        Service.getService(url: "http://66.226.74.85:4002/api/Event/getAgenda") {
+        Service.getServiceWithAuth(url: URLs.getAgenda) {
             (response) in
             print(response)
             let result = JSON(response)
@@ -94,6 +94,7 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
                         "imageUrl" : "http:-b01d-582382a5795e.jpg"]
                          , AgendaDate: agenda_date ?? "date", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String , RondomColor: agenda_rondomColor ?? "red", AgendaType: agenda_Type ?? "session"))
                 }
+                
                 index = index + 1
                 self.tableViewAgenda.reloadData()
                 self.activeLoader.isHidden = true
