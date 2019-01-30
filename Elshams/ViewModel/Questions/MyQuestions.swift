@@ -8,19 +8,54 @@
 
 import UIKit
 import XLPagerTabStrip
+import Alamofire
+import AlamofireImage
+import SwiftyJSON
 
 class MyQuestions: UIViewController , UITableViewDataSource ,UITableViewDelegate {
     var questionList = Array<QuestionsData>()
+    @IBOutlet weak var activeLoader: UIActivityIndicatorView!
+    @IBOutlet weak var questionTableView: UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-
-      /*  questionList.append(QuestionsData(Questions: "What is the chiefly responsible for the increase in the average length of life in USA during the last fifty years?", Answer: "the reduced death rate among infants", AnswerArr: ["a.the reduced death rate among infants.","b.The subistituation of machine for human","c.Compulsory health and physical education."], IdQuset: 0))
-        
-        questionList.append(QuestionsData(Questions: "What is the chiefly responsible for the increase in the average length of life in USA during the last thirty years?", Answer: "No Answer", AnswerArr: ["a.Compulsory health and physical education.","b.the reduced death rate among infants.","c.The subistituation of machine for human"], IdQuset: 1)) */
+        questionTableView.isHidden = true
+        activeLoader.startAnimating()
+        loadMyQuestionData()
+ 
     }
     
+    func loadMyQuestionData()  {
+        Service.getServiceWithAuth(url: URLs.getQuestions) { // authorizre or not ?
+            (response) in
+            print(response)
+            let json = JSON(response)
+            let result = json["myQuestions"]
+            
+            var iDNotNull = true
+            var index = 0
+            while iDNotNull {
+                let question_ID = result[index]["ID"].string
+                let question_head = result[index]["question"].string
+                let question_answer = result[index]["answer"].string
+                let question_TimeStamp = result[index]["questionTimeStamp"].string
+                
+                if question_ID == nil || question_ID?.trimmed == "" || question_ID == "null" || question_ID == "nil" {
+                    iDNotNull = false
+                    break
+                }
+                self.questionList.append(QuestionsData(Questions: question_head ?? "question", Answer: question_answer ?? "answer", QuestionsID: question_ID ?? "ID", QuestionTimeStamp: question_TimeStamp ?? "TimeStamp"))
+                
+                index = index + 1
+                self.questionTableView.reloadData()
+                self.activeLoader.isHidden = true
+                self.activeLoader.stopAnimating()
+                self.questionTableView.isHidden = false
+            }
+        }
+        
+    }
     //table view
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1

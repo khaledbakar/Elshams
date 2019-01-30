@@ -33,7 +33,7 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
     }
     
     func loadAllStartUpData()  {
-        Service.getService(url: URLs.getAllStartups) {
+        Service.getServiceWithAuth(url: URLs.getAllStartups) {
             (response) in
             
             print(response)

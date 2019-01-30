@@ -34,7 +34,7 @@ class StartupDetailsVC: UIViewController {
     
     @IBOutlet weak var sureMessageTxt: UILabel!
     
-    var appointmentBooking = ["saturday 9AM","saturday 10AM","saturday 11AM"]
+   // var appointmentBooking = ["saturday 9AM","saturday 10AM","saturday 11AM"]
     @IBOutlet weak var startUpLogo: UIImageView!
     
     @IBOutlet weak var popUpContainerView: UIView!
@@ -53,6 +53,8 @@ class StartupDetailsVC: UIViewController {
     @IBOutlet weak var profieView: UIView!
    static var  sechadualeBTNSend : Bool?
     var appointmentSelect:String?
+    var appointmentSelect_Name:String?
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -162,6 +164,7 @@ class StartupDetailsVC: UIViewController {
             self.startUpPhone.text = self.startUp_Phone
             self.startUpLinkedIn.text = self.startUp_Linkedin
             self.aboutStartUp.text  = self.startUp_About
+           // self.sureMessageTxt
             self.imgUrl(imgUrl: (self.startUp_ImageURl)!)
             if self.startUp_Appoimentstatus != nil && self.startUp_Appoimentstatus != "notSent" {
                 self.afterRescadualeFrame()
@@ -263,10 +266,8 @@ func imgUrl(imgUrl:String)  {
     
     
     func defaultFrame() {
-      
         rescadualeView.isHidden = true
         informationTopConstraint.constant = -46
-        
     }
     
     func afterRescadualeFrame() {
@@ -301,9 +302,11 @@ func imgUrl(imgUrl:String)  {
         let buTitleInt = sender.tag - 1
         //appointmentSelect = appointmentBooking[buTitleInt]
         appointmentSelect = availableAppointmentList[buTitleInt].appoimentID
+        appointmentSelect_Name = availableAppointmentList[buTitleInt].appoimentName
         print(appointmentSelect)
     }
-    @objc func buLblClick (_ sender: UILabel){
+    
+  /*  @objc func buLblClick (_ sender: UIGestureRecognizer){
         let butSelec:UIButton?
         for ind in 2..<popUpView.subviews.count {
             if ind % 2 == 1 {
@@ -316,14 +319,17 @@ func imgUrl(imgUrl:String)  {
                 continue
             }
         }
+       //(sender as UILabel).isSelected = true
         //butSelec.isSelected = true
-        let  buTitle = "\((sender.text)!)"
-        let buTitleInt = sender.tag - 1
+    //    let  buTitle = "\((sender.text)!)"
+     //   let buTitleInt = sender.tag - 1
         //appointmentSelect = appointmentBooking[buTitleInt]
         appointmentSelect = availableAppointmentList[buTitleInt].appoimentID
+        appointmentSelect_Name = availableAppointmentList[buTitleInt].appoimentName
+
         print(appointmentSelect)
     }
-    
+    */
     func btnRightBar()  {
         let btnAppointment = UIButton(type: UIButton.ButtonType.system)
         btnAppointment.setImage(UIImage(named: "appointment"), for: UIControl.State())
@@ -346,7 +352,18 @@ func imgUrl(imgUrl:String)  {
         let btnSearch = UIButton(type: UIButton.ButtonType.system)
         let customBarItem = UIBarButtonItem(customView: btnSearch)
         self.navigationItem.rightBarButtonItem = customBarItem
-        sureMessageTxt.text = "You have an appointment in \((self.startUp_AppoimentTime)!)!"
+        sureMessageTxt.text = "You send an appointment in \((self.appointmentSelect_Name)!)!"
+        requestAppointment(StartupID: (singleItem?.startup_id)!, AppoimentID: (appointmentSelect)!)
+
+    }
+    
+    func requestAppointment(StartupID:String,AppoimentID:String)  {
+        let appointmentCheckParam : Parameters = ["startupID" : "\(StartupID)",
+            "appoimentID" : "\(AppoimentID)"]
+            Service.postServiceWithAuth(url: URLs.requestAppoiment, parameters: appointmentCheckParam) {
+                (response) in
+                print(response)
+        }
 
     }
     

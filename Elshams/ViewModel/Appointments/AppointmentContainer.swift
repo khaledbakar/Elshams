@@ -13,6 +13,7 @@ class AppointmentContainer: ButtonBarPagerTabStripViewController {
 
     override func viewDidLoad() {
         loadDesign()
+        
 
         super.viewDidLoad()
 

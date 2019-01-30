@@ -8,28 +8,69 @@
 
 import UIKit
 import XLPagerTabStrip
+import Alamofire
+import AlamofireImage
+import SwiftyJSON
+
 
 class AcceptedVC: BaseViewController , UITableViewDataSource ,UITableViewDelegate {
- 
+    var acceptedList = Array<StartUpsData>()
     @IBOutlet weak var acceptedTableView: UITableView!
-    //  var startUpList = Array<StartUpsData>()
-    var filterAccepted = Array<StartUpsData>()
-        //StartUps.startUpList.filter { ($0.acceptedApointmentStr?.contains("true"))!}
+    @IBOutlet weak var activeLoader: UIActivityIndicatorView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         addSlideMenuButton()
 
-      /*  startUpList.append(StartUpsData(StartupName: "Bakar", StartupAddress: "1 Tahrir Square,cairo,Egypt", StartupImage: "avatar", StartUpLinkedIn: "khaled.zaki12", StartUpPhone: "01060136503", StartUpMail: "kzakyy@ikdynamics.com", StartUpAbout: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, ", AcceptedApointment: true, PendingApointment: false, AcceptedApointmentStr: "true", PendingApointmentStr: "false"))
-        startUpList.append(StartUpsData(StartupName: "MedGram", StartupAddress: "18A Obour Bulidings,cairo,Egypt", StartupImage: "avatar", StartUpLinkedIn: "khaled.zaki12", StartUpPhone: "01060136503", StartUpMail: "kzakyy@ikdynamics.com", StartUpAbout: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, ", AcceptedApointment: true, PendingApointment: false, AcceptedApointmentStr: "true", PendingApointmentStr: "false")) */
+        acceptedTableView.isHidden = true
+        activeLoader.startAnimating()
+        loadAcceptedData()
     }
+    
+    func loadAcceptedData()  {
+        Service.getServiceWithAuth(url: URLs.getAppoiments) {
+            (response) in
+            
+            print(response)
+            let json = JSON(response)
+            let result = json["Accepted"]
+            var iDNotNull = true
+            var index = 0
+            while iDNotNull {
+                let startUp_ID = result[index]["id"].string
+                let startUp_Name = result[index]["title"].string
+                let startUp_Appoimentstatus = result[index]["appoimentstatus"].string
+                let startUp_AppoimentTime = result[index]["AppoimentTime"].string
+                let startUp_ImageUrl = result[index]["imageURl"].string
+                let startUp_About = result[index]["about"].string
+                let startUp_ContectInforamtion = result[index]["ContectInforamtion"].dictionaryObject
+                let startUp_Email = result[index]["ContectInforamtion"]["Email"].string
+                let startUp_Linkedin = result[index]["ContectInforamtion"]["linkedin"].string
+                let startUp_Phone = result[index]["ContectInforamtion"]["phone"].string
+                
+                let contect = ["Email": "",
+                               "linkedin": "",
+                               "phone": ""]
+                if startUp_ID == nil || startUp_ID?.trimmed == "" || startUp_ID == "null" || startUp_ID == "nil" {
+                    iDNotNull = false
+                    break
+                }
+                self.acceptedList.append(StartUpsData(StartupName: startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: startUp_ImageUrl ?? "Image", StartUpAbout: startUp_About ?? "about", AppoimentStatus: startUp_Appoimentstatus ?? "Appointmentstatus", AppoimentTime: startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                index = index + 1
+                self.acceptedTableView.reloadData()
+                self.activeLoader.isHidden = true
+                self.activeLoader.stopAnimating()
+                self.acceptedTableView.isHidden = false
+            }
+        }
+    }
+    
    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-       // return startUpList.count
-        return filterAccepted.count
+        return acceptedList.count
 
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -38,28 +79,20 @@ class AcceptedVC: BaseViewController , UITableViewDataSource ,UITableViewDelegat
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "acceptedcell") as! AcceptedCell
-       //cell.setStartupCell(startupsList: startUpList[indexPath.row])
-        cell.setStartupCell(startupsList: filterAccepted[indexPath.row])
-
+        cell.setStartupCell(startupsList: acceptedList[indexPath.row])
         return cell
     }
     
     @IBAction func btnCancelAppointment(_ sender: Any) {
         let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to:self.acceptedTableView)
         let indexPath = self.acceptedTableView.indexPathForRow(at: buttonPosition)
-      //  let selectedId = filterAccepted[indexPath!.row].id_startUp
-       
-      /*  StartUps.startUpList[selectedId!].acceptedApointment = false
-        StartUps.startUpList[selectedId!].acceptedApointmentStr = "false"
-        
-        filterAccepted.remove(at: (indexPath?.row)!) */
+        acceptedList.remove(at: (indexPath?.row)!)
         acceptedTableView.reloadData()
-     //   StartupDetailsVC.sechadualeBTNSend = true
-       // performSegue(withIdentifier: "startupdetail", sender: StartUps.startUpList[indexPath!.row])
+     
     }
   
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "acceptedstartup", sender: filterAccepted[indexPath.row])
+        performSegue(withIdentifier: "acceptedstartup", sender: acceptedList[indexPath.row])
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let dis = segue.destination as? StartupDetailsVC {

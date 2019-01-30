@@ -1641,7 +1641,7 @@
                                                 </constraints>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Newsfeed" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="97R-X7-yzi">
-                                                <rect key="frame" x="15" y="745" width="87" height="20"/>
+                                                <rect key="frame" x="15" y="646" width="87" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="DZl-sD-rPO"/>
                                                     <constraint firstAttribute="width" constant="87" id="bPU-mk-x4e"/>
@@ -1651,11 +1651,11 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="e0Y-5B-40I">
-                                                <rect key="frame" x="8" y="769" width="359" height="285"/>
+                                                <rect key="frame" x="8" y="670" width="359" height="384"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="359" id="lHy-Pw-mQY"/>
-                                                    <constraint firstAttribute="height" constant="285" id="oT2-fZ-a2S"/>
+                                                    <constraint firstAttribute="height" constant="384" id="oT2-fZ-a2S"/>
                                                 </constraints>
                                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="0Kt-Dc-BRQ">
                                                     <size key="itemSize" width="360.5" height="234"/>
@@ -1759,7 +1759,7 @@
                                             <constraint firstAttribute="trailing" secondItem="27A-fg-gq0" secondAttribute="trailing" constant="21" id="EH8-W1-yfJ"/>
                                             <constraint firstItem="v91-dR-Uic" firstAttribute="leading" secondItem="rRF-kZ-AvO" secondAttribute="leading" constant="147" id="EeY-O8-8fo"/>
                                             <constraint firstItem="v91-dR-Uic" firstAttribute="top" secondItem="rRF-kZ-AvO" secondAttribute="top" constant="16" id="FC0-PG-KCm"/>
-                                            <constraint firstItem="97R-X7-yzi" firstAttribute="top" secondItem="c2N-xH-8R2" secondAttribute="bottom" constant="8" id="G4u-uT-Y7B"/>
+                                            <constraint firstItem="97R-X7-yzi" firstAttribute="top" secondItem="faI-da-CeL" secondAttribute="bottom" constant="7" id="G4u-uT-Y7B"/>
                                             <constraint firstItem="e0Y-5B-40I" firstAttribute="top" secondItem="97R-X7-yzi" secondAttribute="bottom" constant="4" id="Hnf-Pp-0s2"/>
                                             <constraint firstAttribute="trailing" secondItem="c2N-xH-8R2" secondAttribute="trailing" constant="8" id="I9G-qe-y7J"/>
                                             <constraint firstAttribute="height" constant="1054" id="Kn0-gJ-SVa"/>
@@ -1842,6 +1842,7 @@
                         <outlet property="sponserName3" destination="pZS-Ew-a4B" id="JC8-Vb-sr0"/>
                         <outlet property="sponserName4" destination="rjc-h3-2ih" id="Wa6-wT-3i2"/>
                         <outlet property="timeLineCollView" destination="e0Y-5B-40I" id="b10-Dr-RpO"/>
+                        <outlet property="viewPostContols" destination="c2N-xH-8R2" id="HeM-wK-Teq"/>
                         <outlet property="viewTimeLineView" destination="rRF-kZ-AvO" id="w93-qY-jPs"/>
                         <segue destination="BEW-ol-MvH" kind="show" identifier="speakerpage" id="sEU-ng-aHe"/>
                         <segue destination="y6Z-Wt-mc1" kind="show" identifier="sponserspage" id="FXy-Db-B3P"/>
@@ -5114,18 +5115,26 @@
                                     <outlet property="delegate" destination="IUr-Ps-vVZ" id="G1z-Cb-0px"/>
                                 </connections>
                             </tableView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="dgq-kb-u5y">
+                                <rect key="frame" x="0.0" y="333.5" width="375" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="FZB-oS-Jr6" firstAttribute="leading" secondItem="M79-1z-xGb" secondAttribute="leading" id="03Y-n6-Cdg"/>
+                            <constraint firstItem="dgq-kb-u5y" firstAttribute="centerX" secondItem="M79-1z-xGb" secondAttribute="centerX" id="3QQ-ER-0jU"/>
+                            <constraint firstItem="dgq-kb-u5y" firstAttribute="centerY" secondItem="M79-1z-xGb" secondAttribute="centerY" id="CAF-xw-6Vh"/>
+                            <constraint firstItem="dgq-kb-u5y" firstAttribute="leading" secondItem="M79-1z-xGb" secondAttribute="leading" id="J9q-6s-mQV"/>
                             <constraint firstItem="FZB-oS-Jr6" firstAttribute="trailing" secondItem="M79-1z-xGb" secondAttribute="trailing" id="MuX-rc-7Vc"/>
                             <constraint firstItem="FZB-oS-Jr6" firstAttribute="top" secondItem="M79-1z-xGb" secondAttribute="top" id="eBf-jU-gF3"/>
+                            <constraint firstItem="dgq-kb-u5y" firstAttribute="trailing" secondItem="M79-1z-xGb" secondAttribute="trailing" id="f3A-Et-4fI"/>
                             <constraint firstItem="FZB-oS-Jr6" firstAttribute="bottom" secondItem="M79-1z-xGb" secondAttribute="bottom" id="gb7-xE-R41"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="M79-1z-xGb"/>
                     </view>
                     <connections>
                         <outlet property="acceptedTableView" destination="FZB-oS-Jr6" id="bqh-vP-8Wf"/>
+                        <outlet property="activeLoader" destination="dgq-kb-u5y" id="KA7-ir-YdA"/>
                         <segue destination="ghk-GE-GAb" kind="show" identifier="acceptedstartup" id="kIZ-Rh-Hi3"/>
                     </connections>
                 </viewController>
@@ -5238,17 +5247,25 @@
                                     <outlet property="delegate" destination="XSb-CV-V8V" id="0RN-XU-B7G"/>
                                 </connections>
                             </tableView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="a5g-e6-DkO">
+                                <rect key="frame" x="0.0" y="333.5" width="375" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.95294117649999999" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="scw-LY-sKd" firstAttribute="leading" secondItem="Ykg-TE-5k4" secondAttribute="leading" id="6kh-N1-UdG"/>
+                            <constraint firstItem="a5g-e6-DkO" firstAttribute="centerY" secondItem="Ykg-TE-5k4" secondAttribute="centerY" id="8hS-XT-o0v"/>
                             <constraint firstItem="scw-LY-sKd" firstAttribute="trailing" secondItem="Ykg-TE-5k4" secondAttribute="trailing" id="JJn-IF-CgO"/>
+                            <constraint firstItem="a5g-e6-DkO" firstAttribute="leading" secondItem="Ykg-TE-5k4" secondAttribute="leading" id="a95-yN-IA7"/>
+                            <constraint firstItem="a5g-e6-DkO" firstAttribute="trailing" secondItem="Ykg-TE-5k4" secondAttribute="trailing" id="eeA-Fj-Ayk"/>
                             <constraint firstItem="scw-LY-sKd" firstAttribute="bottom" secondItem="Ykg-TE-5k4" secondAttribute="bottom" id="tDQ-SW-Xrb"/>
                             <constraint firstItem="scw-LY-sKd" firstAttribute="top" secondItem="Ykg-TE-5k4" secondAttribute="top" id="tbc-vp-wUz"/>
+                            <constraint firstItem="a5g-e6-DkO" firstAttribute="centerX" secondItem="Ykg-TE-5k4" secondAttribute="centerX" id="y00-xQ-AZ8"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Ykg-TE-5k4"/>
                     </view>
                     <connections>
+                        <outlet property="activeLoader" destination="a5g-e6-DkO" id="mSH-Hr-56j"/>
                         <outlet property="pendingTableView" destination="scw-LY-sKd" id="zjt-VO-RBT"/>
                         <segue destination="ghk-GE-GAb" kind="show" identifier="pendingstartup" id="FqZ-fl-RpC"/>
                     </connections>
@@ -5435,16 +5452,27 @@
                                     <outlet property="delegate" destination="5R2-NR-Zh8" id="dZa-fD-Dvs"/>
                                 </connections>
                             </tableView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="emV-JP-Lya">
+                                <rect key="frame" x="0.0" y="333.5" width="375" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="4cn-xI-axt" firstAttribute="bottom" secondItem="kjw-G0-GDg" secondAttribute="bottom" id="AhF-J9-AFa"/>
                             <constraint firstItem="4cn-xI-axt" firstAttribute="top" secondItem="kjw-G0-GDg" secondAttribute="top" id="GpJ-xB-bQh"/>
+                            <constraint firstItem="emV-JP-Lya" firstAttribute="trailing" secondItem="kjw-G0-GDg" secondAttribute="trailing" id="bEw-LH-hAC"/>
+                            <constraint firstItem="emV-JP-Lya" firstAttribute="leading" secondItem="kjw-G0-GDg" secondAttribute="leading" id="f54-UF-1QQ"/>
                             <constraint firstItem="4cn-xI-axt" firstAttribute="leading" secondItem="kjw-G0-GDg" secondAttribute="leading" id="hHS-0i-9NR"/>
+                            <constraint firstItem="emV-JP-Lya" firstAttribute="centerX" secondItem="kjw-G0-GDg" secondAttribute="centerX" id="mUZ-2k-IuO"/>
                             <constraint firstItem="4cn-xI-axt" firstAttribute="trailing" secondItem="kjw-G0-GDg" secondAttribute="trailing" id="op1-9a-kV8"/>
+                            <constraint firstItem="emV-JP-Lya" firstAttribute="centerY" secondItem="kjw-G0-GDg" secondAttribute="centerY" id="rQv-iS-wdW"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="kjw-G0-GDg"/>
                     </view>
+                    <connections>
+                        <outlet property="activeLoader" destination="emV-JP-Lya" id="jCA-Rp-et7"/>
+                        <outlet property="questionTableView" destination="4cn-xI-axt" id="Ken-1C-vsh"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6oJ-K0-khD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -5733,7 +5761,7 @@
         <image name="website" width="21" height="19.5"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="xsD-td-520"/>
+        <segue reference="FqZ-fl-RpC"/>
         <segue reference="fR8-yW-xPq"/>
         <segue reference="yp8-y2-jte"/>
     </inferredMetricsTieBreakers>

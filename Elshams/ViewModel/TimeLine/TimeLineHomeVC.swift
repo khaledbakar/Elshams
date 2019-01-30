@@ -7,9 +7,13 @@
 //
 
 import UIKit
+import Alamofire
+import AlamofireImage
+import SwiftyJSON
 
 class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollectionViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate , UITextFieldDelegate {
     @IBOutlet weak var scrollTimeLineView: UIScrollView!
+    @IBOutlet weak var viewPostContols: UIView!
     
     @IBOutlet weak var viewTimeLineView: UIView!
     @IBOutlet weak var homeLogo: UIImageView!
@@ -48,62 +52,63 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
     override func viewDidLoad() {
         super.viewDidLoad()
         addSlideMenuButton()
-        newsFeedList.append(NewsFeedData(UserPostName: "khaled bakar", VideoPostUrl: "https://www.youtube.com/embed/Kmq6JU-1N9M", UserPostImage: "profile1", TypePost: "video", ImagePost: UIImage(named: "avatar")!))
-        newsFeedList.append(NewsFeedData(UserPostName: "khaled bakar bardo", VideoPostUrl: "https://www.youtube.com/embed/Kmq6JU-1N9M", UserPostImage: "profile2", TypePost: "video", ImagePost: UIImage(named: "avatar")!))
-        newsFeedList.append(NewsFeedData(UserPostName: "khaled bakar 3", VideoPostUrl: "https://www.youtube.com/embed/Kmq6JU-1N9M", UserPostImage: "avatar", TypePost: "video", ImagePost: UIImage(named: "avatar")!))
-        newsFeedList.append(NewsFeedData(UserPostName: "khaled bakar 4", VideoPostUrl: "https://www.youtube.com/embed/Kmq6JU-1N9M", UserPostImage: "avatar", TypePost: "video", ImagePost: UIImage(named: "avatar")!))
 
+        viewPostContols.isHidden = true
         imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         postText.delegate = self
+        loadPostsData()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        
     }
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
-    }
-    @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer)  {
-        view.endEditing(true)
-        self.scrollTimeLineView.endEditing(true)
-        self.viewTimeLineView.endEditing(true)
-        self.timeLineCollView.endEditing(true)
-        self.postText.endEditing(true)
-    }
-    
-    @objc func keyboardWillChange(notification: Notification){
-        guard let keyboardRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
-            return
-        }
-        if  notification.name == Notification.Name.UIKeyboardWillShow ||
-            notification.name == Notification.Name.UIKeyboardWillChangeFrame {
-            view.frame.origin.y = -keyboardRect.height
-        } else {
-            view.frame.origin.y = 0
-        }
-        print("Keyboard will show \(notification.name.rawValue)")
-        //   view.frame.origin.y = -150
-    }
-    
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-        self.scrollTimeLineView.endEditing(true)
-        self.viewTimeLineView.endEditing(true)
-        self.timeLineCollView.endEditing(true)
-        self.postText.endEditing(true)
 
+    func loadPostsData()  {
+        Service.getServiceWithAuth(url: (URLs.getAllPosts)) {
+            (response) in
+            print("this is Posts ")
+            print(response)
+            let json = JSON(response)
+            let result = json["AllPosts"]
+            var iDNotNull = true
+            var index = 0
+            while iDNotNull {
+                let post_ID = result[index]["ID"].string
+                if post_ID == nil || post_ID?.trimmed == "" || post_ID == "null" || post_ID == "nil" {
+                    iDNotNull = false
+                    break
+                }
+                let post_Author = result[index]["author"].string
+                let post_AutherPic = result[index]["autherPic"].string
+                let post_VedioURl = result[index]["vedioURl"].string
+                let post_Discription = result[index]["postDiscription"].string
+                let post_LikeCount = result[index]["about"].int
+                let post_Comments = result[index]["Comments"].array
+                let post_Islike = result[index]["Islike"].bool
+                let post_SharingLink = result[index]["sharingLink"].string
+                let post_Image = result[index]["image"].string
+               
+             /*   var iDNotNullComment = true
+                var indexComm = 0
+                while iDNotNullComment {
+                    let post_CommentDiscription = post_Comments?[indexComm]["commentDiscription"].string
 
-        view.frame.origin.y = 0
+                    if post_CommentDiscription == nil || post_CommentDiscription?.trimmed == "" || post_CommentDiscription == "null" || post_CommentDiscription == "nil" {
+                        iDNotNull = false
+                        break
+                    }
+                    let post_author = post_Comments?[indexComm]["author"].string
+                    let post_autherPic = post_Comments?[indexComm]["autherPic"].string
+                    indexComm = indexComm + 1
+                }
+                */
+                
+               
+                self.newsFeedList.append(NewsFeedData(Post_ID: post_ID ?? "", Post_Author: post_Author ?? "", Post_AutherPicture: post_AutherPic ?? "", Post_VideoURl: post_VedioURl ?? "" , Post_Discription: post_Discription ?? "", Post_LikeCount: post_LikeCount ?? 0, Post_Comments: post_Comments ?? [result], Post_Islike: post_Islike ?? false, Post_SharingLink: post_SharingLink ?? "", Post_Image: post_Image ?? ""))
+                index = index + 1
+                self.timeLineCollView.reloadData()
+            }
+        }
     }
-    
-    func hideKyebad() {
-        postText.resignFirstResponder()
-    }
-    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return newsFeedList.count
@@ -135,7 +140,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
     }
     
     @IBAction func btnPost(_ sender: Any) {
-        newsFeedList.append(NewsFeedData(UserPostName: "Khaled", VideoPostUrl: postText.text! , UserPostImage: "avatar", TypePost: "text", ImagePost: UIImage(named: "avatar")!))
+     //  newsFeedList.append(NewsFeedData(UserPostName: "Khaled", VideoPostUrl: postText.text! , UserPostImage: "avatar", TypePost: "text", ImagePost: UIImage(named: "avatar")!))
         timeLineCollView.reloadData()
         postText.text = ""
 
@@ -156,7 +161,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
            // profileImage.image = image
            TimeLineHomeVC.imagePost  = image
             postText.text = "Image Has Uploaded Post it !"
-            newsFeedList.append(NewsFeedData(UserPostName: "Khaled", VideoPostUrl: "", UserPostImage: "avatar", TypePost: "photo", ImagePost: image))
+         //   newsFeedList.append(NewsFeedData(UserPostName: "Khaled", VideoPostUrl: "", UserPostImage: "avatar", TypePost: "photo", ImagePost: image))
             timeLineCollView.reloadData()
         }
         imagePicker.dismiss(animated: true, completion: nil)

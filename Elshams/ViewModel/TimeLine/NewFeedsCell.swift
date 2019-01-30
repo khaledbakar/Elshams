@@ -8,30 +8,38 @@
 
 import UIKit
 import WebKit
+import Alamofire
+import AlamofireImage
+
 class NewFeedsCell: UICollectionViewCell {
-    
     @IBOutlet weak var userPostImage: UIImageView!
     @IBOutlet weak var videoContainer: WKWebView!
     @IBOutlet weak var userPostName: UILabel!
     @IBOutlet weak var photoPost: UIImageView!
     @IBOutlet weak var textPost: UILabel!
     var PostType : String = ""
-    func setNewsFeedCeel(NewsfeedList:NewsFeedData)  { //,PostType:String
-        PostType = (NewsfeedList.typePost)!
-       userPostImage.image = UIImage(named: "\((NewsfeedList.userPostImage)!)")
+    func setNewsFeedCeel(NewsfeedList:NewsFeedData)  {
+        imgUrl(imgUrl: (NewsfeedList.post_AutherPicture)!)
         userPostImage.layer.cornerRadius = userPostImage.frame.width / 2
         userPostImage.clipsToBounds = true
         
-        userPostName.text = (NewsfeedList.userPostName)!
-        if PostType == "video" {
-            photoPost.isHidden = true
-            textPost.isHidden = true
-            videoContainer.isHidden = false
-        let videoUrl = NSURL(string: "\((NewsfeedList.videoPostUrl)!)")
+        userPostName.text = (NewsfeedList.post_Author)!
+        
+        photoPost.isHidden = true
+        textPost.isHidden = true
+        
+        
+       videoContainer.isHidden = false
+        let videoUrl = NSURL(string: "\((NewsfeedList.post_VideoURl)!)")
         let requestObj = URLRequest(url: videoUrl as! URL)
         videoContainer.load(requestObj)
-        }
-        else if PostType == "photo"{
+       
+      /*
+     if PostType == "video" {
+     photoPost.isHidden = true
+     textPost.isHidden = true
+          }
+     else if PostType == "photo"{
             photoPost.isHidden = false
             textPost.isHidden = true
             videoContainer.isHidden = true
@@ -43,18 +51,31 @@ class NewFeedsCell: UICollectionViewCell {
             textPost.isHidden = false
             videoContainer.isHidden = true
             textPost.text = NewsfeedList.videoPostUrl
+        } */
+    }
+    
+    func imgUrl(imgUrl:String)  {
+        if let imagUrlAl = imgUrl as? String {
+            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
+                print(response)
+                if let image = response.result.value {
+                    DispatchQueue.main.async{
+                        self.userPostImage.image = image
+                    }
+                }
+            })
         }
     }
     
     @IBAction func btnComment(_ sender: Any) {
-        if  userPostName.textColor ==  UIColor.red {
+       /* if  userPostName.textColor ==  UIColor.red {
             userPostName.textColor = UIColor.blue
 
         } else {
             userPostName.textColor = UIColor.red
 
         }
-        
+        */
         
     }
     

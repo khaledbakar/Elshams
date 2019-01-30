@@ -8,28 +8,37 @@
 
 import Foundation
 import UIKit
+import SwiftyJSON
+
 class NewsFeedData {
-    var userPostName : String?
-    var videoPostUrl : String?
-    var userPostImage :String?
-    var typePost :String?    
-    var imagePost :UIImage?
-    /*var cameraPost :String?
-    var textPost :String?
-    var locationPost :String?
-    var attachPost :String? */
+    var post_ID : String?
+    var post_Author : String?
+    var post_AutherPicture :String?
+    var post_VideoURl :String?
+    var post_Discription :String?
+    var post_LikeCount :Int?
+   // var post_Comments :[[String:Any]]?
+     var post_Comments :[JSON]?
 
+    var post_Islike :Bool?
+    var post_SharingLink :String?
+    var post_Image :String?
 
-
-    init(UserPostName:String,VideoPostUrl:String,UserPostImage:String ,TypePost :String?,ImagePost :UIImage) { //,ImagePost :String,CameraPost :String,TextPost :String,LocationPost :String,AttachPost :String
-        self.userPostName = UserPostName
-        self.videoPostUrl = VideoPostUrl
-        self.userPostImage = UserPostImage
-        self.typePost = TypePost
-        self.imagePost = ImagePost
-       /* self.cameraPost = CameraPost
-        self.textPost = TextPost
-        self.locationPost = LocationPost
-        self.attachPost = AttachPost */
+    
+init(Post_ID:String,Post_Author:String,Post_AutherPicture:String ,Post_VideoURl :String,Post_Discription :String,Post_LikeCount :Int,Post_Comments :[JSON],Post_Islike :Bool,Post_SharingLink :String,Post_Image :String) { //Post_Comments :[[String:Any]]
+    self.post_ID = Post_ID
+    self.post_Author = Post_Author
+    self.post_AutherPicture = Post_AutherPicture
+    self.post_VideoURl = Post_VideoURl
+    self.post_Discription = Post_Discription
+    self.post_LikeCount = Post_LikeCount
+    self.post_Comments = Post_Comments
+    self.post_Islike = Post_Islike
+    self.post_SharingLink = Post_SharingLink
+    self.post_Image = Post_Image
+    
+    
+    
+    
     }
 }

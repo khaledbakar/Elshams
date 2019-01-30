@@ -284,8 +284,7 @@ class OpenSessionVC: UIViewController {
         let  buTitle = "\((sender.currentTitle)!)"
         let buTitleInt = sender.tag - 1
         print(buTitleInt)
-        //quest[num]
-       // answerSelect = quest[initQuestion].answerArr?[buTitleInt]
+        
         print(answerSelect)
 
     }
@@ -296,13 +295,9 @@ class OpenSessionVC: UIViewController {
     }
     
     @IBAction func btnFavouriteSession(_ sender: Any) {
-     /*   if self.session_isFavourate == true {
-            }
-            */
+    
         let sessionFavID : Parameters = ["sessionID" : "\((self.singleItem?.agenda_ID)!)"]
-       // let urlA  = "http://66.226.74.85:4002/api/Event/favourateAction"
-      //  let head : HTTPHeaders = ["Authorization": "Bearer wEJa4fD25FJ7W0zZd7STelBmOARPdCuPl9uzzwFFTOI9jmbLbLo4dzrxlp3RTMzIKc-tJeEqeQTtvd9QO00wxCqi1YU73FlVr5LZblfdysFyTgtIMdVHilmjv_Noz5jnXkcaKTNUTcMY20kpaF69ezMzEg8GQY_Ni1HkwdZNww9O6_ueRNZaP08fLInE3LVuFnKChKYGGAlHSDgiRAhcTkBO2AWMPzKYavXcEHZz6d1myYHRsHiXB-BF96ieMxzOM_2LlxXAWG4gvGGj46lAEmEBVGDRksKGmLCQl1JMMH5qnQ8Zth2FoT_Vj1-DQPiHkSJA8tDl-CtaR4_K3U73-KP3UJ7iHDzGt7Pr1nvlMI9LXgkuFcxM2cw4WlqrwgSywxENP6x41JqKVo5UDjiEH7eH5NuBWftAjasp4XeaKsRuNmEY6U2z3hjgUzXHpHtc","Content-Type": "application/json"]
-        
+     
             if self.session_isFavourate == true {
                 Service.postServiceWithAuth(url: URLs.unfavourateAction, parameters: sessionFavID) {
                     (response) in
@@ -311,66 +306,24 @@ class OpenSessionVC: UIViewController {
            self.session_isFavourate = false
             self.session_isFavourate_Str = "false"
                     self.favouriteIcon.image = UIImage(named: "unlike-session")
-                  /*  Service.getServiceWithAuth(url: "http://66.226.74.85:4002/api/Event/getSessionDetails/\((self.singleItem?.agenda_ID)!)") {
-                    //  Service.getService(url: "http://66.226.74.85:4002/api/Event/getSessionDetails/374") {
-                        (response) in
-                        print("this is UNfavour ")
-                        print(response)
-                    }  */
+                 
                  
         }
             }
                 else {
-              /*  Alamofire.request("http://66.226.74.85:4002/api/Event/favourateAction", method: .post, parameters: sessionFavID, encoding: JSONEncoding.default, headers: head )
-                    .validate(statusCode: 200..<600)
-                    .responseJSON { response in */
+              
             Service.postServiceWithAuth(url: URLs.favourateAction, parameters: sessionFavID) {
                 (response) in
-                    /*    print ("the response is : ")
-                        print(response.request)  // original URL request
-                        print(response.response) // HTTP URL response
-                        print(response.data)     // server data
-                        print(response.result)   // result of response serialization
-*/
+                
                 print(response)
                 let result = JSON(response)
-             /*   Service.getServiceWithAuth(url: "http://66.226.74.85:4002/api/Event/getSessionDetails/\((self.singleItem?.agenda_ID)!)") {
-                    (response) in
-                    print("this is favour ")
-                    print(response)
-                }
-                */
+            
             }
             favouriteIcon.image = UIImage(named: "like-session")
             self.session_isFavourate = true
             self.session_isFavourate_Str = "true"
                 
-           // AgendaVC.agendaList[singleItem.id]
         }
     }
     
 }
-//}
-
-
-// sessionTitle.text = sessionList[0].seseionTitle
-//   sessionDescribtion.text = sessionList[0].
-//     let speakerSingleFilter = SpeakersVC.speakerList[(singleItem?.speaker_FK_Id)!]
-/* let filterspeaker = SpeakersVC.speakerList.filter { (($0.speaker_id_str!.contains((singleItem?.speaker_FK_Id_Str)!)))} */
-//   let filtFirst = filterspeaker.first
-
-//  let speakerSingle = SpeakersVC.speakerList[(singleItem?.speaker_FK_Id)!]
-//speakerProfile.image = UIImage(named: speakerSingle.speakerImage!)
-/*  speakerName.text = filtFirst?.name
-speakerProfile.image = UIImage(named: (filtFirst?.speakerImage)!)
-speakerJobTitle.text = filtFirst?.jobTitle */
-
-
-/*  quest.append(QuestionsData(Questions: "What is the chiefly responsible for the increase in the average length of life in USA during the last fifty years?", Answer: "b", AnswerArr: ["a.the reduced death rate among infants.","b.The subistituation of machine for human","c.Compulsory health and physical education."], IdQuset: 0))
- 
- quest.append(QuestionsData(Questions: "What is the chiefly responsible for the increase in the average length of life in USA during the last thirty years?", Answer: "a", AnswerArr: ["a.Compulsory health and physical education.","b.the reduced death rate among infants.","c.The subistituation of machine for human"], IdQuset: 1))
- quest.append(QuestionsData(Questions: "What is the chiefly responsible for the increase in the average length of life in USA during the last seventy years?", Answer: "c", AnswerArr: ["a.The subistituation of machine for human","b.Compulsory health and physical education.","c.the reduced death rate among infants."], IdQuset: 2))
-
- print("count of answer arr \(quest[0].answerArr?.count)")
-
- */

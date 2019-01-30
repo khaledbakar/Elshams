@@ -23,6 +23,8 @@ struct URLs {
     static let getAllStartups = main + "/Event/getAllStartups"
     static let getStartupDetailsByID = main + "/Event/getStartupDetailsByID"
     static let getAvaliableAppoiments = main + "/Event/getAvaliableAppoiments"
+    static let getAppoiments = main + "/Event/getAppoiments"
+    static let requestAppoiment = main + "/Event/requestAppoiment"
 
     
     static let getAllfavourate = main + "/Event/getAllfavourate"
@@ -32,6 +34,9 @@ struct URLs {
 
     static let favourateAction = main + "/Event/favourateAction"
     static let unfavourateAction = main + "/Event/unfavourateAction"
+   
+    static let getAllPosts = main + "/Event/getAllPosts"
+
 
     
     static let headerAuth : HTTPHeaders = ["Authorization": "Bearer \((Helper.getApiToken())!)"]

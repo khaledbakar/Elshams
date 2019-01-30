@@ -8,28 +8,70 @@
 
 import UIKit
 import XLPagerTabStrip
+import Alamofire
+import AlamofireImage
+import SwiftyJSON
 
 class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegate {
 
     @IBOutlet weak var pendingTableView: UITableView!
-    //var startUpList = Array<StartUpsData>()
-  var filterPending = Array<StartUpsData>()
-  //  startUpList.filter { (($0.pendingApointmentStr?.contains("true"))!)}
-
+    @IBOutlet weak var activeLoader: UIActivityIndicatorView!
+    var pendingList = Array<StartUpsData>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
          addSlideMenuButton()
-      /*  startUpList.append(StartUpsData(StartupName: "Bakar", StartupAddress: "1 Tahrir Square,cairo,Egypt", StartupImage: "avatar", StartUpLinkedIn: "khaled.zaki12", StartUpPhone: "01060136503", StartUpMail: "kzakyy@ikdynamics.com", StartUpAbout: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, ", AcceptedApointment: false, PendingApointment: true, AcceptedApointmentStr: "false", PendingApointmentStr: "true"))
-        startUpList.append(StartUpsData(StartupName: "MedGram", StartupAddress: "18A Obour Bulidings,cairo,Egypt", StartupImage: "avatar", StartUpLinkedIn: "khaled.zaki12", StartUpPhone: "01060136503", StartUpMail: "kzakyy@ikdynamics.com", StartUpAbout: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, ", AcceptedApointment: false, PendingApointment: true, AcceptedApointmentStr: "false", PendingApointmentStr: "true")) */
+        
+        pendingTableView.isHidden = true
+        activeLoader.startAnimating()
+        loadPendingAppointmentsData()
+      
     }
+    
+    
+    func loadPendingAppointmentsData()  {
+        Service.getServiceWithAuth(url: URLs.getAppoiments) {
+            (response) in
+            print(response)
+            let json = JSON(response)
+            let result = json["pending"]
+            var iDNotNull = true
+            var index = 0
+            while iDNotNull {
+                let startUp_ID = result[index]["id"].string
+                let startUp_Name = result[index]["title"].string
+                let startUp_Appoimentstatus = result[index]["appoimentstatus"].string
+                let startUp_AppoimentTime = result[index]["AppoimentTime"].string
+                let startUp_ImageUrl = result[index]["imageURl"].string
+                let startUp_About = result[index]["about"].string
+                let startUp_ContectInforamtion = result[index]["ContectInforamtion"].dictionaryObject
+                let startUp_Email = result[index]["ContectInforamtion"]["Email"].string
+                let startUp_Linkedin = result[index]["ContectInforamtion"]["linkedin"].string
+                let startUp_Phone = result[index]["ContectInforamtion"]["phone"].string
+                
+                let contect = ["Email": "",
+                               "linkedin": "",
+                               "phone": ""]
+                if startUp_ID == nil || startUp_ID?.trimmed == "" || startUp_ID == "null" || startUp_ID == "nil" {
+                    iDNotNull = false
+                    break
+                }
+                self.pendingList.append(StartUpsData(StartupName: startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: startUp_ImageUrl ?? "Image", StartUpAbout: startUp_About ?? "about", AppoimentStatus: startUp_Appoimentstatus ?? "Appointmentstatus", AppoimentTime: startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                index = index + 1
+                self.pendingTableView.reloadData()
+                self.activeLoader.isHidden = true
+                self.activeLoader.stopAnimating()
+                self.pendingTableView.isHidden = false
+            }
+        }
+    }
+    
    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-     //  return startUpList.count
-        return filterPending.count
+        return pendingList.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -38,8 +80,7 @@ class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegat
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "pendingcell") as! PendingCell
-       // cell.setStartupCell(startupsList: startUpList[indexPath.row])
-        cell.setStartupCell(startupsList: filterPending[indexPath.row])
+        cell.setStartupCell(startupsList: pendingList[indexPath.row])
 
         return cell
     }
@@ -48,27 +89,19 @@ class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegat
         let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to:self.pendingTableView)
         let indexPath = self.pendingTableView.indexPathForRow(at: buttonPosition)
         StartupDetailsVC.sechadualeBTNSend = true
-        performSegue(withIdentifier: "pendingstartup", sender: filterPending[indexPath!.row])
-
-      //  StartupDetailsVC.sechadualeBTNSend = true
-      //  performSegue(withIdentifier: "startupdetail", sender: StartUps.startUpList[indexPath!.row])
+        performSegue(withIdentifier: "pendingstartup", sender: pendingList[indexPath!.row])
     }
     
     @IBAction func btnCancel(_ sender: Any) {
         let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to:self.pendingTableView)
         let indexPath = self.pendingTableView.indexPathForRow(at: buttonPosition)
-    /*    let selectedId = filterPending[indexPath!.row].id_startUp
-        
-        StartUps.startUpList[selectedId!].pendingApointment = false
-        StartUps.startUpList[selectedId!].pendingApointmentStr = "false"
-       */
-        filterPending.remove(at: (indexPath?.row)!)
+   
+        pendingList.remove(at: (indexPath?.row)!)
         pendingTableView.reloadData()
-        
     }
    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "pendingstartup", sender: filterPending[indexPath.row])
+        performSegue(withIdentifier: "pendingstartup", sender: pendingList[indexPath.row])
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let dis = segue.destination as? StartupDetailsVC {
