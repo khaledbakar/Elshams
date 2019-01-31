@@ -7,11 +7,19 @@
 //
 
 import UIKit
+import AlamofireImage
+import Alamofire
+import SwiftyJSON
 
 class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate , UITableViewDataSource{
    // @IBOutlet weak var newTitle: UILabel!
+    @IBOutlet weak var normalNewsTableView: UITableView!
     
     var newsList = Array<NewsData>()
+    var topNewsList = Array<NewsData>()
+    var scrolImageUrl : String?
+
+
     @IBOutlet weak var scrollContainer: UIScrollView!
     @IBOutlet weak var newsControl: UIPageControl!
  //   @IBOutlet weak var newsImg: UIImageView!
@@ -29,38 +37,135 @@ class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate ,
         addSlideMenuButton()
       //  newTitle.isHidden = true
         self.navigationItem.title = "News"
-        newsList.append(NewsData(NewsTitle: "Integer ut placerat purued non dignissim neque we share love enjoy and happiness ", NewsImageUrl: "rest", NewsDetail: "sar7 ms2ool en el donya htb2a r5isa tani w kd wafk glaltho 3la el matlbyn ", NewsDate: "4,jan 2018"))
-        newsList.append(NewsData(NewsTitle: "Khaled bakar has a new Award", NewsImageUrl: "profile2", NewsDetail: "7az bakar 3la 2 awards in the same year fe mgalin mo5tlfin , golden image in photography and programmer of the year in ios development ", NewsDate: "2,Aug 2018"))
        
-        scrollContainer.contentSize = CGSize(width: (scrollContainer.frame.size.width * CGFloat(images.count)) , height: scrollContainer.frame.size.height)
+       
+        loadNewsData()
+    }
+  
+    func loadTopNews()  {
+        scrollContainer.contentSize = CGSize(width: (scrollContainer.frame.size.width * CGFloat(topNewsList .count)) , height: scrollContainer.frame.size.height)
         scrollContainer.delegate = self
-        newsControl.numberOfPages = images.count
-        
-        for index in 0..<images.count {
+        newsControl.numberOfPages = topNewsList.count
+        for index in 0..<topNewsList.count {
             frame.origin.x = scrollContainer.frame.size.width * CGFloat(index)
-              frame.size = CGSize(width: scrollContainer.frame.size.width , height: 233.0)
+            frame.size = CGSize(width: scrollContainer.frame.size.width , height: 233.0)
             
             let titleLbl = UILabel(frame: frameTitle)
-            titleLbl.text = newsList[0].newsTitle
+            titleLbl.text = topNewsList[index].newsTitle
             titleLbl.numberOfLines = 2
             titleLbl.textColor = UIColor.white
             titleLbl.font = titleLbl.font.withSize(22.0)
-           // newTitle.text = newsList[0].newsTitle
-            let imgView = UIImageView(frame: frame)
-            imgView.image = UIImage(named: images[index])
+            titleLbl.tag = index + 1
+            print(titleLbl.tag)
+
+            // newTitle.text = newsList[0].newsTitle
             
+            let topNewsTitle = UITapGestureRecognizer(target: self, action: #selector(NewsVC.topNewsTitleFunc))
+            titleLbl.isUserInteractionEnabled = true
+            titleLbl.addGestureRecognizer(topNewsTitle)
+            
+            let imgView = UIImageView(frame: frame)
+            scrolImageUrl = topNewsList[index].newsImgUrl
+           // imgView.image = UIImage(named: images[index])
+            imgScrollUrl(imgUrl: scrolImageUrl!, ScrollImage: imgView)
             imgView.widthAnchor.constraint(equalToConstant: self.view.frame.size.width)
             imgView.topAnchor.constraint(equalTo:  scrollContainer.topAnchor, constant: 0)
             imgView.bottomAnchor.constraint(equalTo:  scrollContainer.bottomAnchor, constant: 0)
-            
+            imgView.tag = index + 1
 
+            
+            
             let titleView = UIView(frame: frame)
             titleView.backgroundColor = UIColor.black
             titleView.backgroundColor = UIColor(white: 0, alpha: 0.5)
-            titleView.addSubview(titleLbl)
+            
+            let topNewsImage = UITapGestureRecognizer(target: self, action: #selector(NewsVC.topNewsImageFunc))
+            titleView.isUserInteractionEnabled = true
+         //   topNewsImage.valu
+            titleView.addGestureRecognizer(topNewsImage)
+            titleView.tag = index + 1
+            print(titleView.tag)
 
+            titleView.addSubview(titleLbl)
+            
             scrollContainer.addSubview(imgView)
             scrollContainer.addSubview(titleView)
+        }
+    }
+
+    @objc func topNewsTitleFunc(sender:UIGestureRecognizer) {//UIGestureRecognizer
+      //  guard let TagRe = (sender.view as? UILabel)?.text else { return }
+          guard let tag = (sender.view as? UILabel)?.tag else { return }
+        performSegue(withIdentifier: "newsdetail", sender: topNewsList[tag - 1]) //topNewsList[]
+
+    }
+    @objc func topNewsImageFunc(sender:UIGestureRecognizer) {//UIGestureRecognizer
+        guard let tag = (sender.view as? UIView)?.tag else { return }
+        performSegue(withIdentifier: "newsdetail", sender: topNewsList[tag - 1])
+    }
+    func loadNewsData()  {
+        Service.getService(url: "\(URLs.getNews)/50/1"){
+            (response) in
+            print(response)
+            
+            let result = JSON(response)
+            let topNews = result["topNews"]
+            let normalNews = result["normalNews"]
+
+            var iDTopNotNull = true
+            var iDNormalNotNull = true
+
+            var indexTop = 0
+            var indexNormal = 0
+
+            while iDTopNotNull {
+                let newsTop_ID = topNews[indexTop]["id"].string
+                if newsTop_ID == nil || newsTop_ID?.trimmed == "" ||
+                    newsTop_ID == "null" || newsTop_ID == "nil" {
+                    iDTopNotNull = false
+                    break
+                }
+            
+                let newsTop_Title = topNews[indexTop]["title"].string
+                let newsTop_ImageUrl = topNews[indexTop]["imageUrl"].string
+                let newsTop_Content = topNews[indexTop]["content"].string
+                let newsTop_Date = topNews[indexTop]["date"].string
+                self.topNewsList.append(NewsData(NewsTitle: newsTop_Title ?? "", NewsImageUrl: newsTop_ImageUrl ?? "", NewsContent: newsTop_Content ?? "", NewsDate: newsTop_Date ?? "", NewsID: newsTop_ID ?? ""))
+                indexTop = indexTop + 1
+            }
+            while iDNormalNotNull {
+                let newsNormal_ID = normalNews[indexNormal]["id"].string
+                if newsNormal_ID == nil || newsNormal_ID?.trimmed == "" ||
+                    newsNormal_ID == "null" || newsNormal_ID == "nil" {
+                    iDNormalNotNull = false
+                    break
+                }
+                
+                let newsNormal_Title = normalNews[indexNormal]["title"].string
+                let newsNormal_ImageUrl = normalNews[indexNormal]["imageUrl"].string
+                let newsNormal_Content = normalNews[indexNormal]["content"].string
+                let newsNormal_date = normalNews[indexNormal]["date"].string
+                self.newsList.append(NewsData(NewsTitle: newsNormal_Title ?? "", NewsImageUrl: newsNormal_ImageUrl ?? "", NewsContent: newsNormal_Content ?? "", NewsDate: newsNormal_date ?? "", NewsID: newsNormal_ID ?? ""))
+                indexNormal = indexNormal + 1
+            }
+            
+           self.normalNewsTableView.reloadData()
+            self.loadTopNews()
+           /* self.activityLoader.isHidden = true
+            self.activityLoader.stopAnimating()
+            self.notifyTableView.isHidden = false */
+        }
+    }
+    func imgScrollUrl(imgUrl:String,ScrollImage:UIImageView)  {
+        if let imagUrlAl = imgUrl as? String {
+            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
+                print(response)
+                if let image = response.result.value {
+                    DispatchQueue.main.async{
+                        ScrollImage.image = image
+                    }
+                }
+            })
         }
     }
     

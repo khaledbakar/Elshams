@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AlamofireImage
+import Alamofire
 
 class NewsDetails: UIViewController {
 
@@ -21,10 +23,24 @@ class NewsDetails: UIViewController {
         self.navigationItem.title = "News"
         newsTitle.text = singleItem?.newsTitle
         newsDate.text = singleItem?.newsDate
-        newsDetail.text = singleItem?.newsDetail
-        newsImage.image = UIImage(named: "\((singleItem?.newsImgUrl)!)")
+        newsDetail.text = singleItem?.newsContent
+        if (singleItem?.newsImgUrl)! != nil {
+        imgUrl(imgUrl: (singleItem?.newsImgUrl)!)
+        }// need to nil handler
+       // newsImage.image = UIImage(named: "\((singleItem?.newsImgUrl)!)")
 
     }
-    
+    func imgUrl(imgUrl:String)  {
+        if let imagUrlAl = imgUrl as? String {
+            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
+                print(response)
+                if let image = response.result.value {
+                    DispatchQueue.main.async{
+                        self.newsImage.image = image
+                    }
+                }
+            })
+        }
+    }
 
 }

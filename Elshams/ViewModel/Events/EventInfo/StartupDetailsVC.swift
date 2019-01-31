@@ -307,6 +307,8 @@ func imgUrl(imgUrl:String)  {
     }
     
   /*  @objc func buLblClick (_ sender: UIGestureRecognizer){
+     guard let tag = (sender.view as? UIView)?.tag else { return } // simple soluation
+
         let butSelec:UIButton?
         for ind in 2..<popUpView.subviews.count {
             if ind % 2 == 1 {

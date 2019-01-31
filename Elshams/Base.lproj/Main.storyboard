@@ -3805,7 +3805,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="99.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="rest" translatesAutoresizingMaskIntoConstraints="NO" id="mwD-LP-Yrf">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mwD-LP-Yrf">
                                                     <rect key="frame" x="15" y="15" width="90" height="70"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
@@ -3855,6 +3855,7 @@
                     </view>
                     <connections>
                         <outlet property="newsControl" destination="WVx-3x-NEj" id="fYg-a0-WtC"/>
+                        <outlet property="normalNewsTableView" destination="bVD-Mv-CVs" id="Ch8-EI-eJP"/>
                         <outlet property="scrollContainer" destination="tT1-3O-mbF" id="ZD0-kd-m45"/>
                         <segue destination="Zs4-gM-3vz" kind="show" identifier="newsdetail" id="mvI-pH-UDk"/>
                     </connections>
@@ -4394,11 +4395,11 @@
         <scene sceneID="XEz-GI-V8U">
             <objects>
                 <viewController id="3Df-Nw-jqH" customClass="SpeakerProfileVC" customModule="Elshams" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="5zv-Wj-hxB">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="5zv-Wj-hxB">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="641"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5sN-rH-NUF">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5sN-rH-NUF">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="592"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pOu-Te-cdW">
@@ -4525,7 +4526,7 @@
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="link" translatesAutoresizingMaskIntoConstraints="NO" id="y6t-R5-8R8">
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="facebook_ic" translatesAutoresizingMaskIntoConstraints="NO" id="y6t-R5-8R8">
                                                         <rect key="frame" x="28" y="154" width="24" height="24"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     </imageView>

@@ -17,6 +17,8 @@ struct URLs {
     static let register = main + "/account/register"
     static let getNetwork = main + "/Event/getNetwork"
     static let getPersonDetails = main + "/Event/getPersonDetails"
+    
+    static let getNews = main + "/Event/GetHome" // have item number and page number some issue that don't resposne page numers and current number
 
     static let getAgenda = main + "/Event/getAgenda"
     static let getAllSpeaker = main + "/Event/getAllSpeaker"

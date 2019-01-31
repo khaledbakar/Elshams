@@ -9,6 +9,9 @@
 import UIKit
 import SafariServices
 import MessageUI
+import AlamofireImage
+import Alamofire
+import SwiftyJSON
 
 class SpeakerProfileVC: UIViewController {
     var singleItem:Speakers?
@@ -29,6 +32,10 @@ class SpeakerProfileVC: UIViewController {
     @IBOutlet weak var activeNow: UILabel!
     @IBOutlet weak var speakerJobTitle: UILabel!
     @IBOutlet weak var speakerProfileImg: UIImageView!
+    var phoneNumber:String?
+    var email:String?
+    var faceBookLinkEdinNow:String?
+
     
     
     override func viewDidLoad() {
@@ -38,11 +45,19 @@ class SpeakerProfileVC: UIViewController {
         connectColor.layer.cornerRadius = connectColor.frame.width / 2
         connectColor.clipsToBounds = true
         speakerName.text = singleItem?.name
-     /*   speakerEmail.text = singleItem?.mail
-        speakerPhone.text = singleItem?.phone
-        speakerFacebook.text = singleItem?.facebookLink
-        speakerWebsite.text = singleItem?.website
-        if singleItem?.activeOrNot == true {
+        imgUrl(imgUrl: (singleItem?.speakerImageUrl)!)
+        phoneNumber = singleItem?.contectInforamtion!["phone"] as! String
+        email = singleItem?.contectInforamtion!["Email"] as! String
+        faceBookLinkEdinNow = singleItem?.contectInforamtion!["linkedin"] as! String
+        speakerPhone.text = phoneNumber
+        speakerFacebook.text = faceBookLinkEdinNow
+        speakerEmail.text = email
+        speakerWebsite.text = ""
+        aboutSpeaker.text = singleItem?.about
+        connectColor.backgroundColor  = UIColor.green
+        
+
+      /*  if singleItem?.activeOrNot == true {
             connectColor.backgroundColor  = UIColor.green
             activeNow.text = "Now"
         }
@@ -50,8 +65,8 @@ class SpeakerProfileVC: UIViewController {
             connectColor.backgroundColor = UIColor.red
             activeNow.text = "Offline"
 
-        }
-        */
+        } */
+        
        // speakerPhone.addGestureRecognizer(<#T##gestureRecognizer: UIGestureRecognizer##UIGestureRecognizer#>)
         let tapCall = UITapGestureRecognizer(target: self, action: #selector(SpeakerProfileVC.tapCallFunc))
         speakerPhone.isUserInteractionEnabled = true
@@ -72,12 +87,22 @@ class SpeakerProfileVC: UIViewController {
         speakerFacebook.addGestureRecognizer(tapFacebook)
         
      //   speakerProfileImg.image = UIImage(named: "\((singleItem?.speakerImage)!)")
-        speakerJobTitle.text = singleItem?.jobTitle
+     //   speakerJobTitle.text = singleItem?.jobTitle
         
-        
-
     }
     
+    func imgUrl(imgUrl:String)  {
+        if let imagUrlAl = imgUrl as? String {
+            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
+                print(response)
+                if let image = response.result.value {
+                    DispatchQueue.main.async{
+                        self.speakerProfileImg.image = image
+                    }
+                }
+            })
+        }
+    }
     @objc func tapFacebookLinkFunc(sender:UIGestureRecognizer) {
         if let openURL = URL(string: "twitter://"){
         let canOpen = UIApplication.shared.canOpenURL(openURL)
@@ -86,6 +111,7 @@ class SpeakerProfileVC: UIViewController {
        // let apppName = "Facebook"
          //let apppName = "fb://feed"
         let apppName = "fb"
+        
 
         let appScheme = "\(apppName)://profile"
        // let appScheme = "\(apppName)://trikaofficial" can't open specficprofile
@@ -126,12 +152,12 @@ class SpeakerProfileVC: UIViewController {
     }
     
     @objc func tapCallFunc(sender:UIGestureRecognizer) {
-     //   PhoneCall.makeCall(PhoneNumber: (singleItem?.phone)!)
-       /* guard let numberString = singleItem?.phone,let url = URL(string: "telprompt://\(numberString)")
+       PhoneCall.makeCall(PhoneNumber: (phoneNumber)!)
+        guard let numberString = phoneNumber,let url = URL(string: "telprompt://\(numberString)")
             else {
             return
         }
-        UIApplication.shared.open(url) */
+        UIApplication.shared.open(url)
     }
   
     @objc func tapOpenLinkFunc(sender:UIGestureRecognizer) {

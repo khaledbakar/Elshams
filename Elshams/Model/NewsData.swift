@@ -8,15 +8,17 @@
 
 import Foundation
 class NewsData {
+    var newsID : String?
     var newsTitle : String?
     var newsImgUrl : String?
-    var newsDetail : String?
+    var newsContent : String?
     var newsDate : String?
 
-    init(NewsTitle:String,NewsImageUrl:String,NewsDetail:String,NewsDate:String) {
+    init(NewsTitle:String,NewsImageUrl:String,NewsContent:String,NewsDate:String,NewsID:String) {
         self.newsTitle = NewsTitle
         self.newsImgUrl = NewsImageUrl
-        self.newsDetail = NewsDetail
+        self.newsContent = NewsContent
         self.newsDate = NewsDate
+        self.newsID = NewsID
     }
 }
