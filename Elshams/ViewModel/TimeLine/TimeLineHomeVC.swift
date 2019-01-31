@@ -22,6 +22,9 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
     
     @IBOutlet weak var homeAbout: UITextView!
     var newsFeedList = Array<NewsFeedData>()
+    var speakerList = Array<Speakers>()
+    var sponserList = Array<Sponsers>()
+
     
     @IBOutlet weak var timeLineCollView: UICollectionView!
     @IBOutlet weak var sponserImg1: UIImageView!
@@ -58,10 +61,118 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         imagePicker.delegate = self
         postText.delegate = self
         loadPostsData()
-        
-        
+        loadAllSpeakerData()
+        loadAllSponserData()
+  
     }
 
+    func loadAllSpeakerData()  {
+        Service.getService(url: URLs.getAllSpeaker) {
+            (response) in
+            
+            print(response)
+            let json = JSON(response)
+            let result = json["AllSpeaker"]
+            var iDNotNull = true
+            var index = 0
+            while index < 4 {
+                let speaker_ID = result[index]["ID"].string
+                let speaker_Name = result[index]["name"].string
+                let speaker_JobTitle = result[index]["jobTitle"].string
+                let speaker_CompanyName = result[index]["companyName"].string
+                let speaker_ImageUrl = result[index]["imageUrl"].string
+                let speaker_About = result[index]["about"].string
+                let speaker_ContectInforamtion = result[index]["ContectInforamtion"].dictionaryObject
+                let speaker_Email = result[index]["ContectInforamtion"]["Email"].string
+                let speaker_Linkedin = result[index]["ContectInforamtion"]["linkedin"].string
+                let speaker_Phone = result[index]["ContectInforamtion"]["phone"].string
+                
+                let contect = ["Email": "",
+                               "linkedin": "",
+                               "phone": ""]
+                if speaker_ID == nil || speaker_ID?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || speaker_ID == "null" || speaker_ID == "nil" {
+                    iDNotNull = false
+                    break
+                }
+                self.speakerList.append(Speakers(SpeakerName: speaker_Name ?? "name", JobTitle: speaker_JobTitle ?? "JOB", CompanyName: speaker_CompanyName ?? "Company", SpImageUrl: speaker_ImageUrl ?? "Image", Speaker_id: speaker_ID ?? "ID", ContectInforamtion: speaker_ContectInforamtion ?? contect, About: speaker_About ?? "About"))
+                index = index + 1
+                
+               /* self.speakerTableView.reloadData()
+                self.speakerCollectionView.reloadData()
+                self.activeLoader.isHidden = true
+                self.activeLoader.stopAnimating()
+                self.speakerTableView.isHidden = false */
+            }
+            self.speakerName1.text = self.speakerList[0].name
+            self.speakerName2.text = self.speakerList[1].name
+            self.speakerName3.text = self.speakerList[2].name
+            self.speakerName4.text = self.speakerList[3].name
+            self.imgUrl(imgUrl: self.speakerList[0].speakerImageUrl!, ImageViewSet: self.speakerImg1)
+            self.imgUrl(imgUrl: self.speakerList[1].speakerImageUrl!, ImageViewSet: self.speakerImg2)
+            self.imgUrl(imgUrl: self.speakerList[2].speakerImageUrl!, ImageViewSet: self.speakerImg3)
+            self.imgUrl(imgUrl: self.speakerList[3].speakerImageUrl!, ImageViewSet: self.speakerImg4)
+            
+
+            //  print((self.networkList[2].name)!)
+        }
+    }
+    
+    func loadAllSponserData()  {
+        Service.getService(url: URLs.getAllSponsors) {
+            (response) in
+            print(response)
+            
+            let json = JSON(response)
+            let result = json["AllSponsers"]
+            
+            var iDNotNull = true
+            var index = 0
+            while index < 4 {
+                let sponser_ID = result[index]["ID"].string
+                let sponser_Name = result[index]["name"].string
+                let sponser_Address = result[index]["address"].string
+                let sponser_ImageUrl = result[index]["imageUrl"].string
+                let sponser_About = result[index]["about"].string
+                let sponser_ContectInforamtion = result[index]["ContectInforamtion"].dictionaryObject
+                
+                let sponser_Email = result[index]["ContectInforamtion"]["Email"].string
+                let sponser_Linkedin = result[index]["ContectInforamtion"]["linkedin"].string
+                let sponser_Phone = result[index]["ContectInforamtion"]["phone"].string
+                
+                let sponser_Sponsertype = result[index]["Sponsertype"].dictionaryObject
+                let sponser_Sponsertype_ID = result[index]["Sponsertype"]["id"].string
+                let sponser_Sponsertype_name = result[index]["Sponsertype"]["name"].string
+                let sponser_Sponsertype_icon = result[index]["Sponsertype"]["icon"].string
+                let sponser_Sponsertype_Color = result[index]["Sponsertype"]["color"].string
+                
+                let contectOptionNil = ["Email": "",
+                                        "linkedin": "",
+                                        "phone": ""]
+                let sponserTypeOptionNil = ["id": "Media Partner",
+                                            "name": "Media Partner",
+                                            "icon": "",
+                                            "color": "#053a8e"]
+                
+                if sponser_ID == nil || sponser_ID?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || sponser_ID == "null" || sponser_ID == "nil" {
+                    iDNotNull = false
+                    break
+                }
+                self.sponserList.append(Sponsers(SponserName: sponser_Name ?? "name", SponserAddress: sponser_Address ?? "address", SponserImageURL: sponser_ImageUrl ?? "Image", SponserAbout: sponser_About ?? "ABout", SponserID: sponser_ID ?? "ID", ContectInforamtion: sponser_ContectInforamtion ?? contectOptionNil, Sponsertype: sponser_Sponsertype ?? sponserTypeOptionNil))
+                index = index + 1
+               
+             
+            }
+            self.sponserName1.text = self.sponserList[0].sponserName
+            self.sponserName2.text = self.sponserList[1].sponserName
+            self.sponserName3.text = self.sponserList[2].sponserName
+            self.sponserName4.text = self.sponserList[3].sponserName
+            self.imgUrl(imgUrl: self.sponserList[0].sponserImageUrl!, ImageViewSet: self.sponserImg1)
+            self.imgUrl(imgUrl: self.sponserList[1].sponserImageUrl!, ImageViewSet: self.sponserImg2)
+            self.imgUrl(imgUrl: self.sponserList[2].sponserImageUrl!, ImageViewSet: self.sponserImg3)
+            self.imgUrl(imgUrl: self.sponserList[3].sponserImageUrl!, ImageViewSet: self.sponserImg4)
+            //  print((self.networkList[2].name)!)
+        }    }
+    
     func loadPostsData()  {
         Service.getServiceWithAuth(url: (URLs.getAllPosts)) {
             (response) in
@@ -110,6 +221,20 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         }
     }
     
+    func imgUrl(imgUrl:String,ImageViewSet:UIImageView)  {
+        
+        if let imagUrlAl = imgUrl as? String {
+            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
+                print(response)
+                if let image = response.result.value {
+                    DispatchQueue.main.async{
+                        ImageViewSet.image = image
+                    }
+                }
+            })
+        }
+    }
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return newsFeedList.count
     }
