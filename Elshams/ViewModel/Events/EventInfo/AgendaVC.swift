@@ -58,6 +58,8 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
     
     
     func loadTableData()  {
+        if let  apiToken  = Helper.getApiToken() {
+
         Service.getServiceWithAuth(url: URLs.getAgenda) {
             (response) in
             print(response)
@@ -103,7 +105,53 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
             }
             //  print((self.networkList[2].name)!)
         }
-        
+        } else {
+            Service.getService(url: URLs.getAgenda) {
+                (response) in
+                print(response)
+                let result = JSON(response)
+                
+                var iDNotNull = true
+                var index = 0
+                while iDNotNull {
+                    let agenda_Type = result[index]["type"].string
+                    
+                    if agenda_Type == nil || agenda_Type?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
+                        agenda_Type == "null"{
+                        iDNotNull = false
+                        break
+                    }
+                    let agenda_ID = result[index]["Id"].string
+                    let agenda_rondomColor = result[index]["rondomColor"].string
+                    let agenda_date = result[index]["date"].string
+                    let agenda_sessionTitle = result[index]["sessionTitle"].string
+                    let agenda_dateTitle = result[index]["title"].string
+                    let agenda_Speakers = result[index]["speakers"].dictionaryObject
+                    let agenda_Time = result[index]["time"].string
+                    let agenda_SessionLocation = result[index]["location"].string
+                    let agenda_isFavourate = result[index]["isFavourate"].bool
+                    let agenda_IsFavourate_String = "\(agenda_isFavourate)"
+                    
+                    
+                    if agenda_Type == "head" {
+                        self.agendaHeadList.append(AgendaHeadData(HeadTitle: agenda_dateTitle ?? "title", HeadDate: agenda_date ?? "date", HeadType: agenda_Type ?? "type"))
+                    }
+                    else if agenda_Type == "session" {
+                        self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "Title", SessionTime: agenda_Time ?? "Time", SessionLocation: agenda_SessionLocation ?? "location", SpeakersSession: agenda_Speakers ?? [
+                            "ID" : "314",
+                            "imageUrl" : "http:-b01d-582382a5795e.jpg"]
+                            , AgendaDate: agenda_date ?? "date", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String , RondomColor: agenda_rondomColor ?? "red", AgendaType: agenda_Type ?? "session"))
+                    }
+                    
+                    index = index + 1
+                    self.tableViewAgenda.reloadData()
+                    self.activeLoader.isHidden = true
+                    self.activeLoader.stopAnimating()
+                    self.tableViewAgenda.isHidden = false
+                }
+                //  print((self.networkList[2].name)!)
+            }
+        }
     }
     func btnRightBar()  {
         let btnSearch = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.search, target: nil, action:  #selector(searchTool))

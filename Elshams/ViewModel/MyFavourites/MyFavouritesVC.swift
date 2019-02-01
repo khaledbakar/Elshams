@@ -43,7 +43,8 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
     }
     
    func loadFavourSessionsData(){
-    print(URLs.headerAuth)
+    if let  apiToken  = Helper.getApiToken() {
+
     Service.getServiceWithAuth(url: URLs.getAllfavourate){
         (response) in
         print(response)
@@ -88,6 +89,17 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
         }
         //  print((self.networkList[2].name)!)
     }
+    }else {
+        self.activeLoader.isHidden = true
+        self.favourSessionTableView.isHidden = true
+        //  print(error.localizedDescription)
+        let alert = UIAlertController(title: "Error", message: "You must sign in to Show this Part", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+        
+    
+    }
+    
     }
     func btnRightBar()  {
         let btnSearch = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.search, target: nil, action:  #selector(searchTool))

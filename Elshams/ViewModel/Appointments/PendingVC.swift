@@ -30,6 +30,8 @@ class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegat
     
     
     func loadPendingAppointmentsData()  {
+        if let  apiToken  = Helper.getApiToken() {
+
         Service.getServiceWithAuth(url: URLs.getAppoiments) {
             (response) in
             print(response)
@@ -63,6 +65,15 @@ class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegat
                 self.activeLoader.stopAnimating()
                 self.pendingTableView.isHidden = false
             }
+        }
+        }else {
+            self.activeLoader.isHidden = true
+            self.pendingTableView.isHidden = true
+          //  print(error.localizedDescription)
+            let alert = UIAlertController(title: "Error", message: "You must sign in to Show this Part", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+
         }
     }
     

@@ -28,6 +28,8 @@ class AcceptedVC: BaseViewController , UITableViewDataSource ,UITableViewDelegat
     }
     
     func loadAcceptedData()  {
+        if let  apiToken  = Helper.getApiToken() {
+
         Service.getServiceWithAuth(url: URLs.getAppoiments) {
             (response) in
             
@@ -63,7 +65,16 @@ class AcceptedVC: BaseViewController , UITableViewDataSource ,UITableViewDelegat
                 self.acceptedTableView.isHidden = false
             }
         }
+    }else {
+    self.activeLoader.isHidden = true
+    self.acceptedTableView.isHidden = true
+    //  print(error.localizedDescription)
+    let alert = UIAlertController(title: "Error", message: "You must sign in to Show this Part", preferredStyle: UIAlertControllerStyle.alert)
+    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+    self.present(alert, animated: true, completion: nil)
+    
     }
+}
     
    
     func numberOfSections(in tableView: UITableView) -> Int {

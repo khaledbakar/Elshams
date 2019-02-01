@@ -39,7 +39,6 @@ class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSour
         Service.getService(url: URLs.getAllSponsors) {
             (response) in
             print(response)
-            
             let json = JSON(response)
             let result = json["AllSponsers"]
 

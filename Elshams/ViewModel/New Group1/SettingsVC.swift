@@ -16,12 +16,26 @@ class SettingsVC: UIViewController , UITableViewDelegate , UITableViewDataSource
     var privacy = ["public"]
     var ansPraivacy = false
     @IBOutlet weak var profileImg: UIImageView!
+    @IBOutlet weak var settingTableView: UITableView!
+    @IBOutlet weak var updateBtn: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         profileImg.layer.cornerRadius = profileImg.frame.width / 2
         profileImg.clipsToBounds = true
+        if let  apiToken  = Helper.getApiToken() {
 
+        
+        }else{
+            //view.isHidden = true
+            profileImg.isHidden = true
+            settingTableView.isHidden = true
+            updateBtn.isHidden = true
+            let alert = UIAlertController(title: "Error", message: "You must sign in to Show this Part", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+          //  dismiss(animated: true, completion: nil)
+        }
     }
     func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count

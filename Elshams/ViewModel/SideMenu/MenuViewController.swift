@@ -21,8 +21,8 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
 
 
     var btnMenu : UIButton!
-    var SideMenuTitles = ["TimeLine","Networks","Myfavorites","Agenda","Speakers","Sponsers","Startups","News","Notifications","Questions","Appointment","AllEvents","Settings","Logout"]
-    var SideMenuIcons = ["home","networks","favourite","agenda","speaker","sponsers","startup","news","notifications","questation","appointment","events","home","logout"]
+    var SideMenuTitles = ["TimeLine","Networks","Myfavorites","Agenda","Speakers","Sponsers","Startups","News","Notifications","Questions","Appointment","Settings","Logout"] //,"AllEvents"
+    var SideMenuIcons = ["home","networks","favourite","agenda","speaker","sponsers","startup","news","notifications","questation","appointment","home","logout"]//"events",
     @IBOutlet weak var btnCloseMenuOverlay: UIButton!
     var delegate : SlideMenuDelegate?
     override func viewDidLoad() {
@@ -77,14 +77,17 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             controllerSelect = "QuestionsContainer"
         case 10 :
             controllerSelect = "AppointmentContainer"
-        case 11 :
+    /*    case 11 :
             controllerSelect = "AllMainEvents" //EventContainer
-            MenuViewController.agendaEventOrMenu = true
-        case 12 :
+            MenuViewController.agendaEventOrMenu = true */
+        case 11 :
             controllerSelect = "Settings"
-        case 13 :
+        case 12 :
             //fe sho8l hna kteer 3shan el remember me
             controllerSelect = "Logout"
+            let def = UserDefaults.standard
+            def.setValue(nil, forKey: "api_token")
+            def.synchronize()
             dismiss(animated: true, completion: nil)
         default:
             controllerSelect = "EventAgenda"
@@ -112,6 +115,9 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
          performSegue(withIdentifier: "register", sender: nil)
     }
     @IBAction func btnLogin(_ sender: Any) {
+        let def = UserDefaults.standard
+        def.setValue(nil, forKey: "api_token")
+        def.synchronize()
         performSegue(withIdentifier: "login", sender: nil)
     }
     

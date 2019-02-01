@@ -12,6 +12,59 @@ import Alamofire
 import SwiftyJSON
 
 class API: NSObject {
+    static let reachabilityManager = NetworkReachabilityManager(host: "https://baseURL.com")!
+
+    
+    static func getPostsWithAuth(url: String,newsFeedList: [NewsFeedData] ,callback: @escaping (JSON?) -> ()) {
+     //  newsFeedList.enumerated()
+     //   newsFeedList.removeAll()
+        //newsFeedList.removeAll()
+//newsFeedList.removeAll()
+        //i tried to use return array but alamofire out of return and back again so nil
+        // tried to pass param array  but an strange error 
+        if !reachabilityManager.isReachable {
+            callback(nil)
+            
+        } else {
+       
+            Alamofire.request(url, headers: URLs.headerAuth).responseJSON { (response) in
+                switch response.result {
+                case .success(let value):
+                    let json = JSON(value)
+                    let result = json["AllPosts"]
+                    var iDNotNull = true
+                    var index = 0
+                    while iDNotNull {
+                        let post_ID = result[index]["ID"].string
+                        if post_ID == nil || post_ID?.trimmed == "" || post_ID == "null" || post_ID == "nil" {
+                            iDNotNull = false
+                            break
+                        }
+                        let post_Author = result[index]["author"].string
+                        let post_AutherPic = result[index]["autherPic"].string
+                        let post_VedioURl = result[index]["vedioURl"].string
+                        let post_Discription = result[index]["postDiscription"].string
+                        let post_LikeCount = result[index]["about"].int
+                        let post_Comments = result[index]["Comments"].array
+                        let post_Islike = result[index]["Islike"].bool
+                        let post_SharingLink = result[index]["sharingLink"].string
+                        let post_Image = result[index]["image"].string
+                      //  newsFeedList.append(NewsFeedData(Post_ID: post_ID ?? "", Post_Author: post_Author ?? "", Post_AutherPicture: post_AutherPic ?? "", Post_VideoURl: post_VedioURl ?? "" , Post_Discription: post_Discription ?? "", Post_LikeCount: post_LikeCount ?? 0, Post_Comments: post_Comments ?? [result], Post_Islike: post_Islike ?? false, Post_SharingLink: post_SharingLink ?? "", Post_Image: post_Image ?? ""))
+                        index = index + 1
+                   //     self.timeLineCollView.reloadData()
+                    }
+                    callback(json)
+                case .failure(let error):
+                    print(error)
+                    callback(nil)
+                }
+            }
+        }
+    }
+    
+    
+    
+    
     class func login(Email:String, Password:String, completion: @escaping (_ error:Error?, _ succes: Bool)->Void){
       
         let paramLogin : [String:Any] = [

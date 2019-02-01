@@ -174,7 +174,37 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         }    }
     
     func loadPostsData()  {
-        Service.getServiceWithAuth(url: (URLs.getAllPosts)) {
+        if let  apiToken  = Helper.getApiToken() {
+            Service.getServiceWithAuth(url: (URLs.getAllPosts)) {
+                (response) in
+                print("this is Posts ")
+                print(response)
+                let json = JSON(response)
+                let result = json["AllPosts"]
+                var iDNotNull = true
+                var index = 0
+                while iDNotNull {
+                    let post_ID = result[index]["ID"].string
+                    if post_ID == nil || post_ID?.trimmed == "" || post_ID == "null" || post_ID == "nil" {
+                        iDNotNull = false
+                        break
+                    }
+                    let post_Author = result[index]["author"].string
+                    let post_AutherPic = result[index]["autherPic"].string
+                    let post_VedioURl = result[index]["vedioURl"].string
+                    let post_Discription = result[index]["postDiscription"].string
+                    let post_LikeCount = result[index]["about"].int
+                    let post_Comments = result[index]["Comments"].array
+                    let post_Islike = result[index]["Islike"].bool
+                    let post_SharingLink = result[index]["sharingLink"].string
+                    let post_Image = result[index]["image"].string
+                    self.newsFeedList.append(NewsFeedData(Post_ID: post_ID ?? "", Post_Author: post_Author ?? "", Post_AutherPicture: post_AutherPic ?? "", Post_VideoURl: post_VedioURl ?? "" , Post_Discription: post_Discription ?? "", Post_LikeCount: post_LikeCount ?? 0, Post_Comments: post_Comments ?? [result], Post_Islike: post_Islike ?? false, Post_SharingLink: post_SharingLink ?? "", Post_Image: post_Image ?? ""))
+                    index = index + 1
+                    self.timeLineCollView.reloadData()
+                }
+            }
+        } else {
+        Service.getService(url: (URLs.getAllPosts)) {
             (response) in
             print("this is Posts ")
             print(response)
@@ -197,28 +227,29 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
                 let post_Islike = result[index]["Islike"].bool
                 let post_SharingLink = result[index]["sharingLink"].string
                 let post_Image = result[index]["image"].string
-               
-             /*   var iDNotNullComment = true
-                var indexComm = 0
-                while iDNotNullComment {
-                    let post_CommentDiscription = post_Comments?[indexComm]["commentDiscription"].string
-
-                    if post_CommentDiscription == nil || post_CommentDiscription?.trimmed == "" || post_CommentDiscription == "null" || post_CommentDiscription == "nil" {
-                        iDNotNull = false
-                        break
-                    }
-                    let post_author = post_Comments?[indexComm]["author"].string
-                    let post_autherPic = post_Comments?[indexComm]["autherPic"].string
-                    indexComm = indexComm + 1
-                }
-                */
                 
-               
+                /*   var iDNotNullComment = true
+                 var indexComm = 0
+                 while iDNotNullComment {
+                 let post_CommentDiscription = post_Comments?[indexComm]["commentDiscription"].string
+                 
+                 if post_CommentDiscription == nil || post_CommentDiscription?.trimmed == "" || post_CommentDiscription == "null" || post_CommentDiscription == "nil" {
+                 iDNotNull = false
+                 break
+                 }
+                 let post_author = post_Comments?[indexComm]["author"].string
+                 let post_autherPic = post_Comments?[indexComm]["autherPic"].string
+                 indexComm = indexComm + 1
+                 }
+                 */
+                
+                
                 self.newsFeedList.append(NewsFeedData(Post_ID: post_ID ?? "", Post_Author: post_Author ?? "", Post_AutherPicture: post_AutherPic ?? "", Post_VideoURl: post_VedioURl ?? "" , Post_Discription: post_Discription ?? "", Post_LikeCount: post_LikeCount ?? 0, Post_Comments: post_Comments ?? [result], Post_Islike: post_Islike ?? false, Post_SharingLink: post_SharingLink ?? "", Post_Image: post_Image ?? ""))
                 index = index + 1
                 self.timeLineCollView.reloadData()
             }
         }
+    }
     }
     
     func imgUrl(imgUrl:String,ImageViewSet:UIImageView)  {

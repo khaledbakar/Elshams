@@ -30,6 +30,8 @@ class NotificationsVC: BaseViewController , UITableViewDataSource , UITableViewD
     }
     
     func loadNotifyData()  {
+        if let  apiToken  = Helper.getApiToken() {
+
         Service.getServiceWithAuth(url: URLs.getAllNotification){
        // Service.getService(url: "http://66.226.74.85:4002/api/Event/getAllNotification") {
             (response) in
@@ -45,7 +47,6 @@ class NotificationsVC: BaseViewController , UITableViewDataSource , UITableViewD
                     iDNotNull = false
                     break
                 }
-           
           //  for data in result {
                 let notification_Type = result[index]["type"].string
                 let notification_Body = result[index]["body"].string
@@ -53,15 +54,22 @@ class NotificationsVC: BaseViewController , UITableViewDataSource , UITableViewD
                 let notification_title = result[index]["title"].string
                 let notification_Status = result[index]["notificationStatus"].string
                 self.notificationList.append(Notifications(NotificationTitle: notification_title ?? "title", NotificationID: notification_ID ?? "ID", NotitficationImageUrl: notification_ImageURl ?? "Image", NotificationStatus: notification_Status ?? "status", NotificationType: notification_Type ?? "Type", NotificationBody: notification_Body ?? "Body"))
-                //  }
                 index = index + 1
             }
                 self.notifyTableView.reloadData()
                 self.activityLoader.isHidden = true
                 self.activityLoader.stopAnimating()
                 self.notifyTableView.isHidden = false
-            }
         }
+        }else {
+            self.activityLoader.isHidden = true
+            self.notifyTableView.isHidden = true
+            let alert = UIAlertController(title: "Error", message: "You must sign in to Show this Part", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+        }
+        
     
     
     func btnRightBar()  {

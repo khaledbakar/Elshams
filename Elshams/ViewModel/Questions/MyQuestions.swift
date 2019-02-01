@@ -27,6 +27,8 @@ class MyQuestions: UIViewController , UITableViewDataSource ,UITableViewDelegate
     }
     
     func loadMyQuestionData()  {
+        if let  apiToken  = Helper.getApiToken() {
+
         Service.getServiceWithAuth(url: URLs.getQuestions) { // authorizre or not ?
             (response) in
             print(response)
@@ -55,6 +57,17 @@ class MyQuestions: UIViewController , UITableViewDataSource ,UITableViewDelegate
             }
         }
         
+        }else {
+            self.activeLoader.isHidden = true
+            self.questionTableView.isHidden = true
+            //  print(error.localizedDescription)
+            let alert = UIAlertController(title: "Error", message: "You must sign in to Show this Part", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            dismiss(animated: true, completion: nil)
+            // and should dimiss
+            
+        }
     }
     //table view
     func numberOfSections(in tableView: UITableView) -> Int {

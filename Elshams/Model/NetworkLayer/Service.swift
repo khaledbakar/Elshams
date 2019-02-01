@@ -28,6 +28,7 @@ class Service: NSObject {
                     callback(json)
                 case .failure(let error):
                     print(error)
+                    
                     callback(nil)
                 }
             }
