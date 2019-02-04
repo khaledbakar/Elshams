@@ -22,6 +22,7 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
   //  var filterFavour = AgendaVC.agendaList.filter { (($0.favouriteSessionStr?.contains("true"))!)}
     var agendaSessionList = Array<ProgramAgendaItems>()
     var agendaHeadList = Array<AgendaHeadData>()
+    var agendaSpeakerIDImgList = Array<AgendaSpeakerIdPic>()
 
    
     override func viewDidLoad() {
@@ -64,7 +65,24 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
             let agenda_date = result[index]["date"].string
             let agenda_sessionTitle = result[index]["sessionTitle"].string
             let agenda_dateTitle = result[index]["title"].string
-            let agenda_Speakers = result[index]["speakers"].dictionaryObject
+            let agenda_Speakers = result[index]["speakers"]
+            let agenda_SpeakersDict = result[index]["speakers"].dictionaryObject
+            var SpeakeriDNotNull = true
+            var indexSpeaker = 0
+            
+            while SpeakeriDNotNull {
+                let agenda_speaker_id = agenda_Speakers["ID"].string
+                
+                if agenda_speaker_id == nil || agenda_speaker_id?.trimmed == "" ||
+                    agenda_speaker_id == "null"{
+                    SpeakeriDNotNull = false
+                    break
+                }
+                let agenda_speaker_url = agenda_Speakers["imageUrl"].string
+                self.agendaSpeakerIDImgList.append(AgendaSpeakerIdPic(SpImageUrl: agenda_speaker_url ?? "", Speaker_id: agenda_speaker_id ?? ""))
+                indexSpeaker = indexSpeaker + 1
+            }
+            
             let agenda_Time = result[index]["time"].string
             let agenda_SessionLocation = result[index]["location"].string
             let agenda_isFavourate = result[index]["isFavourate"].bool
@@ -75,10 +93,10 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
                 self.agendaHeadList.append(AgendaHeadData(HeadTitle: agenda_dateTitle ?? "title", HeadDate: agenda_date ?? "date", HeadType: agenda_Type ?? "type"))
             }
             else if agenda_Type == "session" {
-                self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "Title", SessionTime: agenda_Time ?? "Time", SessionLocation: agenda_SessionLocation ?? "location", SpeakersSession: agenda_Speakers ?? [
-                    "ID" : "314",
-                    "imageUrl" : "http:-b01d-582382a5795e.jpg"]
-                    , AgendaDate: agenda_date ?? "date", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String , RondomColor: agenda_rondomColor ?? "red", AgendaType: agenda_Type ?? "session"))
+                self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "Title", SessionTime: agenda_Time ?? "Time", SessionLocation: agenda_SessionLocation ?? "location", SpeakersSession: agenda_SpeakersDict!
+                    , AgendaDate: agenda_date ?? "date", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String , RondomColor: agenda_rondomColor ?? "red", AgendaType: agenda_Type ?? "session", SpeakersIdImg: self.agendaSpeakerIDImgList))
+                
+                 // ?? [[ "ID" : "314","imageUrl" : "http:-b01d-582382a5795e.jpg"]] as! [[String : Any]]
             }
             
             index = index + 1

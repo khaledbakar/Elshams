@@ -32,21 +32,16 @@ class NetworkDetailsVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-      /*  profileName.text = (singleItem?.name)!
-        profileJobTitle.text = (singleItem?.jobTitle)!
-    /*    profileAbout.text = (singleItem?.about)!
-        profileEMail.text = (singleItem?.mail)!
-        profilePhone.text = (singleItem?.phone)!
-        profileLinkedIn.text = (singleItem?.linkedInLink)!
-        */
+       profileName.text = ""
+        profileJobTitle.text = ""
+        profileAbout.text = ""
+        profileEMail.text = ""
+        profilePhone.text = ""
+        profileLinkedIn.text = ""
+        profileImg.layer.cornerRadius = profileImg.frame.width / 2
+        profileImg.clipsToBounds = true
         imgUrl(imgUrl: (singleItem?.imageUrl)!)
-        profileImg.layer.cornerRadius = profileImg.frame.width / 2
-        profileImg.clipsToBounds = true
-     //   profileImg.image = UIImage(named: "\((singleItem?.networkImage)!)")
-        */
         loadSetData(personId: (singleItem?.network_Id)!)
-        profileImg.layer.cornerRadius = profileImg.frame.width / 2
-        profileImg.clipsToBounds = true
         viewAbout.frame = frameAbout
         
         let tapCall = UITapGestureRecognizer(target: self, action: #selector(NetworkDetailsVC.tapCallFunc))
@@ -62,31 +57,11 @@ class NetworkDetailsVC: UIViewController {
         profileLinkedIn.addGestureRecognizer(tapLinkedIn)
       
     }
-    
- /*   func getServiceWithAuth(url: String, callback: @escaping (JSON?) -> ()) {
-        
-        if !reachabilityManager.isReachable {
-            callback(nil)
-            
-        } else {
-            let header : HTTPHeaders = ["Authorization": "token"] // Customize it as needed
-            Alamofire.request(url, headers: header).responseJSON { (response) in
-                switch response.result {
-                case .success(let value):
-                    let json = JSON(value)
-                    callback(json)
-                case .failure(let error):
-                    print(error)
-                    callback(nil)
-                }
-            }
-        }
-    }
-    */
-    func  loadSetData(personId:String)  {
+   
 
+    func  loadSetData(personId:String)  {
+        if let  apiToken  = Helper.getApiToken() {
         Service.getServiceWithAuth(url: "\(URLs.getPersonDetails)/\(personId)"){  // callback: <#T##(JSON?) -> ()#>)
-        //Service.getService(url: "http://66.226.74.85:4002/api/Event/getPersonDetails/\(personId)"){
               (response) in
             print(response)
             let result = JSON(response)
@@ -106,9 +81,14 @@ class NetworkDetailsVC: UIViewController {
             self.profilePhone.text = network_Phone
             self.profileLinkedIn.text = network_Linkedin
             self.profileJobTitle.text = network_JobTitle
-
         }
+        } else {
+            let alert = UIAlertController(title: "Error", message: "You must sign in to Show this Part", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+      }
     }
+    
     func imgUrl(imgUrl:String)  {
         if let imagUrlAl = imgUrl as? String {
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
@@ -133,6 +113,14 @@ class NetworkDetailsVC: UIViewController {
             UIApplication.shared.open(appSchemeUrl!, options: [:], completionHandler: nil)
         }
         else {
+            //stop borwser till know who will check or add https to avoid safari error
+          /*  guard let url = URL(string: (profileLinkedIn.text)!)
+                else {
+                    return
+            }
+            let safariVC = SFSafariViewController(url: url)
+            present(safariVC, animated: true, completion: nil)
+ */
             let alert = UIAlertController(title: "\(apppName) Error...", message: "the app named \(apppName) not found,please install it fia app store.", preferredStyle: .alert )
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
@@ -146,7 +134,7 @@ class NetworkDetailsVC: UIViewController {
         }
         let compser = MFMailComposeViewController()
         compser.mailComposeDelegate = self
-      //  compser.setToRecipients([(singleItem?.mail)!])
+        compser.setToRecipients([(profileEMail.text)!])
         compser.setSubject("Event User Want to connect")
         compser.setMessageBody("i love your session ana want to connect with you in other deal", isHTML: false)
         present(compser, animated: true, completion: nil)
@@ -154,27 +142,8 @@ class NetworkDetailsVC: UIViewController {
     }
     
     @objc func tapCallFunc(sender:UIGestureRecognizer) {
-       // PhoneCall.makeCall(PhoneNumber: (singleItem?.phone)!)
-    
+        PhoneCall.makeCall(PhoneNumber: (profilePhone.text)!)
     }
-    
- 
-    /*
-    @objc func tapOpenLinkFunc(sender:UIGestureRecognizer) {
-        guard let url = URL(string: (singleItem?.website)!)
-            else {
-                return
-        }
-        let safariVC = SFSafariViewController(url: url)
-        present(safariVC, animated: true, completion: nil)
-        
-    }
-    
-    */
-    
-    
-  
-
 }
 
 extension NetworkDetailsVC : MFMailComposeViewControllerDelegate {

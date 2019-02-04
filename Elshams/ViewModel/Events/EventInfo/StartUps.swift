@@ -33,9 +33,10 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
     }
     
     func loadAllStartUpData()  {
-        Service.getServiceWithAuth(url: URLs.getAllStartups) {
+        if let  apiToken  = Helper.getApiToken() {
+
+        Service.getServiceWithAuth(url: URLs.getAllStartups) { //WithAuth
             (response) in
-            
             print(response)
             let json = JSON(response)
             let result = json["AllStartups"]
@@ -68,6 +69,44 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
                 self.startupTableView.isHidden = false
             }
             //  print((self.networkList[2].name)!)
+        }
+        } else {
+            Service.getService(url: URLs.getAllStartups) { //WithAuth
+                (response) in
+                print(response)
+                let json = JSON(response)
+                let result = json["AllStartups"]
+                var iDNotNull = true
+                var index = 0
+                while iDNotNull {
+                    let startUp_ID = result[index]["id"].string
+                    let startUp_Name = result[index]["startupName"].string
+                    let startUp_Appoimentstatus = result[index]["appoimentstatus"].string
+                    let startUp_AppoimentTime = result[index]["AppoimentTime"].string
+                    let startUp_ImageUrl = result[index]["imageURl"].string
+                    let startUp_About = result[index]["about"].string
+                    let startUp_ContectInforamtion = result[index]["ContectInforamtion"].dictionaryObject
+                    let startUp_Email = result[index]["ContectInforamtion"]["Email"].string
+                    let startUp_Linkedin = result[index]["ContectInforamtion"]["linkedin"].string
+                    let startUp_Phone = result[index]["ContectInforamtion"]["phone"].string
+                    
+                    let contect = ["Email": "",
+                                   "linkedin": "",
+                                   "phone": ""]
+                    if startUp_ID == nil || startUp_ID?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || startUp_ID == "null" || startUp_ID == "nil" {
+                        iDNotNull = false
+                        break
+                    }
+                    self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: startUp_ImageUrl ?? "Image", StartUpAbout: startUp_About ?? "about", AppoimentStatus: startUp_Appoimentstatus ?? "Appointmentstatus", AppoimentTime: startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                    index = index + 1
+                    self.startupTableView.reloadData()
+                    self.activeLoader.isHidden = true
+                    self.activeLoader.stopAnimating()
+                    self.startupTableView.isHidden = false
+                }
+                //  print((self.networkList[2].name)!)
+            }
+            
         }
     }
     
@@ -111,6 +150,7 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
         return 80.0
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         performSegue(withIdentifier: "startupdetail", sender: startUpList[indexPath.row])
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

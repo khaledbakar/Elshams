@@ -33,6 +33,14 @@ class SponserCollectionViewCell: UICollectionViewCell {
         sponserColImage.layer.cornerRadius = sponserColImage.frame.width / 2
         sponserColImage.clipsToBounds = true
         sponserColName.text = sponserList.sponserName
+        if !((sponserList.sponsertype?.isEmpty)!) || ((sponserList.sponsertype)!) != nil {
+            let sponserTypeName = sponserList.sponsertype!["name"]
+            let sponserTypeColor = sponserList.sponsertype!["color"]
+            
+            
+            sponserRank.text = "\(sponserTypeName)"
+        }
+       
       /*  if sponserList.sponsersponserRank == "Gold"{
             sponserRank.textColor = UIColor.orange
         } else {

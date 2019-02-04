@@ -18,9 +18,12 @@ class ProgramAgendaItems {
     var rondomColor :String?
     var agendaType :String?
     var speakersSession :[String:Any]?
+    var speakersIdImg:[AgendaSpeakerIdPic]?
 
     
-    init(Agenda_ID:String,SessionTitle:String,SessionTime:String,SessionLocation:String,SpeakersSession :[String:Any],AgendaDate:String,FavouriteSession:Bool,FavouriteSessionStr:String,RondomColor:String,AgendaType:String) {
+
+    
+    init(Agenda_ID:String,SessionTitle:String,SessionTime:String,SessionLocation:String,SpeakersSession :[String:Any],AgendaDate:String,FavouriteSession:Bool,FavouriteSessionStr:String,RondomColor:String,AgendaType:String,SpeakersIdImg:[AgendaSpeakerIdPic]) {
         self.seseionTitle = SessionTitle
         self.sessionTime = SessionTime
         self.progLocation = SessionLocation
@@ -31,6 +34,7 @@ class ProgramAgendaItems {
         self.rondomColor = RondomColor
         self.agenda_ID = Agenda_ID
         self.agendaType = AgendaType
+        self.speakersIdImg = SpeakersIdImg
        
       
 /*

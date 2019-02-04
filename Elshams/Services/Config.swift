@@ -15,6 +15,8 @@ struct URLs {
     static let main = "http://68.168.111.23:9603/api"
     static let login = main + "/account/Login"
     static let register = main + "/account/register"
+    static let getSettingData = main + "/Event/getpofile"
+    static let updateSettingData = main + "/Event/updateProfile"
     static let getNetwork = main + "/Event/getNetwork"
     static let getPersonDetails = main + "/Event/getPersonDetails"
     

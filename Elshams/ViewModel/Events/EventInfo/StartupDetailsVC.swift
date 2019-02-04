@@ -71,6 +71,12 @@ class StartupDetailsVC: UIViewController {
             defaultFrame()
 
         } */
+        startUpName.text = ""
+        startUpPhone.text = ""
+        startUpLinkedIn.text = ""
+        aboutStartUp.text = ""
+        startUpMail.text = ""
+        defaultFrame()
         loadSessionData(StartUpID: (singleItem?.startup_id)!)
         loadavailableAppointment(StartUpID: (singleItem?.startup_id)!)
         if StartupDetailsVC.sechadualeBTNSend == true {
@@ -106,6 +112,8 @@ class StartupDetailsVC: UIViewController {
     
 
     func loadavailableAppointment(StartUpID:String)  {
+        if let  apiToken  = Helper.getApiToken() {
+
         self.availableAppointmentList.removeAll()
         Service.getServiceWithAuth(url: "\(URLs.getAvaliableAppoiments)/\(StartUpID)") {
             (response) in
@@ -133,9 +141,14 @@ class StartupDetailsVC: UIViewController {
                 
             }
         }
+        } else {
+            
+        }
     }
     
     func loadSessionData(StartUpID:String)  {
+        if let  apiToken  = Helper.getApiToken() {
+
         Service.getServiceWithAuth(url: "\(URLs.getStartupDetailsByID)/\(StartUpID)") {
             (response) in
             print("this is SessionDetails ")
@@ -172,6 +185,44 @@ class StartupDetailsVC: UIViewController {
                 self.defaultFrame()
             }
         }
+        } else {
+            Service.getService(url: "\(URLs.getStartupDetailsByID)/\(StartUpID)") {
+                (response) in
+                print("this is SessionDetails ")
+                print(response)
+                let result = JSON(response)
+                // get startUp
+                let startUp_ID = result["id"].string
+                self.startUp_Name = result["startupName"].string
+                self.startUp_About = result["about"].string
+                self.startUp_ImageURl = result["imageURl"].string
+                self.startUp_Appoimentstatus = result["appoimentstatus"].string
+                self.startUp_AppoimentTime = result["AppoimentTime"].string
+                let startUp_ContectInforamtion = result["ContectInforamtion"].dictionaryObject
+                self.startUp_Email = result["ContectInforamtion"]["Email"].string
+                self.startUp_Linkedin = result["ContectInforamtion"]["linkedin"].string
+                self.startUp_Phone = result["ContectInforamtion"]["phone"].string
+                
+                let contect = ["Email": "",
+                               "linkedin": "",
+                               "phone": ""]
+                
+                self.startUpList.append(StartUpsData(StartupName: self.startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: self.startUp_ImageURl ?? "Image" , StartUpAbout: self.startUp_About ?? "About", AppoimentStatus: self.startUp_Appoimentstatus ?? "appoimentstatus" , AppoimentTime: self.startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                
+                self.startUpName.text = self.startUp_Name
+                self.startUpMail.text = self.startUp_Email
+                self.startUpPhone.text = self.startUp_Phone
+                self.startUpLinkedIn.text = self.startUp_Linkedin
+                self.aboutStartUp.text  = self.startUp_About
+                // self.sureMessageTxt
+                self.imgUrl(imgUrl: (self.startUp_ImageURl)!)
+                if self.startUp_Appoimentstatus != nil && self.startUp_Appoimentstatus != "notSent" {
+                    self.afterRescadualeFrame()
+                } else {
+                    self.defaultFrame()
+                }
+            }
+        }
     }
     
     func popUpViewMethod()  {
@@ -203,6 +254,8 @@ class StartupDetailsVC: UIViewController {
     
 
 func imgUrl(imgUrl:String)  {
+   // if let  apiToken  = Helper.getApiToken() {
+
     if let imagUrlAl = imgUrl as? String {
         Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
             print(response)
@@ -213,6 +266,8 @@ func imgUrl(imgUrl:String)  {
             }
         })
     }
+   // } else { }
+    
 }
 
 
@@ -244,8 +299,8 @@ func imgUrl(imgUrl:String)  {
         let compser = MFMailComposeViewController()
         compser.mailComposeDelegate = self
         compser.setToRecipients([(startUp_Email)!])
-        compser.setSubject("Event User Want to connect")
-        compser.setMessageBody("i love your session ana want to connect with you in other deal", isHTML: false)
+        compser.setSubject("")
+        compser.setMessageBody("", isHTML: false)
         present(compser, animated: true, completion: nil)
         
     }
@@ -333,6 +388,8 @@ func imgUrl(imgUrl:String)  {
     }
     */
     func btnRightBar()  {
+        if let  apiToken  = Helper.getApiToken() {
+
         let btnAppointment = UIButton(type: UIButton.ButtonType.system)
         btnAppointment.setImage(UIImage(named: "appointment"), for: UIControl.State())
         btnAppointment.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
@@ -340,6 +397,9 @@ func imgUrl(imgUrl:String)  {
         btnAppointment.tintColor = UIColor.white
         let customBarItem = UIBarButtonItem(customView: btnAppointment)
         self.navigationItem.rightBarButtonItem = customBarItem;
+        } else {
+            
+        }
     }
     
     @objc func popUpTool() {

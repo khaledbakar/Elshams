@@ -7,7 +7,9 @@
 //
 
 import UIKit
-
+import AlamofireImage
+import Alamofire
+import SwiftyJSON
 protocol SlideMenuDelegate {
     func slideMenuItemSelectedAtIndex(_ index : Int32)
 }
@@ -18,8 +20,11 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
     static var speakerEventOrMenu:Bool = false
     static var sponserEventOrMenu:Bool = false
     static var startupEventOrMenu:Bool = false
+    var imgUserUrl:String?
+    static var imgUserTestUrl:String = ""
 
-
+    @IBOutlet weak var userProfile: UIImageView!
+    
     var btnMenu : UIButton!
     var SideMenuTitles = ["TimeLine","Networks","Myfavorites","Agenda","Speakers","Sponsers","Startups","News","Notifications","Questions","Appointment","Settings","Logout"] //,"AllEvents"
     var SideMenuIcons = ["home","networks","favourite","agenda","speaker","sponsers","startup","news","notifications","questation","appointment","home","logout"]//"events",
@@ -27,8 +32,46 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
     var delegate : SlideMenuDelegate?
     override func viewDidLoad() {
         super.viewDidLoad()
+        userProfile.layer.cornerRadius = userProfile.frame.width / 2
+        userProfile.clipsToBounds = true
+        loadUserData()
+    //    imgUrl(imgUrl: MenuViewController.imgUserTestUrl)
+       
+    }
+    func  loadUserData()  {
+        if let  apiToken  = Helper.getApiToken() {
 
-        // Do any additional setup after loading the view.
+        Service.getServiceWithAuth(url: URLs.getSettingData){
+            (response) in
+            print(response)
+            let result = JSON(response)
+            let user_Name = result["Title"].string
+            let user_JobTitle = result["jobTitle"].string
+            let user_CompanyName = result["companyName"].string
+            let user_ImageUrl = result["picture"].string
+            let user_Password = result["password"].string
+            let user_Email = result["email"].string
+            let user_Linkedin = result["linkedin"].string
+            let user_Phone = result["phone"].string
+            let user_about = result["about"].string
+            let user_Ispublic_str = result["isPublic"].string
+           // self.imgUserUrl = user_ImageUrl
+            // internet error handel
+            self.imgUrl(imgUrl: (user_ImageUrl)!)
+        }
+        }
+    }
+    func imgUrl(imgUrl:String)  {
+        if let imagUrlAl = imgUrl as? String {
+            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
+                print(response)
+                if let image = response.result.value {
+                    DispatchQueue.main.async{
+                        self.userProfile.image = image
+                    }
+                }
+            })
+        }
     }
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -53,7 +96,14 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             controllerSelect = "NetworkSpeakers"
 
         case 2 :
+            if let  apiToken  = Helper.getApiToken() {
+
             controllerSelect = "MyFavouriteAgenda"
+                
+            } else {
+                controllerSelect = "NotLogin"
+                
+            }
             
         case 3 :
             controllerSelect = "EventAgenda"
@@ -72,16 +122,40 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             controllerSelect = "AllNews"
             
         case 8 :
+            if let  apiToken  = Helper.getApiToken() {
+
             controllerSelect = "NotificationEvent"
+        } else {
+            controllerSelect = "NotLogin"
+            
+        }
         case 9 :
+        if let  apiToken  = Helper.getApiToken() {
+
             controllerSelect = "QuestionsContainer"
+    } else {
+    controllerSelect = "NotLogin"
+    
+    }
+        
         case 10 :
+            if let  apiToken  = Helper.getApiToken() {
             controllerSelect = "AppointmentContainer"
+            } else {
+                controllerSelect = "NotLogin"
+               
+            }
     /*    case 11 :
             controllerSelect = "AllMainEvents" //EventContainer
             MenuViewController.agendaEventOrMenu = true */
         case 11 :
+             if let  apiToken  = Helper.getApiToken() {
             controllerSelect = "Settings"
+            
+        } else {
+            controllerSelect = "NotLogin"
+            
+        }
         case 12 :
             //fe sho8l hna kteer 3shan el remember me
             controllerSelect = "Logout"
@@ -93,18 +167,27 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             controllerSelect = "EventAgenda"
 
         }
+        
         let mainStoryBoard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        if controllerSelect != "Logout"{
+        if controllerSelect != "Logout" && controllerSelect != "NotLogin"{
             if controllerSelect != "Settings"{
                 let DVC = mainStoryBoard.instantiateViewController(withIdentifier: controllerSelect!)
                 self.navigationController?.pushViewController(DVC, animated: true)
             }
+
             else {
                 performSegue(withIdentifier: "settingspage", sender: nil)
              //   let DVC = mainStoryBoard.instantiateViewController(withIdentifier: controllerSelect!)
               //  self.navigationController?.pus(DVC, animated: true)
             }
             
+            
+        }
+        else if controllerSelect == "NotLogin" {
+            let alert = UIAlertController(title: "Error", message: "You must sign in to Show this Part", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            dismiss(animated: true, completion: nil)
         }
      
         

@@ -16,9 +16,13 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
     @IBOutlet weak var tableViewAgenda: UITableView!
     @IBOutlet weak var activeLoader: UIActivityIndicatorView!
 
- // static  var agendaList = Array<ProgramAgendaItems>()
+    @IBOutlet weak var reloadConnection: UIImageView!
+    @IBOutlet weak var reloadBtnShow: UIButton!
+    // static  var agendaList = Array<ProgramAgendaItems>()
     var agendaSessionList = Array<ProgramAgendaItems>()
     var agendaHeadList = Array<AgendaHeadData>()
+    var agendaSpeakerIDImgList = Array<AgendaSpeakerIdPic>()
+
     var agendaDate = Array<String>()
     var agendaAllDate = Array<String>()
 
@@ -28,14 +32,29 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
     if MenuViewController.agendaEventOrMenu == true {
         addSlideMenuButton()
        // btnRightBar()
-        tableViewAgenda.isHidden = true
-        activeLoader.startAnimating()
+       
         self.navigationItem.title = "Agenda"
         MenuViewController.agendaEventOrMenu = false
     }
+    tableViewAgenda.isHidden = true
+    activeLoader.startAnimating()
+    reloadBtnShow.isHidden = true
+    reloadConnection.isHidden = true
     loadTableData()
+    if TimeLineHomeVC.failMessage ==  "fail"
+    {
+        reloadBtnShow.isHidden = false
+        reloadConnection.isHidden = false
+        self.activeLoader.isHidden = true
+       // self.activeLoader.stopAnimating()
+        self.tableViewAgenda.isHidden = true
+        let alert = UIAlertController(title: "Error", message: "No internet connection please turn on it", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
    
-    var secCount = 0
+  /*  var secCount = 0
   //  for index in 0..<AgendaVC.agendaSessionList.count {
       for index in 0..<agendaSessionList.count {
 
@@ -54,8 +73,17 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
         let filter = agendaDate.filter { $0.contains(agendaAllDate[indFilter]) }
         
     }
+ */
     }
     
+    @IBAction func reloadDataConnection(_ sender: Any) {
+        tableViewAgenda.isHidden = true
+        activeLoader.isHidden = true
+        activeLoader.startAnimating()
+        reloadBtnShow.isHidden = true
+        reloadConnection.isHidden = true
+        loadTableData()
+    }
     
     func loadTableData()  {
         if let  apiToken  = Helper.getApiToken() {
@@ -80,7 +108,24 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
                 let agenda_date = result[index]["date"].string
                 let agenda_sessionTitle = result[index]["sessionTitle"].string
                 let agenda_dateTitle = result[index]["title"].string
-                let agenda_Speakers = result[index]["speakers"].dictionaryObject
+                let agenda_Speakers = result[index]["speakers"]//dictionaryObject
+                let agenda_SpeakersDict = result[index]["speakers"].dictionaryObject//dictionaryObject
+
+                var SpeakeriDNotNull = true
+                var indexSpeaker = 0
+
+                while SpeakeriDNotNull {
+                    let agenda_speaker_id = agenda_Speakers[indexSpeaker]["ID"].string
+                    
+                    if agenda_speaker_id == nil || agenda_speaker_id?.trimmed == "" ||
+                        agenda_speaker_id == "null"{
+                        SpeakeriDNotNull = false
+                        break
+                    }
+                    let agenda_speaker_url = agenda_Speakers[indexSpeaker]["imageUrl"].string
+                    self.agendaSpeakerIDImgList.append(AgendaSpeakerIdPic(SpImageUrl: agenda_speaker_url ?? "", Speaker_id: agenda_speaker_id ?? ""))
+                    indexSpeaker = indexSpeaker + 1
+                }
                 let agenda_Time = result[index]["time"].string
                 let agenda_SessionLocation = result[index]["location"].string
                 let agenda_isFavourate = result[index]["isFavourate"].bool
@@ -91,13 +136,14 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
                     self.agendaHeadList.append(AgendaHeadData(HeadTitle: agenda_dateTitle ?? "title", HeadDate: agenda_date ?? "date", HeadType: agenda_Type ?? "type"))
                 }
                 else if agenda_Type == "session" {
-                    self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "Title", SessionTime: agenda_Time ?? "Time", SessionLocation: agenda_SessionLocation ?? "location", SpeakersSession: agenda_Speakers ?? [
-                        "ID" : "314",
-                        "imageUrl" : "http:-b01d-582382a5795e.jpg"]
-                         , AgendaDate: agenda_date ?? "date", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String , RondomColor: agenda_rondomColor ?? "red", AgendaType: agenda_Type ?? "session"))
+                    self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "Title", SessionTime: agenda_Time ?? "Time", SessionLocation: agenda_SessionLocation ?? "location", SpeakersSession: agenda_SpeakersDict ?? ["ID" : "314",
+                                                                                                                                                                                                                                                    "imageUrl" : "http:-b01d-582382a5795e.jpg"]
+                        , AgendaDate: agenda_date ?? "date", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String , RondomColor: agenda_rondomColor ?? "red", AgendaType: agenda_Type ?? "session", SpeakersIdImg: self.agendaSpeakerIDImgList))
                 }
                 
                 index = index + 1
+                self.agendaSpeakerIDImgList.removeAll()
+
                 self.tableViewAgenda.reloadData()
                 self.activeLoader.isHidden = true
                 self.activeLoader.stopAnimating()
@@ -126,7 +172,23 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
                     let agenda_date = result[index]["date"].string
                     let agenda_sessionTitle = result[index]["sessionTitle"].string
                     let agenda_dateTitle = result[index]["title"].string
-                    let agenda_Speakers = result[index]["speakers"].dictionaryObject
+                    let agenda_Speakers = result[index]["speakers"]
+                    let agenda_SpeakersDict = result[index]["speakers"].dictionaryObject
+                    var SpeakeriDNotNull = true
+                    var indexSpeaker = 0
+                    
+                    while SpeakeriDNotNull {
+                        let agenda_speaker_id = agenda_Speakers["ID"].string
+                        
+                        if agenda_speaker_id == nil || agenda_speaker_id?.trimmed == "" ||
+                            agenda_speaker_id == "null"{
+                            SpeakeriDNotNull = false
+                            break
+                        }
+                        let agenda_speaker_url = agenda_Speakers["imageUrl"].string
+                        self.agendaSpeakerIDImgList.append(AgendaSpeakerIdPic(SpImageUrl: agenda_speaker_url ?? "", Speaker_id: agenda_speaker_id ?? ""))
+                        indexSpeaker = indexSpeaker + 1
+                    }
                     let agenda_Time = result[index]["time"].string
                     let agenda_SessionLocation = result[index]["location"].string
                     let agenda_isFavourate = result[index]["isFavourate"].bool
@@ -137,13 +199,13 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
                         self.agendaHeadList.append(AgendaHeadData(HeadTitle: agenda_dateTitle ?? "title", HeadDate: agenda_date ?? "date", HeadType: agenda_Type ?? "type"))
                     }
                     else if agenda_Type == "session" {
-                        self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "Title", SessionTime: agenda_Time ?? "Time", SessionLocation: agenda_SessionLocation ?? "location", SpeakersSession: agenda_Speakers ?? [
+                        self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "Title", SessionTime: agenda_Time ?? "Time", SessionLocation: agenda_SessionLocation ?? "location", SpeakersSession: agenda_SpeakersDict ?? [
                             "ID" : "314",
                             "imageUrl" : "http:-b01d-582382a5795e.jpg"]
-                            , AgendaDate: agenda_date ?? "date", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String , RondomColor: agenda_rondomColor ?? "red", AgendaType: agenda_Type ?? "session"))
+                            , AgendaDate: agenda_date ?? "date", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String , RondomColor: agenda_rondomColor ?? "red", AgendaType: agenda_Type ?? "session", SpeakersIdImg: self.agendaSpeakerIDImgList))
                     }
-                    
                     index = index + 1
+                    self.agendaSpeakerIDImgList.removeAll()
                     self.tableViewAgenda.reloadData()
                     self.activeLoader.isHidden = true
                     self.activeLoader.stopAnimating()
@@ -229,6 +291,7 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         OpenSessionVC.AgednaOrFavourite = true
+        tableView.deselectRow(at: indexPath, animated: true)
         performSegue(withIdentifier: "opensession", sender: agendaSessionList[indexPath.row])
     }
     

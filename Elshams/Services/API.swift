@@ -123,7 +123,7 @@ class API: NSObject {
             let json = JSON(response)
             if let apiToken = json["access_token"].string {
                 print("api token \(apiToken)")
-                Helper.saveApiToken(Token: apiToken)
+                //Helper.saveApiToken(Token: apiToken)
           //      completion(nil , true)
         }       /*  Alamofire.request(URLs.register, method: .post, parameters: paramRegister, encoding: URLEncoding.default, headers: nil).responseJSON { response in
                 switch response.result
@@ -142,4 +142,43 @@ class API: NSObject {
         } */
     }
 }
+    
+    class func updateUserData(Email:String, Password:String, Title:String, CompanyName:String,
+                              JobTitle:String, About:String, Phone:String,Picture:String,Linkedin:String,Ispublic:String,
+                        completion: @escaping (_ error: Error?, _ succes: Bool)->Void){
+        
+        let paramRegister : [String:Any] = [
+            "Title" : Title,
+            "jobTitle" : JobTitle,
+            "companyName" : CompanyName, //title name and about and company name no field for it
+            "picture" : Picture,
+            "email" : Email,
+          //  "password" : Password,
+            "linkedin" : Linkedin,
+            "phone" : Phone,
+            "about" : Linkedin,
+            "isPublic" : Ispublic
+
+        ]
+       /* "Title": "biveloLKperikd",
+        "jobTitle": "biz developer",
+        "companyName": "biz developer",
+        "picture": "",
+        "email": "msa@gmail.com",
+        "linkedin": "aass",
+        "phone": "01023029394993",
+        "about": "biz developer",
+        "isPublic": "True"
+        */
+
+        Service.postServiceWithAuth(url: URLs.updateSettingData, parameters: paramRegister){ (response) in
+            print("This is response request : ")
+            print(response)
+            let json = JSON(response)
+            let message = json["message"].string
+            SettingsVC.udapatedMessage = message!
+            
+        
+        }
+    }
 }

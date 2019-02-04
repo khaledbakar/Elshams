@@ -11,6 +11,7 @@
 		0410D75721F0BD79005A304E /* OpenSafariLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0410D75621F0BD79005A304E /* OpenSafariLink.swift */; };
 		0416E74F21ADABBC004E7368 /* TabTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0416E74E21ADABBC004E7368 /* TabTestViewController.swift */; };
 		0416E75321B00FE1004E7368 /* MainAgentContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0416E75221B00FE1004E7368 /* MainAgentContainer.swift */; };
+		0427280E2208693C0028C671 /* AgendaSpeakerIdPic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0427280D2208693C0028C671 /* AgendaSpeakerIdPic.swift */; };
 		0429799F21DB8DBC0041039E /* ViewConTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0429799E21DB8DBC0041039E /* ViewConTableViewCell.swift */; };
 		0439DAC721C111510041CDCB /* AllNewsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0439DAC621C111510041CDCB /* AllNewsCell.swift */; };
 		0439DAC921C112700041CDCB /* NewsDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0439DAC821C112700041CDCB /* NewsDetails.swift */; };
@@ -114,6 +115,7 @@
 		0410D75621F0BD79005A304E /* OpenSafariLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSafariLink.swift; sourceTree = "<group>"; };
 		0416E74E21ADABBC004E7368 /* TabTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTestViewController.swift; sourceTree = "<group>"; };
 		0416E75221B00FE1004E7368 /* MainAgentContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAgentContainer.swift; sourceTree = "<group>"; };
+		0427280D2208693C0028C671 /* AgendaSpeakerIdPic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgendaSpeakerIdPic.swift; sourceTree = "<group>"; };
 		0429799E21DB8DBC0041039E /* ViewConTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewConTableViewCell.swift; sourceTree = "<group>"; };
 		0439DAC621C111510041CDCB /* AllNewsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllNewsCell.swift; sourceTree = "<group>"; };
 		0439DAC821C112700041CDCB /* NewsDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsDetails.swift; sourceTree = "<group>"; };
@@ -315,6 +317,7 @@
 				04FE210521F755AB0027DDB3 /* AgendaHeadData.swift */,
 				04B2C5A72200C1B70039D6AD /* AvailableAppointment.swift */,
 				04B2C5A9220345200039D6AD /* UserData.swift */,
+				0427280D2208693C0028C671 /* AgendaSpeakerIdPic.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -754,6 +757,7 @@
 				04FFB80321CFBC70002009A4 /* SettingsVC.swift in Sources */,
 				047970DA21CFF46400C5BAFD /* UIColor.swift in Sources */,
 				0466C08221B6990500C9C555 /* Settings.swift in Sources */,
+				0427280E2208693C0028C671 /* AgendaSpeakerIdPic.swift in Sources */,
 				0466C03C21B026CB00C9C555 /* MenuCompCell.swift in Sources */,
 				0466C06721B57B2700C9C555 /* SponsersVC.swift in Sources */,
 				0410D75721F0BD79005A304E /* OpenSafariLink.swift in Sources */,

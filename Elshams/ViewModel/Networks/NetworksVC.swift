@@ -36,6 +36,8 @@ class NetworksVC: BaseViewController , UITableViewDataSource , UITableViewDelega
     }
     
     func loadTableData()  {
+        if let  apiToken  = Helper.getApiToken() {
+
         Service.getServiceWithAuth(url: URLs.getNetwork) {
             (response) in
             print(response)
@@ -64,42 +66,38 @@ class NetworksVC: BaseViewController , UITableViewDataSource , UITableViewDelega
             }
             //  print((self.networkList[2].name)!)
         }
+        }else {
+            Service.getService(url: URLs.getNetwork) {
+                (response) in
+                print(response)
+                let result = JSON(response)
+                
+                var iDNotNull = true
+                var index = 0
+                while iDNotNull {
+                    let network_ID = result[index]["ID"].string
+                    let network_Name = result[index]["name"].string
+                    let network_JobTitle = result[index]["jobTitle"].string
+                    let network_CompanyName = result[index]["companyName"].string
+                    let network_ImageUrl = result[index]["imageUrl"].string
+                    let network_RequestSenderID = result[index]["requestSenderID"].string
+                    let network_RequestStatus = result[index]["requestStatus"].string
+                    if network_Name == nil || network_Name?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || network_Name == "null" {
+                        iDNotNull = false
+                        break
+                    }
+                    self.networkList.append(Networks(NetworkName: network_Name ?? "noname", JobTitle: network_JobTitle ?? "null", ImageUrl: network_ImageUrl ?? "null", CompanyName: network_CompanyName ?? "null", NetworkID: network_ID ?? "null", RequestStatus: network_RequestStatus ?? "null", RequestSenderID: network_RequestSenderID ?? "null"))
+                    index = index + 1
+                    self.tableVIewNetwork.reloadData()
+                    self.activeLoader.isHidden = true
+                    self.activeLoader.stopAnimating()
+                    self.tableVIewNetwork.isHidden = false
+                }
+        }
         
     }
-    func loadData() {
-        //DispatchQueue.main.async {
-         //   Alamofire.request(URLs.getNetwork).responseJSON(completionHandler:
-        Service.getServiceWithAuth(url: URLs.getNetwork){
-                 (response) in
-                    //  print("this is json")
-                    // print(response)
-                 //   switch response.result{
-                  //  case.success(let value) :
-                        let result = JSON(response)
-                        // print(result[0])
-                        var iDNotNull = true
-                        var index = 0
-                        while iDNotNull {
-                            let network_ID = result[index]["ID"].string
-                            let network_Name = result[index]["name"].string
-                            let network_JobTitle = result[index]["jobTitle"].string
-                            let network_CompanyName = result[index]["companyName"].string
-                            let network_ImageUrl = result[index]["imageUrl"].string
-                            let network_RequestSenderID = result[index]["requestSenderID"].string
-                            let network_RequestStatus = result[index]["requestStatus"].string
-                            if network_Name == nil || network_Name?.trimmed == "" || network_Name == "null" {
-                                iDNotNull = false
-                                break
-                            }
-                            self.networkList.append(Networks(NetworkName: network_Name ?? "noname", JobTitle: network_JobTitle ?? "null", ImageUrl: network_ImageUrl ?? "null", CompanyName: network_CompanyName ?? "null", NetworkID: network_ID ?? "null", RequestStatus: network_RequestStatus ?? "null", RequestSenderID: network_RequestSenderID ?? "null"))
-                            index = index + 1
-                        }
-                 //   case.failure(let error):
-                   //     print(error.localizedDescription)
-                  //  }
-         //   })
-        }
     }
+
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -117,7 +115,14 @@ class NetworksVC: BaseViewController , UITableViewDataSource , UITableViewDelega
         return 90.0
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        if let  apiToken  = Helper.getApiToken() {
         performSegue(withIdentifier: "newtworkdetailpage", sender: networkList[indexPath.row])
+        }else {
+            let alert = UIAlertController(title: "Error", message: "You must sign in to Show this Part", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

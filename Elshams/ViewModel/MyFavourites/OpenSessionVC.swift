@@ -72,10 +72,26 @@ class OpenSessionVC: UIViewController {
     //var startUpList = Array<StartUpsData>()
     var sessionList = Array<ProgramAgendaItems>()
     var questionList = Array<QuestionsData>()
+    var agendaSpeakerIDImgList = Array<AgendaSpeakerIdPic>()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
        // nextQuestion.ges
+        //default empty label
+        sessionTitle.text = ""
+        sessionDate.text = ""
+        sessionTime.text = ""
+        sessionLocation.text = ""
+        speakerName.text = ""
+        speakerJobTitle.text = ""
+        eventDescribtion.text = ""
+        questionsTxt.text = ""
+        speakerProfile.layer.cornerRadius = speakerProfile.frame.width / 2
+        speakerProfile.clipsToBounds = true
+        viewFavBack.layer.cornerRadius = viewFavBack.frame.width / 2
+        viewFavBack.clipsToBounds = true
+        favouriteIcon.image = UIImage(named: "unlike-session")
         loadSessionData(SessionID: (singleItem?.agenda_ID)!)
         if  OpenSessionVC.AgednaOrFavourite == true {
             self.navigationItem.title = "Agenda"
@@ -84,6 +100,7 @@ class OpenSessionVC: UIViewController {
             self.navigationItem.title = "My Favourite"
 
         }
+        
        
 
     }
@@ -96,6 +113,8 @@ class OpenSessionVC: UIViewController {
          print(response)
          }
          */
+        if let  apiToken  = Helper.getApiToken() {
+
      Service.getServiceWithAuth(url: "\(URLs.getSessionDetails)/\(SessionID)") {
             (response) in
         print("this is SessionDetails ")
@@ -114,7 +133,7 @@ class OpenSessionVC: UIViewController {
         
                  self.session_TwitterHash = result["twitterHash"].string //mst5dmt-hash
         let speaker_ID_Image = result["Speaker"].dictionaryObject
-        // get speakers
+        // get speakers // from agendaIdImg get all not only [0]
         let speaker_all = result["Speaker"]["AllSpeaker"]
         self.speaker_ID = speaker_all[0]["ID"].string
         self.speaker_Name = speaker_all[0]["name"].string
@@ -145,10 +164,9 @@ class OpenSessionVC: UIViewController {
         self.speakerList.append(Speakers(SpeakerName: self.speaker_Name ?? "name", JobTitle: self.speaker_JobTitle ?? "JOB", CompanyName: self.speaker_CompanyName ?? "Company", SpImageUrl: self.speaker_ImageUrl ?? "Image", Speaker_id: self.speaker_ID ?? "ID", ContectInforamtion: self.speaker_ContectInforamtion ?? contect, About: self.speaker_About ?? "About"))
         self.questionList.append(QuestionsData(Questions: self.question_head ?? "question", Answer: self.question_answer ?? "answer", QuestionsID: self.question_ID ?? "ID", QuestionTimeStamp: self.question_TimeStamp ?? "TimeStamp"))
         
-        self.sessionList.append(ProgramAgendaItems(Agenda_ID: self.session_ID ?? "ID", SessionTitle: self.session_Title ?? "Title", SessionTime: self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SpeakersSession:  [
-            "ID" : "314",
+        self.sessionList.append(ProgramAgendaItems(Agenda_ID: self.session_ID ?? "ID", SessionTitle: self.session_Title ?? "Title", SessionTime: self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SpeakersSession: ["ID" : "314",
             "imageUrl" : "http:-b01d-582382a5795e.jpg"]
-            , AgendaDate: self.session_Date ?? "date", FavouriteSession: self.session_isFavourate ?? true , FavouriteSessionStr: self.session_isFavourate_Str ?? "true" , RondomColor: self.session_RondomColor ?? "red", AgendaType: self.session_Type ?? "session"))
+            , AgendaDate: self.session_Date ?? "date", FavouriteSession: self.session_isFavourate ?? true , FavouriteSessionStr: self.session_isFavourate_Str ?? "true" , RondomColor: self.session_RondomColor ?? "red", AgendaType: self.session_Type ?? "session", SpeakersIdImg: self.agendaSpeakerIDImgList))
         
         
         if self.session_isFavourate == true {
@@ -157,6 +175,69 @@ class OpenSessionVC: UIViewController {
             self.favouriteIcon.image = UIImage(named: "unlike-session")
         }
         self.mangeSessionDetails(SeseionTitle: self.session_Title ?? "Title", AgendaDate: self.session_Date ?? "date", SessionTime:  self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SessionDescribtion: self.session_Description ?? "Describition", SpeakerName: self.speaker_Name ?? "name", SpeakerJobTitle: self.speaker_JobTitle ?? "JOB", SpeakerImgUrl: self.speaker_ImageUrl ?? "Image", QestionHead: self.question_head ?? "question")
+        }
+        }else {
+            Service.getService(url: "\(URLs.getSessionDetails)/\(SessionID)") {
+                (response) in
+                print("this is SessionDetails ")
+                print(response)
+                let result = JSON(response)
+                self.session_ID = result["Id"].string
+                self.session_RondomColor = result["rondomColor"].string
+                self.session_Type = result["type"].string
+                self.session_Date = result["date"].string
+                self.session_Title = result["sessionTitle"].string
+                self.session_Time = result["time"].string
+                self.session_Location = result["location"].string
+                self.session_Description = result["description"].string
+                self.session_isFavourate = result["isFavourate"].bool
+                self.session_isFavourate_Str = "\(self.session_isFavourate)"
+                
+                self.session_TwitterHash = result["twitterHash"].string //mst5dmt-hash
+                let speaker_ID_Image = result["Speaker"].dictionaryObject
+                // get speakers // from agendaIdImg get all not only [0]
+                let speaker_all = result["Speaker"]["AllSpeaker"]
+                self.speaker_ID = speaker_all[0]["ID"].string
+                self.speaker_Name = speaker_all[0]["name"].string
+                self.speaker_JobTitle = speaker_all[0]["jobTitle"].string
+                self.speaker_CompanyName = speaker_all["companyName"].string
+                self.speaker_ImageUrl = speaker_all[0]["imageUrl"].string
+                self.speaker_About = speaker_all[0]["about"].string
+                self.speaker_ContectInforamtion = speaker_all[0]["ContectInforamtion"].dictionaryObject
+                self.speaker_Email = speaker_all[0]["ContectInforamtion"]["Email"].string
+                self.speaker_Linkedin = speaker_all[0]["ContectInforamtion"]["linkedin"].string
+                self.speaker_Phone = speaker_all[0]["ContectInforamtion"]["phone"].string
+                
+                let contect = ["Email": "",
+                               "linkedin": "",
+                               "phone": ""]
+                
+                let questions_all = result["Question"]["AllQuestion"]
+                print("this is question")
+                print(questions_all)
+                self.question_ID = questions_all["ID"].string
+                self.question_head = questions_all["question"].string
+                self.question_answer = questions_all["answer"].string
+                self.question_TimeStamp = questions_all["questionTimeStamp"].string
+                self.speakerList.removeAll()
+                self.questionList.removeAll()
+                self.sessionList.removeAll()
+                
+                self.speakerList.append(Speakers(SpeakerName: self.speaker_Name ?? "name", JobTitle: self.speaker_JobTitle ?? "JOB", CompanyName: self.speaker_CompanyName ?? "Company", SpImageUrl: self.speaker_ImageUrl ?? "Image", Speaker_id: self.speaker_ID ?? "ID", ContectInforamtion: self.speaker_ContectInforamtion ?? contect, About: self.speaker_About ?? "About"))
+                self.questionList.append(QuestionsData(Questions: self.question_head ?? "question", Answer: self.question_answer ?? "answer", QuestionsID: self.question_ID ?? "ID", QuestionTimeStamp: self.question_TimeStamp ?? "TimeStamp"))
+                
+                self.sessionList.append(ProgramAgendaItems(Agenda_ID: self.session_ID ?? "ID", SessionTitle: self.session_Title ?? "Title", SessionTime: self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SpeakersSession: ["ID" : "314",
+                                                                                                                                                                                                                                                              "imageUrl" : "http:-b01d-582382a5795e.jpg"]
+                    , AgendaDate: self.session_Date ?? "date", FavouriteSession: self.session_isFavourate ?? true , FavouriteSessionStr: self.session_isFavourate_Str ?? "true" , RondomColor: self.session_RondomColor ?? "red", AgendaType: self.session_Type ?? "session", SpeakersIdImg: self.agendaSpeakerIDImgList))
+                
+                
+                if self.session_isFavourate == true {
+                    self.favouriteIcon.image = UIImage(named: "like-session")
+                }else {
+                    self.favouriteIcon.image = UIImage(named: "unlike-session")
+                }
+                self.mangeSessionDetails(SeseionTitle: self.session_Title ?? "Title", AgendaDate: self.session_Date ?? "date", SessionTime:  self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SessionDescribtion: self.session_Description ?? "Describition", SpeakerName: self.speaker_Name ?? "name", SpeakerJobTitle: self.speaker_JobTitle ?? "JOB", SpeakerImgUrl: self.speaker_ImageUrl ?? "Image", QestionHead: self.question_head ?? "question")
+            }
         }
         
     }
@@ -187,10 +268,7 @@ class OpenSessionVC: UIViewController {
          speakerJobTitle.text = SpeakerJobTitle
          imgUrl(imgUrl: SpeakerImgUrl)
         
-        speakerProfile.layer.cornerRadius = speakerProfile.frame.width / 2
-        speakerProfile.clipsToBounds = true
-        viewFavBack.layer.cornerRadius = viewFavBack.frame.width / 2
-        viewFavBack.clipsToBounds = true
+       
         
         questionsTxt.text = QestionHead
         
@@ -295,7 +373,7 @@ class OpenSessionVC: UIViewController {
     }
     
     @IBAction func btnFavouriteSession(_ sender: Any) {
-    
+        if let  apiToken  = Helper.getApiToken() {
         let sessionFavID : Parameters = ["sessionID" : "\((self.singleItem?.agenda_ID)!)"]
      
             if self.session_isFavourate == true {
@@ -306,8 +384,6 @@ class OpenSessionVC: UIViewController {
            self.session_isFavourate = false
             self.session_isFavourate_Str = "false"
                     self.favouriteIcon.image = UIImage(named: "unlike-session")
-                 
-                 
         }
             }
                 else {
@@ -324,6 +400,11 @@ class OpenSessionVC: UIViewController {
             self.session_isFavourate_Str = "true"
                 
         }
+        } else {
+            let alert = UIAlertController(title: "Error", message: "You must sign in to Show this Part", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            dismiss(animated: true, completion: nil)
+        }
     }
-    
 }

@@ -15,6 +15,9 @@ class StartUpsCell: UITableViewCell {
     @IBOutlet weak var startupImage: UIImageView!
     @IBOutlet weak var startupAddress: UILabel!
     @IBOutlet weak var startupName: UILabel!
+    @IBOutlet weak var sechadualeBtn: UIButton!
+    @IBOutlet weak var sechadualeImageBtn: UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -45,7 +48,19 @@ class StartUpsCell: UITableViewCell {
         startupImage.clipsToBounds = true
         startupName.text = startupsList.startupName
         imgUrl(imgUrl: (startupsList.startupImageUrl)!)
-     //   startupAddress.text = startupsList.
+        startupAddress.text = ""
+        if let  apiToken  = Helper.getApiToken() {
+            sechadualeBtn.isHidden = false
+            sechadualeImageBtn.isHidden = false
+
+            
+        } else {
+            sechadualeBtn.isHidden = true
+            sechadualeImageBtn.isHidden = true
+
+
+        }
+        
        // startupImage.image = UIImage(named: "\((startupsList.startupImage)!)")
      //   print( "\((startupsList.startupImage)!)")
     }

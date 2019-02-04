@@ -99,7 +99,12 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
         return speakerList.count
     }
     
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+       // collectionView.deselectRow(at: indexPath, animated: true)
+
+        performSegue(withIdentifier: "speakersprofile", sender: speakerList[indexPath.row])
+
+    }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "speakercolview", for: indexPath) as! SpeakerCollectionViewCell
         cell.setSpeakerColCell(speakerList: speakerList[indexPath.row])
@@ -121,6 +126,7 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         performSegue(withIdentifier: "speakersprofile", sender: speakerList[indexPath.row])
     }
     

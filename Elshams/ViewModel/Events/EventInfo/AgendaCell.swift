@@ -33,15 +33,16 @@ class AgendaCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    func imgUrl(imgUrl:String)  {
+    func imgUrl(imgUrl:String,imageSpeakerView:UIImageView)  {
         
         if let imagUrlAl = imgUrl as? String {
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
                 print(response)
                 if let image = response.result.value {
                     DispatchQueue.main.async{
-                        
-                        self.speakerOneImage.image = image
+                        print(imagUrlAl)
+                        imageSpeakerView.isHidden = false
+                        imageSpeakerView.image = image
                     }
                 }
             })
@@ -64,6 +65,8 @@ class AgendaCell: UITableViewCell {
         timeIcon.image = UIImage(named: "time-fav")
         locationIcon.image = UIImage(named: "location_fav")
         
+      
+
         programAgendaName.text = AgendaProgram.seseionTitle
         programAgendaTime.text = "\((AgendaProgram.sessionTime)!)"
         programAgendaLocation.text = AgendaProgram.progLocation
@@ -74,10 +77,47 @@ class AgendaCell: UITableViewCell {
         }else {
             favourIcon.image = UIImage(named: "favour.unlike")
         }
+      /*   let randomColor = AgendaProgram.rondomColor
+        let randomColorArray =  randomColor?.split(separator: "#")
+        var randomColorStr:String = "\(randomColorArray![0])"
+        randomColorStr = "0x" + randomColorStr
+        print(randomColorStr)
+        //randomColorArray = "0x" + randomColorArray
+       let randomIntColor:Int = Int(randomColorStr)!
+       // cellColor.backgroundColor = UIColor(hex: randomIntColor)
+        cellColor.backgroundColor = UIColor(hex: randomIntColor)
+         */
+    //    let speaker1 = AgendaProgram.speakersSession![0]["imageUrl"]
+        let speaker = AgendaProgram.speakersIdImg
+        if !(speaker?.isEmpty)! {
+            
+     //   }
+       // if speaker != nil {
+        let sp1 = speaker![0].speakerImageUrl
+        let sp2 = speaker![1].speakerImageUrl
+        if sp1 == nil {
+            speakerOneImage.isHidden = true
+        }else {
+            speakerOneImage.isHidden = false
+
+            imgUrl(imgUrl: sp1!, imageSpeakerView: speakerOneImage)
+
+        }
+        if sp2 == nil {
+            speakerTwoImage.isHidden = true
+        }else {
+            speakerTwoImage.isHidden = false
+            imgUrl(imgUrl: sp2!, imageSpeakerView: speakerTwoImage)
+
+        }
+        } else {
+            speakerOneImage.isHidden = true
+
+            speakerTwoImage.isHidden = true
+
+        }
         
-        //speakerImgUrl = (AgendaProgram.speakersSession?[0]["imageUrl"])!
-        //imgUrl(imgUrl: <#T##String#>)
-        switch IndexPath % 3 {
+       switch IndexPath % 3 {
         case 0:
             cellColor.backgroundColor = UIColor.orange
         case 1:
@@ -89,7 +129,6 @@ class AgendaCell: UITableViewCell {
             cellColor.backgroundColor = UIColor.yellow
             
         }
-
     }
 
 }

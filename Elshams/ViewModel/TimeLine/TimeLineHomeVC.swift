@@ -24,6 +24,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
     var newsFeedList = Array<NewsFeedData>()
     var speakerList = Array<Speakers>()
     var sponserList = Array<Sponsers>()
+    static var failMessage = ""
 
     
     @IBOutlet weak var timeLineCollView: UICollectionView!
@@ -55,7 +56,32 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
     override func viewDidLoad() {
         super.viewDidLoad()
         addSlideMenuButton()
-
+        //sponser round
+        sponserImg1.layer.cornerRadius = sponserImg1.frame.width / 2
+        sponserImg1.clipsToBounds = true
+       
+        sponserImg2.layer.cornerRadius = sponserImg2.frame.width / 2
+        sponserImg2.clipsToBounds = true
+       
+        sponserImg3.layer.cornerRadius = sponserImg3.frame.width / 2
+        sponserImg3.clipsToBounds = true
+      
+        sponserImg4.layer.cornerRadius = sponserImg4.frame.width / 2
+        sponserImg4.clipsToBounds = true
+        
+        // speaker round
+        speakerImg1.layer.cornerRadius = speakerImg1.frame.width / 2
+        speakerImg1.clipsToBounds = true
+        
+        speakerImg2.layer.cornerRadius = speakerImg2.frame.width / 2
+        speakerImg2.clipsToBounds = true
+        
+        speakerImg3.layer.cornerRadius = speakerImg3.frame.width / 2
+        speakerImg3.clipsToBounds = true
+        
+        speakerImg4.layer.cornerRadius = speakerImg4.frame.width / 2
+        speakerImg4.clipsToBounds = true
+        
         viewPostContols.isHidden = true
         imagePicker = UIImagePickerController()
         imagePicker.delegate = self
@@ -63,6 +89,12 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         loadPostsData()
         loadAllSpeakerData()
         loadAllSponserData()
+        if TimeLineHomeVC.failMessage ==  "fail"
+      {
+        let alert = UIAlertController(title: "Error", message: "No internet connection please turn on it", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+        }
   
     }
 
@@ -71,7 +103,9 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
             (response) in
             
             print(response)
+            if response != nil {
             let json = JSON(response)
+            
             let result = json["AllSpeaker"]
             var iDNotNull = true
             var index = 0
@@ -111,9 +145,9 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
             self.imgUrl(imgUrl: self.speakerList[1].speakerImageUrl!, ImageViewSet: self.speakerImg2)
             self.imgUrl(imgUrl: self.speakerList[2].speakerImageUrl!, ImageViewSet: self.speakerImg3)
             self.imgUrl(imgUrl: self.speakerList[3].speakerImageUrl!, ImageViewSet: self.speakerImg4)
-            
+            //MenuViewController.imgUserTestUrl = self.speakerList[0].speakerImageUrl!  //test menu user image
 
-            //  print((self.networkList[2].name)!)
+            }   //  print((self.networkList[2].name)!)
         }
     }
     
@@ -121,8 +155,10 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         Service.getService(url: URLs.getAllSponsors) {
             (response) in
             print(response)
-            
+            if response != nil {
+
             let json = JSON(response)
+
             let result = json["AllSponsers"]
             
             var iDNotNull = true
@@ -172,6 +208,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
             self.imgUrl(imgUrl: self.sponserList[3].sponserImageUrl!, ImageViewSet: self.sponserImg4)
             //  print((self.networkList[2].name)!)
         }    }
+    }
     
     func loadPostsData()  {
         if let  apiToken  = Helper.getApiToken() {
@@ -179,7 +216,10 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
                 (response) in
                 print("this is Posts ")
                 print(response)
+                if response != nil {
+
                 let json = JSON(response)
+
                 let result = json["AllPosts"]
                 var iDNotNull = true
                 var index = 0
@@ -203,12 +243,16 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
                     self.timeLineCollView.reloadData()
                 }
             }
+            }
         } else {
         Service.getService(url: (URLs.getAllPosts)) {
             (response) in
             print("this is Posts ")
             print(response)
+            if response != nil {
+
             let json = JSON(response)
+
             let result = json["AllPosts"]
             var iDNotNull = true
             var index = 0
@@ -248,6 +292,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
                 index = index + 1
                 self.timeLineCollView.reloadData()
             }
+            }
         }
     }
     }
@@ -257,9 +302,12 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         if let imagUrlAl = imgUrl as? String {
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
                 print(response)
+                if response != nil {
+
                 if let image = response.result.value {
                     DispatchQueue.main.async{
                         ImageViewSet.image = image
+                    }
                     }
                 }
             })

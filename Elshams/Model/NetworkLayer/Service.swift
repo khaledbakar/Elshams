@@ -18,9 +18,12 @@ class Service: NSObject {
     static func getService(url: String, callback: @escaping (JSON?) -> ()) {
         
         if !reachabilityManager.isReachable {
+            TimeLineHomeVC.failMessage =  "fail"
             callback(nil)
             
         } else {
+            TimeLineHomeVC.failMessage =  "succes   "
+
             Alamofire.request(url).responseJSON { (response) in
                 switch response.result {
                 case .success(let value):
@@ -28,7 +31,8 @@ class Service: NSObject {
                     callback(json)
                 case .failure(let error):
                     print(error)
-                    
+                  //  TimeLineHomeVC.failMessage =  "\(error.localizedDescription)"
+
                     callback(nil)
                 }
             }
@@ -38,9 +42,13 @@ class Service: NSObject {
     static func getServiceWithAuth(url: String, callback: @escaping (JSON?) -> ()) {
         
         if !reachabilityManager.isReachable {
+            TimeLineHomeVC.failMessage =  "fail"
+
             callback(nil)
             
         } else {
+            TimeLineHomeVC.failMessage =  "succes"
+
             //put token value here
             let header : HTTPHeaders = ["Authorization": "Bearer wEJa4fD25FJ7W0zZd7STelBmOARPdCuPl9uzzwFFTOI9jmbLbLo4dzrxlp3RTMzIKc-tJeEqeQTtvd9QO00wxCqi1YU73FlVr5LZblfdysFyTgtIMdVHilmjv_Noz5jnXkcaKTNUTcMY20kpaF69ezMzEg8GQY_Ni1HkwdZNww9O6_ueRNZaP08fLInE3LVuFnKChKYGGAlHSDgiRAhcTkBO2AWMPzKYavXcEHZz6d1myYHRsHiXB-BF96ieMxzOM_2LlxXAWG4gvGGj46lAEmEBVGDRksKGmLCQl1JMMH5qnQ8Zth2FoT_Vj1-DQPiHkSJA8tDl-CtaR4_K3U73-KP3UJ7iHDzGt7Pr1nvlMI9LXgkuFcxM2cw4WlqrwgSywxENP6x41JqKVo5UDjiEH7eH5NuBWftAjasp4XeaKsRuNmEY6U2z3hjgUzXHpHtc"] // Customize it as needed
             Alamofire.request(url, headers: URLs.headerAuth).responseJSON { (response) in
@@ -74,9 +82,13 @@ class Service: NSObject {
     static func postService(url: String, parameters: [String:Any], callback: @escaping (JSON?) -> ()) {
         
         if !reachabilityManager.isReachable {
+          //  TimeLineHomeVC.failMessage =  "fail"
+
             callback(nil)
             
         } else {
+         //   TimeLineHomeVC.failMessage =  "succes"
+
             Alamofire.request(url, method: .post, parameters: parameters,  encoding: JSONEncoding.default).responseJSON { (response) in
                 switch response.result {
                 case .success(let value):
@@ -93,9 +105,13 @@ class Service: NSObject {
     static func postServiceWithAuth(url: String, parameters: [String:Any], callback: @escaping (JSON?) -> ()) {
         
         if !reachabilityManager.isReachable {
+            //  TimeLineHomeVC.failMessage =  "fail"
+
             callback(nil)
             
         } else {
+            //   TimeLineHomeVC.failMessage =  "succes"
+
           //  let header : HTTPHeaders = ["Authorization": "token"] // Customize it as needed
             let header : HTTPHeaders = ["Authorization": "Bearer wEJa4fD25FJ7W0zZd7STelBmOARPdCuPl9uzzwFFTOI9jmbLbLo4dzrxlp3RTMzIKc-tJeEqeQTtvd9QO00wxCqi1YU73FlVr5LZblfdysFyTgtIMdVHilmjv_Noz5jnXkcaKTNUTcMY20kpaF69ezMzEg8GQY_Ni1HkwdZNww9O6_ueRNZaP08fLInE3LVuFnKChKYGGAlHSDgiRAhcTkBO2AWMPzKYavXcEHZz6d1myYHRsHiXB-BF96ieMxzOM_2LlxXAWG4gvGGj46lAEmEBVGDRksKGmLCQl1JMMH5qnQ8Zth2FoT_Vj1-DQPiHkSJA8tDl-CtaR4_K3U73-KP3UJ7iHDzGt7Pr1nvlMI9LXgkuFcxM2cw4WlqrwgSywxENP6x41JqKVo5UDjiEH7eH5NuBWftAjasp4XeaKsRuNmEY6U2z3hjgUzXHpHtc"] // Customize it as needed
 
