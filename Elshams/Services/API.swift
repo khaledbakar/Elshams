@@ -123,6 +123,7 @@ class API: NSObject {
             let json = JSON(response)
             if let apiToken = json["access_token"].string {
                 print("api token \(apiToken)")
+                
                 //Helper.saveApiToken(Token: apiToken)
           //      completion(nil , true)
         }       /*  Alamofire.request(URLs.register, method: .post, parameters: paramRegister, encoding: URLEncoding.default, headers: nil).responseJSON { response in
@@ -153,7 +154,7 @@ class API: NSObject {
             "companyName" : CompanyName, //title name and about and company name no field for it
             "picture" : Picture,
             "email" : Email,
-          //  "password" : Password,
+            "password" : Password,
             "linkedin" : Linkedin,
             "phone" : Phone,
             "about" : Linkedin,

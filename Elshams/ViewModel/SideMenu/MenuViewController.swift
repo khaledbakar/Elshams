@@ -62,6 +62,7 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
         }
     }
     func imgUrl(imgUrl:String)  {
+        if  TimeLineHomeVC.failMessage !=  "fail"{
         if let imagUrlAl = imgUrl as? String {
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
                 print(response)
@@ -71,6 +72,7 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
                     }
                 }
             })
+        }
         }
     }
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -162,7 +164,9 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             let def = UserDefaults.standard
             def.setValue(nil, forKey: "api_token")
             def.synchronize()
-            dismiss(animated: true, completion: nil)
+            performSegue(withIdentifier: "login", sender: nil)
+
+           // dismiss(animated: true, completion: nil)
         default:
             controllerSelect = "EventAgenda"
 
@@ -183,6 +187,10 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             
             
         }
+       /* else if controllerSelect == "Logout"{
+            let DVC = mainStoryBoard.instantiateViewController(withIdentifier: controllerSelect!)
+            self.navigationController?.pushViewController(DVC, animated: true)
+        } */
         else if controllerSelect == "NotLogin" {
             let alert = UIAlertController(title: "Error", message: "You must sign in to Show this Part", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))

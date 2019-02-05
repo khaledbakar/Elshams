@@ -33,6 +33,7 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
     
     var imagePicker: UIImagePickerController!
     @IBOutlet weak var profileImage: UIImageView!
+    var imageProfileB64 : String?
     
   //  var validnumber:Bool?
     var validPassword:Bool?
@@ -54,8 +55,8 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
         othersError.isHidden = true
         jobTitleError.isHidden = true
         
-        imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
+     //   imagePicker = UIImagePickerController()
+       // imagePicker.delegate = self
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -204,7 +205,12 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage{
             profileImage.image = image
-            
+            let jpegCompressionQuality: CGFloat = 0.3 // Set this to whatever suits your purpose
+            if let base64String = UIImageJPEGRepresentation(image, jpegCompressionQuality)?.base64EncodedString() {
+                // Upload base64String to your database
+                imageProfileB64 = base64String
+              //  print(base64String)
+            }
         }
         imagePicker.dismiss(animated: true, completion: nil)
     }
@@ -247,11 +253,18 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
     }
     @IBAction func register(_ sender: Any) {
         guard let email = emaiInputlTxt.text?.trimmed, !email.isEmpty, let password = passwordInputTxt.text, !password.isEmpty, let jobTiltle = jobTitleInput.text?.trimmed , !jobTiltle.isEmpty, let phoneNum = phoneInputTxt.text?.trimmed , !phoneNum.isEmpty , let other = othersInputTxt.text?.trimmed , !other.isEmpty else { return }
-            
-        API.register(Email: email.lowercased(), Password: password, Title: other , CompanyName: jobTiltle, JobTitle: jobTiltle, About: jobTiltle, Phone: phoneNum, Picture: "", Linkedin: "") { (error: Error?,succes:Bool) in
+        if TimeLineHomeVC.failMessage !=  "fail" {
+            API.register(Email: email.lowercased(), Password: password, Title: other , CompanyName: jobTiltle, JobTitle: jobTiltle, About: jobTiltle, Phone: phoneNum, Picture: imageProfileB64 ?? "", Linkedin: "") { (error: Error?,succes:Bool) in
             if succes {
                 print("Succes")
+              //  let alert = UIAlertController(title: "Succes!", message: "Your data is Updated!", preferredStyle: UIAlertControllerStyle.alert)
+             //   alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            //    self.present(alert, animated: true, completion: nil)
             }
+        }
+            
+        } else {
+            
         }
     //registertionMethod(picBase64: pic64)
     }

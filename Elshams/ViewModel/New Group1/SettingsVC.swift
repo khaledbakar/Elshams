@@ -11,7 +11,7 @@ import AlamofireImage
 import Alamofire
 import SwiftyJSON
 
-class SettingsVC: UIViewController , UITableViewDelegate , UITableViewDataSource {
+class SettingsVC: UIViewController , UITableViewDelegate , UITableViewDataSource , UIImagePickerControllerDelegate, UINavigationControllerDelegate , UITextFieldDelegate{
 
     var settingList = Array<UserData>()
     var statSettingList : [String]?
@@ -22,19 +22,33 @@ class SettingsVC: UIViewController , UITableViewDelegate , UITableViewDataSource
   //  var ans =  ["Kzaky@ikdynamics.com","12345","IOS Developer","01060136503","NO"]
     var privacy = ["public"]
    // var ansPraivacy
+    var imageProfileB64 : String?
+
     @IBOutlet weak var profileImg: UIImageView!
     @IBOutlet weak var settingTableView: UITableView!
     @IBOutlet weak var updateBtn: UIButton!
     static var udapatedMessage = ""
+    var validPassword:Bool?
+    var validEmail:Bool?
+    var imagePicker: UIImagePickerController!
+
+    // var userTriming:String?
+    var passwordTriming:String?
+    var emailTrim:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         profileImg.layer.cornerRadius = profileImg.frame.width / 2
         profileImg.clipsToBounds = true
         
+        imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        
         if let  apiToken  = Helper.getApiToken() {
+            profileImg.isHidden = false
+            updateBtn.isHidden = false
             loadSettingData()
-
+        
         }else{
             //view.isHidden = true
             profileImg.isHidden = true
@@ -45,6 +59,85 @@ class SettingsVC: UIViewController , UITableViewDelegate , UITableViewDataSource
             self.present(alert, animated: true, completion: nil)
           //  dismiss(animated: true, completion: nil)
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(RegisterationVC.viewTapped(gestureRecognizer:)))
+        view.addGestureRecognizer(tapGesture)
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+    }
+    
+    func hideKyebad() {
+        let i = IndexPath(row: 1, section: 0)
+        let cell: SettingsCell = self.settingTableView.cellForRow(at: i) as! SettingsCell
+        let emailCell = cell.txtAnswer.text!
+        cell.txtAnswer.resignFirstResponder()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    //    self.settingTableView.endEditing(true)
+        view.frame.origin.y = 0
+        
+    }
+    
+    @objc func keyboardWillChange(notification: Notification){
+        guard let keyboardRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+            return
+        }
+        if  notification.name == Notification.Name.UIKeyboardWillShow ||
+            notification.name == Notification.Name.UIKeyboardWillChangeFrame {
+            view.frame.origin.y = -100
+        } else {
+            view.frame.origin.y = 0
+        }
+        print("Keyboard will show \(notification.name.rawValue)")
+        //  view.frame.origin.y = -150
+    }
+    
+    func isValidEmail(emailID:String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        return emailTest.evaluate(with: emailID)
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        hideKyebad()
+        self.view.endEditing(true)
+        return true
+    }
+    
+    @IBAction func imageSelectBtn(_ sender: Any) {
+         present(imagePicker,animated: true , completion: nil)
+    }
+    
+    /* @IBAction func imageSelect(_ sender: Any) {
+        present(imagePicker,animated: true , completion: nil)
+        
+    } */
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage{
+            profileImg.image = image
+            let jpegCompressionQuality: CGFloat = 0.3 // Set this to whatever suits your purpose
+            if let base64String = UIImageJPEGRepresentation(image, jpegCompressionQuality)?.base64EncodedString() {
+                // Upload base64String to your database
+                imageProfileB64 = base64String
+          //      print(base64String)
+            }
+            
+        }
+        imagePicker.dismiss(animated: true, completion: nil)
+    }
+    
+    
+    @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer)  {
+        view.endEditing(true)
     }
     
     func  loadSettingData()  {
@@ -62,33 +155,15 @@ class SettingsVC: UIViewController , UITableViewDelegate , UITableViewDataSource
             let user_Phone = result["phone"].string
             let user_about = result["about"].string
             let user_Ispublic_str = result["isPublic"].string
-           
             self.statSettingList = [user_Email!,user_Password!,user_JobTitle!,user_Phone!,user_about!,user_Ispublic_str!]
-    
-
-
-            /*self.statSettingList?[0] = user_Email!
-            self.statSettingList?[1] = user_Password!
-            self.statSettingList?[2] = user_JobTitle!
-            self.statSettingList?[3] = user_Phone!
-            self.statSettingList?[4] = user_about!
-            self.statSettingList?[5] = user_Ispublic_str! */
             self.settingTableView.reloadData()
             self.imgUrl(imgUrl: user_ImageUrl!)
         }
     }
-    func  updateSettingData()  {
-       /* guard let email = emaiInputlTxt.text?.trimmed, !email.isEmpty, let password = passwordInputTxt.text, !password.isEmpty, let jobTiltle = jobTitleInput.text?.trimmed , !jobTiltle.isEmpty, let phoneNum = phoneInputTxt.text?.trimmed , !phoneNum.isEmpty , let other = othersInputTxt.text?.trimmed , !other.isEmpty else { return }
  
-        let a =
-        API.updateUserData(Email: email.lowercased(), Password: password, Title: other , CompanyName: jobTiltle, JobTitle: jobTiltle, About: jobTiltle, Phone: phoneNum, Picture: "", Linkedin: "") { (error: Error?,succes:Bool) in
-            if succes {
-                print("Succes")
-            }
-        } */
-    }
     
     func imgUrl(imgUrl:String)  {
+        if  TimeLineHomeVC.failMessage !=  "fail"{
         if let imagUrlAl = imgUrl as? String {
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
                 print(response)
@@ -98,6 +173,7 @@ class SettingsVC: UIViewController , UITableViewDelegate , UITableViewDataSource
                     }
                 }
             })
+        }
         }
     }
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -145,8 +221,6 @@ class SettingsVC: UIViewController , UITableViewDelegate , UITableViewDataSource
 
             }
             }
-          
-                
         }
         return cell
     }
@@ -200,7 +274,7 @@ class SettingsVC: UIViewController , UITableViewDelegate , UITableViewDataSource
         
        /* guard let email = emailCell.trimmed, !email.isEmpty, let password = passawordCell, !password.isEmpty, let jobTiltle = jobTitleCell.trimmed , !jobTiltle.isEmpty, let phoneNum = otherCell.trimmed , !phoneNum.isEmpty , let other = otherCell.trimmed , !other.isEmpty else { return } */
         
-        API.updateUserData(Email: emailCell.lowercased(), Password: passawordCell, Title: otherCell , CompanyName: jobTitleCell, JobTitle: jobTitleCell, About: jobTitleCell, Phone: phoneCell, Picture: "", Linkedin: "", Ispublic: isPublicCell) { (error: Error?,succes:Bool) in
+        API.updateUserData(Email: emailCell.lowercased(), Password: passawordCell, Title: otherCell , CompanyName: jobTitleCell, JobTitle: jobTitleCell, About: jobTitleCell, Phone: phoneCell, Picture: imageProfileB64 ?? "", Linkedin: "", Ispublic: isPublicCell) { (error: Error?,succes:Bool) in
                 if succes {
                     print("Succes")
                 }
