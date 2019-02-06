@@ -93,8 +93,8 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
                 self.agendaHeadList.append(AgendaHeadData(HeadTitle: agenda_dateTitle ?? "title", HeadDate: agenda_date ?? "date", HeadType: agenda_Type ?? "type"))
             }
             else if agenda_Type == "session" {
-                self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "Title", SessionTime: agenda_Time ?? "Time", SessionLocation: agenda_SessionLocation ?? "location", SpeakersSession: agenda_SpeakersDict!
-                    , AgendaDate: agenda_date ?? "date", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String , RondomColor: agenda_rondomColor ?? "red", AgendaType: agenda_Type ?? "session", SpeakersIdImg: self.agendaSpeakerIDImgList))
+                self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "Title", SessionTime: agenda_Time ?? "Time", SessionLocation: agenda_SessionLocation ?? "location", SpeakersSession: agenda_SpeakersDict ?? ["":""]
+                    , AgendaDate: agenda_date ?? "date", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String ?? "" , RondomColor: agenda_rondomColor ?? "red", AgendaType: agenda_Type ?? "session", SpeakersIdImg: self.agendaSpeakerIDImgList))
                 
                  // ?? [[ "ID" : "314","imageUrl" : "http:-b01d-582382a5795e.jpg"]] as! [[String : Any]]
             }
@@ -191,6 +191,8 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         OpenSessionVC.AgednaOrFavourite = false
+        tableView.deselectRow(at: indexPath, animated: true)
+
         // el mafrood ab3t filt
        performSegue(withIdentifier: "openfavsession", sender: agendaSessionList[indexPath.row])
     }

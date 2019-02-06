@@ -37,8 +37,6 @@
 		045EF1A021B96180009DCA7A /* MyQuestionsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045EF19F21B9617F009DCA7A /* MyQuestionsCell.swift */; };
 		045EF1A321B98051009DCA7A /* NewsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045EF1A221B98051009DCA7A /* NewsVC.swift */; };
 		0466C05521B55B1100C9C555 /* CompanyItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C05421B55B1100C9C555 /* CompanyItems.swift */; };
-		0466C05821B56EAB00C9C555 /* EventsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C05721B56EAB00C9C555 /* EventsVC.swift */; };
-		0466C05A21B56EC900C9C555 /* EventsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C05921B56EC900C9C555 /* EventsCell.swift */; };
 		0466C05C21B5717E00C9C555 /* CollectioViewItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C05B21B5717E00C9C555 /* CollectioViewItems.swift */; };
 		0466C05F21B5796A00C9C555 /* EventInfoContainerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C05E21B5796A00C9C555 /* EventInfoContainerVC.swift */; };
 		0466C06121B57AA000C9C555 /* AboutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C06021B57A9F00C9C555 /* AboutEvent.swift */; };
@@ -130,8 +128,6 @@
 		045EF19F21B9617F009DCA7A /* MyQuestionsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyQuestionsCell.swift; sourceTree = "<group>"; };
 		045EF1A221B98051009DCA7A /* NewsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsVC.swift; sourceTree = "<group>"; };
 		0466C05421B55B1100C9C555 /* CompanyItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyItems.swift; sourceTree = "<group>"; };
-		0466C05721B56EAB00C9C555 /* EventsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsVC.swift; sourceTree = "<group>"; };
-		0466C05921B56EC900C9C555 /* EventsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsCell.swift; sourceTree = "<group>"; };
 		0466C05B21B5717E00C9C555 /* CollectioViewItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectioViewItems.swift; sourceTree = "<group>"; };
 		0466C05E21B5796A00C9C555 /* EventInfoContainerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInfoContainerVC.swift; sourceTree = "<group>"; };
 		0466C06021B57A9F00C9C555 /* AboutEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutEvent.swift; sourceTree = "<group>"; };
@@ -242,6 +238,46 @@
 			path = SideAppforLearnOrReUse;
 			sourceTree = "<group>";
 		};
+		044BCA2B220AEF8600A4CA78 /* StartUp */ = {
+			isa = PBXGroup;
+			children = (
+				0466C06821B57B4100C9C555 /* StartUps.swift */,
+				0466C0AF21B84DD200C9C555 /* StartUpsCell.swift */,
+				045EF18721B85C22009DCA7A /* StartupDetailsVC.swift */,
+			);
+			path = StartUp;
+			sourceTree = "<group>";
+		};
+		044BCA2C220AF06800A4CA78 /* Speakers */ = {
+			isa = PBXGroup;
+			children = (
+				0466C06421B57AF400C9C555 /* SpeakersVC.swift */,
+				0466C06C21B58B5C00C9C555 /* SpeakersCell.swift */,
+				0439DACC21C410760041CDCB /* SpeakerCollectionViewCell.swift */,
+				0466C0AD21B8353D00C9C555 /* SpeakerProfileVC.swift */,
+			);
+			path = Speakers;
+			sourceTree = "<group>";
+		};
+		044BCA2D220AF08900A4CA78 /* Sponsers */ = {
+			isa = PBXGroup;
+			children = (
+				0466C06621B57B2700C9C555 /* SponsersVC.swift */,
+				0466C06E21B58B8100C9C555 /* SponsersCell.swift */,
+				049BF7BB21CBBFF70086F569 /* SponserCollectionViewCell.swift */,
+			);
+			path = Sponsers;
+			sourceTree = "<group>";
+		};
+		044BCA2E220AF0C300A4CA78 /* Agenda */ = {
+			isa = PBXGroup;
+			children = (
+				0466C06221B57AE000C9C555 /* AgendaVC.swift */,
+				0466C06A21B58B4400C9C555 /* AgendaCell.swift */,
+			);
+			path = Agenda;
+			sourceTree = "<group>";
+		};
 		045EF18921B93A47009DCA7A /* Appointments */ = {
 			isa = PBXGroup;
 			children = (
@@ -308,8 +344,6 @@
 			children = (
 				04BE00F721D0EF5900809834 /* AllEvents */,
 				0466C05D21B5793D00C9C555 /* EventInfo */,
-				0466C05721B56EAB00C9C555 /* EventsVC.swift */,
-				0466C05921B56EC900C9C555 /* EventsCell.swift */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -317,20 +351,13 @@
 		0466C05D21B5793D00C9C555 /* EventInfo */ = {
 			isa = PBXGroup;
 			children = (
+				044BCA2E220AF0C300A4CA78 /* Agenda */,
+				0466C0A221B7E32200C9C555 /* MyFavourites */,
+				044BCA2D220AF08900A4CA78 /* Sponsers */,
+				044BCA2C220AF06800A4CA78 /* Speakers */,
+				044BCA2B220AEF8600A4CA78 /* StartUp */,
 				0466C05E21B5796A00C9C555 /* EventInfoContainerVC.swift */,
 				0466C06021B57A9F00C9C555 /* AboutEvent.swift */,
-				0466C06221B57AE000C9C555 /* AgendaVC.swift */,
-				0466C06A21B58B4400C9C555 /* AgendaCell.swift */,
-				0466C06421B57AF400C9C555 /* SpeakersVC.swift */,
-				0466C06C21B58B5C00C9C555 /* SpeakersCell.swift */,
-				0439DACC21C410760041CDCB /* SpeakerCollectionViewCell.swift */,
-				0466C0AD21B8353D00C9C555 /* SpeakerProfileVC.swift */,
-				0466C06621B57B2700C9C555 /* SponsersVC.swift */,
-				0466C06E21B58B8100C9C555 /* SponsersCell.swift */,
-				049BF7BB21CBBFF70086F569 /* SponserCollectionViewCell.swift */,
-				0466C06821B57B4100C9C555 /* StartUps.swift */,
-				0466C0AF21B84DD200C9C555 /* StartUpsCell.swift */,
-				045EF18721B85C22009DCA7A /* StartupDetailsVC.swift */,
 			);
 			path = EventInfo;
 			sourceTree = "<group>";
@@ -447,7 +474,6 @@
 				045EF1A121B98012009DCA7A /* News */,
 				045EF19421B95F2E009DCA7A /* Questions */,
 				045EF18921B93A47009DCA7A /* Appointments */,
-				0466C0A221B7E32200C9C555 /* MyFavourites */,
 				0466C09821B7E0B700C9C555 /* Networks */,
 				0466C09121B6CC4A00C9C555 /* TimeLine */,
 				0466C08C21B6CAB600C9C555 /* SideMenu */,
@@ -689,7 +715,6 @@
 				04E994F621EB438E006070B3 /* Service.swift in Sources */,
 				0469B49821AC1674000A337B /* Elshams.xcdatamodeld in Sources */,
 				0466C06D21B58B5D00C9C555 /* SpeakersCell.swift in Sources */,
-				0466C05A21B56EC900C9C555 /* EventsCell.swift in Sources */,
 				04E994F821EB89D2006070B3 /* MdcText.swift in Sources */,
 				04E994FA21ECB7B0006070B3 /* AgendaSectionDate.swift in Sources */,
 				0466C08521B6A90800C9C555 /* SigninVC.swift in Sources */,
@@ -706,7 +731,6 @@
 				0466C09721B6E16200C9C555 /* SideMenuDetailCell.swift in Sources */,
 				0466C06121B57AA000C9C555 /* AboutEvent.swift in Sources */,
 				0466C09F21B7E25400C9C555 /* NetworksVC.swift in Sources */,
-				0466C05821B56EAB00C9C555 /* EventsVC.swift in Sources */,
 				0466C07121B590E900C9C555 /* ProgramAgendaItems.swift in Sources */,
 				049BF7BC21CBBFF70086F569 /* SponserCollectionViewCell.swift in Sources */,
 				04BE00F921D0F02000809834 /* AllEventsVC.swift in Sources */,
