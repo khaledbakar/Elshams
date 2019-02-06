@@ -10,7 +10,6 @@
 		0410D75521F0BBED005A304E /* PhoneCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0410D75421F0BBED005A304E /* PhoneCall.swift */; };
 		0410D75721F0BD79005A304E /* OpenSafariLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0410D75621F0BD79005A304E /* OpenSafariLink.swift */; };
 		0416E74F21ADABBC004E7368 /* TabTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0416E74E21ADABBC004E7368 /* TabTestViewController.swift */; };
-		0416E75321B00FE1004E7368 /* MainAgentContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0416E75221B00FE1004E7368 /* MainAgentContainer.swift */; };
 		0427280E2208693C0028C671 /* AgendaSpeakerIdPic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0427280D2208693C0028C671 /* AgendaSpeakerIdPic.swift */; };
 		0429799F21DB8DBC0041039E /* ViewConTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0429799E21DB8DBC0041039E /* ViewConTableViewCell.swift */; };
 		0439DAC721C111510041CDCB /* AllNewsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0439DAC621C111510041CDCB /* AllNewsCell.swift */; };
@@ -37,13 +36,6 @@
 		045EF19E21B96098009DCA7A /* AllQuestionsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045EF19D21B96098009DCA7A /* AllQuestionsCell.swift */; };
 		045EF1A021B96180009DCA7A /* MyQuestionsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045EF19F21B9617F009DCA7A /* MyQuestionsCell.swift */; };
 		045EF1A321B98051009DCA7A /* NewsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045EF1A221B98051009DCA7A /* NewsVC.swift */; };
-		0466C03821B0262200C9C555 /* MainCompContainerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C03721B0262200C9C555 /* MainCompContainerVC.swift */; };
-		0466C03A21B0268800C9C555 /* BaseCompMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C03921B0268800C9C555 /* BaseCompMenuCell.swift */; };
-		0466C03C21B026CB00C9C555 /* MenuCompCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C03B21B026CB00C9C555 /* MenuCompCell.swift */; };
-		0466C04C21B54CDE00C9C555 /* AllAgentsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C04B21B54CDE00C9C555 /* AllAgentsVC.swift */; };
-		0466C04E21B54D0200C9C555 /* FavouriteAgentsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C04D21B54D0100C9C555 /* FavouriteAgentsVC.swift */; };
-		0466C05021B54D2700C9C555 /* AllAgentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C04F21B54D2700C9C555 /* AllAgentsCell.swift */; };
-		0466C05221B54D5500C9C555 /* FavouriteAgentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C05121B54D5500C9C555 /* FavouriteAgentsCell.swift */; };
 		0466C05521B55B1100C9C555 /* CompanyItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C05421B55B1100C9C555 /* CompanyItems.swift */; };
 		0466C05821B56EAB00C9C555 /* EventsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C05721B56EAB00C9C555 /* EventsVC.swift */; };
 		0466C05A21B56EC900C9C555 /* EventsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C05921B56EC900C9C555 /* EventsCell.swift */; };
@@ -70,8 +62,6 @@
 		0466C09021B6CBE300C9C555 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C08F21B6CBE300C9C555 /* MenuViewController.swift */; };
 		0466C09521B6CF6100C9C555 /* TimeLineHomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C09421B6CF6100C9C555 /* TimeLineHomeVC.swift */; };
 		0466C09721B6E16200C9C555 /* SideMenuDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C09621B6E16100C9C555 /* SideMenuDetailCell.swift */; };
-		0466C09B21B7E1E400C9C555 /* AgendaMainCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C09A21B7E1E400C9C555 /* AgendaMainCell.swift */; };
-		0466C09D21B7E20C00C9C555 /* AgendaMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C09C21B7E20C00C9C555 /* AgendaMainVC.swift */; };
 		0466C09F21B7E25400C9C555 /* NetworksVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C09E21B7E25400C9C555 /* NetworksVC.swift */; };
 		0466C0A121B7E27600C9C555 /* NetworksCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C0A021B7E27600C9C555 /* NetworksCell.swift */; };
 		0466C0A421B7E36100C9C555 /* MyFavouritesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C0A321B7E36100C9C555 /* MyFavouritesCell.swift */; };
@@ -96,7 +86,6 @@
 		04B872AB21AD6E8F00C6629E /* SideMenuContainerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B872AA21AD6E8F00C6629E /* SideMenuContainerVC.swift */; };
 		04B872AD21AD6F6700C6629E /* SideMenuVCTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B872AC21AD6F6700C6629E /* SideMenuVCTableViewController.swift */; };
 		04B872AF21AD77B600C6629E /* TimeLineVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B872AE21AD77B600C6629E /* TimeLineVC.swift */; };
-		04B872B221AD93A500C6629E /* MainTapCompanies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B872B121AD93A500C6629E /* MainTapCompanies.swift */; };
 		04B872B421AD962E00C6629E /* SideMenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B872B321AD962E00C6629E /* SideMenuCell.swift */; };
 		04BE00F921D0F02000809834 /* AllEventsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BE00F821D0F02000809834 /* AllEventsVC.swift */; };
 		04BE00FB21D0F09500809834 /* AllEventsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BE00FA21D0F09500809834 /* AllEventsCell.swift */; };
@@ -114,7 +103,6 @@
 		0410D75421F0BBED005A304E /* PhoneCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneCall.swift; sourceTree = "<group>"; };
 		0410D75621F0BD79005A304E /* OpenSafariLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSafariLink.swift; sourceTree = "<group>"; };
 		0416E74E21ADABBC004E7368 /* TabTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTestViewController.swift; sourceTree = "<group>"; };
-		0416E75221B00FE1004E7368 /* MainAgentContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAgentContainer.swift; sourceTree = "<group>"; };
 		0427280D2208693C0028C671 /* AgendaSpeakerIdPic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgendaSpeakerIdPic.swift; sourceTree = "<group>"; };
 		0429799E21DB8DBC0041039E /* ViewConTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewConTableViewCell.swift; sourceTree = "<group>"; };
 		0439DAC621C111510041CDCB /* AllNewsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllNewsCell.swift; sourceTree = "<group>"; };
@@ -141,13 +129,6 @@
 		045EF19D21B96098009DCA7A /* AllQuestionsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllQuestionsCell.swift; sourceTree = "<group>"; };
 		045EF19F21B9617F009DCA7A /* MyQuestionsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyQuestionsCell.swift; sourceTree = "<group>"; };
 		045EF1A221B98051009DCA7A /* NewsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsVC.swift; sourceTree = "<group>"; };
-		0466C03721B0262200C9C555 /* MainCompContainerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCompContainerVC.swift; sourceTree = "<group>"; };
-		0466C03921B0268800C9C555 /* BaseCompMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCompMenuCell.swift; sourceTree = "<group>"; };
-		0466C03B21B026CB00C9C555 /* MenuCompCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCompCell.swift; sourceTree = "<group>"; };
-		0466C04B21B54CDE00C9C555 /* AllAgentsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllAgentsVC.swift; sourceTree = "<group>"; };
-		0466C04D21B54D0100C9C555 /* FavouriteAgentsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteAgentsVC.swift; sourceTree = "<group>"; };
-		0466C04F21B54D2700C9C555 /* AllAgentsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllAgentsCell.swift; sourceTree = "<group>"; };
-		0466C05121B54D5500C9C555 /* FavouriteAgentsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteAgentsCell.swift; sourceTree = "<group>"; };
 		0466C05421B55B1100C9C555 /* CompanyItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyItems.swift; sourceTree = "<group>"; };
 		0466C05721B56EAB00C9C555 /* EventsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsVC.swift; sourceTree = "<group>"; };
 		0466C05921B56EC900C9C555 /* EventsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsCell.swift; sourceTree = "<group>"; };
@@ -174,8 +155,6 @@
 		0466C08F21B6CBE300C9C555 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		0466C09421B6CF6100C9C555 /* TimeLineHomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineHomeVC.swift; sourceTree = "<group>"; };
 		0466C09621B6E16100C9C555 /* SideMenuDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuDetailCell.swift; sourceTree = "<group>"; };
-		0466C09A21B7E1E400C9C555 /* AgendaMainCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgendaMainCell.swift; sourceTree = "<group>"; };
-		0466C09C21B7E20C00C9C555 /* AgendaMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgendaMainVC.swift; sourceTree = "<group>"; };
 		0466C09E21B7E25400C9C555 /* NetworksVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworksVC.swift; sourceTree = "<group>"; };
 		0466C0A021B7E27600C9C555 /* NetworksCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworksCell.swift; sourceTree = "<group>"; };
 		0466C0A321B7E36100C9C555 /* MyFavouritesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFavouritesCell.swift; sourceTree = "<group>"; };
@@ -202,7 +181,6 @@
 		04B872AA21AD6E8F00C6629E /* SideMenuContainerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuContainerVC.swift; sourceTree = "<group>"; };
 		04B872AC21AD6F6700C6629E /* SideMenuVCTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuVCTableViewController.swift; sourceTree = "<group>"; };
 		04B872AE21AD77B600C6629E /* TimeLineVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineVC.swift; sourceTree = "<group>"; };
-		04B872B121AD93A500C6629E /* MainTapCompanies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTapCompanies.swift; sourceTree = "<group>"; };
 		04B872B321AD962E00C6629E /* SideMenuCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuCell.swift; sourceTree = "<group>"; };
 		04BE00F821D0F02000809834 /* AllEventsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllEventsVC.swift; sourceTree = "<group>"; };
 		04BE00FA21D0F09500809834 /* AllEventsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllEventsCell.swift; sourceTree = "<group>"; };
@@ -249,16 +227,19 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		0416E75121B00FA9004E7368 /* Agents */ = {
+		044BCA29220AEED500A4CA78 /* SideAppforLearnOrReUse */ = {
 			isa = PBXGroup;
 			children = (
-				0416E75221B00FE1004E7368 /* MainAgentContainer.swift */,
-				0466C04B21B54CDE00C9C555 /* AllAgentsVC.swift */,
-				0466C04F21B54D2700C9C555 /* AllAgentsCell.swift */,
-				0466C04D21B54D0100C9C555 /* FavouriteAgentsVC.swift */,
-				0466C05121B54D5500C9C555 /* FavouriteAgentsCell.swift */,
+				0416E74E21ADABBC004E7368 /* TabTestViewController.swift */,
+				0429799E21DB8DBC0041039E /* ViewConTableViewCell.swift */,
+				04B872A621AD536500C6629E /* SelectFavCompVC.swift */,
+				04B872A821AD539800C6629E /* SelectFavCompCVC.swift */,
+				04B872AE21AD77B600C6629E /* TimeLineVC.swift */,
+				04B872B321AD962E00C6629E /* SideMenuCell.swift */,
+				04B872AA21AD6E8F00C6629E /* SideMenuContainerVC.swift */,
+				04B872AC21AD6F6700C6629E /* SideMenuVCTableViewController.swift */,
 			);
-			path = Agents;
+			path = SideAppforLearnOrReUse;
 			sourceTree = "<group>";
 		};
 		045EF18921B93A47009DCA7A /* Appointments */ = {
@@ -401,15 +382,6 @@
 			path = Networks;
 			sourceTree = "<group>";
 		};
-		0466C09921B7E0C200C9C555 /* Agenda */ = {
-			isa = PBXGroup;
-			children = (
-				0466C09A21B7E1E400C9C555 /* AgendaMainCell.swift */,
-				0466C09C21B7E20C00C9C555 /* AgendaMainVC.swift */,
-			);
-			path = Agenda;
-			sourceTree = "<group>";
-		};
 		0466C0A221B7E32200C9C555 /* MyFavourites */ = {
 			isa = PBXGroup;
 			children = (
@@ -441,6 +413,7 @@
 		0469B48E21AC1674000A337B /* Elshams */ = {
 			isa = PBXGroup;
 			children = (
+				044BCA29220AEED500A4CA78 /* SideAppforLearnOrReUse */,
 				0410D75321F0BBAC005A304E /* Services */,
 				047970D821CFF3F200C5BAFD /* Extentions */,
 				0466C05321B55AF600C9C555 /* Model */,
@@ -453,8 +426,6 @@
 				0469B49B21AC1675000A337B /* LaunchScreen.storyboard */,
 				0469B49E21AC1675000A337B /* Info.plist */,
 				0469B49621AC1674000A337B /* Elshams.xcdatamodeld */,
-				0416E74E21ADABBC004E7368 /* TabTestViewController.swift */,
-				0429799E21DB8DBC0041039E /* ViewConTableViewCell.swift */,
 			);
 			path = Elshams;
 			sourceTree = "<group>";
@@ -477,34 +448,14 @@
 				045EF19421B95F2E009DCA7A /* Questions */,
 				045EF18921B93A47009DCA7A /* Appointments */,
 				0466C0A221B7E32200C9C555 /* MyFavourites */,
-				0466C09921B7E0C200C9C555 /* Agenda */,
 				0466C09821B7E0B700C9C555 /* Networks */,
 				0466C09121B6CC4A00C9C555 /* TimeLine */,
 				0466C08C21B6CAB600C9C555 /* SideMenu */,
 				0466C08321B6A8CC00C9C555 /* Sign */,
 				0466C07621B6900B00C9C555 /* Notifications */,
 				0466C05621B56E7600C9C555 /* Events */,
-				0416E75121B00FA9004E7368 /* Agents */,
-				04B872B021AD934C00C6629E /* Companies */,
-				04B872A621AD536500C6629E /* SelectFavCompVC.swift */,
-				04B872A821AD539800C6629E /* SelectFavCompCVC.swift */,
-				04B872AE21AD77B600C6629E /* TimeLineVC.swift */,
-				04B872B321AD962E00C6629E /* SideMenuCell.swift */,
-				04B872AA21AD6E8F00C6629E /* SideMenuContainerVC.swift */,
-				04B872AC21AD6F6700C6629E /* SideMenuVCTableViewController.swift */,
 			);
 			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		04B872B021AD934C00C6629E /* Companies */ = {
-			isa = PBXGroup;
-			children = (
-				04B872B121AD93A500C6629E /* MainTapCompanies.swift */,
-				0466C03721B0262200C9C555 /* MainCompContainerVC.swift */,
-				0466C03921B0268800C9C555 /* BaseCompMenuCell.swift */,
-				0466C03B21B026CB00C9C555 /* MenuCompCell.swift */,
-			);
-			path = Companies;
 			sourceTree = "<group>";
 		};
 		04BE00F721D0EF5900809834 /* AllEvents */ = {
@@ -675,18 +626,13 @@
 			files = (
 				045EF18B21B93AFC009DCA7A /* PendingVC.swift in Sources */,
 				0466C07321B5973900C9C555 /* Sponsers.swift in Sources */,
-				0466C04C21B54CDE00C9C555 /* AllAgentsVC.swift in Sources */,
 				04B872AB21AD6E8F00C6629E /* SideMenuContainerVC.swift in Sources */,
 				0466C06921B57B4100C9C555 /* StartUps.swift in Sources */,
 				04B872B421AD962E00C6629E /* SideMenuCell.swift in Sources */,
 				0469B49221AC1674000A337B /* ViewController.swift in Sources */,
-				0466C05221B54D5500C9C555 /* FavouriteAgentsCell.swift in Sources */,
-				0466C03821B0262200C9C555 /* MainCompContainerVC.swift in Sources */,
 				04FFB80121CFBBFD002009A4 /* SettingsCell.swift in Sources */,
-				0466C05021B54D2700C9C555 /* AllAgentsCell.swift in Sources */,
 				0429799F21DB8DBC0041039E /* ViewConTableViewCell.swift in Sources */,
 				045EF18D21B93B19009DCA7A /* AcceptedVC.swift in Sources */,
-				0466C09B21B7E1E400C9C555 /* AgendaMainCell.swift in Sources */,
 				0466C0AA21B802D600C9C555 /* NetworkDetailsVC.swift in Sources */,
 				0466C07521B5974C00C9C555 /* Speakers.swift in Sources */,
 				0439DACB21C1129F0041CDCB /* NewsData.swift in Sources */,
@@ -714,7 +660,6 @@
 				0439DACF21C68A510041CDCB /* NewFeedsCell.swift in Sources */,
 				04B2C5A82200C1B70039D6AD /* AvailableAppointment.swift in Sources */,
 				045EF19121B93C24009DCA7A /* AcceptedCell.swift in Sources */,
-				0466C03A21B0268800C9C555 /* BaseCompMenuCell.swift in Sources */,
 				044C648321FF342600434BB1 /* Config.swift in Sources */,
 				0439DAC721C111510041CDCB /* AllNewsCell.swift in Sources */,
 				0410D75521F0BBED005A304E /* PhoneCall.swift in Sources */,
@@ -740,16 +685,13 @@
 				0466C05F21B5796A00C9C555 /* EventInfoContainerVC.swift in Sources */,
 				045EF19621B95FBD009DCA7A /* AllQuestionsVC.swift in Sources */,
 				04B2C5AA220345200039D6AD /* UserData.swift in Sources */,
-				0466C04E21B54D0200C9C555 /* FavouriteAgentsVC.swift in Sources */,
 				0466C07E21B691A500C9C555 /* NotificationCell.swift in Sources */,
 				04E994F621EB438E006070B3 /* Service.swift in Sources */,
 				0469B49821AC1674000A337B /* Elshams.xcdatamodeld in Sources */,
 				0466C06D21B58B5D00C9C555 /* SpeakersCell.swift in Sources */,
 				0466C05A21B56EC900C9C555 /* EventsCell.swift in Sources */,
-				04B872B221AD93A500C6629E /* MainTapCompanies.swift in Sources */,
 				04E994F821EB89D2006070B3 /* MdcText.swift in Sources */,
 				04E994FA21ECB7B0006070B3 /* AgendaSectionDate.swift in Sources */,
-				0416E75321B00FE1004E7368 /* MainAgentContainer.swift in Sources */,
 				0466C08521B6A90800C9C555 /* SigninVC.swift in Sources */,
 				0469B49021AC1674000A337B /* AppDelegate.swift in Sources */,
 				045EF18621B8590D009DCA7A /* StartUpsData.swift in Sources */,
@@ -758,10 +700,8 @@
 				047970DA21CFF46400C5BAFD /* UIColor.swift in Sources */,
 				0466C08221B6990500C9C555 /* Settings.swift in Sources */,
 				0427280E2208693C0028C671 /* AgendaSpeakerIdPic.swift in Sources */,
-				0466C03C21B026CB00C9C555 /* MenuCompCell.swift in Sources */,
 				0466C06721B57B2700C9C555 /* SponsersVC.swift in Sources */,
 				0410D75721F0BD79005A304E /* OpenSafariLink.swift in Sources */,
-				0466C09D21B7E20C00C9C555 /* AgendaMainVC.swift in Sources */,
 				044C648521FF3A4900434BB1 /* API.swift in Sources */,
 				0466C09721B6E16200C9C555 /* SideMenuDetailCell.swift in Sources */,
 				0466C06121B57AA000C9C555 /* AboutEvent.swift in Sources */,
