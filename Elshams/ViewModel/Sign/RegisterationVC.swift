@@ -57,7 +57,7 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
         
      //   imagePicker = UIImagePickerController()
        // imagePicker.delegate = self
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(succesRegister), name: NSNotification.Name("SuccesRegister"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -66,6 +66,12 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(RegisterationVC.viewTapped(gestureRecognizer:)))
         view.addGestureRecognizer(tapGesture)
 
+    }
+    @objc func succesRegister(){
+      
+        let alert = UIAlertController(title: "Succes!", message: "You are just registered!", preferredStyle: UIAlertControllerStyle.alert)
+           alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
     }
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -91,7 +97,7 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
         }
         if  notification.name == Notification.Name.UIKeyboardWillShow ||
             notification.name == Notification.Name.UIKeyboardWillChangeFrame {
-            view.frame.origin.y = -100
+            view.frame.origin.y = -150
         } else {
             view.frame.origin.y = 0
         }

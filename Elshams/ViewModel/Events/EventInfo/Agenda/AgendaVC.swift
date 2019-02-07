@@ -130,26 +130,23 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
                 let agenda_SessionLocation = result[index]["location"].string
                 let agenda_isFavourate = result[index]["isFavourate"].bool
                 let agenda_IsFavourate_String = "\(agenda_isFavourate)"
-
                 
                 if agenda_Type == "head" {
                     self.agendaHeadList.append(AgendaHeadData(HeadTitle: agenda_dateTitle ?? "title", HeadDate: agenda_date ?? "date", HeadType: agenda_Type ?? "type"))
                 }
                 else if agenda_Type == "session" {
                     self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "Title", SessionTime: agenda_Time ?? "Time", SessionLocation: agenda_SessionLocation ?? "location", SpeakersSession: agenda_SpeakersDict ?? ["ID" : "314",
-                                                                                                                                                                                                                                                    "imageUrl" : "http:-b01d-582382a5795e.jpg"]
+                                                                                                                                                                                                                                                "imageUrl" : "http:-b01d-582382a5795e.jpg"]
                         , AgendaDate: agenda_date ?? "date", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String , RondomColor: agenda_rondomColor ?? "red", AgendaType: agenda_Type ?? "session", SpeakersIdImg: self.agendaSpeakerIDImgList))
                 }
                 
                 index = index + 1
                 self.agendaSpeakerIDImgList.removeAll()
-
                 self.tableViewAgenda.reloadData()
                 self.activeLoader.isHidden = true
                 self.activeLoader.stopAnimating()
                 self.tableViewAgenda.isHidden = false
             }
-            //  print((self.networkList[2].name)!)
         }
         } else {
             Service.getService(url: URLs.getAgenda) {
@@ -178,14 +175,14 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
                     var indexSpeaker = 0
                     
                     while SpeakeriDNotNull {
-                        let agenda_speaker_id = agenda_Speakers["ID"].string
+                        let agenda_speaker_id = agenda_Speakers[indexSpeaker]["ID"].string
                         
                         if agenda_speaker_id == nil || agenda_speaker_id?.trimmed == "" ||
                             agenda_speaker_id == "null"{
                             SpeakeriDNotNull = false
                             break
                         }
-                        let agenda_speaker_url = agenda_Speakers["imageUrl"].string
+                        let agenda_speaker_url = agenda_Speakers[indexSpeaker]["imageUrl"].string
                         self.agendaSpeakerIDImgList.append(AgendaSpeakerIdPic(SpImageUrl: agenda_speaker_url ?? "", Speaker_id: agenda_speaker_id ?? ""))
                         indexSpeaker = indexSpeaker + 1
                     }
@@ -193,7 +190,6 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
                     let agenda_SessionLocation = result[index]["location"].string
                     let agenda_isFavourate = result[index]["isFavourate"].bool
                     let agenda_IsFavourate_String = "\(agenda_isFavourate)"
-                    
                     
                     if agenda_Type == "head" {
                         self.agendaHeadList.append(AgendaHeadData(HeadTitle: agenda_dateTitle ?? "title", HeadDate: agenda_date ?? "date", HeadType: agenda_Type ?? "type"))
@@ -211,7 +207,6 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
                     self.activeLoader.stopAnimating()
                     self.tableViewAgenda.isHidden = false
                 }
-                //  print((self.networkList[2].name)!)
             }
         }
     }

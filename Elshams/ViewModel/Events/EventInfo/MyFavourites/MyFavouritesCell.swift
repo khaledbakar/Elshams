@@ -58,8 +58,8 @@ class MyFavouritesCell: UITableViewCell {
         speakerTwoImage.layer.cornerRadius = locationIcon.frame.width / 2
         speakerTwoImage.clipsToBounds = true
         
-        timeIcon.image = UIImage(named: "time-fav")
-        locationIcon.image = UIImage(named: "location_fav")
+       // timeIcon.image = UIImage(named: "time-fav")
+       // locationIcon.image = UIImage(named: "location_fav")
         
         programAgendaName.text = AgendaProgram.seseionTitle
         programAgendaTime.text = "\((AgendaProgram.sessionTime)!)"

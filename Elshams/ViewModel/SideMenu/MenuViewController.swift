@@ -195,7 +195,7 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             let alert = UIAlertController(title: "Error", message: "You must sign in to Show this Part", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
-            dismiss(animated: true, completion: nil)
+            //dismiss(animated: true, completion: nil)
         }
      
         

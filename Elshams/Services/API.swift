@@ -75,11 +75,19 @@ class API: NSObject {
             print("This is response request : ")
             print(response)
             let json = JSON(response)
-            if let apiToken = json["access_token"].string {
-                print("api token \(apiToken)")
-                Helper.saveApiToken(Token: apiToken)
-                //      completion(nil , true)
+            if let error = json["error"].string {
+                let error_description = json["error_description"].string
+                NotificationCenter.default.post(name: NSNotification.Name("LoginError"), object: nil)
+
+              print(error_description)
+            } else {
+                if let apiToken = json["access_token"].string {
+                    print("api token \(apiToken)")
+                    Helper.saveApiToken(Token: apiToken)
+                    //      completion(nil , true)
+                }
             }
+          
         }
         
      /*   Alamofire.request(URLs.login, method: .post, parameters: paramLogin, encoding: URLEncoding.default, headers: nil)
@@ -121,9 +129,10 @@ class API: NSObject {
             print("This is response request : ")
             print(response)
             let json = JSON(response)
+            
             if let apiToken = json["access_token"].string {
                 print("api token \(apiToken)")
-                
+                 NotificationCenter.default.post(name: NSNotification.Name("SuccesRegister"), object: nil)
                 //Helper.saveApiToken(Token: apiToken)
           //      completion(nil , true)
         }       /*  Alamofire.request(URLs.register, method: .post, parameters: paramRegister, encoding: URLEncoding.default, headers: nil).responseJSON { response in
@@ -178,6 +187,7 @@ class API: NSObject {
             let json = JSON(response)
             let message = json["message"].string
             SettingsVC.udapatedMessage = message!
+             NotificationCenter.default.post(name: NSNotification.Name("SuccesUpdate"), object: nil)
             
         
         }

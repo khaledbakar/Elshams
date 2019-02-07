@@ -79,8 +79,16 @@ class StartupDetailsVC: UIViewController {
         defaultFrame()
         loadSessionData(StartUpID: (singleItem?.startup_id)!)
         loadavailableAppointment(StartUpID: (singleItem?.startup_id)!)
+        
         if StartupDetailsVC.sechadualeBTNSend == true {
-             popUpContainerView.isHidden = false
+          // if  availableAppointmentList.count != 0 {
+            popUpContainerView.isHidden = false
+         /*  } else {
+            let alert = UIAlertController(title: "Error!", message: "There's no Available Appointments", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            } */
+            
         } else
         {
              popUpContainerView.isHidden = true
@@ -338,7 +346,13 @@ func imgUrl(imgUrl:String)  {
     }
     
     @IBAction func rescadualeAppointment(_ sender: Any) {
+        if  availableAppointmentList.count != 0 {
         popUpContainerView.isHidden = false
+        } else {
+            let alert = UIAlertController(title: "Error!", message: "There's no Available Appointments", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
         btnRightBar()
     }
     
@@ -361,32 +375,7 @@ func imgUrl(imgUrl:String)  {
         print(appointmentSelect)
     }
     
-  /*  @objc func buLblClick (_ sender: UIGestureRecognizer){
-     guard let tag = (sender.view as? UIView)?.tag else { return } // simple soluation
 
-        let butSelec:UIButton?
-        for ind in 2..<popUpView.subviews.count {
-            if ind % 2 == 1 {
-                print(ind)
-                print(popUpView.subviews[ind])
-        //        butSelec = popUpView.subviews[ind] as! UIButton
-          //      butSelec?.isSelected = false
-                (popUpView.subviews[ind] as! UIButton).isSelected = false
-            } else {
-                continue
-            }
-        }
-       //(sender as UILabel).isSelected = true
-        //butSelec.isSelected = true
-    //    let  buTitle = "\((sender.text)!)"
-     //   let buTitleInt = sender.tag - 1
-        //appointmentSelect = appointmentBooking[buTitleInt]
-        appointmentSelect = availableAppointmentList[buTitleInt].appoimentID
-        appointmentSelect_Name = availableAppointmentList[buTitleInt].appoimentName
-
-        print(appointmentSelect)
-    }
-    */
     func btnRightBar()  {
         if let  apiToken  = Helper.getApiToken() {
 
@@ -403,7 +392,13 @@ func imgUrl(imgUrl:String)  {
     }
     
     @objc func popUpTool() {
+        if  availableAppointmentList.count != 0 {
         popUpContainerView.isHidden = false
+        } else {
+            let alert = UIAlertController(title: "Error!", message: "There's no Available Appointments", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
         btnRightBar()
     }
     

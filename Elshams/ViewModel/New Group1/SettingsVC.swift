@@ -59,6 +59,7 @@ class SettingsVC: UIViewController , UITableViewDelegate , UITableViewDataSource
             self.present(alert, animated: true, completion: nil)
           //  dismiss(animated: true, completion: nil)
         }
+         NotificationCenter.default.addObserver(self, selector: #selector(succesUpdate), name: NSNotification.Name("SuccesUpdate"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -66,6 +67,12 @@ class SettingsVC: UIViewController , UITableViewDelegate , UITableViewDataSource
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(RegisterationVC.viewTapped(gestureRecognizer:)))
         view.addGestureRecognizer(tapGesture)
+    }
+    @objc func succesUpdate(){
+        
+        let alert = UIAlertController(title: "Succes!", message: "Your data is Updated!", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -93,7 +100,7 @@ class SettingsVC: UIViewController , UITableViewDelegate , UITableViewDataSource
         }
         if  notification.name == Notification.Name.UIKeyboardWillShow ||
             notification.name == Notification.Name.UIKeyboardWillChangeFrame {
-            view.frame.origin.y = -100
+            view.frame.origin.y = -150
         } else {
             view.frame.origin.y = 0
         }

@@ -15,7 +15,8 @@ import SwiftyJSON
 class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource {
     var startUpList = Array<StartUpsData>()
     @IBOutlet weak var startupTableView: UITableView!
-    
+    var availableAppointmentList = Array<AvailableAppointment>()
+
     @IBOutlet weak var activeLoader: UIActivityIndicatorView!
     
     override func viewDidLoad() {
@@ -129,9 +130,50 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
     
     @IBAction func btnSechaduale(_ sender: Any) {
         let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to:self.startupTableView)
-        let indexPath = self.startupTableView.indexPathForRow(at: buttonPosition)
-        StartupDetailsVC.sechadualeBTNSend = true
-        performSegue(withIdentifier: "startupdetail", sender: startUpList[indexPath!.row])
+        var indexPath = self.startupTableView.indexPathForRow(at: buttonPosition)
+      //  StartupDetailsVC.sechadualeBTNSend = true
+        let startUpId = (startUpList[indexPath!.row].startup_id)!
+        print(startUpId)
+        Service.getServiceWithAuth(url: "\(URLs.getAvaliableAppoiments)/\(startUpId)") {
+            (response) in
+            print("this is SessionDetails ")
+            print(response)
+            let result = JSON(response)
+            var iDNotNull = true
+            var index = 0
+            var availableAppointmentListCount = 0
+            
+            while iDNotNull {
+                let avaAppointment_ID = result[index]["appoimentID"].string
+                
+                if avaAppointment_ID == nil || avaAppointment_ID?.trimmed == "" ||
+                    avaAppointment_ID == "null" || avaAppointment_ID == "nil"{
+                    iDNotNull = false
+                   // self.popUpViewMethod()
+                    break
+                }
+                let avaAppointment = result[index].dictionaryObject
+                let avaAppointment_Name = result[index]["appoimentName"].string
+                
+                let avaAppointmentOptinal = ["appoimentName": "",
+                                             "appoimentID": ""]
+                self.availableAppointmentList.append(AvailableAppointment(AvailableAppointmentDict: avaAppointment ?? avaAppointmentOptinal, AppoimentName: avaAppointment_Name ?? "name", AppoimentID: avaAppointment_ID ?? "id"))
+                index = index + 1
+                availableAppointmentListCount = self.availableAppointmentList.count
+                
+            }
+            if  availableAppointmentListCount != 0 {
+                StartupDetailsVC.sechadualeBTNSend = true
+
+                self.performSegue(withIdentifier: "startupdetail", sender: self.startUpList[indexPath!.row])
+
+            } else {
+                let alert = UIAlertController(title: "Error!", message: "There's no Available Appointments", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                
+            }
+        }
        
     }
     func numberOfSections(in tableView: UITableView) -> Int {

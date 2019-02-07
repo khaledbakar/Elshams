@@ -62,8 +62,8 @@ class AgendaCell: UITableViewCell {
         speakerTwoImage.layer.cornerRadius = locationIcon.frame.width / 2
         speakerTwoImage.clipsToBounds = true
         
-        timeIcon.image = UIImage(named: "time-fav")
-        locationIcon.image = UIImage(named: "location_fav")
+      //  timeIcon.image = UIImage(named: "time-fav")
+      //  locationIcon.image = UIImage(named: "location_fav")
         
       
 
@@ -72,11 +72,12 @@ class AgendaCell: UITableViewCell {
         programAgendaLocation.text = AgendaProgram.progLocation
       //  speakerOneImage.image = UIImage(named: "\((AgendaProgram.speakerOneImage)!)")
       //  speakerTwoImage.image = UIImage(named: "\((AgendaProgram.speakerTwoImage)!)")
-        if AgendaProgram.favouriteSession == true {
+       if AgendaProgram.favouriteSession == true {
             favourIcon.image = UIImage(named: "favour")
-        }else {
-            favourIcon.image = UIImage(named: "favour.unlike")
-        }
+       }else {
+            favourIcon.image = UIImage(named: "favour-unlike")
+       }
+        
       /*   let randomColor = AgendaProgram.rondomColor
         let randomColorArray =  randomColor?.split(separator: "#")
         var randomColorStr:String = "\(randomColorArray![0])"

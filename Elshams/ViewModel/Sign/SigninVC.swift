@@ -15,6 +15,7 @@ import AlamofireImage
 
 class SigninVC: UIViewController ,  UITextFieldDelegate { 
     @IBOutlet weak var signInView: UIView!
+    @IBOutlet weak var activeLoginLoader: UIActivityIndicatorView!
     
     @IBOutlet weak var signInScrollView: UIScrollView!
   
@@ -35,33 +36,12 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.activeLoginLoader.isHidden = true
+
+        NotificationCenter.default.addObserver(self, selector: #selector(loginError), name: NSNotification.Name("LoginError"), object: nil)
         //speaker static list
         
-     /*   SpeakersVC.speakerList.removeAll()
-        SpeakersVC.speakerList.append(Speakers(SpeakerName: "Khaled bakar", JobTitle: "Programmer", jobDescribition: "IOSDeveloper", SpImage: "profile1", FacebookInLink: "facebook.com/khaledbakar.12", Phone: "01060136503", Mail: "kzaky@ikdynamics.com", About: "one of the most importanat people in the life he hasn't title job his name is a title", Website: "www.khaledbakar.com", ActiveOrNot: true, Speaker_id: 0, Speaker_id_Str: "0"))
-        SpeakersVC.speakerList.append(Speakers(SpeakerName: "Khaled bakar", JobTitle: "Programmer", jobDescribition: "IOSDeveloper", SpImage: "profile2", FacebookInLink: "facebook.com/khaledbakar.12", Phone: "01060136503", Mail: "kzaky@ikdynamics.com", About: "one of the most importanat people in the life he hasn't title job his name is a title", Website: "www.google.com", ActiveOrNot: true, Speaker_id: 1, Speaker_id_Str: "1"))
-        SpeakersVC.speakerList.append(Speakers(SpeakerName: "saad hamo", JobTitle: "Programmer", jobDescribition: "IOSDeveloper", SpImage: "avatar", FacebookInLink: "facebook.com/khaledbakar.12", Phone: "01060136503", Mail: "kzaky@ikdynamics.com", About: "one of the most importanat people in the life he hasn't title job his name is a title", Website: "https://www.facebook.com", ActiveOrNot: false, Speaker_id: 2, Speaker_id_Str: "2")) */
-        
-        //startup static list
-        //3shan bttkrr 3ayz 7l
-     /*   StartUps.startUpList.removeAll()
-        
-        StartUps.startUpList.append(StartUpsData(StartupName: "El7ag Bakar", StartupAddress: "1 Tahrir Square,cairo,Egypt", StartupImage: "profile1", StartUpLinkedIn: "khaled.zaki12", StartUpPhone: "01060136503", StartUpMail: "kzakyy@ikdynamics.com", StartUpAbout: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, ", AcceptedApointment: true, PendingApointment: false, AcceptedApointmentStr: "true", PendingApointmentStr: "false", Id_StartUp: 0))
-        
-        StartUps.startUpList.append(StartUpsData(StartupName: "MedGram", StartupAddress: "18A Obour Bulidings,cairo,Egypt", StartupImage: "avatar", StartUpLinkedIn: "khaled.zaki12", StartUpPhone: "01060136503", StartUpMail: "kzakyy@ikdynamics.com", StartUpAbout: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, ", AcceptedApointment: false, PendingApointment: true, AcceptedApointmentStr: "false", PendingApointmentStr: "true", Id_StartUp: 1))
-        StartUps.startUpList.append(StartUpsData(StartupName: "MedGram", StartupAddress: "18A Obour Bulidings,cairo,Egypt", StartupImage: "avatar", StartUpLinkedIn: "khaled.zaki12", StartUpPhone: "01060136503", StartUpMail: "kzakyy@ikdynamics.com", StartUpAbout: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, ", AcceptedApointment: false, PendingApointment: true, AcceptedApointmentStr: "false", PendingApointmentStr: "true", Id_StartUp: 2))
-        
-        StartUps.startUpList.append(StartUpsData(StartupName: "MedGram", StartupAddress: "18A Obour Bulidings,cairo,Egypt", StartupImage: "avatar", StartUpLinkedIn: "khaled.zaki12", StartUpPhone: "01060136503", StartUpMail: "kzakyy@ikdynamics.com", StartUpAbout: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, ", AcceptedApointment: false, PendingApointment: false, AcceptedApointmentStr: "false", PendingApointmentStr: "false", Id_StartUp: 3))
-        StartUps.startUpList.append(StartUpsData(StartupName: "El7ag Bakar", StartupAddress: "1 Tahrir Square,cairo,Egypt", StartupImage: "profile1", StartUpLinkedIn: "khaled.zaki12", StartUpPhone: "01060136503", StartUpMail: "kzakyy@ikdynamics.com", StartUpAbout: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, ", AcceptedApointment: true, PendingApointment: false, AcceptedApointmentStr: "true", PendingApointmentStr: "false", Id_StartUp: 4)) */
-
-        //agendaa
-        /*
-        AgendaVC.agendaList.removeAll()
-        AgendaVC.agendaList.append(ProgramAgendaItems(ProgramName: "Regestration and Networking", StartTime: "8AM", EndTime: "10AM", ProgLocation: "hall", SpImageOne: "avatar", SpImageTwo: "avatar",AgendaDate:"Monday,March 8", FavouriteSession: true, FavouriteSessionStr: "true", Describtion: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore ", Speaker_FK_Id: 2, Speaker_FK_Id_Str: "2"))
-        AgendaVC.agendaList.append(ProgramAgendaItems(ProgramName: "Ministers from the Cambinet Economic Group and selected", StartTime: "11AM", EndTime: "11.30AM", ProgLocation: "cinema", SpImageOne: "avatar", SpImageTwo: "avatar",AgendaDate:"Monday,March 8", FavouriteSession: false, FavouriteSessionStr: "false", Describtion: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore ", Speaker_FK_Id: 1, Speaker_FK_Id_Str: "1"))
-        AgendaVC.agendaList.append(ProgramAgendaItems(ProgramName: "New Reg", StartTime: "11AM", EndTime: "11.30AM", ProgLocation: "cinema", SpImageOne: "avatar", SpImageTwo: "avatar",AgendaDate:"Monday,March 9", FavouriteSession: true, FavouriteSessionStr: "true", Describtion: "Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore ", Speaker_FK_Id: 1, Speaker_FK_Id_Str: "1"))
-        */
-        
+   
        // userNameInputlTxt = MDCTextField()
         userNameInputlTxt.placeholder = "Name"
         userNameInputlTxt.isEnabled = true
@@ -126,6 +106,17 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+    }
+    @objc func loginError(){
+        // performSegue(withIdentifier: "ShowSetting", sender: nil)
+      //  print("setting")
+        self.activeLoginLoader.isHidden = true
+        self.activeLoginLoader.stopAnimating()
+
+        passwordError.text = "The user name or password is incorrect."
+        passwordError.isHidden = false
+
+        
     }
     @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer)  {
         if userNameInputlTxt.text == "" {
@@ -203,26 +194,48 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
     }
     
     func signInMethod() {
-        guard let email = userNameInputlTxt.text, !email.isEmpty else { return }
-        guard let password = passwordInputTxt.text, !password.isEmpty else { return }
+        guard let email = userNameInputlTxt.text, !email.isEmpty else {
+            userNameError.isHidden = false
+            userNameError.text = "you must enter your name"
+            
+            return
+            
+        }
+        guard let password = passwordInputTxt.text, !password.isEmpty else {
+            passwordError.isHidden = false
+            passwordError.text = "you must enter your password"
+
+
+            return
+            
+        }
+        self.activeLoginLoader.isHidden = false
+        self.activeLoginLoader.startAnimating()
         let username = userNameInputlTxt.text?.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
         let pass = passwordInputTxt.text
         API.login(Email: email, Password: password) { (error: Error?,succes:Bool) in
             if succes {
                 print("Succes")
+
                 self.performSegue(withIdentifier: "skipnav", sender: nil)
+                self.activeLoginLoader.isHidden = true
+                self.activeLoginLoader.stopAnimating()
+
             }
             else {
             }
         }
-         if (username == "admin" && pass == "admin") {
+        /* if (username == "admin" && pass == "admin") {
             performSegue(withIdentifier: "skipnav", sender: nil)
             userNameInputlTxt.text = ""
             passwordInputTxt.text = ""
-        }
+        } */
     }
     
     @IBAction func skipLogin(_ sender: Any) {
+        let def = UserDefaults.standard
+        def.setValue(nil, forKey: "api_token")
+        def.synchronize()
         performSegue(withIdentifier: "skipnav", sender: nil)
     }
     
