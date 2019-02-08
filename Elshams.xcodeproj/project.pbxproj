@@ -88,6 +88,7 @@
 		04BE00F921D0F02000809834 /* AllEventsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BE00F821D0F02000809834 /* AllEventsVC.swift */; };
 		04BE00FB21D0F09500809834 /* AllEventsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BE00FA21D0F09500809834 /* AllEventsCell.swift */; };
 		04BE00FD21D0F26A00809834 /* EventsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BE00FC21D0F26A00809834 /* EventsData.swift */; };
+		04D27B22220C5D0A00DFF12B /* RegistrationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04D27B21220C5D0A00DFF12B /* RegistrationCell.swift */; };
 		04E994F621EB438E006070B3 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E994F521EB438E006070B3 /* Service.swift */; };
 		04E994F821EB89D2006070B3 /* MdcText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E994F721EB89D2006070B3 /* MdcText.swift */; };
 		04E994FA21ECB7B0006070B3 /* AgendaSectionDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E994F921ECB7B0006070B3 /* AgendaSectionDate.swift */; };
@@ -181,6 +182,7 @@
 		04BE00F821D0F02000809834 /* AllEventsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllEventsVC.swift; sourceTree = "<group>"; };
 		04BE00FA21D0F09500809834 /* AllEventsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllEventsCell.swift; sourceTree = "<group>"; };
 		04BE00FC21D0F26A00809834 /* EventsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsData.swift; sourceTree = "<group>"; };
+		04D27B21220C5D0A00DFF12B /* RegistrationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationCell.swift; sourceTree = "<group>"; };
 		04E994F521EB438E006070B3 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		04E994F721EB89D2006070B3 /* MdcText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MdcText.swift; sourceTree = "<group>"; };
 		04E994F921ECB7B0006070B3 /* AgendaSectionDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgendaSectionDate.swift; sourceTree = "<group>"; };
@@ -376,6 +378,7 @@
 			children = (
 				0466C08421B6A90800C9C555 /* SigninVC.swift */,
 				0466C08821B6AC1300C9C555 /* RegisterationVC.swift */,
+				04D27B21220C5D0A00DFF12B /* RegistrationCell.swift */,
 			);
 			path = Sign;
 			sourceTree = "<group>";
@@ -734,6 +737,7 @@
 				0466C07121B590E900C9C555 /* ProgramAgendaItems.swift in Sources */,
 				049BF7BC21CBBFF70086F569 /* SponserCollectionViewCell.swift in Sources */,
 				04BE00F921D0F02000809834 /* AllEventsVC.swift in Sources */,
+				04D27B22220C5D0A00DFF12B /* RegistrationCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

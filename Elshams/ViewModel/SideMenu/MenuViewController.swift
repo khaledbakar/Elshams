@@ -26,8 +26,8 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
     @IBOutlet weak var userProfile: UIImageView!
     
     var btnMenu : UIButton!
-    var SideMenuTitles = ["TimeLine","Networks","Myfavorites","Agenda","Speakers","Sponsers","Startups","News","Notifications","Questions","Appointment","Settings","Logout"] //,"AllEvents"
-    var SideMenuIcons = ["home","networks","favourite","agenda","speaker","sponsers","startup","news","notifications","questation","appointment","home","logout"]//"events",
+    var SideMenuTitles = ["TimeLine","Myfavorites","Agenda","Speakers","Sponsers","Startups","News","Notifications","Questions","Appointment","Settings","Logout"] //,"AllEvents" "Networks",
+    var SideMenuIcons = ["home","favourite","agenda","speaker","sponsers","startup","news","notifications","questation","appointment","home","logout"]//"events", "networks",
     @IBOutlet weak var btnCloseMenuOverlay: UIButton!
     var delegate : SlideMenuDelegate?
     override func viewDidLoad() {
@@ -94,10 +94,10 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
         switch indexPath.row {
         case 0:
             controllerSelect = "TimeLine"
-        case 1 :
-            controllerSelect = "NetworkSpeakers"
+   //     case 1 :
+       //     controllerSelect = "NetworkSpeakers"
 
-        case 2 :
+        case 1 :
             if let  apiToken  = Helper.getApiToken() {
 
             controllerSelect = "MyFavouriteAgenda"
@@ -107,23 +107,23 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
                 
             }
             
-        case 3 :
+        case 2 :
             controllerSelect = "EventAgenda"
             MenuViewController.agendaEventOrMenu = true
-        case 4 :
+        case 3 :
             controllerSelect = "EventSpeakers"
             MenuViewController.speakerEventOrMenu = true
-        case 5 :
+        case 4 :
             controllerSelect = "EventSponsers"
             MenuViewController.sponserEventOrMenu = true
-        case 6 :
+        case 5 :
             controllerSelect = "EventStartups"
             MenuViewController.startupEventOrMenu = true
 
-        case 7 :
+        case 6 :
             controllerSelect = "AllNews"
             
-        case 8 :
+        case 7 :
             if let  apiToken  = Helper.getApiToken() {
 
             controllerSelect = "NotificationEvent"
@@ -131,7 +131,7 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             controllerSelect = "NotLogin"
             
         }
-        case 9 :
+        case 8 :
         if let  apiToken  = Helper.getApiToken() {
 
             controllerSelect = "QuestionsContainer"
@@ -140,7 +140,7 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
     
     }
         
-        case 10 :
+        case 9 :
             if let  apiToken  = Helper.getApiToken() {
             controllerSelect = "AppointmentContainer"
             } else {
@@ -150,7 +150,7 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
     /*    case 11 :
             controllerSelect = "AllMainEvents" //EventContainer
             MenuViewController.agendaEventOrMenu = true */
-        case 11 :
+        case 10 :
              if let  apiToken  = Helper.getApiToken() {
             controllerSelect = "Settings"
             
@@ -158,7 +158,7 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             controllerSelect = "NotLogin"
             
         }
-        case 12 :
+        case 11 :
             //fe sho8l hna kteer 3shan el remember me
             controllerSelect = "Logout"
             let def = UserDefaults.standard

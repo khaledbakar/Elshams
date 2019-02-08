@@ -135,13 +135,16 @@ class API: NSObject {
                  NotificationCenter.default.post(name: NSNotification.Name("SuccesRegister"), object: nil)
                 //Helper.saveApiToken(Token: apiToken)
           //      completion(nil , true)
-        }       /*  Alamofire.request(URLs.register, method: .post, parameters: paramRegister, encoding: URLEncoding.default, headers: nil).responseJSON { response in
+       
+            }
+           
+            /*  Alamofire.request(URLs.register, method: .post, parameters: paramRegister, encoding: URLEncoding.default, headers: nil).responseJSON { response in
                 switch response.result
                 {
-                case .failure(let error):
+                  case .failure(let error):
                     completion(error,false)
                     print(error)
-                case .success(let value):
+                  case .success(let value):
                     let json = JSON(value)
                     if let apiToken = json["access_token"].string {
                         print("api token \(apiToken)")

@@ -8,9 +8,10 @@
 
 import UIKit
 
-class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINavigationControllerDelegate , UITextFieldDelegate  {
+class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINavigationControllerDelegate , UITextFieldDelegate  , UITableViewDelegate , UITableViewDataSource  {
     
 
+    @IBOutlet weak var regestrationTableView: UITableView!
     @IBOutlet weak var emaiInputlTxt: UITextField!
     @IBOutlet weak var emailLbl: UILabel!
     @IBOutlet weak var emailError: UILabel!
@@ -34,11 +35,13 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
     var imagePicker: UIImagePickerController!
     @IBOutlet weak var profileImage: UIImageView!
     var imageProfileB64 : String?
+    var registerAnswerList :[String]?
     
   //  var validnumber:Bool?
     var validPassword:Bool?
     var validEmail:Bool?
-    
+    var quest = ["Email","Password","Confirm Password","Title","CompanyName","Job Title","Phone","linkedin","About"]
+
    // var userTriming:String?
     var passwordTriming:String?
     var emailTrim:String?
@@ -67,12 +70,14 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
         view.addGestureRecognizer(tapGesture)
 
     }
+    
     @objc func succesRegister(){
       
         let alert = UIAlertController(title: "Succes!", message: "You are just registered!", preferredStyle: UIAlertControllerStyle.alert)
            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
     }
+    
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -226,41 +231,90 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
         view.endEditing(true)
     }
 
-    func registertionMethod()  {
-        /*
-        let paramRegisteration : [String:Any] = [
-           "Email" : "\((emaiInputlTxt.text)!)",
-            "password" : "\((passwordInputTxt.text)!)",
-            "Title" : "\((othersInputTxt.text)!)", //title name and about and company name no field for it
-            "CompanyName" : "\((othersInputTxt.text)!)",
-            "jobTitle" : "\((jobTitleInput.text)!)",
-            "about" : "ios deveopler and photographer",
-            "phone" : "\((phoneInputTxt.text)!)",
-            "picture" : "",
-            "linkedin" : "linkedin.com"
-             /*"Email" : "khale16@yahoo.com",
-            "password" : "12345678",
-            "Title" : "khark",
-            "CompanyName" : "ikd",
-            "jobTitle" : "devleoper",
-            "about" : "ios deveopler and photographer",
-            "phone" : "01060136503",
-            //"picture" : "\(picBase64)",
-            "picture" : "",
-            "linkedin" : "linkedin.com" */
-        ] */
-       // if validEmail == true && validPassword == true {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 75
+    }
+  
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return quest.count
         
-          /*  Service.postService(url: URLs.register, parameters: paramRegisteration){ (response) in
-                print("This is response request : ")
-                print(response)
-            } */
-       // }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+       // let cell = tableView.dequeueReusableCell(withIdentifier: "registerscell") as! RegistrationCell
+       //     cell.lblQuestQuest.text = quest[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "registerscell", for: indexPath) as! RegistrationCell
+         cell.lblQuestQuest.text = quest[indexPath.row]
+        return cell
+    }
+    
+    func registertionTableData()-> [String]  {
+        var linkedinCell : String?
+        let i = IndexPath(row: 0, section: 0)
+        let cell: RegistrationCell = self.regestrationTableView.cellForRow(at: i) as! RegistrationCell
+        let emailCell = cell.txtAnswer.text!
+        
+        let i1 = IndexPath(row: 1, section: 0)
+        let cell1: RegistrationCell = self.regestrationTableView.cellForRow(at: i1) as! RegistrationCell
+        let passawordCell = cell1.txtAnswer.text!
+        
+        let i2 = IndexPath(row: 2, section: 0)
+        let cell2: RegistrationCell = self.regestrationTableView.cellForRow(at: i2) as! RegistrationCell
+        let confirmPassawordCell = cell2.txtAnswer.text!
+        
+        let i3 = IndexPath(row: 3, section: 0)
+        let cell3: RegistrationCell = self.regestrationTableView.cellForRow(at: i3) as! RegistrationCell
+        let titleCell = cell3.txtAnswer.text!
+        
+        let i4 = IndexPath(row: 4, section: 0)
+        let cell4: RegistrationCell = self.regestrationTableView.cellForRow(at: i4) as! RegistrationCell
+        let companyNameCell = cell4.txtAnswer.text!
+        
+        let i5 = IndexPath(row: 5, section: 0)
+        let cell5: RegistrationCell = self.regestrationTableView.cellForRow(at: i5) as! RegistrationCell
+        let jobTitleCell = cell5.txtAnswer.text!
+
+        let i6 = IndexPath(row: 6, section: 0)
+        let cell6: RegistrationCell = self.regestrationTableView.cellForRow(at: i6) as! RegistrationCell
+        let phoneCell = cell6.txtAnswer.text!
+      //keyborad
+        
+        let i7 = IndexPath(row: 7, section: 0)
+        let cell7: RegistrationCell = self.regestrationTableView.cellForRow(at: i7) as! RegistrationCell
+        if !((cell7.txtAnswer.text?.isEmpty)!) {
+             linkedinCell = cell7.txtAnswer.text!
+
+        }else {
+             linkedinCell = ""
+
+        }
+        
+        let i8 = IndexPath(row: 8, section: 0)
+        let cell8: RegistrationCell = self.regestrationTableView.cellForRow(at: i8) as! RegistrationCell
+        let aboutCell = cell8.txtAnswer.text!
+        
+        
+        return [emailCell,passawordCell,confirmPassawordCell,titleCell,companyNameCell,jobTitleCell,phoneCell,linkedinCell ?? "",aboutCell]
+    
     }
     @IBAction func register(_ sender: Any) {
-        guard let email = emaiInputlTxt.text?.trimmed, !email.isEmpty, let password = passwordInputTxt.text, !password.isEmpty, let jobTiltle = jobTitleInput.text?.trimmed , !jobTiltle.isEmpty, let phoneNum = phoneInputTxt.text?.trimmed , !phoneNum.isEmpty , let other = othersInputTxt.text?.trimmed , !other.isEmpty else { return }
+        registerAnswerList = registertionTableData()
+        guard let email = registerAnswerList?[0].trimmed,isValidEmail(emailID: email), !email.isEmpty else { return }
+        guard let password = registerAnswerList?[1], !password.isEmpty else { return } // registerAnswerList?[2] for confirm password
+        guard let tiltleUser = registerAnswerList?[3]  else { return }
+        guard let companyName = registerAnswerList?[4]  else { return }
+
+        guard let jobTiltle = registerAnswerList?[5] else { return }
+        guard let phoneNum = registerAnswerList?[6]   else { return }
+        guard let linkedIn = registerAnswerList?[7]   else { return }
+
+        guard  let about = registerAnswerList?[8]   else { return }
+     
         if TimeLineHomeVC.failMessage !=  "fail" {
-            API.register(Email: email.lowercased(), Password: password, Title: other , CompanyName: jobTiltle, JobTitle: jobTiltle, About: jobTiltle, Phone: phoneNum, Picture: imageProfileB64 ?? "", Linkedin: "") { (error: Error?,succes:Bool) in
+            API.register(Email: email.lowercased(), Password: password, Title: tiltleUser , CompanyName: companyName, JobTitle: jobTiltle, About: about, Phone: phoneNum, Picture: imageProfileB64 ?? "", Linkedin: linkedIn) { (error: Error?,succes:Bool) in
             if succes {
                 print("Succes")
               //  let alert = UIAlertController(title: "Succes!", message: "Your data is Updated!", preferredStyle: UIAlertControllerStyle.alert)
@@ -282,3 +336,11 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
 
     }
 }
+
+
+/* guard let email = emaiInputlTxt.text?.trimmed, !email.isEmpty else { return }
+ guard let password = passwordInputTxt.text, !password.isEmpty else { return }
+ guard let jobTiltle = jobTitleInput.text?.trimmed , !jobTiltle.isEmpty else { return }
+ guard let phoneNum = phoneInputTxt.text?.trimmed , !phoneNum.isEmpty else { return }
+ guard  let other = othersInputTxt.text?.trimmed , !other.isEmpty else { return }
+ */

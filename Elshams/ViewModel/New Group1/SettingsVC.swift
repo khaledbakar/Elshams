@@ -17,10 +17,10 @@ class SettingsVC: UIViewController , UITableViewDelegate , UITableViewDataSource
     var statSettingList : [String]?
     var cellSettingList : [String]?
 
-    var sections = ["Information","Praivacy"]
-    var quest = ["Email","Password","Job Title","Phone","Other"]
+    var sections = ["Information"] //,"Praivacy"
+    var quest = ["Email","Password","Confirm Password","Title","CompanyName","Job Title","Phone","Linkedin","About"]
   //  var ans =  ["Kzaky@ikdynamics.com","12345","IOS Developer","01060136503","NO"]
-    var privacy = ["public"]
+   // var privacy = ["public"]
    // var ansPraivacy
     var imageProfileB64 : String?
 
@@ -193,11 +193,11 @@ class SettingsVC: UIViewController , UITableViewDelegate , UITableViewDataSource
         return sections[section]
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
+       // if section == 0 {
             return quest.count
-        } else {
-            return privacy.count
-        }
+       // } else {
+       //     return privacy.count
+       // }
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -214,7 +214,7 @@ class SettingsVC: UIViewController , UITableViewDelegate , UITableViewDataSource
             }
             cell.privacySwitch.isHidden = true
         }
-        else {
+      /*  else {
             cell.lblNameQuest.text = privacy[indexPath.row]
             cell.lblNameQuest.frame.origin.y = 30.0
             cell.txtAnswer.isHidden = true
@@ -228,7 +228,7 @@ class SettingsVC: UIViewController , UITableViewDelegate , UITableViewDataSource
 
             }
             }
-        }
+        } */
         return cell
     }
 
@@ -270,18 +270,20 @@ class SettingsVC: UIViewController , UITableViewDelegate , UITableViewDataSource
         
         let i5 = IndexPath(row: 0, section: 1)
         let cell5: SettingsCell = self.settingTableView.cellForRow(at: i5) as! SettingsCell
-        let isPublicSwitchCell = cell5.privacySwitch
-        var isPublicCell = ""
+        
+     /*   let isPublicSwitchCell = cell5.privacySwitch
+       var isPublicCell = ""
         if isPublicSwitchCell?.isOn == true {
             isPublicCell = "True"
         } else {
             isPublicCell = "False"
 
         }
+        */
         
        /* guard let email = emailCell.trimmed, !email.isEmpty, let password = passawordCell, !password.isEmpty, let jobTiltle = jobTitleCell.trimmed , !jobTiltle.isEmpty, let phoneNum = otherCell.trimmed , !phoneNum.isEmpty , let other = otherCell.trimmed , !other.isEmpty else { return } */
         
-        API.updateUserData(Email: emailCell.lowercased(), Password: passawordCell, Title: otherCell , CompanyName: jobTitleCell, JobTitle: jobTitleCell, About: jobTitleCell, Phone: phoneCell, Picture: imageProfileB64 ?? "", Linkedin: "", Ispublic: isPublicCell) { (error: Error?,succes:Bool) in
+        API.updateUserData(Email: emailCell.lowercased(), Password: passawordCell, Title: otherCell , CompanyName: jobTitleCell, JobTitle: jobTitleCell, About: jobTitleCell, Phone: phoneCell, Picture: imageProfileB64 ?? "", Linkedin: "", Ispublic: "True") { (error: Error?,succes:Bool) in
                 if succes {
                     print("Succes")
                 }

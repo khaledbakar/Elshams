@@ -16,6 +16,11 @@ class OpenSessionVC: UIViewController {
     var singleItem:ProgramAgendaItems?
     var quest = Array<QuestionsData>()
     var answerSelect:String?
+    @IBOutlet weak var backSpeakerBtn: UIButton!
+    @IBOutlet weak var nextSpeakerBtnImg: UIImageView!
+    
+    @IBOutlet weak var backSpeakerBtnImg: UIImageView!
+    @IBOutlet weak var nextSpeakerBtn: UIButton!
     
     var session_ID :String?
     var session_RondomColor :String?
@@ -28,6 +33,7 @@ class OpenSessionVC: UIViewController {
     var session_isFavourate :Bool?
     var session_isFavourate_Str :String?
     var session_TwitterHash :String? //mst5dmt-hash
+    var speakerImagesCash :[Image]?
     
     var speaker_ID :String?
     var speaker_Name :String?
@@ -135,21 +141,31 @@ class OpenSessionVC: UIViewController {
         let speaker_ID_Image = result["Speaker"].dictionaryObject
         // get speakers // from agendaIdImg get all not only [0]
         let speaker_all = result["Speaker"]["AllSpeaker"]
-        self.speaker_ID = speaker_all[0]["ID"].string
-        self.speaker_Name = speaker_all[0]["name"].string
-        self.speaker_JobTitle = speaker_all[0]["jobTitle"].string
-        self.speaker_CompanyName = speaker_all["companyName"].string
-        self.speaker_ImageUrl = speaker_all[0]["imageUrl"].string
-        self.speaker_About = speaker_all[0]["about"].string
-        self.speaker_ContectInforamtion = speaker_all[0]["ContectInforamtion"].dictionaryObject
-        self.speaker_Email = speaker_all[0]["ContectInforamtion"]["Email"].string
-        self.speaker_Linkedin = speaker_all[0]["ContectInforamtion"]["linkedin"].string
-        self.speaker_Phone = speaker_all[0]["ContectInforamtion"]["phone"].string
-        
-        let contect = ["Email": "",
-                       "linkedin": "",
-                       "phone": ""]
- 
+        var iDSpeakerNotNull = true
+        var indexSpeaker = 0
+        while iDSpeakerNotNull {
+            let speaker_ID = speaker_all[indexSpeaker]["ID"].string
+            if speaker_ID == nil || speaker_ID?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || speaker_ID == "null" || speaker_ID == "nil" {
+                iDSpeakerNotNull = false
+                break
+            }
+            let speaker_Name = speaker_all[indexSpeaker]["name"].string
+            let speaker_JobTitle = speaker_all[indexSpeaker]["jobTitle"].string
+            let speaker_CompanyName = speaker_all[indexSpeaker]["companyName"].string
+            let speaker_ImageUrl = speaker_all[indexSpeaker]["imageUrl"].string
+            let speaker_About = speaker_all[indexSpeaker]["about"].string
+            let speaker_ContectInforamtion = speaker_all[indexSpeaker]["ContectInforamtion"].dictionaryObject
+            let speaker_Email = speaker_all[indexSpeaker]["ContectInforamtion"]["Email"].string
+            let speaker_Linkedin = speaker_all[indexSpeaker]["ContectInforamtion"]["linkedin"].string
+            let speaker_Phone = speaker_all[indexSpeaker]["ContectInforamtion"]["phone"].string
+            
+            let contect = ["Email": "",
+                           "linkedin": "",
+                           "phone": ""]
+            
+            self.speakerList.append(Speakers(SpeakerName: speaker_Name ?? "name", JobTitle: speaker_JobTitle ?? "JOB", CompanyName: speaker_CompanyName ?? "Company", SpImageUrl: speaker_ImageUrl ?? "Image", Speaker_id: speaker_ID ?? "ID", ContectInforamtion: speaker_ContectInforamtion ?? contect, About: speaker_About ?? "About"))
+            indexSpeaker = indexSpeaker + 1
+        }
         let questions_all = result["Question"]["AllQuestion"]
         print("this is question")
         print(questions_all)
@@ -161,7 +177,7 @@ class OpenSessionVC: UIViewController {
         self.questionList.removeAll()
         self.sessionList.removeAll()
         
-        self.speakerList.append(Speakers(SpeakerName: self.speaker_Name ?? "name", JobTitle: self.speaker_JobTitle ?? "JOB", CompanyName: self.speaker_CompanyName ?? "Company", SpImageUrl: self.speaker_ImageUrl ?? "Image", Speaker_id: self.speaker_ID ?? "ID", ContectInforamtion: self.speaker_ContectInforamtion ?? contect, About: self.speaker_About ?? "About"))
+       /* self.speakerList.append(Speakers(SpeakerName: self.speaker_Name ?? "name", JobTitle: self.speaker_JobTitle ?? "JOB", CompanyName: self.speaker_CompanyName ?? "Company", SpImageUrl: self.speaker_ImageUrl ?? "Image", Speaker_id: self.speaker_ID ?? "ID", ContectInforamtion: self.speaker_ContectInforamtion ?? contect, About: self.speaker_About ?? "About")) */
         self.questionList.append(QuestionsData(Questions: self.question_head ?? "question", Answer: self.question_answer ?? "answer", QuestionsID: self.question_ID ?? "ID", QuestionTimeStamp: self.question_TimeStamp ?? "TimeStamp"))
         
         self.sessionList.append(ProgramAgendaItems(Agenda_ID: self.session_ID ?? "ID", SessionTitle: self.session_Title ?? "Title", SessionTime: self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SpeakersSession: ["ID" : "314",
@@ -174,7 +190,7 @@ class OpenSessionVC: UIViewController {
         }else {
             self.favouriteIcon.image = UIImage(named: "unlike-session")
         }
-        self.mangeSessionDetails(SeseionTitle: self.session_Title ?? "Title", AgendaDate: self.session_Date ?? "date", SessionTime:  self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SessionDescribtion: self.session_Description ?? "Describition", SpeakerName: self.speaker_Name ?? "name", SpeakerJobTitle: self.speaker_JobTitle ?? "JOB", SpeakerImgUrl: self.speaker_ImageUrl ?? "Image", QestionHead: self.question_head ?? "question")
+        self.mangeSessionDetails(SeseionTitle: self.session_Title ?? "Title", AgendaDate: self.session_Date ?? "date", SessionTime:  self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SessionDescribtion: self.session_Description ?? "Describition", SpeakerName: self.speaker_Name ?? "name", SpeakerJobTitle: self.speaker_JobTitle ?? "JOB", SpeakerImgUrl: self.speaker_ImageUrl ?? "Image", QestionHead: self.question_head ?? "question", Speakers: self.speakerList)
         }
         }else {
             Service.getService(url: "\(URLs.getSessionDetails)/\(SessionID)") {
@@ -197,21 +213,31 @@ class OpenSessionVC: UIViewController {
                 let speaker_ID_Image = result["Speaker"].dictionaryObject
                 // get speakers // from agendaIdImg get all not only [0]
                 let speaker_all = result["Speaker"]["AllSpeaker"]
-                self.speaker_ID = speaker_all[0]["ID"].string
-                self.speaker_Name = speaker_all[0]["name"].string
-                self.speaker_JobTitle = speaker_all[0]["jobTitle"].string
-                self.speaker_CompanyName = speaker_all["companyName"].string
-                self.speaker_ImageUrl = speaker_all[0]["imageUrl"].string
-                self.speaker_About = speaker_all[0]["about"].string
-                self.speaker_ContectInforamtion = speaker_all[0]["ContectInforamtion"].dictionaryObject
-                self.speaker_Email = speaker_all[0]["ContectInforamtion"]["Email"].string
-                self.speaker_Linkedin = speaker_all[0]["ContectInforamtion"]["linkedin"].string
-                self.speaker_Phone = speaker_all[0]["ContectInforamtion"]["phone"].string
+                var iDSpeakerNotNull = true
+                var indexSpeaker = 0
+                while iDSpeakerNotNull {
+                let speaker_ID = speaker_all[indexSpeaker]["ID"].string
+                    if speaker_ID == nil || speaker_ID?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || speaker_ID == "null" || speaker_ID == "nil" {
+                        iDSpeakerNotNull = false
+                        break
+                    }
+                let speaker_Name = speaker_all[indexSpeaker]["name"].string
+                let speaker_JobTitle = speaker_all[indexSpeaker]["jobTitle"].string
+                let speaker_CompanyName = speaker_all[indexSpeaker]["companyName"].string
+                let speaker_ImageUrl = speaker_all[indexSpeaker]["imageUrl"].string
+               let speaker_About = speaker_all[indexSpeaker]["about"].string
+                let speaker_ContectInforamtion = speaker_all[indexSpeaker]["ContectInforamtion"].dictionaryObject
+                let speaker_Email = speaker_all[indexSpeaker]["ContectInforamtion"]["Email"].string
+                let speaker_Linkedin = speaker_all[indexSpeaker]["ContectInforamtion"]["linkedin"].string
+                let speaker_Phone = speaker_all[indexSpeaker]["ContectInforamtion"]["phone"].string
                 
                 let contect = ["Email": "",
                                "linkedin": "",
                                "phone": ""]
-                
+                    
+                    self.speakerList.append(Speakers(SpeakerName: speaker_Name ?? "name", JobTitle: speaker_JobTitle ?? "JOB", CompanyName: speaker_CompanyName ?? "Company", SpImageUrl: speaker_ImageUrl ?? "Image", Speaker_id: speaker_ID ?? "ID", ContectInforamtion: speaker_ContectInforamtion ?? contect, About: speaker_About ?? "About"))
+                      indexSpeaker = indexSpeaker + 1
+                }
                 let questions_all = result["Question"]["AllQuestion"]
                 print("this is question")
                 print(questions_all)
@@ -219,11 +245,10 @@ class OpenSessionVC: UIViewController {
                 self.question_head = questions_all["question"].string
                 self.question_answer = questions_all["answer"].string
                 self.question_TimeStamp = questions_all["questionTimeStamp"].string
-                self.speakerList.removeAll()
+              /*  self.speakerList.removeAll()
                 self.questionList.removeAll()
-                self.sessionList.removeAll()
-                
-                self.speakerList.append(Speakers(SpeakerName: self.speaker_Name ?? "name", JobTitle: self.speaker_JobTitle ?? "JOB", CompanyName: self.speaker_CompanyName ?? "Company", SpImageUrl: self.speaker_ImageUrl ?? "Image", Speaker_id: self.speaker_ID ?? "ID", ContectInforamtion: self.speaker_ContectInforamtion ?? contect, About: self.speaker_About ?? "About"))
+                self.sessionList.removeAll() */
+             
                 self.questionList.append(QuestionsData(Questions: self.question_head ?? "question", Answer: self.question_answer ?? "answer", QuestionsID: self.question_ID ?? "ID", QuestionTimeStamp: self.question_TimeStamp ?? "TimeStamp"))
                 
                 self.sessionList.append(ProgramAgendaItems(Agenda_ID: self.session_ID ?? "ID", SessionTitle: self.session_Title ?? "Title", SessionTime: self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SpeakersSession: ["ID" : "314",
@@ -236,26 +261,30 @@ class OpenSessionVC: UIViewController {
                 }else {
                     self.favouriteIcon.image = UIImage(named: "unlike-session")
                 }
-                self.mangeSessionDetails(SeseionTitle: self.session_Title ?? "Title", AgendaDate: self.session_Date ?? "date", SessionTime:  self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SessionDescribtion: self.session_Description ?? "Describition", SpeakerName: self.speaker_Name ?? "name", SpeakerJobTitle: self.speaker_JobTitle ?? "JOB", SpeakerImgUrl: self.speaker_ImageUrl ?? "Image", QestionHead: self.question_head ?? "question")
+                self.mangeSessionDetails(SeseionTitle: self.session_Title ?? "Title", AgendaDate: self.session_Date ?? "date", SessionTime:  self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SessionDescribtion: self.session_Description ?? "Describition", SpeakerName: self.speaker_Name ?? "name", SpeakerJobTitle: self.speaker_JobTitle ?? "JOB", SpeakerImgUrl: self.speaker_ImageUrl ?? "Image", QestionHead: self.question_head ?? "question", Speakers: self.speakerList)
             }
         }
         
     }
     
-    func imgUrl(imgUrl:String)  {
+    func imgUrl(imgUrl:String)  { //,listImage:[UIImage]
         if let imagUrlAl = imgUrl as? String {
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
                 print(response)
                 if let image = response.result.value {
                     DispatchQueue.main.async{
+                      /*  for data in listImage {
+                            
+                        }*/
                         self.speakerProfile.image = image
+                    //    self.speakerImagesCash?[0] = image
                     }
                 }
             })
         }
     }
     
-    func mangeSessionDetails(SeseionTitle:String,AgendaDate:String,SessionTime:String,SessionLocation:String,SessionDescribtion:String,SpeakerName:String,SpeakerJobTitle:String,SpeakerImgUrl:String,QestionHead:String){
+    func mangeSessionDetails(SeseionTitle:String,AgendaDate:String,SessionTime:String,SessionLocation:String,SessionDescribtion:String,SpeakerName:String,SpeakerJobTitle:String,SpeakerImgUrl:String,QestionHead:String,Speakers:[Speakers]){
  
         
          sessionTitle.text = SeseionTitle
@@ -264,9 +293,10 @@ class OpenSessionVC: UIViewController {
          sessionLocation.text = SessionLocation
          eventDescribtion.text = SessionDescribtion
       
-         speakerName.text = SpeakerName
-         speakerJobTitle.text = SpeakerJobTitle
-         imgUrl(imgUrl: SpeakerImgUrl)
+         speakerName.text = Speakers[0].name
+         speakerJobTitle.text = Speakers[0].jobTitle
+      //array of image and cashe the images
+        imgUrl(imgUrl: Speakers[0].speakerImageUrl!)
         
        
         
@@ -366,6 +396,22 @@ class OpenSessionVC: UIViewController {
         print(answerSelect)
 
     }
+    
+    @IBAction func backSpeakerMethod(_ sender: Any) {
+        speakerName.text = speakerList[0].name
+        speakerJobTitle.text = speakerList[0].jobTitle
+        imgUrl(imgUrl: speakerList[0].speakerImageUrl!)
+//cashe image needed
+        
+    }
+    
+    @IBAction func nextSpeakerMethod(_ sender: Any) {
+        speakerName.text = speakerList[1].name
+        speakerJobTitle.text = speakerList[1].jobTitle
+        imgUrl(imgUrl: speakerList[1].speakerImageUrl!)
+        
+    }
+    
     @IBAction func askSpeaker(_ sender: Any) {
     }
     
