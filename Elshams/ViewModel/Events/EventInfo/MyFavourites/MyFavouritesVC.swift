@@ -50,6 +50,7 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
         (response) in
         print(response)
         let result = JSON(response)
+        if !(result.isEmpty){
         var iDNotNull = true
         var index = 0
         while iDNotNull {
@@ -105,8 +106,15 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
             self.activeLoader.stopAnimating()
             self.favourSessionTableView.isHidden = false
         }
-        //  print((self.networkList[2].name)!)
-    }
+        }
+        else {
+            let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            self.activeLoader.isHidden = true
+            
+        }
+        }
     }else {
         self.activeLoader.isHidden = true
         self.favourSessionTableView.isHidden = true
@@ -174,7 +182,7 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "myfavacell") as! MyFavouritesCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "myfavacell", for: indexPath) as! MyFavouritesCell
 
         for i in 0..<agendaHeadList.count {
             if indexPath.section == i {

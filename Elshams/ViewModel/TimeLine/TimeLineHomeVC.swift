@@ -86,27 +86,40 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         postText.delegate = self
+        NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
+
         loadPostsData()
         loadAllSpeakerData()
         loadAllSponserData()
-        if TimeLineHomeVC.failMessage ==  "fail"
+        
+     /*   if TimeLineHomeVC.failMessage ==  "fail"
       {
         let alert = UIAlertController(title: "Error", message: "No internet connection please turn on it", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
-        }
+        } */
   
+    }
+    
+    @objc func errorAlert(){
+        let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+        //  startupTableView.isHidden = true
+    //    activeLoader.isHidden = true
+        //  activeLoader.stopAnimating()
+        //reload after
+        //
     }
 
     func loadAllSpeakerData()  {
         Service.getService(url: URLs.getAllSpeaker) {
             (response) in
-            
             print(response)
-            if response != nil {
+         //   if response != nil {
             let json = JSON(response)
-            
             let result = json["AllSpeaker"]
+            if !(result.isEmpty){
             var iDNotNull = true
             var index = 0
             while index < 4 {
@@ -120,34 +133,35 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
                 let speaker_Email = result[index]["ContectInforamtion"]["Email"].string
                 let speaker_Linkedin = result[index]["ContectInforamtion"]["linkedin"].string
                 let speaker_Phone = result[index]["ContectInforamtion"]["phone"].string
-                
-                let contect = ["Email": "",
-                               "linkedin": "",
-                               "phone": ""]
-                if speaker_ID == nil || speaker_ID?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || speaker_ID == "null" || speaker_ID == "nil" {
+                let contect = ["Email": "","linkedin": "","phone": ""]
+                if speaker_ID == nil || speaker_ID?.trimmed == "" || speaker_ID == "null" || speaker_ID == "nil" {
                     iDNotNull = false
                     break
                 }
                 self.speakerList.append(Speakers(SpeakerName: speaker_Name ?? "name", JobTitle: speaker_JobTitle ?? "JOB", CompanyName: speaker_CompanyName ?? "Company", SpImageUrl: speaker_ImageUrl ?? "Image", Speaker_id: speaker_ID ?? "ID", ContectInforamtion: speaker_ContectInforamtion ?? contect, About: speaker_About ?? "About"))
                 index = index + 1
-                
                /* self.speakerTableView.reloadData()
                 self.speakerCollectionView.reloadData()
                 self.activeLoader.isHidden = true
                 self.activeLoader.stopAnimating()
                 self.speakerTableView.isHidden = false */
             }
+                if !(self.speakerList.isEmpty){
             self.speakerName1.text = self.speakerList[0].name
             self.speakerName2.text = self.speakerList[1].name
             self.speakerName3.text = self.speakerList[2].name
             self.speakerName4.text = self.speakerList[3].name
+              //  if self.speakerList[0].speakerImageUrl != nil{
             self.imgUrl(imgUrl: self.speakerList[0].speakerImageUrl!, ImageViewSet: self.speakerImg1)
+             //   }
             self.imgUrl(imgUrl: self.speakerList[1].speakerImageUrl!, ImageViewSet: self.speakerImg2)
             self.imgUrl(imgUrl: self.speakerList[2].speakerImageUrl!, ImageViewSet: self.speakerImg3)
             self.imgUrl(imgUrl: self.speakerList[3].speakerImageUrl!, ImageViewSet: self.speakerImg4)
-            //MenuViewController.imgUserTestUrl = self.speakerList[0].speakerImageUrl!  //test menu user image
-
-            }   //  print((self.networkList[2].name)!)
+                }
+           //MenuViewController.imgUserTestUrl = self.speakerList[0].speakerImageUrl!  //test menu user image
+            } else {
+                // if no data in speaker what doing ??
+            }
         }
     }
     
@@ -155,12 +169,11 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         Service.getService(url: URLs.getAllSponsors) {
             (response) in
             print(response)
-            if response != nil {
-
+       //     if response != nil {
             let json = JSON(response)
 
             let result = json["AllSponsers"]
-            
+        if !(result.isEmpty){
             var iDNotNull = true
             var index = 0
             while index < 4 {
@@ -181,15 +194,10 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
                 let sponser_Sponsertype_icon = result[index]["Sponsertype"]["icon"].string
                 let sponser_Sponsertype_Color = result[index]["Sponsertype"]["color"].string
                 
-                let contectOptionNil = ["Email": "",
-                                        "linkedin": "",
-                                        "phone": ""]
-                let sponserTypeOptionNil = ["id": "Media Partner",
-                                            "name": "Media Partner",
-                                            "icon": "",
-                                            "color": "#053a8e"]
+                let contectOptionNil = ["Email": "","linkedin": "","phone": ""]
+                let sponserTypeOptionNil = ["id": "Media Partner","name": "Media Partner","icon": "","color": "#053a8e"]
                 
-                if sponser_ID == nil || sponser_ID?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || sponser_ID == "null" || sponser_ID == "nil" {
+                if sponser_ID == nil || sponser_ID?.trimmed == "" || sponser_ID == "null" || sponser_ID == "nil" {
                     iDNotNull = false
                     break
                 }
@@ -198,6 +206,8 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
                
              
             }
+            //suggestion make it scrollview
+                if !(self.sponserList.isEmpty) {   
             self.sponserName1.text = self.sponserList[0].sponserName
             self.sponserName2.text = self.sponserList[1].sponserName
             self.sponserName3.text = self.sponserList[2].sponserName
@@ -206,54 +216,27 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
             self.imgUrl(imgUrl: self.sponserList[1].sponserImageUrl!, ImageViewSet: self.sponserImg2)
             self.imgUrl(imgUrl: self.sponserList[2].sponserImageUrl!, ImageViewSet: self.sponserImg3)
             self.imgUrl(imgUrl: self.sponserList[3].sponserImageUrl!, ImageViewSet: self.sponserImg4)
-            //  print((self.networkList[2].name)!)
-        }    }
+        }
+        } else {
+            // if no data in sponser what doing ??
+
+            }
+            
+            }
     }
     
     func loadPostsData()  {
-        if let  apiToken  = Helper.getApiToken() {
-            Service.getServiceWithAuth(url: (URLs.getAllPosts)) {
-                (response) in
-                print("this is Posts ")
-                print(response)
-                if response != nil {
-
-                let json = JSON(response)
-
-                let result = json["AllPosts"]
-                var iDNotNull = true
-                var index = 0
-                while iDNotNull {
-                    let post_ID = result[index]["ID"].string
-                    if post_ID == nil || post_ID?.trimmed == "" || post_ID == "null" || post_ID == "nil" {
-                        iDNotNull = false
-                        break
-                    }
-                    let post_Author = result[index]["author"].string
-                    let post_AutherPic = result[index]["autherPic"].string
-                    let post_VedioURl = result[index]["vedioURl"].string
-                    let post_Discription = result[index]["postDiscription"].string
-                    let post_LikeCount = result[index]["about"].int
-                    let post_Comments = result[index]["Comments"].array
-                    let post_Islike = result[index]["Islike"].bool
-                    let post_SharingLink = result[index]["sharingLink"].string
-                    let post_Image = result[index]["image"].string
-                    self.newsFeedList.append(NewsFeedData(Post_ID: post_ID ?? "", Post_Author: post_Author ?? "", Post_AutherPicture: post_AutherPic ?? "", Post_VideoURl: post_VedioURl ?? "" , Post_Discription: post_Discription ?? "", Post_LikeCount: post_LikeCount ?? 0, Post_Comments: post_Comments ?? [result], Post_Islike: post_Islike ?? false, Post_SharingLink: post_SharingLink ?? "", Post_Image: post_Image ?? ""))
-                    index = index + 1
-                    self.timeLineCollView.reloadData()
-                }
-            }
-            }
-        } else {
+      
         Service.getService(url: (URLs.getAllPosts)) {
             (response) in
             print("this is Posts ")
             print(response)
-            if response != nil {
+          //  if response != nil {
 
             let json = JSON(response)
 
             let result = json["AllPosts"]
+            if !(result.isEmpty){
             var iDNotNull = true
             var index = 0
             while iDNotNull {
@@ -271,7 +254,6 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
                 let post_Islike = result[index]["Islike"].bool
                 let post_SharingLink = result[index]["sharingLink"].string
                 let post_Image = result[index]["image"].string
-                
                 /*   var iDNotNullComment = true
                  var indexComm = 0
                  while iDNotNullComment {
@@ -291,9 +273,12 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
                 self.newsFeedList.append(NewsFeedData(Post_ID: post_ID ?? "", Post_Author: post_Author ?? "", Post_AutherPicture: post_AutherPic ?? "", Post_VideoURl: post_VedioURl ?? "" , Post_Discription: post_Discription ?? "", Post_LikeCount: post_LikeCount ?? 0, Post_Comments: post_Comments ?? [result], Post_Islike: post_Islike ?? false, Post_SharingLink: post_SharingLink ?? "", Post_Image: post_Image ?? ""))
                 index = index + 1
                 self.timeLineCollView.reloadData()
+           // }
             }
+            } else {
+                // if no data in posts what doing ??
+
             }
-        }
     }
     }
     
@@ -303,11 +288,15 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
                 print(response)
                 if response != nil {
-
+                    switch response.result {
+                    case .success(let value):
                 if let image = response.result.value {
                     DispatchQueue.main.async{
                         ImageViewSet.image = image
                     }
+                    }
+                    case .failure(let error):
+                        print(error)
                     }
                 }
             })
@@ -335,10 +324,11 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
     
     @IBAction func moreSpeaker(_ sender: Any) {
         MenuViewController.speakerEventOrMenu = true
-        Service.getService(url: "http://66.226.74.85:4002/api/Event/getNetwork", callback: { (response) in
+      /*  Service.getService(url: "http://66.226.74.85:4002/api/Event/getNetwork", callback: { (response) in
             print("this is json")
             print(response)
         })
+        */
  
         performSegue(withIdentifier: "speakerpage", sender: nil)
     }

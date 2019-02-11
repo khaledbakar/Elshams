@@ -40,42 +40,34 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
     activeLoader.startAnimating()
     reloadBtnShow.isHidden = true
     reloadConnection.isHidden = true
+      NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
     loadTableData()
-    if TimeLineHomeVC.failMessage ==  "fail"
+ /*   if TimeLineHomeVC.failMessage ==  "fail"
     {
-        reloadBtnShow.isHidden = false
-        reloadConnection.isHidden = false
+     
         self.activeLoader.isHidden = true
        // self.activeLoader.stopAnimating()
         self.tableViewAgenda.isHidden = true
         let alert = UIAlertController(title: "Error", message: "No internet connection please turn on it", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
-    }
-    
-   
-  /*  var secCount = 0
-  //  for index in 0..<AgendaVC.agendaSessionList.count {
-      for index in 0..<agendaSessionList.count {
+    } */
 
-        agendaDate.append("\((agendaSessionList[index].agendaDate)!)")
-        if (agendaAllDate.contains((agendaSessionList[index].agendaDate)!)) {
-            
-            secCount = secCount + 1
-            continue
-        } else {
-            agendaAllDate.append((agendaSessionList[index].agendaDate)!)
-            secCount = 1
-        }
     }
     
-    for indFilter in 0..<agendaAllDate.count {
-        let filter = agendaDate.filter { $0.contains(agendaAllDate[indFilter]) }
+    @objc func errorAlert(){
+        
+        let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+        reloadBtnShow.isHidden = false
+        reloadConnection.isHidden = false
+        tableViewAgenda.isHidden = true
+        activeLoader.isHidden = true
+        activeLoader.stopAnimating()
+        //reload
         
     }
- */
-    }
-    
     @IBAction func reloadDataConnection(_ sender: Any) {
         tableViewAgenda.isHidden = true
         activeLoader.isHidden = true
@@ -86,74 +78,13 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
     }
     
     func loadTableData()  {
-        if let  apiToken  = Helper.getApiToken() {
 
-        Service.getServiceWithAuth(url: URLs.getAgenda) {
-            (response) in
-            print(response)
-            let result = JSON(response)
-            
-            var iDNotNull = true
-            var index = 0
-            while iDNotNull {
-                let agenda_Type = result[index]["type"].string
-
-                 if agenda_Type == nil || agenda_Type?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
-                  agenda_Type == "null"{
-                    iDNotNull = false
-                    break
-                 }
-                let agenda_ID = result[index]["Id"].string
-                let agenda_rondomColor = result[index]["rondomColor"].string
-                let agenda_date = result[index]["date"].string
-                let agenda_sessionTitle = result[index]["sessionTitle"].string
-                let agenda_dateTitle = result[index]["title"].string
-                let agenda_Speakers = result[index]["speakers"]//dictionaryObject
-                let agenda_SpeakersDict = result[index]["speakers"].dictionaryObject//dictionaryObject
-
-                var SpeakeriDNotNull = true
-                var indexSpeaker = 0
-
-                while SpeakeriDNotNull {
-                    let agenda_speaker_id = agenda_Speakers[indexSpeaker]["ID"].string
-                    
-                    if agenda_speaker_id == nil || agenda_speaker_id?.trimmed == "" ||
-                        agenda_speaker_id == "null"{
-                        SpeakeriDNotNull = false
-                        break
-                    }
-                    let agenda_speaker_url = agenda_Speakers[indexSpeaker]["imageUrl"].string
-                    self.agendaSpeakerIDImgList.append(AgendaSpeakerIdPic(SpImageUrl: agenda_speaker_url ?? "", Speaker_id: agenda_speaker_id ?? ""))
-                    indexSpeaker = indexSpeaker + 1
-                }
-                let agenda_Time = result[index]["time"].string
-                let agenda_SessionLocation = result[index]["location"].string
-                let agenda_isFavourate = result[index]["isFavourate"].bool
-                let agenda_IsFavourate_String = "\(agenda_isFavourate)"
-                
-                if agenda_Type == "head" {
-                    self.agendaHeadList.append(AgendaHeadData(HeadTitle: agenda_dateTitle ?? "title", HeadDate: agenda_date ?? "date", HeadType: agenda_Type ?? "type"))
-                }
-                else if agenda_Type == "session" {
-                    self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "Title", SessionTime: agenda_Time ?? "Time", SessionLocation: agenda_SessionLocation ?? "location", SpeakersSession: agenda_SpeakersDict ?? ["ID" : "314",
-                                                                                                                                                                                                                                                "imageUrl" : "http:-b01d-582382a5795e.jpg"]
-                        , AgendaDate: agenda_date ?? "date", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String , RondomColor: agenda_rondomColor ?? "red", AgendaType: agenda_Type ?? "session", SpeakersIdImg: self.agendaSpeakerIDImgList))
-                }
-                
-                index = index + 1
-                self.agendaSpeakerIDImgList.removeAll()
-                self.tableViewAgenda.reloadData()
-                self.activeLoader.isHidden = true
-                self.activeLoader.stopAnimating()
-                self.tableViewAgenda.isHidden = false
-            }
-        }
-        } else {
             Service.getService(url: URLs.getAgenda) {
                 (response) in
                 print(response)
                 let result = JSON(response)
-                
+                if !(result.isEmpty){
+
                 var iDNotNull = true
                 var index = 0
                 while iDNotNull {
@@ -190,7 +121,7 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
                     let agenda_SessionLocation = result[index]["location"].string
                     let agenda_isFavourate = result[index]["isFavourate"].bool
                     let agenda_IsFavourate_String = "\(agenda_isFavourate)"
-                    
+
                     if agenda_Type == "head" {
                         self.agendaHeadList.append(AgendaHeadData(HeadTitle: agenda_dateTitle ?? "title", HeadDate: agenda_date ?? "date", HeadType: agenda_Type ?? "type"))
                     }
@@ -206,10 +137,17 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
                     self.activeLoader.isHidden = true
                     self.activeLoader.stopAnimating()
                     self.tableViewAgenda.isHidden = false
-                }
+             //   }
             }
+                } else {
+                    let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    self.activeLoader.isHidden = true
+                }
         }
     }
+    
     func btnRightBar()  {
         let btnSearch = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.search, target: nil, action:  #selector(searchTool))
         //  btnSearch.setImage(UIImage(named: "fav_resic"), for: UIControl.State())
@@ -269,7 +207,7 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "agendacell") as! AgendaCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "agendacell", for: indexPath) as! AgendaCell
  
         for i in 0..<agendaHeadList.count {
             if indexPath.section == i {

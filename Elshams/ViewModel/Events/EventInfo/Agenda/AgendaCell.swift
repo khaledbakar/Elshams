@@ -38,12 +38,17 @@ class AgendaCell: UITableViewCell {
         if let imagUrlAl = imgUrl as? String {
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
                 print(response)
+                switch response.result {
+                case .success(let value):
                 if let image = response.result.value {
                     DispatchQueue.main.async{
                         print(imagUrlAl)
                         imageSpeakerView.isHidden = false
                         imageSpeakerView.image = image
                     }
+                }
+                case .failure(let error):
+                    print(error)
                 }
             })
         }

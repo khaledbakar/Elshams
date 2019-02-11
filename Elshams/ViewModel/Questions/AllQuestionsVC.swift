@@ -25,24 +25,38 @@ class AllQuestionsVC: UIViewController , UITableViewDataSource ,UITableViewDeleg
 
         questionTableView.isHidden = true
         activeLoader.startAnimating()
+        NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
         loadQuestionData()
    
     }
     
+    @objc func errorAlert(){
+        let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+        //  startupTableView.isHidden = true
+         activeLoader.isHidden = true
+        //  activeLoader.stopAnimating()
+        //reload after
+        //
+    }
     
     func loadQuestionData()  {
         if let  apiToken  = Helper.getApiToken() {
-
         Service.getServiceWithAuth(url: URLs.getQuestions) { // authorizre or not ?
             (response) in
             print(response)
+           
             let json = JSON(response)
-            let result = json["All"]
             
+         
+            let result = json["All"]
+            if !(result.isEmpty){
+
             var iDNotNull = true
             var index = 0
             while iDNotNull {
-                let question_ID = result[index]["ID"].string
+                let question_ID = result[index]["questionId"].string
                 let question_head = result[index]["question"].string
                 let question_answer = result[index]["answer"].string
                 let question_TimeStamp = result[index]["questionTimeStamp"].string
@@ -59,7 +73,14 @@ class AllQuestionsVC: UIViewController , UITableViewDataSource ,UITableViewDeleg
                 self.activeLoader.stopAnimating()
                 self.questionTableView.isHidden = false
             }
-        }
+            } else {
+                let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                self.activeLoader.isHidden = true
+                
+            }
+            }
         
         }else {
             self.activeLoader.isHidden = true
@@ -77,7 +98,9 @@ class AllQuestionsVC: UIViewController , UITableViewDataSource ,UITableViewDeleg
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return questionList.count
     }
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
   
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "allquestioncell") as! AllQuestionsCell

@@ -109,7 +109,7 @@ class BaseViewController: UIViewController, SlideMenuDelegate {
                 }, completion: { (finished) -> Void in
                     viewMenuBack.removeFromSuperview()
             })
-            
+            // think black here 
             return
         }
         

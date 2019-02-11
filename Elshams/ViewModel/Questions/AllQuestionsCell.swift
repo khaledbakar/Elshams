@@ -23,9 +23,13 @@ class AllQuestionsCell: UITableViewCell {
     }
     func setAllQuestionCell(QuestionList:QuestionsData)  {
         questionTxt.text = QuestionList.questions
-        answerTxt.text = QuestionList.answer
-        if answerTxt.text == "No Answer"{
+        if QuestionList.answer == "" || QuestionList.answer == nil{
+            answerTxt.text = "No Answer"
             answerTxt.textColor = UIColor.red
+        } else {
+            answerTxt.text = QuestionList.answer
+             answerTxt.textColor = UIColor(hex: 0xC2C2C0)
+            
         }
         
     }

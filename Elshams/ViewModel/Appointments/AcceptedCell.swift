@@ -41,7 +41,15 @@ class AcceptedCell: UITableViewCell {
     
     func setStartupCell(startupsList:StartUpsData) {
         startupName.text = startupsList.startupName
-        imgUrl(imgUrl: (startupsList.startupImageUrl)!)       // startupAddress.text = startupsList.startupAddress
+        
+        if startupsList.startupImageUrl != nil {
+        imgUrl(imgUrl: (startupsList.startupImageUrl)!)
+        }
+        
+        let email = startupsList.contectInforamtion?["Email"]
+        startupAddress.text = "\((email)!)"
+
+        // startupAddress.text = startupsList.startupAddress
        // startupImage.image = UIImage(named: "\((startupsList.startupImage)!)")
         startupImage.layer.cornerRadius = startupImage.frame.width / 2
         startupImage.clipsToBounds = true

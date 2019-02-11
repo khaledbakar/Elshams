@@ -19,20 +19,27 @@ class NewFeedsCell: UICollectionViewCell {
     @IBOutlet weak var textPost: UILabel!
     var PostType : String = ""
     func setNewsFeedCeel(NewsfeedList:NewsFeedData)  {
-        imgUrl(imgUrl: (NewsfeedList.post_AutherPicture)!)
+        if NewsfeedList.post_AutherPicture != nil {
+            imgUrl(imgUrl: (NewsfeedList.post_AutherPicture)!)
+        }
         userPostImage.layer.cornerRadius = userPostImage.frame.width / 2
         userPostImage.clipsToBounds = true
-        
-        userPostName.text = (NewsfeedList.post_Author)!
+        if NewsfeedList.post_Author != nil {
+            userPostName.text = (NewsfeedList.post_Author)!
+
+        }
         
         photoPost.isHidden = true
         textPost.isHidden = true
         
         
        videoContainer.isHidden = false
-        let videoUrl = NSURL(string: "\((NewsfeedList.post_VideoURl)!)")
-        let requestObj = URLRequest(url: videoUrl as! URL)
-        videoContainer.load(requestObj)
+        if NewsfeedList.post_VideoURl != nil{
+            let videoUrl = NSURL(string: "\((NewsfeedList.post_VideoURl)!)")
+            let requestObj = URLRequest(url: videoUrl as! URL)
+            videoContainer.load(requestObj)
+        }
+       
        
       /*
      if PostType == "video" {
@@ -58,10 +65,15 @@ class NewFeedsCell: UICollectionViewCell {
         if let imagUrlAl = imgUrl as? String {
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
                 print(response)
+                switch response.result {
+                case .success(let value):
                 if let image = response.result.value {
                     DispatchQueue.main.async{
                         self.userPostImage.image = image
                     }
+                }
+                case .failure(let error):
+                    print(error)
                 }
             })
         }

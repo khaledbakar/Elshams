@@ -17,6 +17,7 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
     
     @IBOutlet weak var activeLoader: UIActivityIndicatorView!
     
+    @IBOutlet weak var shapeContainerView: UIView!
     @IBOutlet weak var speakerTableView: UITableView!
     @IBOutlet weak var speakerCollectionView: UICollectionView!
     
@@ -29,9 +30,11 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
             self.navigationItem.title = "Speakers"
             MenuViewController.speakerEventOrMenu = false
         }
+        shapeContainerView.isHidden = true
         activeLoader.startAnimating()
         speakerTableView.isHidden = true
         speakerCollectionView.isHidden = true
+          NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
         loadAllSpeakerData()
 
     }
@@ -70,11 +73,23 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
                 self.speakerCollectionView.reloadData()
                 self.activeLoader.isHidden = true
                 self.activeLoader.stopAnimating()
-                self.speakerTableView.isHidden = false
+                self.speakerTableView.isHidden = true
+                self.speakerCollectionView.isHidden = false
             }
             //  print((self.networkList[2].name)!)
         }
     }
+    @objc func errorAlert(){
+        let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+        //  startupTableView.isHidden = true
+        activeLoader.isHidden = true
+        //  activeLoader.stopAnimating()
+        //reload after
+        //
+    }
+    
     
     func btnRightBar()  {
         //  let btnSearch = UIButton(type: UIButton.ButtonType.system)
@@ -120,7 +135,7 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "speakercell") as! SpeakersCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "speakercell", for: indexPath) as! SpeakersCell
         cell.setSpeakerCell(speakerList: speakerList[indexPath.row])
         return cell
     }

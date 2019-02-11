@@ -24,7 +24,7 @@ class NewsDetails: UIViewController {
         newsTitle.text = singleItem?.newsTitle
         newsDate.text = singleItem?.newsDate
         newsDetail.text = singleItem?.newsContent
-        if (singleItem?.newsImgUrl)! != nil {
+        if singleItem?.newsImgUrl != nil {
         imgUrl(imgUrl: (singleItem?.newsImgUrl)!)
         }// need to nil handler
        // newsImage.image = UIImage(named: "\((singleItem?.newsImgUrl)!)")
@@ -34,10 +34,15 @@ class NewsDetails: UIViewController {
         if let imagUrlAl = imgUrl as? String {
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
                 print(response)
+                switch response.result {
+                case .success(let value):
                 if let image = response.result.value {
                     DispatchQueue.main.async{
                         self.newsImage.image = image
                     }
+                }
+                case .failure(let error):
+                    print(error)
                 }
             })
         }

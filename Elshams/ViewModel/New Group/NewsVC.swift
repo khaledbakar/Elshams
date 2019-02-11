@@ -19,7 +19,6 @@ class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate ,
     var topNewsList = Array<NewsData>()
     var scrolImageUrl : String?
 
-
     @IBOutlet weak var scrollContainer: UIScrollView!
     @IBOutlet weak var newsControl: UIPageControl!
  //   @IBOutlet weak var newsImg: UIImageView!
@@ -37,11 +36,22 @@ class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate ,
         addSlideMenuButton()
       //  newTitle.isHidden = true
         self.navigationItem.title = "News"
-       
+        NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
        
         loadNewsData()
     }
-  
+    
+    @objc func errorAlert(){
+    let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+      //  startupTableView.isHidden = true
+      //  activeLoader.isHidden = true
+      //  activeLoader.stopAnimating()
+        //reload after
+        //
+    }
+    
     func loadTopNews()  {
         scrollContainer.contentSize = CGSize(width: (scrollContainer.frame.size.width * CGFloat(topNewsList .count)) , height: scrollContainer.frame.size.height)
         scrollContainer.delegate = self
@@ -67,7 +77,10 @@ class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate ,
             let imgView = UIImageView(frame: frame)
             scrolImageUrl = topNewsList[index].newsImgUrl
            // imgView.image = UIImage(named: images[index])
-            imgScrollUrl(imgUrl: scrolImageUrl!, ScrollImage: imgView)
+            if scrolImageUrl != nil {
+                imgScrollUrl(imgUrl: scrolImageUrl!, ScrollImage: imgView)
+            }
+            
             imgView.widthAnchor.constraint(equalToConstant: self.view.frame.size.width)
             imgView.topAnchor.constraint(equalTo:  scrollContainer.topAnchor, constant: 0)
             imgView.bottomAnchor.constraint(equalTo:  scrollContainer.bottomAnchor, constant: 0)
@@ -99,14 +112,16 @@ class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate ,
         performSegue(withIdentifier: "newsdetail", sender: topNewsList[tag - 1]) //topNewsList[]
 
     }
+    
     @objc func topNewsImageFunc(sender:UIGestureRecognizer) {//UIGestureRecognizer
         guard let tag = (sender.view as? UIView)?.tag else { return }
         performSegue(withIdentifier: "newsdetail", sender: topNewsList[tag - 1])
     }
+    
     func loadNewsData()  {
-        Service.getService(url: "\(URLs.getNews)/50/1"){
+        Service.getService(url: "\(URLs.getNews)/50/1"){ //because no pagging refernce fixed number of news
             (response) in
-            print(response)
+         //   print(response)
             
             let result = JSON(response)
             let topNews = result["topNews"]
@@ -133,6 +148,7 @@ class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate ,
                 self.topNewsList.append(NewsData(NewsTitle: newsTop_Title ?? "", NewsImageUrl: newsTop_ImageUrl ?? "", NewsContent: newsTop_Content ?? "", NewsDate: newsTop_Date ?? "", NewsID: newsTop_ID ?? ""))
                 indexTop = indexTop + 1
             }
+            
             while iDNormalNotNull {
                 let newsNormal_ID = normalNews[indexNormal]["id"].string
                 if newsNormal_ID == nil || newsNormal_ID?.trimmed == "" ||
@@ -140,7 +156,6 @@ class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate ,
                     iDNormalNotNull = false
                     break
                 }
-                
                 let newsNormal_Title = normalNews[indexNormal]["title"].string
                 let newsNormal_ImageUrl = normalNews[indexNormal]["imageUrl"].string
                 let newsNormal_Content = normalNews[indexNormal]["content"].string
@@ -160,10 +175,15 @@ class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate ,
         if let imagUrlAl = imgUrl as? String {
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
                 print(response)
+                switch response.result {
+                case .success(let value):
                 if let image = response.result.value {
                     DispatchQueue.main.async{
                         ScrollImage.image = image
                     }
+                    }
+                case .failure(let error):
+                    print(error)
                 }
             })
         }

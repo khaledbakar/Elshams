@@ -41,11 +41,15 @@ class PendingCell: UITableViewCell {
   
     func setStartupCell(startupsList:StartUpsData) {
         startupName.text = startupsList.startupName
+        if startupsList.startupImageUrl != nil {
         imgUrl(imgUrl: (startupsList.startupImageUrl)!)
+        }
         // startupAddress.text = startupsList.startupAddress
        // startupImage.image = UIImage(named: "\((startupsList.startupImage)!)")
         startupImage.layer.cornerRadius = startupImage.frame.width / 2
         startupImage.clipsToBounds = true
+        let email = startupsList.contectInforamtion?["Email"]
+        startupAddress.text = "\((email)!)"
     }
     
 }

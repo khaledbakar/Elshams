@@ -42,7 +42,10 @@ class AllNewsCell: UITableViewCell {
         newsTitle.text = newsList.newsTitle
         newsDate.text = newsList.newsDate
       //  newsImage.image = UIImage(named: "\((newsList.newsImgUrl)!)")
-        imgUrl(imgUrl: (newsList.newsImgUrl)!)
+        if newsList.newsImgUrl != nil {
+            imgUrl(imgUrl: (newsList.newsImgUrl)!)
+
+        }
     }
 
 }

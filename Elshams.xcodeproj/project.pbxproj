@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0401DFAF22104CF300146075 /* ExhibitorsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DFAE22104CF300146075 /* ExhibitorsVC.swift */; };
+		0401DFB122104D1000146075 /* ExhibitorsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0401DFB022104D1000146075 /* ExhibitorsCell.swift */; };
 		0410D75521F0BBED005A304E /* PhoneCall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0410D75421F0BBED005A304E /* PhoneCall.swift */; };
 		0410D75721F0BD79005A304E /* OpenSafariLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0410D75621F0BD79005A304E /* OpenSafariLink.swift */; };
 		0416E74F21ADABBC004E7368 /* TabTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0416E74E21ADABBC004E7368 /* TabTestViewController.swift */; };
@@ -99,6 +101,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0401DFAE22104CF300146075 /* ExhibitorsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExhibitorsVC.swift; sourceTree = "<group>"; };
+		0401DFB022104D1000146075 /* ExhibitorsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExhibitorsCell.swift; sourceTree = "<group>"; };
 		0410D75421F0BBED005A304E /* PhoneCall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneCall.swift; sourceTree = "<group>"; };
 		0410D75621F0BD79005A304E /* OpenSafariLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenSafariLink.swift; sourceTree = "<group>"; };
 		0416E74E21ADABBC004E7368 /* TabTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTestViewController.swift; sourceTree = "<group>"; };
@@ -206,6 +210,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0401DFAD22104C2400146075 /* Exhibitors */ = {
+			isa = PBXGroup;
+			children = (
+				0401DFAE22104CF300146075 /* ExhibitorsVC.swift */,
+				0401DFB022104D1000146075 /* ExhibitorsCell.swift */,
+			);
+			path = Exhibitors;
+			sourceTree = "<group>";
+		};
 		0410D75321F0BBAC005A304E /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -358,6 +371,7 @@
 				044BCA2D220AF08900A4CA78 /* Sponsers */,
 				044BCA2C220AF06800A4CA78 /* Speakers */,
 				044BCA2B220AEF8600A4CA78 /* StartUp */,
+				0401DFAD22104C2400146075 /* Exhibitors */,
 				0466C05E21B5796A00C9C555 /* EventInfoContainerVC.swift */,
 				0466C06021B57A9F00C9C555 /* AboutEvent.swift */,
 			);
@@ -728,6 +742,8 @@
 				047970DA21CFF46400C5BAFD /* UIColor.swift in Sources */,
 				0466C08221B6990500C9C555 /* Settings.swift in Sources */,
 				0427280E2208693C0028C671 /* AgendaSpeakerIdPic.swift in Sources */,
+				0401DFB122104D1000146075 /* ExhibitorsCell.swift in Sources */,
+				0401DFAF22104CF300146075 /* ExhibitorsVC.swift in Sources */,
 				0466C06721B57B2700C9C555 /* SponsersVC.swift in Sources */,
 				0410D75721F0BD79005A304E /* OpenSafariLink.swift in Sources */,
 				044C648521FF3A4900434BB1 /* API.swift in Sources */,

@@ -23,6 +23,8 @@ struct URLs {
     static let getNews = main + "/Event/GetHome" // have item number and page number some issue that don't resposne page numers and current number
 
     static let getAgenda = main + "/Event/getAgenda"
+    static let askQuestion = main + "/Event/askQuestion"
+
     static let getAllSpeaker = main + "/Event/getAllSpeaker"
     static let getAllSponsors = main + "/Event/getAllSponsors"
     
@@ -46,5 +48,6 @@ struct URLs {
 
     
     static let headerAuth : HTTPHeaders = ["Authorization": "Bearer \((Helper.getApiToken())!)"]
+    
     
 }

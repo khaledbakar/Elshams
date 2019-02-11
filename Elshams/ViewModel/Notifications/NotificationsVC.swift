@@ -20,23 +20,33 @@ class NotificationsVC: BaseViewController , UITableViewDataSource , UITableViewD
         addSlideMenuButton()
         notifyTableView.isHidden = true
         activityLoader.startAnimating()
+           NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
         loadNotifyData()
       //  btnRightBar()
-
         self.navigationItem.title = "Notifications"
-
        // notificationList.append(Notifications(NotificationName: "MEDGRAM", NotificationDetails: "rod 3lya msh 2ader atnfs", NotitficationImageUrl: "avatar"))
 
+    }
+    
+    @objc func errorAlert(){
+        let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+        //  startupTableView.isHidden = true
+        activityLoader.isHidden = true
+        //  activeLoader.stopAnimating()
+        //reload after
+        //
     }
     
     func loadNotifyData()  {
         if let  apiToken  = Helper.getApiToken() {
 
         Service.getServiceWithAuth(url: URLs.getAllNotification){
-       // Service.getService(url: "http://66.226.74.85:4002/api/Event/getAllNotification") {
             (response) in
             print(response)
             let result = JSON(response)
+            if !(result.isEmpty){
             var iDNotNull = true
             var index = 0
             while iDNotNull {
@@ -60,8 +70,15 @@ class NotificationsVC: BaseViewController , UITableViewDataSource , UITableViewD
                 self.activityLoader.isHidden = true
                 self.activityLoader.stopAnimating()
                 self.notifyTableView.isHidden = false
+            } else {
+                let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                self.activityLoader.isHidden = true
+            }
         }
-        }else {
+        }
+            else {
             self.activityLoader.isHidden = true
             self.notifyTableView.isHidden = true
             let alert = UIAlertController(title: "Error", message: "You must sign in to Show this Part", preferredStyle: UIAlertControllerStyle.alert)
@@ -70,8 +87,6 @@ class NotificationsVC: BaseViewController , UITableViewDataSource , UITableViewD
         }
         }
         
-    
-    
     func btnRightBar()  {
         //  let btnSearch = UIButton(type: UIButton.ButtonType.system)
         let btnSearch = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.search, target: nil, action:  #selector(searchTool))

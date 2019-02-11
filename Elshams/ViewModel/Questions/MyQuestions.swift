@@ -22,8 +22,20 @@ class MyQuestions: UIViewController , UITableViewDataSource ,UITableViewDelegate
 
         questionTableView.isHidden = true
         activeLoader.startAnimating()
+         NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
         loadMyQuestionData()
  
+    }
+    
+    @objc func errorAlert(){
+        let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+        //  startupTableView.isHidden = true
+        activeLoader.isHidden = true
+        //  activeLoader.stopAnimating()
+        //reload after
+        //
     }
     
     func loadMyQuestionData()  {
@@ -34,11 +46,12 @@ class MyQuestions: UIViewController , UITableViewDataSource ,UITableViewDelegate
             print(response)
             let json = JSON(response)
             let result = json["myQuestions"]
-            
+            if !(result.isEmpty){
+
             var iDNotNull = true
             var index = 0
             while iDNotNull {
-                let question_ID = result[index]["ID"].string
+                let question_ID = result[index]["questionId"].string
                 let question_head = result[index]["question"].string
                 let question_answer = result[index]["answer"].string
                 let question_TimeStamp = result[index]["questionTimeStamp"].string
@@ -55,7 +68,14 @@ class MyQuestions: UIViewController , UITableViewDataSource ,UITableViewDelegate
                 self.activeLoader.stopAnimating()
                 self.questionTableView.isHidden = false
             }
-        }
+            }else {
+                let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                self.activeLoader.isHidden = true
+                
+            }
+            }
         
         }else {
             self.activeLoader.isHidden = true
@@ -79,7 +99,9 @@ class MyQuestions: UIViewController , UITableViewDataSource ,UITableViewDelegate
     /*func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 190.0
     } */
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "myquestioncell") as! MyQuestionsCell
         cell.setMyQuestionCell(QuestionList: questionList[indexPath.row])

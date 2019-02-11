@@ -55,7 +55,10 @@ class SpeakerProfileVC: UIViewController {
         speakerEmail.text = email
         speakerWebsite.text = faceBookLinkEdinNow
         aboutSpeaker.text = singleItem?.about
+        connectColor.isHidden = true
         connectColor.backgroundColor  = UIColor.green
+        activeNow.isHidden = true
+        
         
 
       /*  if singleItem?.activeOrNot == true {

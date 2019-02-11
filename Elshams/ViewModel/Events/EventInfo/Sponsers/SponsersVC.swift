@@ -17,6 +17,8 @@ class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSour
     @IBOutlet weak var activeLoader: UIActivityIndicatorView!
     @IBOutlet weak var sponserTableView: UITableView!
     @IBOutlet weak var sponserCollectionView: UICollectionView!
+    
+    @IBOutlet weak var shapesContainerView: UIView!
     var sponserList = Array<Sponsers>()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +28,7 @@ class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSour
             self.navigationItem.title = "Sponsers"
             MenuViewController.sponserEventOrMenu = false
         }
-    
+        shapesContainerView.isHidden = true
         activeLoader.startAnimating()
         sponserTableView.isHidden = true
         sponserCollectionView.isHidden = true
@@ -82,7 +84,8 @@ class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSour
                 self.sponserCollectionView.reloadData()
                 self.activeLoader.isHidden = true
                 self.activeLoader.stopAnimating()
-                self.sponserTableView.isHidden = false
+                self.sponserTableView.isHidden = true
+                self.sponserCollectionView.isHidden = false
             }
             //  print((self.networkList[2].name)!)
         }
@@ -132,7 +135,9 @@ class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSour
                     self.sponserCollectionView.reloadData()
                     self.activeLoader.isHidden = true
                     self.activeLoader.stopAnimating()
-                    self.sponserTableView.isHidden = false
+                    self.sponserTableView.isHidden = true
+                    self.sponserCollectionView.isHidden = false
+                    
                 }
             }
             
@@ -185,7 +190,8 @@ class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSour
         return 80.0
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "sponsercell") as! SponsersCell
+      //  let cell = tableView.dequeueReusableCell(withIdentifier: "sponsercell" for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "sponsercell", for: indexPath) as! SponsersCell
         cell.setSponserCell(sponsersList: sponserList[indexPath.row])
         return cell
     }

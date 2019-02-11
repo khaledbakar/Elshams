@@ -24,11 +24,21 @@ class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegat
         
         pendingTableView.isHidden = true
         activeLoader.startAnimating()
+         NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
         loadPendingAppointmentsData()
       
     }
     
-    
+    @objc func errorAlert(){
+        let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+        //  startupTableView.isHidden = true
+        activeLoader.isHidden = true
+        //  activeLoader.stopAnimating()
+        //reload after
+        //
+    }
     func loadPendingAppointmentsData()  {
         if let  apiToken  = Helper.getApiToken() {
 
@@ -37,6 +47,8 @@ class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegat
             print(response)
             let json = JSON(response)
             let result = json["pending"]
+            if !(result.isEmpty){
+
             var iDNotNull = true
             var index = 0
             while iDNotNull {
@@ -65,8 +77,16 @@ class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegat
                 self.activeLoader.stopAnimating()
                 self.pendingTableView.isHidden = false
             }
+            } else {
+                let alert = UIAlertController(title: "No Pending found!", message: "No Pending Appointment till now", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                self.activeLoader.isHidden = true
+
+            }
+          }
         }
-        }else {
+        else {
             self.activeLoader.isHidden = true
             self.pendingTableView.isHidden = true
           //  print(error.localizedDescription)

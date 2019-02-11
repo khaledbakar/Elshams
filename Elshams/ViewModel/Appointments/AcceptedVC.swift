@@ -36,6 +36,7 @@ class AcceptedVC: BaseViewController , UITableViewDataSource ,UITableViewDelegat
             print(response)
             let json = JSON(response)
             let result = json["Accepted"]
+            if !(result.isEmpty){
             var iDNotNull = true
             var index = 0
             while iDNotNull {
@@ -63,6 +64,13 @@ class AcceptedVC: BaseViewController , UITableViewDataSource ,UITableViewDelegat
                 self.activeLoader.isHidden = true
                 self.activeLoader.stopAnimating()
                 self.acceptedTableView.isHidden = false
+            }
+            }  else {
+                let alert = UIAlertController(title: "No Accepted found!", message: "No Accepted Appointment till now", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                self.activeLoader.isHidden = true
+
             }
         }
     }else {

@@ -11,7 +11,7 @@ import Alamofire
 import AlamofireImage
 import SwiftyJSON
 
-class OpenSessionVC: UIViewController {
+class OpenSessionVC: UIViewController , UITextViewDelegate{
     static var AgednaOrFavourite:Bool = true
     var singleItem:ProgramAgendaItems?
     var quest = Array<QuestionsData>()
@@ -19,8 +19,15 @@ class OpenSessionVC: UIViewController {
     @IBOutlet weak var backSpeakerBtn: UIButton!
     @IBOutlet weak var nextSpeakerBtnImg: UIImageView!
     
+    @IBOutlet weak var sendQuestMainContainer: UIView!
+    @IBOutlet weak var askSpeakerContainer: UIView!
+    
+    @IBOutlet weak var questionTxt: UITextView!
+    
     @IBOutlet weak var backSpeakerBtnImg: UIImageView!
     @IBOutlet weak var nextSpeakerBtn: UIButton!
+    
+    var speakerCounterIndex : Int = 0
     
     var session_ID :String?
     var session_RondomColor :String?
@@ -97,6 +104,12 @@ class OpenSessionVC: UIViewController {
         speakerProfile.clipsToBounds = true
         viewFavBack.layer.cornerRadius = viewFavBack.frame.width / 2
         viewFavBack.clipsToBounds = true
+        sendQuestMainContainer.isHidden = true
+       self.questionTxt.delegate = self
+        self.questionTxt.layer.borderWidth = 1.0
+        questionTxt.layer.borderColor = UIColor.red.cgColor
+        
+       // questionTxt.
         favouriteIcon.image = UIImage(named: "unlike-session")
         loadSessionData(SessionID: (singleItem?.agenda_ID)!)
         if  OpenSessionVC.AgednaOrFavourite == true {
@@ -107,8 +120,53 @@ class OpenSessionVC: UIViewController {
 
         }
         
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(RegisterationVC.viewTapped(gestureRecognizer:)))
+        view.addGestureRecognizer(tapGesture)
+
        
 
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+    }
+    
+    
+    
+    func hideKyebad() {
+        questionTxt.resignFirstResponder()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.askSpeakerContainer.endEditing(true)
+        askSpeakerContainer.frame.origin.y = 0
+        
+    }
+    
+    @objc func keyboardWillChange(notification: Notification){
+        guard let keyboardRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+            return
+        }
+        if  notification.name == Notification.Name.UIKeyboardWillShow ||
+            notification.name == Notification.Name.UIKeyboardWillChangeFrame {
+           // view.frame.origin.y = -150
+            sendQuestMainContainer.frame.origin.y = -150
+
+        } else {
+            sendQuestMainContainer.frame.origin.y = 0
+        }
+        print("Keyboard will show \(notification.name.rawValue)")
+        //  view.frame.origin.y = -150
+    }
+    @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer)  {
+        sendQuestMainContainer.endEditing(true)
     }
     
     func loadSessionData(SessionID:String)  {
@@ -173,9 +231,9 @@ class OpenSessionVC: UIViewController {
         self.question_head = questions_all["question"].string
         self.question_answer = questions_all["answer"].string
         self.question_TimeStamp = questions_all["questionTimeStamp"].string
-        self.speakerList.removeAll()
-        self.questionList.removeAll()
-        self.sessionList.removeAll()
+       // self.speakerList.removeAll()
+     //   self.questionList.removeAll()
+     //   self.sessionList.removeAll()
         
        /* self.speakerList.append(Speakers(SpeakerName: self.speaker_Name ?? "name", JobTitle: self.speaker_JobTitle ?? "JOB", CompanyName: self.speaker_CompanyName ?? "Company", SpImageUrl: self.speaker_ImageUrl ?? "Image", Speaker_id: self.speaker_ID ?? "ID", ContectInforamtion: self.speaker_ContectInforamtion ?? contect, About: self.speaker_About ?? "About")) */
         self.questionList.append(QuestionsData(Questions: self.question_head ?? "question", Answer: self.question_answer ?? "answer", QuestionsID: self.question_ID ?? "ID", QuestionTimeStamp: self.question_TimeStamp ?? "TimeStamp"))
@@ -286,21 +344,36 @@ class OpenSessionVC: UIViewController {
     
     func mangeSessionDetails(SeseionTitle:String,AgendaDate:String,SessionTime:String,SessionLocation:String,SessionDescribtion:String,SpeakerName:String,SpeakerJobTitle:String,SpeakerImgUrl:String,QestionHead:String,Speakers:[Speakers]){
  
+        if !(SeseionTitle.isEmpty) {
+            sessionTitle.text = SeseionTitle
+        }
+        if !(AgendaDate.isEmpty){
+            sessionDate.text = AgendaDate
+        }
+        if !(SessionTime.isEmpty){
+            sessionTime.text = SessionTime
+        }
+        if !(SessionLocation.isEmpty){
+            sessionLocation.text = SessionLocation
+        }
+        if !(SessionDescribtion.isEmpty){
+            let sessionDecribtionHtml = SessionDescribtion.htmlToString
+            eventDescribtion.text = sessionDecribtionHtml
+        }
         
-         sessionTitle.text = SeseionTitle
-         sessionDate.text = AgendaDate
-         sessionTime.text = SessionTime
-         sessionLocation.text = SessionLocation
-         eventDescribtion.text = SessionDescribtion
-      
-         speakerName.text = Speakers[0].name
-         speakerJobTitle.text = Speakers[0].jobTitle
-      //array of image and cashe the images
-        imgUrl(imgUrl: Speakers[0].speakerImageUrl!)
-        
+        if !(Speakers.isEmpty) {
+            speakerName.text = Speakers[0].name
+            speakerJobTitle.text = Speakers[0].jobTitle
+            //array of image and cashe the images
+            imgUrl(imgUrl: Speakers[0].speakerImageUrl!)
+            
+        }
+     
        
-        
-        questionsTxt.text = QestionHead
+        if !(QestionHead.isEmpty){
+            questionsTxt.text = QestionHead
+
+        }
         
    /*     for i in 0..<1{
               for i in 0..<questionList.count{
@@ -398,21 +471,63 @@ class OpenSessionVC: UIViewController {
     }
     
     @IBAction func backSpeakerMethod(_ sender: Any) {
-        speakerName.text = speakerList[0].name
-        speakerJobTitle.text = speakerList[0].jobTitle
-        imgUrl(imgUrl: speakerList[0].speakerImageUrl!)
+        if speakerCounterIndex > 0   {
+            print(speakerCounterIndex)
+            speakerCounterIndex = speakerCounterIndex - 1
+            
+        }
+        if !(speakerList.isEmpty) { // != nil
+        speakerName.text = speakerList[speakerCounterIndex].name
+        speakerJobTitle.text = speakerList[speakerCounterIndex].jobTitle
+        imgUrl(imgUrl: speakerList[speakerCounterIndex].speakerImageUrl!)
+        }
+      
 //cashe image needed
         
     }
     
-    @IBAction func nextSpeakerMethod(_ sender: Any) {
-        speakerName.text = speakerList[1].name
-        speakerJobTitle.text = speakerList[1].jobTitle
-        imgUrl(imgUrl: speakerList[1].speakerImageUrl!)
+    @IBAction func sendQuestionBtn(_ sender: Any) {
+        let questionTextSend = questionTxt.text
+        let questionCheckParam : Parameters =
+            ["sessionID": "\((self.singleItem?.agenda_ID)!)",
+             "speakerID": "\((speakerList[speakerCounterIndex].speaker_id)!)",
+             "question": "\((questionTextSend)!)"]
+        Service.postServiceWithAuth(url: URLs.askQuestion, parameters: questionCheckParam) {
+            (response) in
+            print(response)
+            self.questionTxt.text = ""
+        }
         
     }
     
+    @IBAction func nextSpeakerMethod(_ sender: Any) {
+        if speakerCounterIndex < speakerList.count - 1 {
+                        print(speakerCounterIndex)
+            speakerCounterIndex = speakerCounterIndex + 1
+
+        }
+        if !(speakerList.isEmpty) { // != nil
+            speakerName.text = speakerList[speakerCounterIndex].name
+            speakerJobTitle.text = speakerList[speakerCounterIndex].jobTitle
+            imgUrl(imgUrl: speakerList[speakerCounterIndex].speakerImageUrl!)
+        }
+        
+        
+    }
+    @IBAction func dismissContainer(_ sender: Any) {
+        sendQuestMainContainer.isHidden = true
+        hideKyebad()
+
+    }
+    
     @IBAction func askSpeaker(_ sender: Any) {
+        if let  apiToken  = Helper.getApiToken() {
+        sendQuestMainContainer.isHidden = false
+        } else {
+            let alert = UIAlertController(title: "Not Available", message: "You must at first sign in!", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     @IBAction func vote(_ sender: Any) {

@@ -26,21 +26,32 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
     @IBOutlet weak var userProfile: UIImageView!
     
     var btnMenu : UIButton!
-    var SideMenuTitles = ["TimeLine","Myfavorites","Agenda","Speakers","Sponsers","Startups","News","Notifications","Questions","Appointment","Settings","Logout"] //,"AllEvents" "Networks",
-    var SideMenuIcons = ["home","favourite","agenda","speaker","sponsers","startup","news","notifications","questation","appointment","home","logout"]//"events", "networks",
+    var SideMenuTitles = ["TimeLine","Myfavorites","Agenda","Speakers","Sponsers","Exhibitors","Startups","News","Notifications","Questions","Appointment","Settings","Logout"] //,"AllEvents" "Networks",
+    var SideMenuIcons = ["home","favourite","agenda","speaker","sponsers","startup","startup","news","notifications","questation","appointment","home","logout"]//"events", "networks",
     @IBOutlet weak var btnCloseMenuOverlay: UIButton!
     var delegate : SlideMenuDelegate?
     override func viewDidLoad() {
         super.viewDidLoad()
         userProfile.layer.cornerRadius = userProfile.frame.width / 2
         userProfile.clipsToBounds = true
+        NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
+
         loadUserData()
     //    imgUrl(imgUrl: MenuViewController.imgUserTestUrl)
        
     }
+    @objc func errorAlert(){
+        let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+        //  startupTableView.isHidden = true
+      //  activeLoader.isHidden = true
+        //  activeLoader.stopAnimating()
+        //reload after
+        //
+    }
     func  loadUserData()  {
         if let  apiToken  = Helper.getApiToken() {
-
         Service.getServiceWithAuth(url: URLs.getSettingData){
             (response) in
             print(response)
@@ -48,7 +59,7 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             let user_Name = result["Title"].string
             let user_JobTitle = result["jobTitle"].string
             let user_CompanyName = result["companyName"].string
-            let user_ImageUrl = result["picture"].string
+            var user_ImageUrl = result["picture"].string
             let user_Password = result["password"].string
             let user_Email = result["email"].string
             let user_Linkedin = result["linkedin"].string
@@ -57,23 +68,33 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             let user_Ispublic_str = result["isPublic"].string
            // self.imgUserUrl = user_ImageUrl
             // internet error handel
-            self.imgUrl(imgUrl: (user_ImageUrl)!)
+            if user_ImageUrl != nil {
+                self.imgUrl(imgUrl: (user_ImageUrl)!)
+
+            }
         }
         }
     }
     func imgUrl(imgUrl:String)  {
-        if  TimeLineHomeVC.failMessage !=  "fail"{
+       // if  TimeLineHomeVC.failMessage !=  "fail"{
         if let imagUrlAl = imgUrl as? String {
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
                 print(response)
+                switch response.result {
+                case .success(let value):
                 if let image = response.result.value {
                     DispatchQueue.main.async{
                         self.userProfile.image = image
                     }
                 }
+                    
+                case .failure(let error):
+                    print(error)
+                    
+                }
             })
         }
-        }
+       // }
     }
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -117,13 +138,16 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             controllerSelect = "EventSponsers"
             MenuViewController.sponserEventOrMenu = true
         case 5 :
+            controllerSelect = "EventExhibitors"
+            MenuViewController.startupEventOrMenu = true
+        case 6 :
             controllerSelect = "EventStartups"
             MenuViewController.startupEventOrMenu = true
 
-        case 6 :
+        case 7 :
             controllerSelect = "AllNews"
             
-        case 7 :
+        case 8 :
             if let  apiToken  = Helper.getApiToken() {
 
             controllerSelect = "NotificationEvent"
@@ -131,7 +155,7 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             controllerSelect = "NotLogin"
             
         }
-        case 8 :
+        case 9 :
         if let  apiToken  = Helper.getApiToken() {
 
             controllerSelect = "QuestionsContainer"
@@ -140,7 +164,7 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
     
     }
         
-        case 9 :
+        case 10 :
             if let  apiToken  = Helper.getApiToken() {
             controllerSelect = "AppointmentContainer"
             } else {
@@ -150,7 +174,7 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
     /*    case 11 :
             controllerSelect = "AllMainEvents" //EventContainer
             MenuViewController.agendaEventOrMenu = true */
-        case 10 :
+        case 11 :
              if let  apiToken  = Helper.getApiToken() {
             controllerSelect = "Settings"
             
@@ -158,13 +182,14 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             controllerSelect = "NotLogin"
             
         }
-        case 11 :
+        case 12 :
             //fe sho8l hna kteer 3shan el remember me
             controllerSelect = "Logout"
             let def = UserDefaults.standard
             def.setValue(nil, forKey: "api_token")
             def.synchronize()
             performSegue(withIdentifier: "login", sender: nil)
+            //notify for show buttons
 
            // dismiss(animated: true, completion: nil)
         default:
@@ -183,16 +208,15 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
                 performSegue(withIdentifier: "settingspage", sender: nil)
              //   let DVC = mainStoryBoard.instantiateViewController(withIdentifier: controllerSelect!)
               //  self.navigationController?.pus(DVC, animated: true)
-            }
-            
-            
+            }  
         }
        /* else if controllerSelect == "Logout"{
             let DVC = mainStoryBoard.instantiateViewController(withIdentifier: controllerSelect!)
             self.navigationController?.pushViewController(DVC, animated: true)
         } */
+            
         else if controllerSelect == "NotLogin" {
-            let alert = UIAlertController(title: "Error", message: "You must sign in to Show this Part", preferredStyle: UIAlertControllerStyle.alert)
+            let alert = UIAlertController(title: "Not Allowed", message: "You must sign in to Show this Part", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
             //dismiss(animated: true, completion: nil)
@@ -231,6 +255,7 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             self.view.removeFromSuperview()
             self.removeFromParentViewController()
         })
+        //think black here
     }
     
 
