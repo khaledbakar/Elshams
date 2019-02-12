@@ -45,7 +45,6 @@ class StartupDetailsVC: UIViewController {
     @IBOutlet weak var aboutStartUp: UITextView!
     @IBOutlet weak var startUpLinkedIn: UILabel!
     @IBOutlet weak var startUpPhone: UILabel!
-    
     @IBOutlet weak var informationTopConstraint: NSLayoutConstraint!
     var frame = CGRect(x: 0, y: 0, width: 0, height: 0)
     var frameBtn = CGRect(x: 0, y: 0, width: 0, height: 0)
@@ -71,13 +70,41 @@ class StartupDetailsVC: UIViewController {
             defaultFrame()
 
         } */
-        startUpName.text = ""
-        startUpPhone.text = ""
-        startUpLinkedIn.text = ""
-        aboutStartUp.text = ""
-        startUpMail.text = ""
-        defaultFrame()
-        loadSessionData(StartUpID: (singleItem?.startup_id)!)
+        // pending and accept
+       // if  singleItem?.appoimentStatus != nil && singleItem?.appoimentStatus != "notSent" {
+
+        if  singleItem?.appoimentStatus == "pending" || singleItem?.appoimentStatus == "accepted" {
+            afterRescadualeFrame()
+        } else {
+            defaultFrame()
+        }
+        if singleItem?.startupImageUrl == nil || singleItem?.startupImageUrl == "" {
+            
+        } else {
+            imgUrl(imgUrl: (singleItem?.startupImageUrl)!)
+        }
+        
+        startUpName.text = singleItem?.startupName
+        startUp_Phone = singleItem?.contectInforamtion!["phone"] as! String
+        startUpPhone.text = startUp_Phone
+        startUp_Linkedin = singleItem?.contectInforamtion!["linkedin"] as! String
+        startUpLinkedIn.text = startUp_Linkedin
+        startUp_Email = singleItem?.contectInforamtion!["Email"] as! String
+        startUpMail.text = startUp_Email
+
+        if singleItem?.about == nil || singleItem?.about?.trimmed == "" {
+            aboutView.isHidden = true
+
+        } else {
+            aboutView.isHidden = false
+            aboutStartUp.text = singleItem?.about
+
+        }
+        
+      //  defaultFrame()
+        
+        
+       // loadSessionData(StartUpID: (singleItem?.startup_id)!)
         loadavailableAppointment(StartUpID: (singleItem?.startup_id)!)
         
         if StartupDetailsVC.sechadualeBTNSend == true {
@@ -154,85 +181,7 @@ class StartupDetailsVC: UIViewController {
         }
     }
     
-    func loadSessionData(StartUpID:String)  {
-        if let  apiToken  = Helper.getApiToken() {
-
-        Service.getServiceWithAuth(url: "\(URLs.getStartupDetailsByID)/\(StartUpID)") {
-            (response) in
-            print("this is SessionDetails ")
-            print(response)
-            let result = JSON(response)
-            // get startUp
-            let startUp_ID = result["id"].string
-            self.startUp_Name = result["startupName"].string
-            self.startUp_About = result["about"].string
-            self.startUp_ImageURl = result["imageURl"].string
-            self.startUp_Appoimentstatus = result["appoimentstatus"].string
-            self.startUp_AppoimentTime = result["AppoimentTime"].string
-            let startUp_ContectInforamtion = result["ContectInforamtion"].dictionaryObject
-             self.startUp_Email = result["ContectInforamtion"]["Email"].string
-             self.startUp_Linkedin = result["ContectInforamtion"]["linkedin"].string
-             self.startUp_Phone = result["ContectInforamtion"]["phone"].string
-            
-            let contect = ["Email": "",
-                           "linkedin": "",
-                           "phone": ""]
-            
-            self.startUpList.append(StartUpsData(StartupName: self.startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: self.startUp_ImageURl ?? "Image" , StartUpAbout: self.startUp_About ?? "About", AppoimentStatus: self.startUp_Appoimentstatus ?? "appoimentstatus" , AppoimentTime: self.startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
-            
-            self.startUpName.text = self.startUp_Name
-            self.startUpMail.text = self.startUp_Email
-            self.startUpPhone.text = self.startUp_Phone
-            self.startUpLinkedIn.text = self.startUp_Linkedin
-            self.aboutStartUp.text  = self.startUp_About
-           // self.sureMessageTxt
-            self.imgUrl(imgUrl: (self.startUp_ImageURl)!)
-            if self.startUp_Appoimentstatus != nil && self.startUp_Appoimentstatus != "notSent" {
-                self.afterRescadualeFrame()
-            } else {
-                self.defaultFrame()
-            }
-        }
-        } else {
-            Service.getService(url: "\(URLs.getStartupDetailsByID)/\(StartUpID)") {
-                (response) in
-                print("this is SessionDetails ")
-                print(response)
-                let result = JSON(response)
-                // get startUp
-                let startUp_ID = result["id"].string
-                self.startUp_Name = result["startupName"].string
-                self.startUp_About = result["about"].string
-                self.startUp_ImageURl = result["imageURl"].string
-                self.startUp_Appoimentstatus = result["appoimentstatus"].string
-                self.startUp_AppoimentTime = result["AppoimentTime"].string
-                let startUp_ContectInforamtion = result["ContectInforamtion"].dictionaryObject
-                self.startUp_Email = result["ContectInforamtion"]["Email"].string
-                self.startUp_Linkedin = result["ContectInforamtion"]["linkedin"].string
-                self.startUp_Phone = result["ContectInforamtion"]["phone"].string
-                
-                let contect = ["Email": "",
-                               "linkedin": "",
-                               "phone": ""]
-                
-                self.startUpList.append(StartUpsData(StartupName: self.startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: self.startUp_ImageURl ?? "Image" , StartUpAbout: self.startUp_About ?? "About", AppoimentStatus: self.startUp_Appoimentstatus ?? "appoimentstatus" , AppoimentTime: self.startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
-                
-                self.startUpName.text = self.startUp_Name
-                self.startUpMail.text = self.startUp_Email
-                self.startUpPhone.text = self.startUp_Phone
-                self.startUpLinkedIn.text = self.startUp_Linkedin
-                self.aboutStartUp.text  = self.startUp_About
-                // self.sureMessageTxt
-                self.imgUrl(imgUrl: (self.startUp_ImageURl)!)
-                if self.startUp_Appoimentstatus != nil && self.startUp_Appoimentstatus != "notSent" {
-                    self.afterRescadualeFrame()
-                } else {
-                    self.defaultFrame()
-                }
-            }
-        }
-    }
-    
+   
     func popUpViewMethod()  {
         //PopUp View
         for index in 0..<availableAppointmentList.count {
@@ -263,17 +212,19 @@ class StartupDetailsVC: UIViewController {
 
 func imgUrl(imgUrl:String)  {
    // if let  apiToken  = Helper.getApiToken() {
-
-    if let imagUrlAl = imgUrl as? String {
-        Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
-            print(response)
-            if let image = response.result.value {
-                DispatchQueue.main.async{
-                    self.startUpLogo.image = image
+    if imgUrl != nil {
+        if let imagUrlAl = imgUrl as? String {
+            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
+                print(response)
+                if let image = response.result.value {
+                    DispatchQueue.main.async{
+                        self.startUpLogo.image = image
+                    }
                 }
-            }
-        })
+            })
+        }
     }
+  
    // } else { }
     
 }
@@ -346,6 +297,10 @@ func imgUrl(imgUrl:String)  {
     }
     
     @IBAction func rescadualeAppointment(_ sender: Any) {
+        availableAppointmentList.removeAll()
+        loadavailableAppointment(StartUpID: (singleItem?.startup_id)!)
+      
+        //some issue think loading
         if  availableAppointmentList.count != 0 {
         popUpContainerView.isHidden = false
         } else {
@@ -404,17 +359,21 @@ func imgUrl(imgUrl:String)  {
     
     
     @IBAction func savePopUpData(_ sender: Any) {
-        
-       afterRescadualeFrame()
+      
+        if self.appointmentSelect_Name != nil {
+         afterRescadualeFrame()
         let btnSearch = UIButton(type: UIButton.ButtonType.system)
         let customBarItem = UIBarButtonItem(customView: btnSearch)
         self.navigationItem.rightBarButtonItem = customBarItem
-        sureMessageTxt.text = "You send an appointment in \((self.appointmentSelect_Name)!)!"
-        requestAppointment(StartupID: (singleItem?.startup_id)!, AppoimentID: (appointmentSelect)!)
+            sureMessageTxt.text = "You send an appointment in \((self.appointmentSelect_Name)!)!"
+            requestAppointment(StartupID: (singleItem?.startup_id)!, AppoimentID: (appointmentSelect)!)
+
+        }
 
     }
     
     func requestAppointment(StartupID:String,AppoimentID:String)  {
+        OpenSessionVC.likeFlag = "faveMethod"  //
         let appointmentCheckParam : Parameters = ["startupID" : "\(StartupID)",
             "appoimentID" : "\(AppoimentID)"]
             Service.postServiceWithAuth(url: URLs.requestAppoiment, parameters: appointmentCheckParam) {
@@ -428,6 +387,92 @@ func imgUrl(imgUrl:String)  {
         popUpContainerView.isHidden = true
 
     }
+    func loadSessionData(StartUpID:String)  {
+        if let  apiToken  = Helper.getApiToken() {
+            
+            Service.getServiceWithAuth(url: "\(URLs.getStartupDetailsByID)/\(StartUpID)") {
+                (response) in
+                print("this is SessionDetails ")
+                print(response)
+                let result = JSON(response)
+                // get startUp
+                let startUp_ID = result["id"].string
+                self.startUp_Name = result["startupName"].string
+                self.startUp_About = result["about"].string
+                self.startUp_ImageURl = result["imageURl"].string
+                self.startUp_Appoimentstatus = result["appoimentstatus"].string
+                self.startUp_AppoimentTime = result["AppoimentTime"].string
+                let startUp_ContectInforamtion = result["ContectInforamtion"].dictionaryObject
+                self.startUp_Email = result["ContectInforamtion"]["Email"].string
+                self.startUp_Linkedin = result["ContectInforamtion"]["linkedin"].string
+                self.startUp_Phone = result["ContectInforamtion"]["phone"].string
+                
+                let contect = ["Email": "",
+                               "linkedin": "",
+                               "phone": ""]
+                
+                self.startUpList.append(StartUpsData(StartupName: self.startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: self.startUp_ImageURl ?? "Image" , StartUpAbout: self.startUp_About ?? "About", AppoimentStatus: self.startUp_Appoimentstatus ?? "appoimentstatus" , AppoimentTime: self.startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                
+                self.startUpName.text = self.startUp_Name
+                self.startUpMail.text = self.startUp_Email
+                self.startUpPhone.text = self.startUp_Phone
+                self.startUpLinkedIn.text = self.startUp_Linkedin
+                if self.startUp_About == nil || self.startUp_About == "" {
+                    self.aboutView.isHidden = true
+                    
+                } else {
+                    self.aboutView.isHidden = false
+                    self.aboutStartUp.text  = self.startUp_About
+                    
+                }
+                // self.sureMessageTxt
+                self.imgUrl(imgUrl: (self.startUp_ImageURl)!)
+                if self.startUp_Appoimentstatus != nil && self.startUp_Appoimentstatus != "notSent" {
+                    self.afterRescadualeFrame()
+                } else {
+                    self.defaultFrame()
+                }
+            }
+        } else {
+            Service.getService(url: "\(URLs.getStartupDetailsByID)/\(StartUpID)") {
+                (response) in
+                print("this is SessionDetails ")
+                print(response)
+                let result = JSON(response)
+                // get startUp
+                let startUp_ID = result["id"].string
+                self.startUp_Name = result["startupName"].string
+                self.startUp_About = result["about"].string
+                self.startUp_ImageURl = result["imageURl"].string
+                self.startUp_Appoimentstatus = result["appoimentstatus"].string
+                self.startUp_AppoimentTime = result["AppoimentTime"].string
+                let startUp_ContectInforamtion = result["ContectInforamtion"].dictionaryObject
+                self.startUp_Email = result["ContectInforamtion"]["Email"].string
+                self.startUp_Linkedin = result["ContectInforamtion"]["linkedin"].string
+                self.startUp_Phone = result["ContectInforamtion"]["phone"].string
+                
+                let contect = ["Email": "",
+                               "linkedin": "",
+                               "phone": ""]
+                
+                self.startUpList.append(StartUpsData(StartupName: self.startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: self.startUp_ImageURl ?? "Image" , StartUpAbout: self.startUp_About ?? "About", AppoimentStatus: self.startUp_Appoimentstatus ?? "appoimentstatus" , AppoimentTime: self.startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                
+                self.startUpName.text = self.startUp_Name
+                self.startUpMail.text = self.startUp_Email
+                self.startUpPhone.text = self.startUp_Phone
+                self.startUpLinkedIn.text = self.startUp_Linkedin
+                self.aboutStartUp.text  = self.startUp_About
+                // self.sureMessageTxt
+                self.imgUrl(imgUrl: (self.startUp_ImageURl)!)
+                if self.startUp_Appoimentstatus != nil && self.startUp_Appoimentstatus != "notSent" {
+                    self.afterRescadualeFrame()
+                } else {
+                    self.defaultFrame()
+                }
+            }
+        }
+    }
+    
 }
 
 extension StartupDetailsVC : MFMailComposeViewControllerDelegate {

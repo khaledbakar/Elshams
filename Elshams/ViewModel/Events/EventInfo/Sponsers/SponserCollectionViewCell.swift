@@ -16,15 +16,20 @@ class SponserCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var sponserColName: UILabel!
     
     func imgUrl(imgUrl:String)  {
-        
         if let imagUrlAl = imgUrl as? String {
+            //let s :Int = 0x0020
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
                 print(response)
+                switch response.result {
+                case .success(let value):
                 if let image = response.result.value {
                     DispatchQueue.main.async{
                         
                         self.sponserColImage.image = image
                     }
+                }
+                case .failure(let error):
+                    print(error)
                 }
             })
         }
@@ -32,15 +37,19 @@ class SponserCollectionViewCell: UICollectionViewCell {
     func setSponserColCell(sponserList:Sponsers) {
         sponserColImage.layer.cornerRadius = sponserColImage.frame.width / 2
         sponserColImage.clipsToBounds = true
-        sponserColName.text = sponserList.sponserName
-        if !((sponserList.sponsertype?.isEmpty)!) || ((sponserList.sponsertype)!) != nil {
+        if  sponserList.sponserName != nil {
+            sponserColName.text = sponserList.sponserName
+
+        }
+        if !((sponserList.sponsertype?.isEmpty)!) || sponserList.sponsertype != nil {
             let sponserTypeName = sponserList.sponsertype!["name"]
             let sponserTypeColor = sponserList.sponsertype!["color"]
-            
-            
-            sponserRank.text = "\(sponserTypeName)"
+            print(sponserTypeColor)
+            sponserRank.text = "\((sponserTypeName)!)"
         }
-       
+        if sponserList.sponserImageUrl != nil ||  !((sponserList.sponserImageUrl?.isEmpty)!) {
+            imgUrl(imgUrl: (sponserList.sponserImageUrl)!)
+        }
       /*  if sponserList.sponsersponserRank == "Gold"{
             sponserRank.textColor = UIColor.orange
         } else {
@@ -49,6 +58,6 @@ class SponserCollectionViewCell: UICollectionViewCell {
         */
      //   sponserRank.text = sponserList.sponsersponserRank
        // sponserColImage.image = UIImage(named: "\((sponserList.sponserImage)!)")
-        imgUrl(imgUrl: (sponserList.sponserImageUrl)!)
+        
 }
 }

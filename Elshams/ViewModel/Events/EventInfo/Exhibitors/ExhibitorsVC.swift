@@ -26,13 +26,26 @@ class ExhibitorsVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
         if MenuViewController.startupEventOrMenu == true {
             addSlideMenuButton()
             //  btnRightBar()
-            self.navigationItem.title = "Startups"
+            self.navigationItem.title = "Exhibitors"
             MenuViewController.startupEventOrMenu = false
         }
         startupTableView.isHidden = true
         activeLoader.startAnimating()
+        NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
         loadAllStartUpData()
     }
+    
+    @objc func errorAlert(){
+        let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+        startupTableView.isHidden = true
+        activeLoader.isHidden = true
+        activeLoader.stopAnimating()
+        //reload after
+        //
+    }
+    
     
     func loadAllStartUpData()  {
         if let  apiToken  = Helper.getApiToken() {
@@ -42,71 +55,82 @@ class ExhibitorsVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
                 print(response)
                 let json = JSON(response)
                 let result = json["AllStartups"]
-                var iDNotNull = true
-                var index = 0
-                while iDNotNull {
-                    let startUp_ID = result[index]["id"].string
-                    let startUp_Name = result[index]["startupName"].string
-                    let startUp_Appoimentstatus = result[index]["appoimentstatus"].string
-                    let startUp_AppoimentTime = result[index]["AppoimentTime"].string
-                    let startUp_ImageUrl = result[index]["imageURl"].string
-                    let startUp_About = result[index]["about"].string
-                    let startUp_ContectInforamtion = result[index]["ContectInforamtion"].dictionaryObject
-                    let startUp_Email = result[index]["ContectInforamtion"]["Email"].string
-                    let startUp_Linkedin = result[index]["ContectInforamtion"]["linkedin"].string
-                    let startUp_Phone = result[index]["ContectInforamtion"]["phone"].string
-                    
-                    let contect = ["Email": "",
-                                   "linkedin": "",
-                                   "phone": ""]
-                    if startUp_ID == nil || startUp_ID?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || startUp_ID == "null" || startUp_ID == "nil" {
-                        iDNotNull = false
-                        break
+                if !(result.isEmpty){
+                    var iDNotNull = true
+                    var index = 0
+                    while iDNotNull {
+                        let startUp_ID = result[index]["id"].string
+                        let startUp_Name = result[index]["startupName"].string
+                        let startUp_Appoimentstatus = result[index]["appoimentstatus"].string
+                        let startUp_AppoimentTime = result[index]["AppoimentTime"].string
+                        let startUp_ImageUrl = result[index]["imageURl"].string
+                        let startUp_About = result[index]["about"].string
+                        let startUp_ContectInforamtion = result[index]["ContectInforamtion"].dictionaryObject
+                        let startUp_Email = result[index]["ContectInforamtion"]["Email"].string
+                        let startUp_Linkedin = result[index]["ContectInforamtion"]["linkedin"].string
+                        let startUp_Phone = result[index]["ContectInforamtion"]["phone"].string
+                        
+                        let contect = ["Email": "","linkedin": "","phone": ""]
+                        if startUp_ID == nil || startUp_ID?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || startUp_ID == "null" || startUp_ID == "nil" {
+                            iDNotNull = false
+                            break
+                        }
+                        self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: startUp_ImageUrl ?? "Image", StartUpAbout: startUp_About ?? "about", AppoimentStatus: startUp_Appoimentstatus ?? "Appointmentstatus", AppoimentTime: startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                        index = index + 1
+                        self.startupTableView.reloadData()
+                        self.activeLoader.isHidden = true
+                        self.activeLoader.stopAnimating()
+                        self.startupTableView.isHidden = false
                     }
-                    self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: startUp_ImageUrl ?? "Image", StartUpAbout: startUp_About ?? "about", AppoimentStatus: startUp_Appoimentstatus ?? "Appointmentstatus", AppoimentTime: startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
-                    index = index + 1
-                    self.startupTableView.reloadData()
-                    self.activeLoader.isHidden = true
-                    self.activeLoader.stopAnimating()
-                    self.startupTableView.isHidden = false
                 }
-                //  print((self.networkList[2].name)!)
+                    
+                else {
+                    let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    self.activeLoader.isHidden = true
+                }
             }
-        } else {
+        }
+        else {
             Service.getService(url: URLs.getAllStartups) { //WithAuth
                 (response) in
                 print(response)
                 let json = JSON(response)
                 let result = json["AllStartups"]
-                var iDNotNull = true
-                var index = 0
-                while iDNotNull {
-                    let startUp_ID = result[index]["id"].string
-                    let startUp_Name = result[index]["startupName"].string
-                    let startUp_Appoimentstatus = result[index]["appoimentstatus"].string
-                    let startUp_AppoimentTime = result[index]["AppoimentTime"].string
-                    let startUp_ImageUrl = result[index]["imageURl"].string
-                    let startUp_About = result[index]["about"].string
-                    let startUp_ContectInforamtion = result[index]["ContectInforamtion"].dictionaryObject
-                    let startUp_Email = result[index]["ContectInforamtion"]["Email"].string
-                    let startUp_Linkedin = result[index]["ContectInforamtion"]["linkedin"].string
-                    let startUp_Phone = result[index]["ContectInforamtion"]["phone"].string
-                    
-                    let contect = ["Email": "",
-                                   "linkedin": "",
-                                   "phone": ""]
-                    if startUp_ID == nil || startUp_ID?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || startUp_ID == "null" || startUp_ID == "nil" {
-                        iDNotNull = false
-                        break
+                if !(result.isEmpty){
+                    var iDNotNull = true
+                    var index = 0
+                    while iDNotNull {
+                        let startUp_ID = result[index]["id"].string
+                        let startUp_Name = result[index]["startupName"].string
+                        let startUp_Appoimentstatus = result[index]["appoimentstatus"].string
+                        let startUp_AppoimentTime = result[index]["AppoimentTime"].string
+                        let startUp_ImageUrl = result[index]["imageURl"].string
+                        let startUp_About = result[index]["about"].string
+                        let startUp_ContectInforamtion = result[index]["ContectInforamtion"].dictionaryObject
+                        let startUp_Email = result[index]["ContectInforamtion"]["Email"].string
+                        let startUp_Linkedin = result[index]["ContectInforamtion"]["linkedin"].string
+                        let startUp_Phone = result[index]["ContectInforamtion"]["phone"].string
+                        
+                        let contect = ["Email": "","linkedin": "","phone": ""]
+                        if startUp_ID == nil || startUp_ID?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || startUp_ID == "null" || startUp_ID == "nil" {
+                            iDNotNull = false
+                            break
+                        }
+                        self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: startUp_ImageUrl ?? "Image", StartUpAbout: startUp_About ?? "about", AppoimentStatus: startUp_Appoimentstatus ?? "Appointmentstatus", AppoimentTime: startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                        index = index + 1
+                        self.startupTableView.reloadData()
+                        self.activeLoader.isHidden = true
+                        self.activeLoader.stopAnimating()
+                        self.startupTableView.isHidden = false
                     }
-                    self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: startUp_ImageUrl ?? "Image", StartUpAbout: startUp_About ?? "about", AppoimentStatus: startUp_Appoimentstatus ?? "Appointmentstatus", AppoimentTime: startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
-                    index = index + 1
-                    self.startupTableView.reloadData()
+                } else {
+                    let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
                     self.activeLoader.isHidden = true
-                    self.activeLoader.stopAnimating()
-                    self.startupTableView.isHidden = false
                 }
-                //  print((self.networkList[2].name)!)
             }
             
         }

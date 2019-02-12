@@ -14,6 +14,8 @@ import SwiftyJSON
 
 class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource {
     var startUpList = Array<StartUpsData>()
+    var startUpListPaging = Array<StartUpsData>()
+
     @IBOutlet weak var startupTableView: UITableView!
     var availableAppointmentList = Array<AvailableAppointment>()
 
@@ -29,10 +31,13 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
             }
         startupTableView.isHidden = true
         activeLoader.startAnimating()
-       
          NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
+       // loadAllStartUpData()
+    }
+    override func viewWillAppear(_ animated: Bool) {
         loadAllStartUpData()
-    
+
+      //  self.startupTableView.reloadData()
     }
     
     @objc func errorAlert(){
@@ -45,11 +50,12 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
         activeLoader.stopAnimating()
         //reload after
         //
-        
     }
     
     
     func loadAllStartUpData()  {
+         startUpList.removeAll()
+        startUpListPaging.removeAll()
         if let  apiToken  = Helper.getApiToken() {
 
         Service.getServiceWithAuth(url: URLs.getAllStartups) { //WithAuth
@@ -57,6 +63,7 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
             print(response)
             let json = JSON(response)
             let result = json["AllStartups"]
+            if !(result.isEmpty){
             var iDNotNull = true
             var index = 0
             while iDNotNull {
@@ -71,28 +78,39 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
                 let startUp_Linkedin = result[index]["ContectInforamtion"]["linkedin"].string
                 let startUp_Phone = result[index]["ContectInforamtion"]["phone"].string
                 
-                let contect = ["Email": "",
-                               "linkedin": "",
-                               "phone": ""]
+                let contect = ["Email": "","linkedin": "","phone": ""]
                 if startUp_ID == nil || startUp_ID?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || startUp_ID == "null" || startUp_ID == "nil" {
                     iDNotNull = false
                     break
                 }
-                self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: startUp_ImageUrl ?? "Image", StartUpAbout: startUp_About ?? "about", AppoimentStatus: startUp_Appoimentstatus ?? "Appointmentstatus", AppoimentTime: startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                self.startUpListPaging.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                if index <= 10 {
+                   self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                }
                 index = index + 1
+                
+            }
                 self.startupTableView.reloadData()
                 self.activeLoader.isHidden = true
                 self.activeLoader.stopAnimating()
                 self.startupTableView.isHidden = false
-            }
-            //  print((self.networkList[2].name)!)
         }
-        } else {
+            
+            else {
+                let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                self.activeLoader.isHidden = true
+            }
+            }
+        }
+        else {
             Service.getService(url: URLs.getAllStartups) { //WithAuth
                 (response) in
                 print(response)
                 let json = JSON(response)
                 let result = json["AllStartups"]
+                if !(result.isEmpty){
                 var iDNotNull = true
                 var index = 0
                 while iDNotNull {
@@ -114,14 +132,23 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
                         iDNotNull = false
                         break
                     }
-                    self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: startUp_ImageUrl ?? "Image", StartUpAbout: startUp_About ?? "about", AppoimentStatus: startUp_Appoimentstatus ?? "Appointmentstatus", AppoimentTime: startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                    self.startUpListPaging.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                    if index <= 10 {
+                        self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                    }
                     index = index + 1
+                   
+                }
                     self.startupTableView.reloadData()
                     self.activeLoader.isHidden = true
                     self.activeLoader.stopAnimating()
                     self.startupTableView.isHidden = false
+                } else {
+                    let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    self.activeLoader.isHidden = true
                 }
-                //  print((self.networkList[2].name)!)
             }
             
         }
@@ -192,8 +219,32 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
         }
        
     }
+    func loadNewItems(){
+        let lastindex = startUpList.count - 1
+        for i in 1 ..< 5 {
+            let lastItem = startUpList.last
+            let lastIt = lastindex + i
+            if lastIt != startUpListPaging.count {
+                let newItem  = startUpListPaging[lastIt]
+                
+                startUpList.append(newItem)
+                startupTableView.reloadData()
+            }
+            else {
+                print("that's end")
+                break
+            }
+        }
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
+    }
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let lastItem = startUpList.count - 1
+        if indexPath.row == lastItem {
+            loadNewItems()
+        }
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return startUpList.count

@@ -15,6 +15,10 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
     static var AgednaOrFavourite:Bool = true
     var singleItem:ProgramAgendaItems?
     var quest = Array<QuestionsData>()
+    var questVotes = Array<QuestionsVote>()
+    var questionAnswerVote = Array<MultiAnswers>()
+
+
     var answerSelect:String?
     @IBOutlet weak var backSpeakerBtn: UIButton!
     @IBOutlet weak var nextSpeakerBtnImg: UIImageView!
@@ -23,7 +27,8 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
     @IBOutlet weak var askSpeakerContainer: UIView!
     
     @IBOutlet weak var questionTxt: UITextView!
-    
+    static var likeFlag :String?
+
     @IBOutlet weak var backSpeakerBtnImg: UIImageView!
     @IBOutlet weak var nextSpeakerBtn: UIButton!
     
@@ -98,6 +103,12 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         sessionLocation.text = ""
         speakerName.text = ""
         speakerJobTitle.text = ""
+       // speakerName.isHidden = true
+        //speakerProfile.isHidden = true
+        
+      //  discrepFrame
+        OpenSessionVC.likeFlag = "notFavMethod"
+
         eventDescribtion.text = ""
         questionsTxt.text = ""
         speakerProfile.layer.cornerRadius = speakerProfile.frame.width / 2
@@ -105,7 +116,7 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         viewFavBack.layer.cornerRadius = viewFavBack.frame.width / 2
         viewFavBack.clipsToBounds = true
         sendQuestMainContainer.isHidden = true
-       self.questionTxt.delegate = self
+        self.questionTxt.delegate = self
         self.questionTxt.layer.borderWidth = 1.0
         questionTxt.layer.borderColor = UIColor.red.cgColor
         
@@ -227,16 +238,46 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         let questions_all = result["Question"]["AllQuestion"]
         print("this is question")
         print(questions_all)
-        self.question_ID = questions_all["ID"].string
-        self.question_head = questions_all["question"].string
-        self.question_answer = questions_all["answer"].string
-        self.question_TimeStamp = questions_all["questionTimeStamp"].string
+        var iDQuesionNotNull = true
+        var indexQuestion = 0
+        while iDQuesionNotNull {
+            let questionFirstloop_ID = questions_all[indexQuestion]["ID"].string
+       //     self.question_ID = questions_all[indexQuestion]["ID"].string
+            if questionFirstloop_ID == nil || questionFirstloop_ID?.trimmed == "" || questionFirstloop_ID == "null" || questionFirstloop_ID == "nil" {
+                iDQuesionNotNull = false
+                break
+            }
+        let questionFirstloop_q = questions_all[indexQuestion]["question"].string
+            let questionFirstloop_qestionAnswers = questions_all[indexQuestion]["Question_Answer"]
+
+            var iDQuesionAnswersNotNull = true
+            var indexQuestionAns = 0
+            while iDQuesionAnswersNotNull {
+                let answer_ID = questionFirstloop_qestionAnswers[indexQuestionAns]["answerID"].string
+                if answer_ID == nil || answer_ID?.trimmed == "" || answer_ID == "null" || answer_ID == "nil" {
+                    iDQuesionAnswersNotNull = false
+                    break
+                }
+                let answer_Title = questionFirstloop_qestionAnswers[indexQuestionAns]["answerTitle"].string
+                let vote_No = questionFirstloop_qestionAnswers[indexQuestionAns]["VoteNo"].string
+                
+                self.questionAnswerVote.append((MultiAnswers(AnswerID: answer_ID ?? "", AnswerTitle: answer_Title ?? "", VoteNo: vote_No ?? "")))
+
+            indexQuestionAns = indexQuestionAns + 1
+            }
+            self.questVotes.append((QuestionsVote(Questions: questionFirstloop_q ?? "", QuestionAnswer: self.questionAnswerVote, QuestionsID: questionFirstloop_ID ?? "")))
+      //  self.question_head = questions_all["question"].string
+     //   self.question_answer = questions_all["answer"].string
+      //  self.question_TimeStamp = questions_all["questionTimeStamp"].string
+            
        // self.speakerList.removeAll()
      //   self.questionList.removeAll()
      //   self.sessionList.removeAll()
-        
+            indexQuestion = indexQuestion + 1
+        }
+    
        /* self.speakerList.append(Speakers(SpeakerName: self.speaker_Name ?? "name", JobTitle: self.speaker_JobTitle ?? "JOB", CompanyName: self.speaker_CompanyName ?? "Company", SpImageUrl: self.speaker_ImageUrl ?? "Image", Speaker_id: self.speaker_ID ?? "ID", ContectInforamtion: self.speaker_ContectInforamtion ?? contect, About: self.speaker_About ?? "About")) */
-        self.questionList.append(QuestionsData(Questions: self.question_head ?? "question", Answer: self.question_answer ?? "answer", QuestionsID: self.question_ID ?? "ID", QuestionTimeStamp: self.question_TimeStamp ?? "TimeStamp"))
+     //   self.questionList.append(QuestionsData(Questions: self.question_head ?? "question", Answer: self.question_answer ?? "answer", QuestionsID: self.question_ID ?? "ID", QuestionTimeStamp: self.question_TimeStamp ?? "TimeStamp"))
         
         self.sessionList.append(ProgramAgendaItems(Agenda_ID: self.session_ID ?? "ID", SessionTitle: self.session_Title ?? "Title", SessionTime: self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SpeakersSession: ["ID" : "314",
             "imageUrl" : "http:-b01d-582382a5795e.jpg"]
@@ -248,9 +289,14 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         }else {
             self.favouriteIcon.image = UIImage(named: "unlike-session")
         }
+        //fix question
+        self.questionTxt.text = self.questVotes[0].question
+        
         self.mangeSessionDetails(SeseionTitle: self.session_Title ?? "Title", AgendaDate: self.session_Date ?? "date", SessionTime:  self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SessionDescribtion: self.session_Description ?? "Describition", SpeakerName: self.speaker_Name ?? "name", SpeakerJobTitle: self.speaker_JobTitle ?? "JOB", SpeakerImgUrl: self.speaker_ImageUrl ?? "Image", QestionHead: self.question_head ?? "question", Speakers: self.speakerList)
+        
         }
         }else {
+            
             Service.getService(url: "\(URLs.getSessionDetails)/\(SessionID)") {
                 (response) in
                 print("this is SessionDetails ")
@@ -274,40 +320,68 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
                 var iDSpeakerNotNull = true
                 var indexSpeaker = 0
                 while iDSpeakerNotNull {
-                let speaker_ID = speaker_all[indexSpeaker]["ID"].string
+                    let speaker_ID = speaker_all[indexSpeaker]["ID"].string
                     if speaker_ID == nil || speaker_ID?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || speaker_ID == "null" || speaker_ID == "nil" {
                         iDSpeakerNotNull = false
                         break
                     }
-                let speaker_Name = speaker_all[indexSpeaker]["name"].string
-                let speaker_JobTitle = speaker_all[indexSpeaker]["jobTitle"].string
-                let speaker_CompanyName = speaker_all[indexSpeaker]["companyName"].string
-                let speaker_ImageUrl = speaker_all[indexSpeaker]["imageUrl"].string
-               let speaker_About = speaker_all[indexSpeaker]["about"].string
-                let speaker_ContectInforamtion = speaker_all[indexSpeaker]["ContectInforamtion"].dictionaryObject
-                let speaker_Email = speaker_all[indexSpeaker]["ContectInforamtion"]["Email"].string
-                let speaker_Linkedin = speaker_all[indexSpeaker]["ContectInforamtion"]["linkedin"].string
-                let speaker_Phone = speaker_all[indexSpeaker]["ContectInforamtion"]["phone"].string
-                
-                let contect = ["Email": "",
-                               "linkedin": "",
-                               "phone": ""]
+                    let speaker_Name = speaker_all[indexSpeaker]["name"].string
+                    let speaker_JobTitle = speaker_all[indexSpeaker]["jobTitle"].string
+                    let speaker_CompanyName = speaker_all[indexSpeaker]["companyName"].string
+                    let speaker_ImageUrl = speaker_all[indexSpeaker]["imageUrl"].string
+                    let speaker_About = speaker_all[indexSpeaker]["about"].string
+                    let speaker_ContectInforamtion = speaker_all[indexSpeaker]["ContectInforamtion"].dictionaryObject
+                    let speaker_Email = speaker_all[indexSpeaker]["ContectInforamtion"]["Email"].string
+                    let speaker_Linkedin = speaker_all[indexSpeaker]["ContectInforamtion"]["linkedin"].string
+                    let speaker_Phone = speaker_all[indexSpeaker]["ContectInforamtion"]["phone"].string
+                    
+                    let contect = ["Email": "",
+                                   "linkedin": "",
+                                   "phone": ""]
                     
                     self.speakerList.append(Speakers(SpeakerName: speaker_Name ?? "name", JobTitle: speaker_JobTitle ?? "JOB", CompanyName: speaker_CompanyName ?? "Company", SpImageUrl: speaker_ImageUrl ?? "Image", Speaker_id: speaker_ID ?? "ID", ContectInforamtion: speaker_ContectInforamtion ?? contect, About: speaker_About ?? "About"))
-                      indexSpeaker = indexSpeaker + 1
+                    indexSpeaker = indexSpeaker + 1
                 }
                 let questions_all = result["Question"]["AllQuestion"]
                 print("this is question")
                 print(questions_all)
-                self.question_ID = questions_all["ID"].string
-                self.question_head = questions_all["question"].string
-                self.question_answer = questions_all["answer"].string
-                self.question_TimeStamp = questions_all["questionTimeStamp"].string
-              /*  self.speakerList.removeAll()
-                self.questionList.removeAll()
-                self.sessionList.removeAll() */
-             
-                self.questionList.append(QuestionsData(Questions: self.question_head ?? "question", Answer: self.question_answer ?? "answer", QuestionsID: self.question_ID ?? "ID", QuestionTimeStamp: self.question_TimeStamp ?? "TimeStamp"))
+                var iDQuesionNotNull = true
+                var indexQuestion = 0
+                while iDQuesionNotNull {
+                    let questionFirstloop_ID = questions_all[indexQuestion]["ID"].string
+                    //     self.question_ID = questions_all[indexQuestion]["ID"].string
+                    if questionFirstloop_ID == nil || questionFirstloop_ID?.trimmed == "" || questionFirstloop_ID == "null" || questionFirstloop_ID == "nil" {
+                        iDQuesionNotNull = false
+                        break
+                    }
+                    let questionFirstloop_q = questions_all[indexQuestion]["question"].string
+                    let questionFirstloop_qestionAnswers = questions_all[indexQuestion]["Question_Answer"]
+                    
+                    var iDQuesionAnswersNotNull = true
+                    var indexQuestionAns = 0
+                    while iDQuesionAnswersNotNull {
+                        let answer_ID = questionFirstloop_qestionAnswers[indexQuestionAns]["answerID"].string
+                        if answer_ID == nil || answer_ID?.trimmed == "" || answer_ID == "null" || answer_ID == "nil" {
+                            iDQuesionAnswersNotNull = false
+                            break
+                        }
+                        let answer_Title = questionFirstloop_qestionAnswers[indexQuestionAns]["answerTitle"].string
+                        let vote_No = questionFirstloop_qestionAnswers[indexQuestionAns]["VoteNo"].string
+                        
+                        self.questionAnswerVote.append((MultiAnswers(AnswerID: answer_ID ?? "", AnswerTitle: answer_Title ?? "", VoteNo: vote_No ?? "")))
+                        
+                        indexQuestionAns = indexQuestionAns + 1
+                    }
+                    self.questVotes.append((QuestionsVote(Questions: questionFirstloop_q ?? "", QuestionAnswer: self.questionAnswerVote, QuestionsID: questionFirstloop_ID ?? "")))
+                    //  self.question_head = questions_all["question"].string
+                    //   self.question_answer = questions_all["answer"].string
+                    //  self.question_TimeStamp = questions_all["questionTimeStamp"].string
+                    
+                    // self.speakerList.removeAll()
+                    //   self.questionList.removeAll()
+                    //   self.sessionList.removeAll()
+                    indexQuestion = indexQuestion + 1
+                }
                 
                 self.sessionList.append(ProgramAgendaItems(Agenda_ID: self.session_ID ?? "ID", SessionTitle: self.session_Title ?? "Title", SessionTime: self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SpeakersSession: ["ID" : "314",
                                                                                                                                                                                                                                                               "imageUrl" : "http:-b01d-582382a5795e.jpg"]
@@ -319,27 +393,40 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
                 }else {
                     self.favouriteIcon.image = UIImage(named: "unlike-session")
                 }
+                //fix question
+                self.questionTxt.text = self.questVotes[0].question
+                
                 self.mangeSessionDetails(SeseionTitle: self.session_Title ?? "Title", AgendaDate: self.session_Date ?? "date", SessionTime:  self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SessionDescribtion: self.session_Description ?? "Describition", SpeakerName: self.speaker_Name ?? "name", SpeakerJobTitle: self.speaker_JobTitle ?? "JOB", SpeakerImgUrl: self.speaker_ImageUrl ?? "Image", QestionHead: self.question_head ?? "question", Speakers: self.speakerList)
+                
             }
         }
         
     }
     
     func imgUrl(imgUrl:String)  { //,listImage:[UIImage]
-        if let imagUrlAl = imgUrl as? String {
-            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
-                print(response)
-                if let image = response.result.value {
-                    DispatchQueue.main.async{
-                      /*  for data in listImage {
-                            
-                        }*/
-                        self.speakerProfile.image = image
-                    //    self.speakerImagesCash?[0] = image
+        if imgUrl != nil {
+            if let imagUrlAl = imgUrl as? String {
+                Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
+                    print(response)
+                    
+                    switch response.result {
+                    case .success(let value):
+                        if let image = response.result.value {
+                            DispatchQueue.main.async{
+                                /*  for data in listImage {
+                                 
+                                 }*/
+                                self.speakerProfile.image = image
+                                //    self.speakerImagesCash?[0] = image
+                            }
+                        }
+                    case .failure(let error):
+                        print(error)
                     }
-                }
-            })
+                })
+            }
         }
+       
     }
     
     func mangeSessionDetails(SeseionTitle:String,AgendaDate:String,SessionTime:String,SessionLocation:String,SessionDescribtion:String,SpeakerName:String,SpeakerJobTitle:String,SpeakerImgUrl:String,QestionHead:String,Speakers:[Speakers]){
@@ -375,15 +462,17 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
 
         }
         
-   /*     for i in 0..<1{
-              for i in 0..<questionList.count{
-            var qu = Int(questionList[i].answerArr!.count)
+       for i in 0..<questVotes.count{
+        //fix at first and then change with tap
+         questionsTxt.text =  questVotes[i].question
+              for i in 0..<questVotes.count{
+                var qu = Int(questVotes[i].questionAnswer.count)
             for index in 0..<qu {
                 frame.origin.x = 45
                 frame.origin.y = (40 * CGFloat(index))
                 frame.size = CGSize(width: 200 , height: 20.0)
                 let lblAnswers = UILabel(frame: frame)
-                lblAnswers.text = quest[i].answerArr?[index]
+                lblAnswers.text = questVotes[i].questionAnswer[index].answerTitle
                 lblAnswers.textColor = UIColor.darkGray
                 lblAnswers.font = lblAnswers.font.withSize(13.0)
                 frameBtn.origin.x = 0
@@ -401,7 +490,7 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
             }
         }
     }
-        */
+ 
     }
     
     @IBAction func backQuestionBtn(_ sender: Any) {
@@ -538,17 +627,25 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         let sessionFavID : Parameters = ["sessionID" : "\((self.singleItem?.agenda_ID)!)"]
      
             if self.session_isFavourate == true {
+                OpenSessionVC.likeFlag = "faveMethod"
+                self.session_isFavourate = false
+                self.session_isFavourate_Str = "false"
+                self.favouriteIcon.image = UIImage(named: "unlike-session")
                 Service.postServiceWithAuth(url: URLs.unfavourateAction, parameters: sessionFavID) {
                     (response) in
                     print(response)
                     let result = JSON(response)
-           self.session_isFavourate = false
+         /*  self.session_isFavourate = false
             self.session_isFavourate_Str = "false"
-                    self.favouriteIcon.image = UIImage(named: "unlike-session")
+                    self.favouriteIcon.image = UIImage(named: "unlike-session") */
         }
             }
                 else {
-              
+                OpenSessionVC.likeFlag = "faveMethod"
+                favouriteIcon.image = UIImage(named: "like-session")
+                self.session_isFavourate = true
+                self.session_isFavourate_Str = "true"
+                
             Service.postServiceWithAuth(url: URLs.favourateAction, parameters: sessionFavID) {
                 (response) in
                 
@@ -556,10 +653,7 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
                 let result = JSON(response)
             
             }
-            favouriteIcon.image = UIImage(named: "like-session")
-            self.session_isFavourate = true
-            self.session_isFavourate_Str = "true"
-                
+           
         }
         } else {
             let alert = UIAlertController(title: "Error", message: "You must sign in to Show this Part", preferredStyle: UIAlertControllerStyle.alert)

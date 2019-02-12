@@ -23,12 +23,17 @@ class SpeakerCollectionViewCell: UICollectionViewCell {
         if let imagUrlAl = imgUrl as? String {
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
                 print(response)
+                switch response.result {
+                case .success(let value):
                 if let image = response.result.value {
                     DispatchQueue.main.async{
                         
                         self.speakerColImage.image = image
                     }
                 }
+                case .failure(let error):
+                print(error)
+            }
             })
         }
     }
@@ -39,7 +44,10 @@ class SpeakerCollectionViewCell: UICollectionViewCell {
         speakerColName.text = speakerList.name
         speakerColJobTitle.text = speakerList.jobTitle
         speakerColJobDescribtion.text = speakerList.companyName
-        imgUrl(imgUrl: (speakerList.speakerImageUrl)!)
+        if speakerList.speakerImageUrl != nil {
+            imgUrl(imgUrl: (speakerList.speakerImageUrl)!)
+
+        }
       //  speakerColImage.image = UIImage(named: "\((speakerList.speakerImage)!)")
     }
     

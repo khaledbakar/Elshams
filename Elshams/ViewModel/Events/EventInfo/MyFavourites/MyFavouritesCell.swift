@@ -86,6 +86,13 @@ class MyFavouritesCell: UITableViewCell {
         }else {
             favourIcon.image = UIImage(named: "favour.unlike")
         }
+        if AgendaProgram.rondomColor != nil {
+            let randomColor = AgendaProgram.rondomColor
+            let colorItem = UIColor(hexString: randomColor!)
+            cellColor.backgroundColor = colorItem
+        }
+        
+        
         let speaker = AgendaProgram.speakersIdImg
         if !(speaker?.isEmpty)! {
             
@@ -116,7 +123,7 @@ class MyFavouritesCell: UITableViewCell {
         }
         //speakerImgUrl = (AgendaProgram.speakersSession?[0]["imageUrl"])!
         //imgUrl(imgUrl: <#T##String#>)
-        switch IndexPath % 3 {
+      /*  switch IndexPath % 3 {
         case 0:
             cellColor.backgroundColor = UIColor.orange
         case 1:
@@ -128,6 +135,7 @@ class MyFavouritesCell: UITableViewCell {
             cellColor.backgroundColor = UIColor.yellow
             
         }
+        */
         
     }
 

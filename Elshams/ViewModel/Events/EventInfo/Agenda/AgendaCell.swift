@@ -82,9 +82,13 @@ class AgendaCell: UITableViewCell {
        }else {
             favourIcon.image = UIImage(named: "favour-unlike")
        }
-        
-      /*   let randomColor = AgendaProgram.rondomColor
-        let randomColorArray =  randomColor?.split(separator: "#")
+    if AgendaProgram.rondomColor != nil {
+        let randomColor = AgendaProgram.rondomColor
+        let colorItem = UIColor(hexString: randomColor!)
+        cellColor.backgroundColor = colorItem
+    }
+        //UIColor(hexString: randomColor!)
+      /*  let randomColorArray =  randomColor?.split(separator: "#")
         var randomColorStr:String = "\(randomColorArray![0])"
         randomColorStr = "0x" + randomColorStr
         print(randomColorStr)
@@ -123,7 +127,7 @@ class AgendaCell: UITableViewCell {
 
         }
         
-       switch IndexPath % 3 {
+     /*  switch IndexPath % 3 {
         case 0:
             cellColor.backgroundColor = UIColor.orange
         case 1:
@@ -134,7 +138,7 @@ class AgendaCell: UITableViewCell {
         default:
             cellColor.backgroundColor = UIColor.yellow
             
-        }
+        } */
     }
 
 }

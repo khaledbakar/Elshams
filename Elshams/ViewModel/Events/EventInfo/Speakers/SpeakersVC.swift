@@ -39,13 +39,26 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
 
     }
     
+    @objc func errorAlert(){
+        
+        let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+        //   reloadBtnShow.isHidden = false
+        //  reloadConnection.isHidden = false
+        speakerCollectionView.isHidden = true
+        activeLoader.isHidden = true
+        activeLoader.stopAnimating()
+        //reload
+    }
+    
     func loadAllSpeakerData()  {
         Service.getService(url: URLs.getAllSpeaker) {
             (response) in
-            
             print(response)
             let json = JSON(response)
             let result = json["AllSpeaker"]
+            if !(result.isEmpty){
             var iDNotNull = true
             var index = 0
             while iDNotNull {
@@ -76,20 +89,15 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
                 self.speakerTableView.isHidden = true
                 self.speakerCollectionView.isHidden = false
             }
-            //  print((self.networkList[2].name)!)
+        }
+            else {
+                let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                self.activeLoader.isHidden = true
+            }
         }
     }
-    @objc func errorAlert(){
-        let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-        //  startupTableView.isHidden = true
-        activeLoader.isHidden = true
-        //  activeLoader.stopAnimating()
-        //reload after
-        //
-    }
-    
     
     func btnRightBar()  {
         //  let btnSearch = UIButton(type: UIButton.ButtonType.system)

@@ -79,6 +79,9 @@
 		0469B49D21AC1675000A337B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0469B49B21AC1675000A337B /* LaunchScreen.storyboard */; };
 		047970DA21CFF46400C5BAFD /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047970D921CFF46400C5BAFD /* UIColor.swift */; };
 		049BF7BC21CBBFF70086F569 /* SponserCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049BF7BB21CBBFF70086F569 /* SponserCollectionViewCell.swift */; };
+		04AD60E5221239CB00648C7E /* SpeakerSessions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AD60E4221239CB00648C7E /* SpeakerSessions.swift */; };
+		04AD60E92212446000648C7E /* QuestionsVote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AD60E82212446000648C7E /* QuestionsVote.swift */; };
+		04AD60EB221244E200648C7E /* MultiAnswers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AD60EA221244E200648C7E /* MultiAnswers.swift */; };
 		04B2C5A82200C1B70039D6AD /* AvailableAppointment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B2C5A72200C1B70039D6AD /* AvailableAppointment.swift */; };
 		04B2C5AA220345200039D6AD /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B2C5A9220345200039D6AD /* UserData.swift */; };
 		04B872A721AD536500C6629E /* SelectFavCompVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B872A621AD536500C6629E /* SelectFavCompVC.swift */; };
@@ -175,6 +178,9 @@
 		0469B49E21AC1675000A337B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		047970D921CFF46400C5BAFD /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		049BF7BB21CBBFF70086F569 /* SponserCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponserCollectionViewCell.swift; sourceTree = "<group>"; };
+		04AD60E4221239CB00648C7E /* SpeakerSessions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeakerSessions.swift; sourceTree = "<group>"; };
+		04AD60E82212446000648C7E /* QuestionsVote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsVote.swift; sourceTree = "<group>"; };
+		04AD60EA221244E200648C7E /* MultiAnswers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiAnswers.swift; sourceTree = "<group>"; };
 		04B2C5A72200C1B70039D6AD /* AvailableAppointment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableAppointment.swift; sourceTree = "<group>"; };
 		04B2C5A9220345200039D6AD /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		04B872A621AD536500C6629E /* SelectFavCompVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectFavCompVC.swift; sourceTree = "<group>"; };
@@ -350,6 +356,9 @@
 				04B2C5A72200C1B70039D6AD /* AvailableAppointment.swift */,
 				04B2C5A9220345200039D6AD /* UserData.swift */,
 				0427280D2208693C0028C671 /* AgendaSpeakerIdPic.swift */,
+				04AD60E4221239CB00648C7E /* SpeakerSessions.swift */,
+				04AD60E82212446000648C7E /* QuestionsVote.swift */,
+				04AD60EA221244E200648C7E /* MultiAnswers.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -670,11 +679,13 @@
 				045EF18B21B93AFC009DCA7A /* PendingVC.swift in Sources */,
 				0466C07321B5973900C9C555 /* Sponsers.swift in Sources */,
 				04B872AB21AD6E8F00C6629E /* SideMenuContainerVC.swift in Sources */,
+				04AD60EB221244E200648C7E /* MultiAnswers.swift in Sources */,
 				0466C06921B57B4100C9C555 /* StartUps.swift in Sources */,
 				04B872B421AD962E00C6629E /* SideMenuCell.swift in Sources */,
 				0469B49221AC1674000A337B /* ViewController.swift in Sources */,
 				04FFB80121CFBBFD002009A4 /* SettingsCell.swift in Sources */,
 				0429799F21DB8DBC0041039E /* ViewConTableViewCell.swift in Sources */,
+				04AD60E92212446000648C7E /* QuestionsVote.swift in Sources */,
 				045EF18D21B93B19009DCA7A /* AcceptedVC.swift in Sources */,
 				0466C0AA21B802D600C9C555 /* NetworkDetailsVC.swift in Sources */,
 				0466C07521B5974C00C9C555 /* Speakers.swift in Sources */,
@@ -701,6 +712,7 @@
 				044C648121FF2B0A00434BB1 /* Helper.swift in Sources */,
 				045EF19E21B96098009DCA7A /* AllQuestionsCell.swift in Sources */,
 				0439DACF21C68A510041CDCB /* NewFeedsCell.swift in Sources */,
+				04AD60E5221239CB00648C7E /* SpeakerSessions.swift in Sources */,
 				04B2C5A82200C1B70039D6AD /* AvailableAppointment.swift in Sources */,
 				045EF19121B93C24009DCA7A /* AcceptedCell.swift in Sources */,
 				044C648321FF342600434BB1 /* Config.swift in Sources */,

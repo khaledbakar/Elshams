@@ -32,10 +32,15 @@ class ExhibitorsCell: UITableViewCell {
         if let imagUrlAl = imgUrl as? String {
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
                 print(response)
+                switch response.result {
+                case .success(let value):
                 if let image = response.result.value {
                     DispatchQueue.main.async{
                         self.exhibitorsImage.image = image
                     }
+                }
+                case .failure(let error):
+                    print(error)
                 }
             })
         }
@@ -45,7 +50,10 @@ class ExhibitorsCell: UITableViewCell {
         exhibitorsImage.layer.cornerRadius = exhibitorsImage.frame.width / 2
         exhibitorsImage.clipsToBounds = true
         exhibitorsName.text = exibitorsList.startupName
-        imgUrl(imgUrl: (exibitorsList.startupImageUrl)!)
+        if exibitorsList.startupImageUrl != nil {
+            imgUrl(imgUrl: (exibitorsList.startupImageUrl)!)
+
+        }
         let email = exibitorsList.contectInforamtion?["Email"]
         
 

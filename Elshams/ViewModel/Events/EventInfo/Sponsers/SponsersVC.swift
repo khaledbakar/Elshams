@@ -32,71 +32,32 @@ class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSour
         activeLoader.startAnimating()
         sponserTableView.isHidden = true
         sponserCollectionView.isHidden = true
+          NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
         loadAllSponserData()
      //   self.navigationItem.bar
 
     }
     
-    func loadAllSponserData()  {
-        if let  apiToken  = Helper.getApiToken() {
-
-        Service.getServiceWithAuth(url: URLs.getAllSponsors) {
-            (response) in
-            print(response)
-            let json = JSON(response)
-            let result = json["AllSponsers"]
-
-            var iDNotNull = true
-            var index = 0
-            while iDNotNull {
-                let sponser_ID = result[index]["ID"].string
-                let sponser_Name = result[index]["name"].string
-                let sponser_Address = result[index]["address"].string
-                let sponser_ImageUrl = result[index]["imageUrl"].string
-                let sponser_About = result[index]["about"].string
-                let sponser_ContectInforamtion = result[index]["ContectInforamtion"].dictionaryObject
-
-                let sponser_Email = result[index]["ContectInforamtion"]["Email"].string
-                let sponser_Linkedin = result[index]["ContectInforamtion"]["linkedin"].string
-                let sponser_Phone = result[index]["ContectInforamtion"]["phone"].string
-                
-                let sponser_Sponsertype = result[index]["Sponsertype"].dictionaryObject
-                let sponser_Sponsertype_ID = result[index]["Sponsertype"]["id"].string
-                let sponser_Sponsertype_name = result[index]["Sponsertype"]["name"].string
-                let sponser_Sponsertype_icon = result[index]["Sponsertype"]["icon"].string
-                let sponser_Sponsertype_Color = result[index]["Sponsertype"]["color"].string
-                
-                let contectOptionNil = ["Email": "",
-                               "linkedin": "",
-                               "phone": ""]
-                let sponserTypeOptionNil = ["id": "Media Partner",
-                "name": "Media Partner",
-                "icon": "",
-                "color": "#053a8e"]
-
-                if sponser_ID == nil || sponser_ID?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || sponser_ID == "null" || sponser_ID == "nil" {
-                    iDNotNull = false
-                    break
-                }
-                self.sponserList.append(Sponsers(SponserName: sponser_Name ?? "name", SponserAddress: sponser_Address ?? "address", SponserImageURL: sponser_ImageUrl ?? "Image", SponserAbout: sponser_About ?? "ABout", SponserID: sponser_ID ?? "ID", ContectInforamtion: sponser_ContectInforamtion ?? contectOptionNil, Sponsertype: sponser_Sponsertype ?? sponserTypeOptionNil))
-                index = index + 1
-                self.sponserTableView.reloadData()
-                self.sponserCollectionView.reloadData()
-                self.activeLoader.isHidden = true
-                self.activeLoader.stopAnimating()
-                self.sponserTableView.isHidden = true
-                self.sponserCollectionView.isHidden = false
-            }
-            //  print((self.networkList[2].name)!)
-        }
-        }else {
+    @objc func errorAlert(){
         
+        let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+     //   reloadBtnShow.isHidden = false
+      //  reloadConnection.isHidden = false
+        sponserCollectionView.isHidden = true
+        activeLoader.isHidden = true
+        activeLoader.stopAnimating()
+        //reload
+    }
+    
+    func loadAllSponserData()  {
             Service.getService(url: URLs.getAllSponsors) {
                 (response) in
                 print(response)
                 let json = JSON(response)
                 let result = json["AllSponsers"]
-                
+                if !(result.isEmpty){
                 var iDNotNull = true
                 var index = 0
                 while iDNotNull {
@@ -117,13 +78,8 @@ class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSour
                     let sponser_Sponsertype_icon = result[index]["Sponsertype"]["icon"].string
                     let sponser_Sponsertype_Color = result[index]["Sponsertype"]["color"].string
                     
-                    let contectOptionNil = ["Email": "",
-                                            "linkedin": "",
-                                            "phone": ""]
-                    let sponserTypeOptionNil = ["id": "Media Partner",
-                                                "name": "Media Partner",
-                                                "icon": "",
-                                                "color": "#053a8e"]
+                    let contectOptionNil = ["Email": "","linkedin": "","phone": ""]
+                    let sponserTypeOptionNil = ["id": "Media Partner","name": "Media Partner", "icon": "","color": "#053a8e"]
                     
                     if sponser_ID == nil || sponser_ID?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || sponser_ID == "null" || sponser_ID == "nil" {
                         iDNotNull = false
@@ -138,9 +94,16 @@ class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSour
                     self.sponserTableView.isHidden = true
                     self.sponserCollectionView.isHidden = false
                     
-                }
+               // }
             }
             
+        }
+                else {
+                    let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    self.activeLoader.isHidden = true
+                }
         }
     }
     

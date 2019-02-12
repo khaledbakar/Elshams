@@ -33,6 +33,7 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
     
         activeLoader.startAnimating()
         favourSessionTableView.isHidden = true
+          NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
         loadFavourSessionsData()
         var secCount = 0
       
@@ -43,6 +44,19 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
         }
     }
     
+    @objc func errorAlert(){
+        
+        let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+     //   reloadBtnShow.isHidden = false
+      //  reloadConnection.isHidden = false
+        favourSessionTableView.isHidden = true
+        activeLoader.isHidden = true
+        activeLoader.stopAnimating()
+        //reload
+        
+    }
    func loadFavourSessionsData(){
     if let  apiToken  = Helper.getApiToken() {
 
@@ -55,8 +69,7 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
         var index = 0
         while iDNotNull {
             let agenda_Type = result[index]["type"].string
-                
-            if agenda_Type == nil || agenda_Type?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
+            if agenda_Type == nil || agenda_Type?.trimmed == "" ||
                 agenda_Type == "null"{
                 iDNotNull = false
                 break

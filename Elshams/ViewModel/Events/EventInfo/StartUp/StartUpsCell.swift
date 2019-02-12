@@ -34,10 +34,15 @@ class StartUpsCell: UITableViewCell {
         if let imagUrlAl = imgUrl as? String {
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
                 print(response)
+                switch response.result {
+                case .success(let value):
                 if let image = response.result.value {
                     DispatchQueue.main.async{
                         self.startupImage.image = image
                     }
+                }
+                case .failure(let error):
+                    print(error)
                 }
             })
         }
@@ -49,7 +54,9 @@ class StartUpsCell: UITableViewCell {
         startupName.text = startupsList.startupName
         let email = startupsList.contectInforamtion?["Email"]
         startupAddress.text = "\((email)!)"
-        imgUrl(imgUrl: (startupsList.startupImageUrl)!)
+        if startupsList.startupImageUrl != nil {
+            imgUrl(imgUrl: (startupsList.startupImageUrl)!)
+        }
       //  startupAddress.text = ""
         if let  apiToken  = Helper.getApiToken() {
             sechadualeBtn.isHidden = false

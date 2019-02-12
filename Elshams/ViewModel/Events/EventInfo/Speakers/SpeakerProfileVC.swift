@@ -15,6 +15,8 @@ import SwiftyJSON
 
 class SpeakerProfileVC: UIViewController {
     var singleItem:Speakers?
+    var speakerSessionsList = Array<SpeakerSeasions>()
+
     @IBOutlet weak var speakerName: UILabel!
     @IBOutlet weak var speakerEmail: UILabel!
     @IBOutlet weak var aboutSpeaker: UITextView!
@@ -46,7 +48,11 @@ class SpeakerProfileVC: UIViewController {
         connectColor.clipsToBounds = true
         speakerName.text = singleItem?.name
         speakerJobTitle.text = singleItem?.jobTitle
-        imgUrl(imgUrl: (singleItem?.speakerImageUrl)!)
+        
+        if singleItem?.speakerImageUrl != nil {
+            imgUrl(imgUrl: (singleItem?.speakerImageUrl)!)
+        }
+        
         phoneNumber = singleItem?.contectInforamtion!["phone"] as! String
         email = singleItem?.contectInforamtion!["Email"] as! String
         faceBookLinkEdinNow = singleItem?.contectInforamtion!["linkedin"] as! String
@@ -94,18 +100,99 @@ class SpeakerProfileVC: UIViewController {
      //   speakerJobTitle.text = singleItem?.jobTitle
         
     }
+    override func viewWillAppear(_ animated: Bool) {
+        loadAllSpeakerData()
+    }
+    
+    func loadAllSpeakerData()  {
+        Service.getService(url: "\(URLs.getSpeakerDetail)/\((singleItem?.speaker_id)!)") {
+            (response) in
+            print(response)
+            let json = JSON(response)
+            let result = json
+            if !(result.isEmpty){
+                    let speaker_ID = result["ID"].string
+                    let speaker_Name = result["name"].string
+                    let speaker_JobTitle = result["jobTitle"].string
+                    let speaker_CompanyName = result["companyName"].string
+                    let speaker_ImageUrl = result["imageUrl"].string
+                    let speaker_About = result["about"].string
+                    let speaker_ContectInforamtion = result["ContectInforamtion"].dictionaryObject
+                    let speaker_Email = result["ContectInforamtion"]["Email"].string
+                    let speaker_Linkedin = result["ContectInforamtion"]["linkedin"].string
+                    let speaker_Phone = result["ContectInforamtion"]["phone"].string
+                    let contect = ["Email": "","linkedin": "","phone": ""]
+                    let speaker_Sessions = result["Seassions"]
+                
+                var iDNotNull = true
+                var index = 0
+                while iDNotNull {
+                    let session_ID = speaker_Sessions[index]["ID"].string
+                    if session_ID == nil || session_ID?.trimmed == "" || session_ID == "null" || session_ID == "nil" {
+                       iDNotNull = false
+                        break
+                    }
+                    let session_Title = speaker_Sessions[index]["Title"].string
+                    let session_Location = speaker_Sessions[index]["Location"].string
+                    let session_Time = speaker_Sessions[index]["Time"].string
+
+                    self.speakerSessionsList.append(SpeakerSeasions(Session_id: session_ID ?? "", Session_Title: session_Title ?? "", Session_Location: session_Location ?? "", Session_Time: session_Time ?? ""))
+                    index = index + 1
+                }
+                self.speakerPhone.text = speaker_Phone
+                self.speakerEmail.text = speaker_Email
+                self.speakerWebsite.text = speaker_Linkedin
+                self.speakerFacebook.text = speaker_Linkedin
+                self.aboutSpeaker.text = speaker_About
+                if !(self.speakerSessionsList.isEmpty) {
+                    for ind in 0..<self.speakerSessionsList.count{
+                        if ind == 0 {
+                            self.speakerFSName.text = self.speakerSessionsList[ind].session_Title
+                            self.speakerFSTime.text = self.speakerSessionsList[ind].session_Time
+                            self.speakerFSLocation.text = self.speakerSessionsList[ind].session_Location
+                            
+                        }
+                        else if ind == 1 {
+                            self.speakerSecSName.text = self.speakerSessionsList[ind].session_Title
+                            self.speakerSecSTime.text = self.speakerSessionsList[ind].session_Time
+                            self.speakerSecSLocation.text = self.speakerSessionsList[ind].session_Location
+                        }
+                    }
+               
+                } else {
+                    // session view hidden
+                }
+               
+                }
+            
+            else {
+                let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
     
     func imgUrl(imgUrl:String)  {
+        if imgUrl != nil {
+            
+       
         if let imagUrlAl = imgUrl as? String {
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
                 print(response)
+                switch response.result {
+                case .success(let value):
                 if let image = response.result.value {
                     DispatchQueue.main.async{
                         self.speakerProfileImg.image = image
                     }
                 }
+                case .failure(let error):
+                    print(error)
+                }
             })
         }
+             }
     }
     @objc func tapFacebookLinkFunc(sender:UIGestureRecognizer) {
         if let openURL = URL(string: "twitter://"){
@@ -150,12 +237,13 @@ class SpeakerProfileVC: UIViewController {
         compser.mailComposeDelegate = self
         compser.setToRecipients([(email)!])
         compser.setSubject("Event User Want to connect")
-        compser.setMessageBody("i love your session ana want to connect with you in other deal", isHTML: false)
+        compser.setMessageBody("", isHTML: false)
         present(compser, animated: true, completion: nil)
         
     }
     
     @objc func tapCallFunc(sender:UIGestureRecognizer) {
+        if phoneNumber != nil {
        PhoneCall.makeCall(PhoneNumber: (phoneNumber)!)
         guard let numberString = phoneNumber,let url = URL(string: "telprompt://\(numberString)")
             else {
@@ -163,7 +251,7 @@ class SpeakerProfileVC: UIViewController {
         }
         UIApplication.shared.open(url)
     }
-  
+    }
     @objc func tapOpenLinkFunc(sender:UIGestureRecognizer) {
        guard let url = URL(string: (speakerWebsite.text)!)
             else {
