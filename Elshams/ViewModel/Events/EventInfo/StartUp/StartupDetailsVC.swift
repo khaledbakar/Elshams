@@ -191,7 +191,11 @@ class StartupDetailsVC: UIViewController {
             
             let lblApointmet = UILabel(frame: frame)
             lblApointmet.text = availableAppointmentList[index].appoimentName
-          //  lblApointmet.tag = index+1
+            lblApointmet.tag = index+1
+            let titleLabelGest = UITapGestureRecognizer(target: self, action: #selector(StartupDetailsVC.labelChoiseFunc))
+            lblApointmet.isUserInteractionEnabled = true
+            lblApointmet.addGestureRecognizer(titleLabelGest)
+            
             frameBtn.origin.x = 15
             frameBtn.origin.y = (45 * CGFloat(index)) + 75
             frameBtn.size = CGSize(width: 40 , height: 20.0)
@@ -202,7 +206,7 @@ class StartupDetailsVC: UIViewController {
             btnCheck.addTarget(self, action: #selector(butClic(_:)), for: .touchUpInside)
             btnCheck.setImage(UIImage(named: "unCheck"), for: UIControlState.normal)
             btnCheck.setImage(UIImage(named: "check-1"), for: UIControlState.selected)
-            btnCheck.tag = index + 1
+            btnCheck.tag = (index + 1) * 2
             
             popUpView.addSubview(lblApointmet)
             popUpView.addSubview(btnCheck)
@@ -229,8 +233,7 @@ func imgUrl(imgUrl:String)  {
     
 }
 
-
-    
+   
     @objc func tapLinkedInFunc(sender:UIGestureRecognizer) {
         if let openURL = URL(string: "linkedin://"){
             let canOpen = UIApplication.shared.canOpenURL(openURL)
@@ -285,14 +288,14 @@ func imgUrl(imgUrl:String)  {
     }
     
     func afterRescadualeFrame() {
-     
+     /*
         popUpContainerView.isHidden = true
         rescadualeView.isHidden = false
         informationTopConstraint.constant = 65
+        */
     }
     @IBAction func cancelAppointment(_ sender: Any) {
         defaultFrame()
-       
         btnRightBar()
     }
     
@@ -311,6 +314,30 @@ func imgUrl(imgUrl:String)  {
         btnRightBar()
     }
     
+    //MARK:- RadioButtonsSelection
+
+    @objc func labelChoiseFunc(sender:UIGestureRecognizer) {//UIGestureRecognizer
+        //  guard let TagRe = (sender.view as? UILabel)?.text else { return }
+        guard let tag = (sender.view as? UILabel)?.tag else { return }
+        
+        for ind in 2..<popUpView.subviews.count {
+            if ind % 2 == 1 {
+                print(ind)
+                print(popUpView.subviews[ind])
+                (popUpView.subviews[ind] as! UIButton).isSelected = false
+            } else {
+                continue
+            }
+        }
+        (popUpView.viewWithTag(tag * 2) as? UIButton)!.isSelected = true
+        appointmentSelect = availableAppointmentList[tag - 1].appoimentID
+        appointmentSelect_Name = availableAppointmentList[tag - 1].appoimentName
+        print(appointmentSelect_Name)
+        print(tag - 1)
+        //  performSegue(withIdentifier: "newsdetail", sender: topNewsList[tag - 1]) //topNewsList[]
+    }
+    
+    
     @objc func butClic (_ sender: UIButton){
         for ind in 2..<popUpView.subviews.count {
             if ind % 2 == 1 {
@@ -323,7 +350,7 @@ func imgUrl(imgUrl:String)  {
         }
         sender.isSelected = true
         let  buTitle = "\((sender.currentTitle)!)"
-        let buTitleInt = sender.tag - 1
+        let buTitleInt = (sender.tag / 2 ) - 1
         //appointmentSelect = appointmentBooking[buTitleInt]
         appointmentSelect = availableAppointmentList[buTitleInt].appoimentID
         appointmentSelect_Name = availableAppointmentList[buTitleInt].appoimentName
@@ -333,7 +360,6 @@ func imgUrl(imgUrl:String)  {
 
     func btnRightBar()  {
         if let  apiToken  = Helper.getApiToken() {
-
         let btnAppointment = UIButton(type: UIButton.ButtonType.system)
         btnAppointment.setImage(UIImage(named: "appointment"), for: UIControl.State())
         btnAppointment.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
@@ -411,7 +437,7 @@ func imgUrl(imgUrl:String)  {
                                "linkedin": "",
                                "phone": ""]
                 
-                self.startUpList.append(StartUpsData(StartupName: self.startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: self.startUp_ImageURl ?? "Image" , StartUpAbout: self.startUp_About ?? "About", AppoimentStatus: self.startUp_Appoimentstatus ?? "appoimentstatus" , AppoimentTime: self.startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                self.startUpList.append(StartUpsData(StartupName: self.startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: self.startUp_ImageURl ?? "Image" , StartUpAbout: self.startUp_About ?? "", AppoimentStatus: self.startUp_Appoimentstatus ?? "" , AppoimentTime: self.startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
                 
                 self.startUpName.text = self.startUp_Name
                 self.startUpMail.text = self.startUp_Email

@@ -12,14 +12,32 @@ import AlamofireImage
 import SwiftyJSON
 
 class OpenSessionVC: UIViewController , UITextViewDelegate{
+    //MARK:- StaticValues
     static var AgednaOrFavourite:Bool = true
+    static var likeFlag :String?
+   
+    //MARK:- DataLists
     var singleItem:ProgramAgendaItems?
-    var quest = Array<QuestionsData>()
+   // var quest = Array<QuestionsData>()
     var questVotes = Array<QuestionsVote>()
     var questionAnswerVote = Array<MultiAnswers>()
-
-
-    var answerSelect:String?
+    var speakerList = Array<Speakers>()
+    //var startUpList = Array<StartUpsData>()
+    var sessionList = Array<ProgramAgendaItems>()
+    var questionList = Array<QuestionsData>()
+    var agendaSpeakerIDImgList = Array<AgendaSpeakerIdPic>()
+    
+    
+    //MARK:- Containers&Constraints
+    @IBOutlet weak var speakerViewContainer: UIView!
+    @IBOutlet weak var describtionContainerView: UIView!
+    @IBOutlet weak var describtionTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var describeHeightConstraints: NSLayoutConstraint!
+    @IBOutlet weak var questionContTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var nextBackQuestionCont: UIView!
+    @IBOutlet weak var nextBackSpeakerCont: UIView!
+    @IBOutlet weak var questionVoteContainer: UIView!
+    
     @IBOutlet weak var backSpeakerBtn: UIButton!
     @IBOutlet weak var nextSpeakerBtnImg: UIImageView!
     
@@ -27,13 +45,24 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
     @IBOutlet weak var askSpeakerContainer: UIView!
     
     @IBOutlet weak var questionTxt: UITextView!
-    static var likeFlag :String?
 
     @IBOutlet weak var backSpeakerBtnImg: UIImageView!
     @IBOutlet weak var nextSpeakerBtn: UIButton!
     
-    var speakerCounterIndex : Int = 0
+    @IBOutlet weak var nextQuestionBtn: UIButton!
+    @IBOutlet weak var backQuestionBtn: UIButton!
     
+   
+    //MARK:- VariablesInit
+    var answerSelect:String?
+    var answerSelectTitle:String?
+
+    var speakerCounterIndex : Int = 0
+    var initQuestion : Int = 0
+    var frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+    var frameBtn = CGRect(x: 0, y: 0, width: 0, height: 0)
+    
+    //MARK:- SessionVariablesInit
     var session_ID :String?
     var session_RondomColor :String?
     var session_Type :String?
@@ -45,8 +74,9 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
     var session_isFavourate :Bool?
     var session_isFavourate_Str :String?
     var session_TwitterHash :String? //mst5dmt-hash
+   
+    //MARK:- SpeakerVariablesInit
     var speakerImagesCash :[Image]?
-    
     var speaker_ID :String?
     var speaker_Name :String?
     var speaker_JobTitle :String?
@@ -58,11 +88,13 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
     var speaker_Linkedin :String?
     var speaker_Phone :String?
     
+    //MARK:- QuestionVariablesInit
     var question_ID :String?
     var question_head :String?
     var question_answer :String?
     var question_TimeStamp :String?
-
+    
+    //MARK:- IBOutlets
     @IBOutlet weak var sessionTitle: UILabel!
     @IBOutlet weak var sessionDate: UILabel!
     @IBOutlet weak var sessionLocation: UILabel!
@@ -79,38 +111,38 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
     @IBOutlet weak var viewFavBack: UIView!
     @IBOutlet weak var sessionDescribtion: UITextView!
     @IBOutlet weak var questionAnsContainer: UIView!
-    var frame = CGRect(x: 0, y: 0, width: 0, height: 0)
-    var frameBtn = CGRect(x: 0, y: 0, width: 0, height: 0)
-
-
-    var initQuestion : Int = 0
-    
     @IBOutlet weak var sessionQuestion: UITextView!
-    var speakerList = Array<Speakers>()
-    //var startUpList = Array<StartUpsData>()
-    var sessionList = Array<ProgramAgendaItems>()
-    var questionList = Array<QuestionsData>()
-    var agendaSpeakerIDImgList = Array<AgendaSpeakerIdPic>()
+    @IBOutlet weak var activeLoader: UIActivityIndicatorView!
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-       // nextQuestion.ges
-        //default empty label
-        sessionTitle.text = ""
-        sessionDate.text = ""
-        sessionTime.text = ""
-        sessionLocation.text = ""
-        speakerName.text = ""
-        speakerJobTitle.text = ""
-       // speakerName.isHidden = true
-        //speakerProfile.isHidden = true
-        
-      //  discrepFrame
-        OpenSessionVC.likeFlag = "notFavMethod"
 
-        eventDescribtion.text = ""
-        questionsTxt.text = ""
+        initalViewLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(RegisterationVC.viewTapped(gestureRecognizer:)))
+        view.addGestureRecognizer(tapGesture)
+
+    }
+    
+    
+    func initalViewLoad()  {
+        // nextQuestion.ges
+        //default empty label
+        speakerViewContainer.isHidden = true
+        describtionContainerView.isHidden = true
+        questionVoteContainer.isHidden = true
+        sessionTime.text = "NA"
+        sessionDate.text = "NA"
+        sessionTitle.text = "NA"
+        sessionLocation.text = "NA"
+        activeLoader.isHidden = false
+        activeLoader.startAnimating()
+        
+        OpenSessionVC.likeFlag = "notFavMethod"
+        
         speakerProfile.layer.cornerRadius = speakerProfile.frame.width / 2
         speakerProfile.clipsToBounds = true
         viewFavBack.layer.cornerRadius = viewFavBack.frame.width / 2
@@ -119,30 +151,17 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         self.questionTxt.delegate = self
         self.questionTxt.layer.borderWidth = 1.0
         questionTxt.layer.borderColor = UIColor.red.cgColor
-        
-       // questionTxt.
         favouriteIcon.image = UIImage(named: "unlike-session")
         loadSessionData(SessionID: (singleItem?.agenda_ID)!)
         if  OpenSessionVC.AgednaOrFavourite == true {
             self.navigationItem.title = "Agenda"
-
+            
         } else {
             self.navigationItem.title = "My Favourite"
-
         }
-        
-        
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(RegisterationVC.viewTapped(gestureRecognizer:)))
-        view.addGestureRecognizer(tapGesture)
-
-       
-
     }
+    
+    //MARK:- DismmKeyBoard
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -179,15 +198,9 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
     @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer)  {
         sendQuestMainContainer.endEditing(true)
     }
-    
+    //MARK:- LoadData
+
     func loadSessionData(SessionID:String)  {
-       // if user logIN Authorize use this
-        /*   Service.getServiceWithAuth(url: "http://66.226.74.85:4002/api/Event/getSessionDetails/\((self.singleItem?.agenda_ID)!)") {
-         (response) in
-         print("this is favour ")
-         print(response)
-         }
-         */
         if let  apiToken  = Helper.getApiToken() {
 
      Service.getServiceWithAuth(url: "\(URLs.getSessionDetails)/\(SessionID)") {
@@ -208,7 +221,6 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         
                  self.session_TwitterHash = result["twitterHash"].string //mst5dmt-hash
         let speaker_ID_Image = result["Speaker"].dictionaryObject
-        // get speakers // from agendaIdImg get all not only [0]
         let speaker_all = result["Speaker"]["AllSpeaker"]
         var iDSpeakerNotNull = true
         var indexSpeaker = 0
@@ -228,11 +240,8 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
             let speaker_Linkedin = speaker_all[indexSpeaker]["ContectInforamtion"]["linkedin"].string
             let speaker_Phone = speaker_all[indexSpeaker]["ContectInforamtion"]["phone"].string
             
-            let contect = ["Email": "",
-                           "linkedin": "",
-                           "phone": ""]
-            
-            self.speakerList.append(Speakers(SpeakerName: speaker_Name ?? "name", JobTitle: speaker_JobTitle ?? "JOB", CompanyName: speaker_CompanyName ?? "Company", SpImageUrl: speaker_ImageUrl ?? "Image", Speaker_id: speaker_ID ?? "ID", ContectInforamtion: speaker_ContectInforamtion ?? contect, About: speaker_About ?? "About"))
+            let contect = ["Email": "","linkedin": "","phone": ""]
+            self.speakerList.append(Speakers(SpeakerName: speaker_Name ?? "", JobTitle: speaker_JobTitle ?? "", CompanyName: speaker_CompanyName ?? "", SpImageUrl: speaker_ImageUrl ?? "", Speaker_id: speaker_ID ?? "", ContectInforamtion: speaker_ContectInforamtion ?? contect, About: speaker_About ?? ""))
             indexSpeaker = indexSpeaker + 1
         }
         let questions_all = result["Question"]["AllQuestion"]
@@ -266,23 +275,12 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
             indexQuestionAns = indexQuestionAns + 1
             }
             self.questVotes.append((QuestionsVote(Questions: questionFirstloop_q ?? "", QuestionAnswer: self.questionAnswerVote, QuestionsID: questionFirstloop_ID ?? "")))
-      //  self.question_head = questions_all["question"].string
-     //   self.question_answer = questions_all["answer"].string
-      //  self.question_TimeStamp = questions_all["questionTimeStamp"].string
-            
-       // self.speakerList.removeAll()
-     //   self.questionList.removeAll()
-     //   self.sessionList.removeAll()
             indexQuestion = indexQuestion + 1
         }
-    
-       /* self.speakerList.append(Speakers(SpeakerName: self.speaker_Name ?? "name", JobTitle: self.speaker_JobTitle ?? "JOB", CompanyName: self.speaker_CompanyName ?? "Company", SpImageUrl: self.speaker_ImageUrl ?? "Image", Speaker_id: self.speaker_ID ?? "ID", ContectInforamtion: self.speaker_ContectInforamtion ?? contect, About: self.speaker_About ?? "About")) */
-     //   self.questionList.append(QuestionsData(Questions: self.question_head ?? "question", Answer: self.question_answer ?? "answer", QuestionsID: self.question_ID ?? "ID", QuestionTimeStamp: self.question_TimeStamp ?? "TimeStamp"))
-        
-        self.sessionList.append(ProgramAgendaItems(Agenda_ID: self.session_ID ?? "ID", SessionTitle: self.session_Title ?? "Title", SessionTime: self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SpeakersSession: ["ID" : "314",
+
+        self.sessionList.append(ProgramAgendaItems(Agenda_ID: self.session_ID ?? "", SessionTitle: self.session_Title ?? "", SessionTime: self.session_Time ?? "", SessionLocation: self.session_Location ?? "", SpeakersSession: ["ID" : "314",
             "imageUrl" : "http:-b01d-582382a5795e.jpg"]
-            , AgendaDate: self.session_Date ?? "date", FavouriteSession: self.session_isFavourate ?? true , FavouriteSessionStr: self.session_isFavourate_Str ?? "true" , RondomColor: self.session_RondomColor ?? "red", AgendaType: self.session_Type ?? "session", SpeakersIdImg: self.agendaSpeakerIDImgList))
-        
+            , AgendaDate: self.session_Date ?? "", FavouriteSession: self.session_isFavourate ?? true , FavouriteSessionStr: self.session_isFavourate_Str ?? "" , RondomColor: self.session_RondomColor ?? "", AgendaType: self.session_Type ?? "", SpeakersIdImg: self.agendaSpeakerIDImgList))
         
         if self.session_isFavourate == true {
             self.favouriteIcon.image = UIImage(named: "like-session")
@@ -290,9 +288,10 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
             self.favouriteIcon.image = UIImage(named: "unlike-session")
         }
         //fix question
+        if !(self.questVotes.isEmpty) {
         self.questionTxt.text = self.questVotes[0].question
-        
-        self.mangeSessionDetails(SeseionTitle: self.session_Title ?? "Title", AgendaDate: self.session_Date ?? "date", SessionTime:  self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SessionDescribtion: self.session_Description ?? "Describition", SpeakerName: self.speaker_Name ?? "name", SpeakerJobTitle: self.speaker_JobTitle ?? "JOB", SpeakerImgUrl: self.speaker_ImageUrl ?? "Image", QestionHead: self.question_head ?? "question", Speakers: self.speakerList)
+        }
+        self.mangeSessionDetails(SeseionTitle: self.session_Title ?? "Title", AgendaDate: self.session_Date ?? "date", SessionTime:  self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SessionDescribtion: self.session_Description ?? "Describition", SpeakerName: self.speaker_Name ?? "name", SpeakerJobTitle: self.speaker_JobTitle ?? "JOB", SpeakerImgUrl: self.speaker_ImageUrl ?? "Image", QestionHead: self.question_head ?? "question", Speakers: self.speakerList, QuestVotesParam: self.questVotes)
         
         }
         }else {
@@ -315,13 +314,12 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
                 
                 self.session_TwitterHash = result["twitterHash"].string //mst5dmt-hash
                 let speaker_ID_Image = result["Speaker"].dictionaryObject
-                // get speakers // from agendaIdImg get all not only [0]
                 let speaker_all = result["Speaker"]["AllSpeaker"]
                 var iDSpeakerNotNull = true
                 var indexSpeaker = 0
                 while iDSpeakerNotNull {
                     let speaker_ID = speaker_all[indexSpeaker]["ID"].string
-                    if speaker_ID == nil || speaker_ID?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || speaker_ID == "null" || speaker_ID == "nil" {
+                    if speaker_ID == nil || speaker_ID?.trimmed == "" || speaker_ID == "null" || speaker_ID == "nil" {
                         iDSpeakerNotNull = false
                         break
                     }
@@ -335,11 +333,9 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
                     let speaker_Linkedin = speaker_all[indexSpeaker]["ContectInforamtion"]["linkedin"].string
                     let speaker_Phone = speaker_all[indexSpeaker]["ContectInforamtion"]["phone"].string
                     
-                    let contect = ["Email": "",
-                                   "linkedin": "",
-                                   "phone": ""]
+                    let contect = ["Email": "","linkedin": "","phone": ""]
                     
-                    self.speakerList.append(Speakers(SpeakerName: speaker_Name ?? "name", JobTitle: speaker_JobTitle ?? "JOB", CompanyName: speaker_CompanyName ?? "Company", SpImageUrl: speaker_ImageUrl ?? "Image", Speaker_id: speaker_ID ?? "ID", ContectInforamtion: speaker_ContectInforamtion ?? contect, About: speaker_About ?? "About"))
+                    self.speakerList.append(Speakers(SpeakerName: speaker_Name ?? "", JobTitle: speaker_JobTitle ?? "", CompanyName: speaker_CompanyName ?? "", SpImageUrl: speaker_ImageUrl ?? "", Speaker_id: speaker_ID ?? "", ContectInforamtion: speaker_ContectInforamtion ?? contect, About: speaker_About ?? ""))
                     indexSpeaker = indexSpeaker + 1
                 }
                 let questions_all = result["Question"]["AllQuestion"]
@@ -349,7 +345,6 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
                 var indexQuestion = 0
                 while iDQuesionNotNull {
                     let questionFirstloop_ID = questions_all[indexQuestion]["ID"].string
-                    //     self.question_ID = questions_all[indexQuestion]["ID"].string
                     if questionFirstloop_ID == nil || questionFirstloop_ID?.trimmed == "" || questionFirstloop_ID == "null" || questionFirstloop_ID == "nil" {
                         iDQuesionNotNull = false
                         break
@@ -373,19 +368,11 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
                         indexQuestionAns = indexQuestionAns + 1
                     }
                     self.questVotes.append((QuestionsVote(Questions: questionFirstloop_q ?? "", QuestionAnswer: self.questionAnswerVote, QuestionsID: questionFirstloop_ID ?? "")))
-                    //  self.question_head = questions_all["question"].string
-                    //   self.question_answer = questions_all["answer"].string
-                    //  self.question_TimeStamp = questions_all["questionTimeStamp"].string
-                    
-                    // self.speakerList.removeAll()
-                    //   self.questionList.removeAll()
-                    //   self.sessionList.removeAll()
                     indexQuestion = indexQuestion + 1
                 }
                 
-                self.sessionList.append(ProgramAgendaItems(Agenda_ID: self.session_ID ?? "ID", SessionTitle: self.session_Title ?? "Title", SessionTime: self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SpeakersSession: ["ID" : "314",
-                                                                                                                                                                                                                                                              "imageUrl" : "http:-b01d-582382a5795e.jpg"]
-                    , AgendaDate: self.session_Date ?? "date", FavouriteSession: self.session_isFavourate ?? true , FavouriteSessionStr: self.session_isFavourate_Str ?? "true" , RondomColor: self.session_RondomColor ?? "red", AgendaType: self.session_Type ?? "session", SpeakersIdImg: self.agendaSpeakerIDImgList))
+                self.sessionList.append(ProgramAgendaItems(Agenda_ID: self.session_ID ?? "", SessionTitle: self.session_Title ?? "", SessionTime: self.session_Time ?? "", SessionLocation: self.session_Location ?? "location", SpeakersSession: ["ID" : "","imageUrl" : ""]
+                    , AgendaDate: self.session_Date ?? "", FavouriteSession: self.session_isFavourate ?? true , FavouriteSessionStr: self.session_isFavourate_Str ?? "" , RondomColor: self.session_RondomColor ?? "", AgendaType: self.session_Type ?? "", SpeakersIdImg: self.agendaSpeakerIDImgList))
                 
                 
                 if self.session_isFavourate == true {
@@ -396,7 +383,7 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
                 //fix question
                 self.questionTxt.text = self.questVotes[0].question
                 
-                self.mangeSessionDetails(SeseionTitle: self.session_Title ?? "Title", AgendaDate: self.session_Date ?? "date", SessionTime:  self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SessionDescribtion: self.session_Description ?? "Describition", SpeakerName: self.speaker_Name ?? "name", SpeakerJobTitle: self.speaker_JobTitle ?? "JOB", SpeakerImgUrl: self.speaker_ImageUrl ?? "Image", QestionHead: self.question_head ?? "question", Speakers: self.speakerList)
+                self.mangeSessionDetails(SeseionTitle: self.session_Title ?? "", AgendaDate: self.session_Date ?? "", SessionTime:  self.session_Time ?? "", SessionLocation: self.session_Location ?? "", SessionDescribtion: self.session_Description ?? "", SpeakerName: self.speaker_Name ?? "", SpeakerJobTitle: self.speaker_JobTitle ?? "", SpeakerImgUrl: self.speaker_ImageUrl ?? "", QestionHead: self.question_head ?? "", Speakers: self.speakerList, QuestVotesParam: self.questVotes)
                 
             }
         }
@@ -429,7 +416,7 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
        
     }
     
-    func mangeSessionDetails(SeseionTitle:String,AgendaDate:String,SessionTime:String,SessionLocation:String,SessionDescribtion:String,SpeakerName:String,SpeakerJobTitle:String,SpeakerImgUrl:String,QestionHead:String,Speakers:[Speakers]){
+    func mangeSessionDetails(SeseionTitle:String,AgendaDate:String,SessionTime:String,SessionLocation:String,SessionDescribtion:String,SpeakerName:String,SpeakerJobTitle:String,SpeakerImgUrl:String,QestionHead:String,Speakers:[Speakers],QuestVotesParam: [QuestionsVote]){
  
         if !(SeseionTitle.isEmpty) {
             sessionTitle.text = SeseionTitle
@@ -439,96 +426,145 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         }
         if !(SessionTime.isEmpty){
             sessionTime.text = SessionTime
+        } else {
+            sessionTime.text = "NA"
+
         }
         if !(SessionLocation.isEmpty){
             sessionLocation.text = SessionLocation
+        } else {
+            sessionLocation.text = "NA"
         }
+        
         if !(SessionDescribtion.isEmpty){
             let sessionDecribtionHtml = SessionDescribtion.htmlToString
             eventDescribtion.text = sessionDecribtionHtml
+            describtionContainerView.isHidden = false
+
+            
+        } else {
+            noDescribtionMethod()
         }
         
+        //MARK:- Speaker
         if !(Speakers.isEmpty) {
+            speakerViewContainer.isHidden = false
             speakerName.text = Speakers[0].name
             speakerJobTitle.text = Speakers[0].jobTitle
             //array of image and cashe the images
             imgUrl(imgUrl: Speakers[0].speakerImageUrl!)
-            
-        }
-     
-       
-        if !(QestionHead.isEmpty){
-            questionsTxt.text = QestionHead
-
-        }
-        
-       for i in 0..<questVotes.count{
-        //fix at first and then change with tap
-         questionsTxt.text =  questVotes[i].question
-              for i in 0..<questVotes.count{
-                var qu = Int(questVotes[i].questionAnswer.count)
-            for index in 0..<qu {
-                frame.origin.x = 45
-                frame.origin.y = (40 * CGFloat(index))
-                frame.size = CGSize(width: 200 , height: 20.0)
-                let lblAnswers = UILabel(frame: frame)
-                lblAnswers.text = questVotes[i].questionAnswer[index].answerTitle
-                lblAnswers.textColor = UIColor.darkGray
-                lblAnswers.font = lblAnswers.font.withSize(13.0)
-                frameBtn.origin.x = 0
-                frameBtn.origin.y = (40 * CGFloat(index))
-                frameBtn.size = CGSize(width: 40 , height: 20.0)
-                var btnCheck = UIButton(frame: frameBtn)
-                btnCheck.setTitle("\(index)", for: .normal)
-                btnCheck.isSelected = false
-                btnCheck.addTarget(self, action: #selector(butClic(_:)), for: .touchUpInside)
-                btnCheck.setImage(UIImage(named: "unCheck"), for: UIControlState.normal)
-                btnCheck.setImage(UIImage(named: "check-1"), for: UIControlState.selected)
-                btnCheck.tag = index + 1
-                questionAnsContainer.addSubview(lblAnswers)
-                questionAnsContainer.addSubview(btnCheck)
+            if Speakers.count == 1 {
+                nextBackSpeakerCont.isHidden = true
+            } else {
+                nextBackSpeakerCont.isHidden = false
             }
+            
+        } else {
+            noSpeakerMethod()
         }
-    }
- 
+
+        //MARK:- QUESTION
+        if !(QuestVotesParam.isEmpty) {
+            questionVoteContainer.isHidden = false
+           if QuestVotesParam.count == 1 {
+                nextBackQuestionCont.isHidden = true
+            } else {
+                nextBackQuestionCont.isHidden = false
+            }
+            for i in 0..<questVotes.count{
+                //fix at first and then change with tap
+                questionsTxt.text =  questVotes[i].question
+                for i in 0..<questVotes.count{
+                    var qu = Int(questVotes[i].questionAnswer.count)
+                    for index in 0..<qu {
+                        frame.origin.x = 45
+                        frame.origin.y = (40 * CGFloat(index))
+                        frame.size = CGSize(width: 200 , height: 20.0)
+                        let lblAnswers = UILabel(frame: frame)
+                        lblAnswers.text = questVotes[i].questionAnswer[index].answerTitle
+                        lblAnswers.textColor = UIColor.darkGray
+                        lblAnswers.font = lblAnswers.font.withSize(13.0)
+                        lblAnswers.tag = index+1
+
+                        let titleLabelGest = UITapGestureRecognizer(target: self, action: #selector(OpenSessionVC.labelChoiseFunc))
+                        lblAnswers.isUserInteractionEnabled = true
+                        lblAnswers.addGestureRecognizer(titleLabelGest)
+                        frameBtn.origin.x = 0
+                        frameBtn.origin.y = (40 * CGFloat(index))
+                        frameBtn.size = CGSize(width: 40 , height: 20.0)
+                        
+                        var btnCheck = UIButton(frame: frameBtn)
+                        btnCheck.setTitle("\(index)", for: .normal)
+                        btnCheck.isSelected = false
+                        btnCheck.addTarget(self, action: #selector(butClic(_:)), for: .touchUpInside)
+                        btnCheck.setImage(UIImage(named: "unCheck"), for: UIControlState.normal)
+                        btnCheck.setImage(UIImage(named: "check-1"), for: UIControlState.selected)
+                        btnCheck.tag = (index + 1) * 2
+                        questionAnsContainer.addSubview(lblAnswers)
+                        questionAnsContainer.addSubview(btnCheck)
+                    }
+                }
+            }
+        } else {
+            noQuestionMethod()
+        }
+        activeLoader.stopAnimating()
+        activeLoader.isHidden = true
+        
     }
     
+    //MARK:- QUESTIONNextBackButtons
     @IBAction func backQuestionBtn(_ sender: Any) {
-     /*   print(initQuestion)
+       print(initQuestion)
 
         if initQuestion <= 0{
             print("Illegal")
+            backQuestionBtn.isHidden = true
+            backQuestion.isHidden = true
         }
         else {
+            backQuestionBtn.isHidden = false
+            backQuestion.isHidden = false
             initQuestion = initQuestion - 1
-            questionsTxt.text = quest[initQuestion].questions
+            if initQuestion == 0 {
+                backQuestionBtn.isHidden = true
+                backQuestion.isHidden = true
+            }
+            questionsTxt.text = questVotes[initQuestion].question
             var ansInd = 0
             for ind in 0..<questionAnsContainer.subviews.count {
                 if ind % 2 == 0 {
-                    (questionAnsContainer.subviews[ind] as! UILabel).text = quest[initQuestion].answerArr![ansInd]
+    (questionAnsContainer.subviews[ind] as! UILabel).text = questVotes[initQuestion].questionAnswer[ansInd].answerTitle
                     ansInd = ansInd + 1
                 } else {
                     continue
                 }
             }
         }
-        */
+        
     }
     
     @IBAction func nextQuestionBtn(_ sender: Any) {
-        
-/*
+
         print(initQuestion)
-        if initQuestion >= quest.count - 1 {
+        if initQuestion >= questVotes.count - 1 {
             print("Illegal")
+            nextQuestion.isHidden = true
+            nextQuestionBtn.isHidden = true
         }
         else {
+            nextQuestion.isHidden = false
+            nextQuestionBtn.isHidden = false
             initQuestion = initQuestion + 1
-            questionsTxt.text = quest[initQuestion].questions
+            if initQuestion == questVotes.count - 1 {
+                nextQuestion.isHidden = true
+                nextQuestionBtn.isHidden = true
+            }
+            questionsTxt.text = questVotes[initQuestion].question
             var ansInd = 0
             for ind in 0..<questionAnsContainer.subviews.count {
                 if ind % 2 == 0 {
-                    (questionAnsContainer.subviews[ind] as! UILabel).text = quest[initQuestion].answerArr![ansInd]
+    (questionAnsContainer.subviews[ind] as! UILabel).text = questVotes[initQuestion].questionAnswer[ansInd].answerTitle
                     ansInd = ansInd + 1
                 } else {
                     continue
@@ -536,10 +572,72 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
             }
             
         }
-        */
+       
             }
     
+    //MARK:- RadioButtonsSelection
+    
+    @objc func labelChoiseFunc(sender:UIGestureRecognizer) {//UIGestureRecognizer
+        //  guard let TagRe = (sender.view as? UILabel)?.text else { return }
+        guard let tag = (sender.view as? UILabel)?.tag else { return }
+        for ind in 0..<questionAnsContainer.subviews.count {
+            print("the \(ind) is :")
+
+            print(questionAnsContainer.subviews[ind])
+            if ind % 2 == 1 {
+                print(ind)
+                print(questionAnsContainer.subviews[ind])
+                (questionAnsContainer.subviews[ind] as! UIButton).isSelected = false
+            } else {
+                continue
+            }
+        }
+
+     /*
+        for ind in 2..<questionAnsContainer.subviews.count {
+            if ind % 2 == 1 {
+                print(ind)
+                print(questionAnsContainer.subviews[ind])
+                (questionAnsContainer.subviews[ind] as! UIButton).isSelected = false
+            } else {
+                continue
+            }
+        } */
+        (questionAnsContainer.viewWithTag(tag * 2) as? UIButton)!.isSelected = true
+        answerSelect = questVotes[initQuestion].questionAnswer[tag - 1].answerID
+        answerSelectTitle = questVotes[initQuestion].questionAnswer[tag - 1].answerTitle
+        print(answerSelect)
+        print(answerSelectTitle)
+        print(tag - 1)
+ 
+        //  performSegue(withIdentifier: "newsdetail", sender: topNewsList[tag - 1]) //topNewsList[]
+    }
+    
+    
     @objc func butClic (_ sender: UIButton){
+        for ind in 2..<questionAnsContainer.subviews.count {
+            if ind % 2 == 1 {
+                print(ind)
+                print(questionAnsContainer.subviews[ind])
+                (questionAnsContainer.subviews[ind] as! UIButton).isSelected = false
+            } else {
+                continue
+            }
+        }
+        sender.isSelected = true
+        let  buTitle = "\((sender.currentTitle)!)"
+        let buTitleInt = (sender.tag / 2 ) - 1
+        //appointmentSelect = appointmentBooking[buTitleInt]
+       // appointmentSelect = availableAppointmentList[buTitleInt].appoimentID
+       // appointmentSelect_Name = availableAppointmentList[buTitleInt].appoimentName
+        answerSelect = questVotes[initQuestion].questionAnswer[buTitleInt].answerID
+        answerSelectTitle = questVotes[initQuestion].questionAnswer[buTitleInt].answerTitle
+        print(answerSelect)
+        print(answerSelectTitle)
+    }
+    
+
+    @objc func butClicOld (_ sender: UIButton){
         for ind in 0..<questionAnsContainer.subviews.count {
             if ind % 2 == 1 {
                 print(ind)
@@ -554,16 +652,51 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         let  buTitle = "\((sender.currentTitle)!)"
         let buTitleInt = sender.tag - 1
         print(buTitleInt)
-        
         print(answerSelect)
 
+    }
+    
+    //MARK:- SpeakerNextBackButtons
+    @IBAction func nextSpeakerMethod(_ sender: Any) {
+        if speakerCounterIndex < speakerList.count - 1 {
+            print(speakerCounterIndex)
+            speakerCounterIndex = speakerCounterIndex + 1
+            backSpeakerBtnImg.isHidden = false
+            backSpeakerBtn.isHidden = false
+            if speakerCounterIndex == speakerList.count - 1 {
+                nextSpeakerBtn.isHidden = true
+                nextSpeakerBtnImg.isHidden = true
+            }
+            
+        } else if speakerCounterIndex == speakerList.count - 1 {
+            backSpeakerBtnImg.isHidden = false
+            backSpeakerBtn.isHidden = false
+            nextSpeakerBtn.isHidden = true
+            nextSpeakerBtnImg.isHidden = true
+        }
+        if !(speakerList.isEmpty) { // != nil
+            speakerName.text = speakerList[speakerCounterIndex].name
+            speakerJobTitle.text = speakerList[speakerCounterIndex].jobTitle
+            imgUrl(imgUrl: speakerList[speakerCounterIndex].speakerImageUrl!)
+        }
     }
     
     @IBAction func backSpeakerMethod(_ sender: Any) {
         if speakerCounterIndex > 0   {
             print(speakerCounterIndex)
             speakerCounterIndex = speakerCounterIndex - 1
+            nextSpeakerBtn.isHidden = false
+            nextSpeakerBtnImg.isHidden = false
+            if speakerCounterIndex == 0 {
+                backSpeakerBtnImg.isHidden = true
+                backSpeakerBtn.isHidden = true
+            }
             
+        } else if speakerCounterIndex == 0 {
+            backSpeakerBtnImg.isHidden = true
+            backSpeakerBtn.isHidden = true
+            nextSpeakerBtn.isHidden = false
+            nextSpeakerBtnImg.isHidden = false
         }
         if !(speakerList.isEmpty) { // != nil
         speakerName.text = speakerList[speakerCounterIndex].name
@@ -574,7 +707,8 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
 //cashe image needed
         
     }
-    
+    //MARK:- AskSpeakerMethods
+
     @IBAction func sendQuestionBtn(_ sender: Any) {
         let questionTextSend = questionTxt.text
         let questionCheckParam : Parameters =
@@ -589,26 +723,8 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         
     }
     
-    @IBAction func nextSpeakerMethod(_ sender: Any) {
-        if speakerCounterIndex < speakerList.count - 1 {
-                        print(speakerCounterIndex)
-            speakerCounterIndex = speakerCounterIndex + 1
-
-        }
-        if !(speakerList.isEmpty) { // != nil
-            speakerName.text = speakerList[speakerCounterIndex].name
-            speakerJobTitle.text = speakerList[speakerCounterIndex].jobTitle
-            imgUrl(imgUrl: speakerList[speakerCounterIndex].speakerImageUrl!)
-        }
-        
-        
-    }
-    @IBAction func dismissContainer(_ sender: Any) {
-        sendQuestMainContainer.isHidden = true
-        hideKyebad()
-
-    }
-    
+ 
+  
     @IBAction func askSpeaker(_ sender: Any) {
         if let  apiToken  = Helper.getApiToken() {
         sendQuestMainContainer.isHidden = false
@@ -619,9 +735,38 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         }
     }
     
+    @IBAction func dismissContainer(_ sender: Any) {
+        sendQuestMainContainer.isHidden = true
+        hideKyebad()
+        
+    }
+    
     @IBAction func vote(_ sender: Any) {
     }
     
+    //MARK:- Show/Hide Views
+
+    func noSpeakerMethod()  {
+        speakerViewContainer.isHidden = true
+        describtionTopConstraint.constant = -(speakerViewContainer.frame.height) + 10
+        describeHeightConstraints.constant = (describeHeightConstraints.constant) + (speakerViewContainer.frame.height)
+     //   describtionContainerView.frame.height =  describtionContainerView.frame.height + speakerViewContainer.frame.height
+    }
+    
+    func noDescribtionMethod()  {
+        //
+        describtionContainerView.isHidden = true
+        questionContTopConstraint.constant = -(describtionContainerView.frame.height)
+    }
+    
+    func noQuestionMethod()  {
+        questionVoteContainer.isHidden = true
+        describeHeightConstraints.constant = (describeHeightConstraints.constant) + (questionVoteContainer.frame.height)
+    }
+    
+    
+    //MARK:- Favourite/Un Buttons
+
     @IBAction func btnFavouriteSession(_ sender: Any) {
         if let  apiToken  = Helper.getApiToken() {
         let sessionFavID : Parameters = ["sessionID" : "\((self.singleItem?.agenda_ID)!)"]
@@ -662,4 +807,5 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
           //  dismiss(animated: true, completion: nil)
         }
     }
+    
 }
