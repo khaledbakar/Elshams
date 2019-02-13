@@ -57,6 +57,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         super.viewDidLoad()
         addSlideMenuButton()
         //sponser round
+        loadAboutData()
         sponserImg1.layer.cornerRadius = sponserImg1.frame.width / 2
         sponserImg1.clipsToBounds = true
        
@@ -223,6 +224,25 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
             }
             
             }
+    }
+    
+    func loadAboutData()  {
+        
+        Service.getService(url: (URLs.getAbout)) {
+            (response) in
+            print("this is About ")
+            print(response)
+
+            let json = JSON(response)
+            
+            let result = json["AboutInfo"].string
+            if !(result!.isEmpty){
+                self.homeAbout.text = result?.htmlToString
+            } else {
+                // if no data in posts what doing ??
+                
+            }
+        }
     }
     
     func loadPostsData()  {

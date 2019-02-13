@@ -45,6 +45,8 @@ struct URLs {
     static let unfavourateAction = main + "/Event/unfavourateAction"
    
     static let getAllPosts = main + "/Event/getAllPosts"
+    static let getAbout = main + "/Event/getAbout"
+
 
 
     

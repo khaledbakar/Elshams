@@ -78,6 +78,7 @@
 		0469B49A21AC1675000A337B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0469B49921AC1675000A337B /* Assets.xcassets */; };
 		0469B49D21AC1675000A337B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0469B49B21AC1675000A337B /* LaunchScreen.storyboard */; };
 		047970DA21CFF46400C5BAFD /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047970D921CFF46400C5BAFD /* UIColor.swift */; };
+		048128182214A39500DDEE05 /* CommentsNewsFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048128172214A39500DDEE05 /* CommentsNewsFeed.swift */; };
 		049BF7BC21CBBFF70086F569 /* SponserCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049BF7BB21CBBFF70086F569 /* SponserCollectionViewCell.swift */; };
 		04AD60E5221239CB00648C7E /* SpeakerSessions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AD60E4221239CB00648C7E /* SpeakerSessions.swift */; };
 		04AD60E92212446000648C7E /* QuestionsVote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AD60E82212446000648C7E /* QuestionsVote.swift */; };
@@ -175,6 +176,7 @@
 		0469B49C21AC1675000A337B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0469B49E21AC1675000A337B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		047970D921CFF46400C5BAFD /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		048128172214A39500DDEE05 /* CommentsNewsFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsNewsFeed.swift; sourceTree = "<group>"; };
 		049BF7BB21CBBFF70086F569 /* SponserCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponserCollectionViewCell.swift; sourceTree = "<group>"; };
 		04AD60E4221239CB00648C7E /* SpeakerSessions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeakerSessions.swift; sourceTree = "<group>"; };
 		04AD60E82212446000648C7E /* QuestionsVote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsVote.swift; sourceTree = "<group>"; };
@@ -346,6 +348,7 @@
 				045EF19921B96004009DCA7A /* QuestionsData.swift */,
 				0439DACA21C1129F0041CDCB /* NewsData.swift */,
 				0439DAD021C68ACD0041CDCB /* NewsFeedData.swift */,
+				048128172214A39500DDEE05 /* CommentsNewsFeed.swift */,
 				04BE00FC21D0F26A00809834 /* EventsData.swift */,
 				04E994F921ECB7B0006070B3 /* AgendaSectionDate.swift */,
 				04FE210521F755AB0027DDB3 /* AgendaHeadData.swift */,
@@ -735,6 +738,7 @@
 				04B2C5AA220345200039D6AD /* UserData.swift in Sources */,
 				0466C07E21B691A500C9C555 /* NotificationCell.swift in Sources */,
 				04E994F621EB438E006070B3 /* Service.swift in Sources */,
+				048128182214A39500DDEE05 /* CommentsNewsFeed.swift in Sources */,
 				0469B49821AC1674000A337B /* Elshams.xcdatamodeld in Sources */,
 				0466C06D21B58B5D00C9C555 /* SpeakersCell.swift in Sources */,
 				04E994F821EB89D2006070B3 /* MdcText.swift in Sources */,

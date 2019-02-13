@@ -90,6 +90,9 @@ class BaseViewController: UIViewController, SlideMenuDelegate {
     
 //blackView:UIView
     @objc func onSlideMenuButtonPressed(_ sender : UIButton){
+     //   let viewMenuBack : UIView = view.subviews.last!
+         // viewMenuBack.backgroundColor = UIColor.purple
+
         if (sender.tag == 10)
         {
             // To Hide Menu If it already there
@@ -98,21 +101,25 @@ class BaseViewController: UIViewController, SlideMenuDelegate {
             sender.tag = 0;
             
             let viewMenuBack : UIView = view.subviews.last!
-            
+        //    viewMenuBack.backgroundColor = UIColor.black
             UIView.animate(withDuration: 0.3, animations: { () -> Void in
                 var frameMenu : CGRect = viewMenuBack.frame
                 frameMenu.origin.x = -1 * UIScreen.main.bounds.size.width
                 viewMenuBack.frame = frameMenu
                 viewMenuBack.layoutIfNeeded()
                 viewMenuBack.backgroundColor = UIColor.clear
+              //  viewMenuBack.backgroundColor = UIColor.blue
+
                // viewMenuBack.tintColor = UIColor.white
                 }, completion: { (finished) -> Void in
                     viewMenuBack.removeFromSuperview()
             })
+         //   sender.backgroundColor = UIColor.gray
+
             // think black here 
             return
         }
-        
+       // sender.backgroundColor = UIColor.green
         sender.isEnabled = false
         sender.tag = 10
         
@@ -129,6 +136,8 @@ class BaseViewController: UIViewController, SlideMenuDelegate {
         UIView.animate(withDuration: 0.3, animations: { () -> Void in
             menuVC.view.frame=CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height);
             sender.isEnabled = true
+          //  sender.backgroundColor = UIColor.orange
+
             }, completion:nil)
     }
 }

@@ -46,6 +46,8 @@ class MyQuestions: UIViewController , UITableViewDataSource ,UITableViewDelegate
             print(response)
             let json = JSON(response)
             let result = json["myQuestions"]
+            print("All question \(result)")
+
             if !(result.isEmpty){
 
             var iDNotNull = true
@@ -60,7 +62,7 @@ class MyQuestions: UIViewController , UITableViewDataSource ,UITableViewDelegate
                     iDNotNull = false
                     break
                 }
-                self.questionList.append(QuestionsData(Questions: question_head ?? "question", Answer: question_answer ?? "answer", QuestionsID: question_ID ?? "ID", QuestionTimeStamp: question_TimeStamp ?? "TimeStamp"))
+                self.questionList.append(QuestionsData(Questions: question_head ?? "", Answer: question_answer ?? "", QuestionsID: question_ID ?? "", QuestionTimeStamp: question_TimeStamp ?? ""))
                 
                 index = index + 1
                 self.questionTableView.reloadData()

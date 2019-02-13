@@ -289,7 +289,7 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         }
         //fix question
         if !(self.questVotes.isEmpty) {
-        self.questionTxt.text = self.questVotes[0].question
+        self.questionTxt.text = ""
         }
         self.mangeSessionDetails(SeseionTitle: self.session_Title ?? "Title", AgendaDate: self.session_Date ?? "date", SessionTime:  self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SessionDescribtion: self.session_Description ?? "Describition", SpeakerName: self.speaker_Name ?? "name", SpeakerJobTitle: self.speaker_JobTitle ?? "JOB", SpeakerImgUrl: self.speaker_ImageUrl ?? "Image", QestionHead: self.question_head ?? "question", Speakers: self.speakerList, QuestVotesParam: self.questVotes)
         
@@ -711,16 +711,33 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
 
     @IBAction func sendQuestionBtn(_ sender: Any) {
         let questionTextSend = questionTxt.text
-        let questionCheckParam : Parameters =
-            ["sessionID": "\((self.singleItem?.agenda_ID)!)",
-             "speakerID": "\((speakerList[speakerCounterIndex].speaker_id)!)",
-             "question": "\((questionTextSend)!)"]
-        Service.postServiceWithAuth(url: URLs.askQuestion, parameters: questionCheckParam) {
-            (response) in
-            print(response)
-            self.questionTxt.text = ""
+        if questionTextSend?.trimmed == "" || questionTextSend == nil {
+            let alert = UIAlertController(title: "oPP's!", message: "You didn't write your question!", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            let questionCheckParam : Parameters =
+                ["sessionID": "\((self.singleItem?.agenda_ID)!)",
+                    "speakerID": "\((speakerList[speakerCounterIndex].speaker_id)!)",
+                    "question": "\((questionTextSend)!)"]
+            OpenSessionVC.likeFlag = "faveMethod"
+
+            Service.postServiceWithAuth(url: URLs.askQuestion, parameters: questionCheckParam) {
+                (response) in
+                print(response)
+                if response == nil {
+                    OpenSessionVC.likeFlag = ""
+                    self.questionTxt.text = ""
+                    let alert = UIAlertController(title: "Succes!", message: "your question is send!", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+             //        self.sendQuestMainContainer.isHidden = true
+
+                }
+            }
+            
         }
-        
+     
     }
     
  

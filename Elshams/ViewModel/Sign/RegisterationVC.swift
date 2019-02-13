@@ -61,6 +61,7 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
     var passwordTriming:String?
     var emailTrim:String?
     
+    @IBOutlet weak var activeLoader: UIActivityIndicatorView!
     override func viewDidLoad() {
         super.viewDidLoad()
         imagePicker = UIImagePickerController()
@@ -75,7 +76,10 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
         firstHideErrors()
         firstHideHintLabel()
         NotificationCenter.default.addObserver(self, selector: #selector(succesRegister), name: NSNotification.Name("SuccesRegister"), object: nil)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
+        activeLoader.isHidden = true
+       //NotificationCenter.default.post(name: NSNotification.Name("ErrorConnections"), object: nil)
+
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
@@ -83,6 +87,17 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(RegisterationVC.viewTapped(gestureRecognizer:)))
         view.addGestureRecognizer(tapGesture)
 
+    }
+    @objc func errorAlert(){
+        
+        let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+       // startupTableView.isHidden = true
+        activeLoader.isHidden = true
+        activeLoader.stopAnimating()
+        //reload after
+        //
     }
     
     func textFieldsDelegats()  {
@@ -145,7 +160,7 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
         }
         if  notification.name == Notification.Name.UIKeyboardWillShow ||
             notification.name == Notification.Name.UIKeyboardWillChangeFrame {
-            view.frame.origin.y = -150
+            view.frame.origin.y = -190
         } else {
             view.frame.origin.y = 0
         }
@@ -334,14 +349,17 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
         guard let linkedIn = linkedInInputTxt.text   else { return }
         
         guard  let about = othersInputTxt.text  else { return }
-        
+        activeLoader.isHidden = false
+        activeLoader.startAnimating()
        // if TimeLineHomeVC.failMessage !=  "fail" {
         API.register(Email: (emaiInputlTxt.text?.lowercased())!, Password: passwordInputTxt.text!, Title: tiltleUser , CompanyName: companyName, JobTitle: jobTiltle, About: about, Phone: phoneNum, Picture: imageProfileB64 ?? "", Linkedin: linkedIn) { (error: Error?,succes:Bool) in
                 if succes {
                     print("Succes")
+                   self.performSegue(withIdentifier: "registersegue", sender: nil) // SuccesLogin
+/*
                       let alert = UIAlertController(title: "Succes!", message: "Your Are Regestered!", preferredStyle: UIAlertControllerStyle.alert)
                        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-                       self.present(alert, animated: true, completion: nil)
+                       self.present(alert, animated: true, completion: nil) */
                 }
           //  }
             

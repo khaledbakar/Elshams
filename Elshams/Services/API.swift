@@ -133,7 +133,7 @@ class API: NSObject {
             if let apiToken = json["access_token"].string {
                 print("api token \(apiToken)")
                  NotificationCenter.default.post(name: NSNotification.Name("SuccesRegister"), object: nil)
-                //Helper.saveApiToken(Token: apiToken)
+                Helper.saveApiToken(Token: apiToken)
           //      completion(nil , true)
        
             }

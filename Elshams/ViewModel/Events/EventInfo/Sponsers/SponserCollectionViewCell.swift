@@ -45,7 +45,31 @@ class SponserCollectionViewCell: UICollectionViewCell {
             let sponserTypeName = sponserList.sponsertype!["name"]
             let sponserTypeColor = sponserList.sponsertype!["color"]
             print(sponserTypeColor)
-            sponserRank.text = "\((sponserTypeName)!)"
+            if sponserTypeName == nil || "\((sponserTypeName)!)" == "<null>" {
+                sponserRank.isHidden = true
+
+            }
+            else {
+                
+                sponserRank.isHidden = false
+                let spName = "\((sponserTypeName)!)"
+
+            print(spName)
+                sponserRank.text = "\((sponserTypeName)!)"
+                let spColor = "\((sponserTypeColor)!)"
+                print(spColor)
+                if sponserTypeColor == nil || "\((sponserTypeColor)!)" == "<null>" {
+                    
+                } else {
+                    // gold not show
+                    sponserRank.text = "\((sponserTypeName)!)"
+
+                    sponserRank.isHidden = false
+                    sponserRank.textColor = UIColor(hexString: spColor)
+
+                }
+
+            }
         }
         if sponserList.sponserImageUrl != nil ||  !((sponserList.sponserImageUrl?.isEmpty)!) {
             imgUrl(imgUrl: (sponserList.sponserImageUrl)!)

@@ -59,15 +59,15 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
   //  var ans =  ["Kzaky@ikdynamics.com","12345","IOS Developer","01060136503","NO"]
    // var privacy = ["public"]
    // var ansPraivacy
-    var imageProfileB64 : String?
+    var imageProfileB64 : String = ""
     
 
     @IBOutlet weak var profileImg: UIImageView!
    // @IBOutlet weak var settingTableView: UITableView!
     @IBOutlet weak var updateBtn: UIButton!
     static var udapatedMessage = ""
-    var validPassword:Bool = false
-    var validEmail:Bool = false
+    var validPassword:Bool = true
+    var validEmail:Bool = true
     var imagePicker: UIImagePickerController!
 
     // var userTriming:String?
@@ -82,7 +82,7 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
         imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         firstHideErrors()
-        firstHideHintLabel()
+     //   firstHideHintLabel()
         textFieldsDelegats()
         if let  apiToken  = Helper.getApiToken() {
             profileImg.isHidden = false

@@ -43,7 +43,7 @@ class AllQuestionsVC: UIViewController , UITableViewDataSource ,UITableViewDeleg
     
     func loadQuestionData()  {
         if let  apiToken  = Helper.getApiToken() {
-        Service.getServiceWithAuth(url: URLs.getQuestions) { // authorizre or not ?
+        Service.getService(url: URLs.getQuestions) { // authorizre or not ?  WithAuth
             (response) in
             print(response)
            
@@ -51,6 +51,7 @@ class AllQuestionsVC: UIViewController , UITableViewDataSource ,UITableViewDeleg
             
          
             let result = json["All"]
+            print("All question \(result)")
             if !(result.isEmpty){
 
             var iDNotNull = true

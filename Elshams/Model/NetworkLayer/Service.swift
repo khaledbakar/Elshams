@@ -138,16 +138,20 @@ class Service: NSObject {
                     callback(json)
                 case .failure(let error):
                     // why it see notifcation while i don't put notifican in class is because navgiation ?
-                    if OpenSessionVC.likeFlag != "faveMethod" {
-                        Service.errorConnection = "\(error.localizedDescription)"
-                        NotificationCenter.default.post(name: NSNotification.Name("ErrorConnections"), object: nil)
-                        
+                  //  if response != nil {
+                        if OpenSessionVC.likeFlag != "faveMethod" {
+                            Service.errorConnection = "\(error.localizedDescription)"
+                            NotificationCenter.default.post(name: NSNotification.Name("ErrorConnections"), object: nil)
+                            
+                           
+                        }
                         print(error)
                         if let data = response.data {
                             print("Print Server Error: " + String(data: data, encoding: String.Encoding.utf8)!)
                         }
                         callback(nil)
-                    }
+                   // }
+                    
                    
                // }
             }

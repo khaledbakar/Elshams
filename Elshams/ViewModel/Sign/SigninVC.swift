@@ -43,24 +43,23 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
         
    
        // userNameInputlTxt = MDCTextField()
-        userNameInputlTxt.placeholder = "Name"
-        userNameInputlTxt.isEnabled = true
-        userNameInputlTxt.isUserInteractionEnabled = true
-        userNameInputlTxt.clearButtonMode = .whileEditing
+      
      //   userNameInputlTxt.tintColor = UIColor.white
       //  userNameInputlTxt.textColor = UIColor.lightGray
    //     userNameInputlTxt.cursorColor = UIColor.darkGray
 
       //  userNameInputlTxt.keyboardAppearance =
         
+     /*   userNameInputlTxt.placeholder = "Name"
+        userNameInputlTxt.isEnabled = true
+        userNameInputlTxt.isUserInteractionEnabled = true
+        userNameInputlTxt.clearButtonMode = .whileEditing
+        
         textFieldControllerFloating = MDCTextInputControllerUnderline(textInput: userNameInputlTxt)
-      //  textFieldControllerFloating.helperText = "Enter a name"
         textFieldControllerFloating.leadingUnderlineLabelTextColor = UIColor.darkGray       // The helper text
         textFieldControllerFloating.trailingUnderlineLabelTextColor = UIColor.green
         textFieldControllerFloating.inlinePlaceholderColor = UIColor.white
-      //  textFieldControllerFloating.textco = UIColor.white              // inline label
-// inline label
-       // textFieldControllerFloating.borderFillColor = UIColor.white
+        
         textFieldControllerFloating.isFloatingEnabled = true
         
         textFieldControllerFloating.activeColor = UIColor.lightGray               // active label & underline
@@ -68,14 +67,23 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
         textFieldControllerFloating.normalColor = UIColor.white                         // default underline
         textFieldControllerFloating.errorColor = UIColor.red
         
+        MdcText.mdcTextField(textFInput: passwordInputTxt, Placeholder: "PASSWORD")
+*/
+        
+        //  textFieldControllerFloating.helperText = "Enter a name"
+
+      //  textFieldControllerFloating.textco = UIColor.white              // inline label
+// inline label
+       // textFieldControllerFloating.borderFillColor = UIColor.white
+       
+        
       //  textFieldControllerFloating.floatingPlaceholderNormalColor = UIColor.white
       //  textFieldControllerFloating.leadingico
       //  userNameInputlTxt.textColor = UIColor.white
-        userNameInputlTxt.textColor = UIColor.white
+        userNameInputlTxt.textColor = UIColor.black
        // userNameInputlTxt.tou
         //userNameInputlTxt.keyboardAppearance =
-        MdcText.mdcTextField(textFInput: passwordInputTxt, Placeholder: "PASSWORD")
-        passwordInputTxt.textColor = UIColor.white
+        passwordInputTxt.textColor = UIColor.black
         
         userProfileImg.layer.cornerRadius = userProfileImg.frame.width / 2
         userProfileImg.clipsToBounds = true
@@ -112,7 +120,9 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
       //  print("setting")
         self.activeLoginLoader.isHidden = true
         self.activeLoginLoader.stopAnimating()
-
+        let alert = UIAlertController(title: "Error!", message: "The user name or password is incorrect.", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
         passwordError.text = "The user name or password is incorrect."
         passwordError.isHidden = false
 
@@ -196,6 +206,7 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
     }
     
     func signInMethod() {
+        hideKyebad()
         guard let email = userNameInputlTxt.text, !email.isEmpty else {
             userNameError.isHidden = false
             userNameError.text = "you must enter your name"
@@ -218,7 +229,7 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
         API.login(Email: email, Password: password) { (error: Error?,succes:Bool) in
             if succes {
                 print("Succes")
-
+          //      self.loadUserData()
                 self.performSegue(withIdentifier: "skipnav", sender: nil) // SuccesLogin
               //  NotificationCenter.default.post(name: NSNotification.Name("SuccesLogin"), object: nil)
 
@@ -240,7 +251,61 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
         let def = UserDefaults.standard
         def.setValue(nil, forKey: "api_token")
         def.synchronize()
+        hideKyebad()
         performSegue(withIdentifier: "skipnav", sender: nil)
+    }
+    func  loadUserData()  {
+        if let  apiToken  = Helper.getApiToken() {
+            Service.getServiceWithAuth(url: URLs.getSettingData){
+                (response) in
+                print(response)
+                let result = JSON(response)
+                let user_Name = result["Title"].string
+                let user_JobTitle = result["jobTitle"].string
+                let user_CompanyName = result["companyName"].string
+                var user_ImageUrl = result["picture"].string
+                let user_Password = result["password"].string
+                let user_Email = result["email"].string
+                let user_Linkedin = result["linkedin"].string
+                let user_Phone = result["phone"].string
+                let user_about = result["about"].string
+                let user_Ispublic_str = result["isPublic"].string
+                // self.imgUserUrl = user_ImageUrl
+                // internet error handel
+                if user_Name == nil ||  user_Name == "" {
+                    Helper.saveUserName(UserName: user_Name!)
+                }
+                if user_ImageUrl != nil {
+                    self.imgUrl(imgUrl: (user_ImageUrl)!)
+                }
+            }
+        }
+    }
+    func imgUrl(imgUrl:String)  {
+        // if  TimeLineHomeVC.failMessage !=  "fail"{
+        if let imagUrlAl = imgUrl as? String {
+            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
+                print(response)
+                switch response.result {
+                case .success(let value):
+                    if let image = response.result.value {
+                        DispatchQueue.main.async{
+                        //    if let apiToken = json["access_token"].string {
+                        //        print("api token \(apiToken)")
+                                Helper.saveUserImage(UserProfile: image)
+                                //      completion(nil , true)
+                         //   }
+                         //   self.userProfile.image = image
+                        }
+                    }
+                    
+                case .failure(let error):
+                    print(error)
+                    
+                }
+            })
+        }
+        // }
     }
     
     @IBAction func forgotPassword(_ sender: Any) {

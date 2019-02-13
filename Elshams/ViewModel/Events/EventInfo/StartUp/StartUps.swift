@@ -56,6 +56,9 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
     func loadAllStartUpData()  {
          startUpList.removeAll()
         startUpListPaging.removeAll()
+        self.startupTableView.reloadData()
+        startupTableView.isHidden = true
+        activeLoader.startAnimating()
         if let  apiToken  = Helper.getApiToken() {
 
         Service.getServiceWithAuth(url: URLs.getAllStartups) { //WithAuth

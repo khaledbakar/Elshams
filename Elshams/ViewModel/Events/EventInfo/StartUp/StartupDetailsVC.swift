@@ -405,6 +405,11 @@ func imgUrl(imgUrl:String)  {
             Service.postServiceWithAuth(url: URLs.requestAppoiment, parameters: appointmentCheckParam) {
                 (response) in
                 print(response)
+                if response == nil {
+                    OpenSessionVC.likeFlag = ""  //
+
+                }
+
         }
 
     }

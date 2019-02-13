@@ -39,9 +39,11 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
         
         userNameLbl.isHidden = true
         jobTitle.isHidden = true
+        
         userProfile.layer.cornerRadius = userProfile.frame.width / 2
         userProfile.clipsToBounds = true
         NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
+      //  btnCloseMenuOverlay.backgroundColor = UIColor.red
 
         loadUserData()
     //    imgUrl(imgUrl: MenuViewController.imgUserTestUrl)
@@ -88,7 +90,6 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
            
             if user_ImageUrl != nil {
                 self.imgUrl(imgUrl: (user_ImageUrl)!)
-
             }
         }
         } else {
@@ -100,7 +101,7 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
     }
     func imgUrl(imgUrl:String)  {
        // if  TimeLineHomeVC.failMessage !=  "fail"{
-        
+
         if let imagUrlAl = imgUrl as? String {
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
                 print(response)
@@ -135,6 +136,7 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         var controllerSelect : String?
         switch indexPath.row {
         case 0:
@@ -213,6 +215,21 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             def.setValue(nil, forKey: "api_token")
             def.synchronize()
             performSegue(withIdentifier: "login", sender: nil)
+            
+            
+           /* //fe sho8l hna kteer 3shan el remember me
+            controllerSelect = "Logout"
+            let def = UserDefaults.standard
+            def.setValue(nil, forKey: "api_token")
+            def.synchronize()
+            let userProfile = UserDefaults.standard
+            userProfile.setValue(nil, forKey: "user_profile")
+            userProfile.synchronize()
+            let userName = UserDefaults.standard
+            userName.setValue(nil, forKey: "user_name")
+            def.synchronize()
+            performSegue(withIdentifier: "login", sender: nil) */
+            //notify for show buttons
             //notify for show buttons
 
            // dismiss(animated: true, completion: nil)
@@ -260,6 +277,12 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
         performSegue(withIdentifier: "login", sender: nil)
     }
     
+    @IBAction func settingImageMethod(_ sender: Any) {
+if let  apiToken  = Helper.getApiToken() {
+      performSegue(withIdentifier: "settingspage", sender: nil)
+        }
+        
+        }
     @IBAction func btnCloseTapped(_ sender: UIButton) {
         btnMenu.tag = 0
         btnMenu.isHidden = false
@@ -268,6 +291,7 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             if(sender == self.btnCloseMenuOverlay){
                 index = -1
             }
+            
             delegate?.slideMenuItemSelectedAtIndex(index)
         }
         
@@ -279,6 +303,8 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             self.view.removeFromSuperview()
             self.removeFromParentViewController()
         })
+        btnCloseMenuOverlay.backgroundColor = UIColor.clear
+
         //think black here
     }
     
