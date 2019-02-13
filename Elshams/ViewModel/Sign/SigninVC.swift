@@ -219,7 +219,9 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
             if succes {
                 print("Succes")
 
-                self.performSegue(withIdentifier: "skipnav", sender: nil)
+                self.performSegue(withIdentifier: "skipnav", sender: nil) // SuccesLogin
+              //  NotificationCenter.default.post(name: NSNotification.Name("SuccesLogin"), object: nil)
+
                 self.activeLoginLoader.isHidden = true
                 self.activeLoginLoader.stopAnimating()
 

@@ -16,6 +16,10 @@ protocol SlideMenuDelegate {
 
 class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDataSource {
 
+    @IBOutlet weak var jobTitle: UILabel!
+    @IBOutlet weak var userNameLbl: UILabel!
+    @IBOutlet weak var btnRegister: UIButton!
+    @IBOutlet weak var btnLogin: UIButton!
     static var agendaEventOrMenu:Bool = false
     static var speakerEventOrMenu:Bool = false
     static var sponserEventOrMenu:Bool = false
@@ -32,6 +36,9 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
     var delegate : SlideMenuDelegate?
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        userNameLbl.isHidden = true
+        jobTitle.isHidden = true
         userProfile.layer.cornerRadius = userProfile.frame.width / 2
         userProfile.clipsToBounds = true
         NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
@@ -52,6 +59,8 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
     }
     func  loadUserData()  {
         if let  apiToken  = Helper.getApiToken() {
+            btnLogin.isHidden = true
+            btnRegister.isHidden = true
         Service.getServiceWithAuth(url: URLs.getSettingData){
             (response) in
             print(response)
@@ -68,15 +77,30 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             let user_Ispublic_str = result["isPublic"].string
            // self.imgUserUrl = user_ImageUrl
             // internet error handel
+            if user_Name == nil ||  user_Name == "" {
+                
+            } else {
+                self.userNameLbl.isHidden = false
+                self.userNameLbl.text = user_Name!
+                self.jobTitle.isHidden = false
+                self.jobTitle.text = user_JobTitle!
+            }
+           
             if user_ImageUrl != nil {
                 self.imgUrl(imgUrl: (user_ImageUrl)!)
 
             }
         }
+        } else {
+            btnLogin.isHidden = false
+            btnRegister.isHidden = false
+            userNameLbl.isHidden = true
+            jobTitle.isHidden = true
         }
     }
     func imgUrl(imgUrl:String)  {
        // if  TimeLineHomeVC.failMessage !=  "fail"{
+        
         if let imagUrlAl = imgUrl as? String {
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
                 print(response)

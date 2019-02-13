@@ -8,10 +8,9 @@
 
 import UIKit
 
-class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINavigationControllerDelegate , UITextFieldDelegate  , UITableViewDelegate , UITableViewDataSource  {
+class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINavigationControllerDelegate , UITextFieldDelegate  {
     
 
-    @IBOutlet weak var regestrationTableView: UITableView!
     @IBOutlet weak var emaiInputlTxt: UITextField!
     @IBOutlet weak var emailLbl: UILabel!
     @IBOutlet weak var emailError: UILabel!
@@ -19,6 +18,10 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
     @IBOutlet weak var passwordLbl: UILabel!
     @IBOutlet weak var passwordInputTxt: UITextField!
     @IBOutlet weak var passwordError: UILabel!
+    
+    @IBOutlet weak var confirmPasswordLbl: UILabel!
+    @IBOutlet weak var confirmPasswordInputTxt: UITextField!
+    @IBOutlet weak var confirmPasswordError: UILabel!
     
     @IBOutlet weak var jobTitleInput: UITextField!
     @IBOutlet weak var jobTitleError: UILabel!
@@ -32,14 +35,26 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
     @IBOutlet weak var othersLbl: UILabel!
     @IBOutlet weak var othersInputTxt: UITextField!
     
+    @IBOutlet weak var companyNameError: UILabel!
+    @IBOutlet weak var companyNameLbl: UILabel!
+    @IBOutlet weak var companyNameInputTxt: UITextField!
+    
+    @IBOutlet weak var linkedInError: UILabel!
+    @IBOutlet weak var linkedInLbl: UILabel!
+    @IBOutlet weak var linkedInInputTxt: UITextField!
+    
+    @IBOutlet weak var titleError: UILabel!
+    @IBOutlet weak var titleLbl: UILabel!
+    @IBOutlet weak var titleInputTxt: UITextField!
+    
     var imagePicker: UIImagePickerController!
     @IBOutlet weak var profileImage: UIImageView!
     var imageProfileB64 : String?
     var registerAnswerList :[String]?
     
   //  var validnumber:Bool?
-    var validPassword:Bool?
-    var validEmail:Bool?
+    var validPassword:Bool = false
+    var validEmail:Bool = false
     var quest = ["Email","Password","Confirm Password","Title","CompanyName","Job Title","Phone","linkedin","About"]
 
    // var userTriming:String?
@@ -52,14 +67,13 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
         imagePicker.delegate = self
         profileImage.layer.cornerRadius = profileImage.frame.width / 2
         profileImage.clipsToBounds = true
-        emailError.isHidden = true
-        passwordError.isHidden = true
-        phoneError.isHidden = true
-        othersError.isHidden = true
-        jobTitleError.isHidden = true
+        
         
      //   imagePicker = UIImagePickerController()
        // imagePicker.delegate = self
+        textFieldsDelegats()
+        firstHideErrors()
+        firstHideHintLabel()
         NotificationCenter.default.addObserver(self, selector: #selector(succesRegister), name: NSNotification.Name("SuccesRegister"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -69,6 +83,35 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(RegisterationVC.viewTapped(gestureRecognizer:)))
         view.addGestureRecognizer(tapGesture)
 
+    }
+    
+    func textFieldsDelegats()  {
+        emaiInputlTxt.delegate = self
+        passwordInputTxt.delegate = self
+        confirmPasswordInputTxt.delegate = self
+    }
+    func firstHideErrors()  {
+        emailError.isHidden = true
+        passwordError.isHidden = true
+        confirmPasswordError.isHidden = true
+        phoneError.isHidden = true
+        othersError.isHidden = true
+        jobTitleError.isHidden = true
+        linkedInError.isHidden = true
+        companyNameError.isHidden = true
+        titleError.isHidden  = true
+    }
+    
+    func firstHideHintLabel()  {
+        emailLbl.isHidden = true
+        passwordLbl.isHidden = true
+        confirmPasswordLbl.isHidden = true
+        phoneLbl.isHidden = true
+        othersLbl.isHidden = true
+        jobTitleLbl.isHidden = true
+        linkedInLbl.isHidden = true
+        companyNameLbl.isHidden = true
+        titleLbl.isHidden  = true
     }
     
     @objc func succesRegister(){
@@ -125,10 +168,35 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
             passwordError.isHidden = true
             passwordLbl.isHidden = false
         }
-      /*  else if textField.isEqual(lblEmail){
-            lblEmailError.isHidden = true
-            lblShowEmail.isHidden = false
-        } */
+        else if textField.isEqual(confirmPasswordInputTxt){
+            confirmPasswordError.isHidden = true
+            confirmPasswordLbl.isHidden = false
+        }
+        else if textField.isEqual(jobTitleInput){
+            jobTitleError.isHidden = true
+            jobTitleLbl.isHidden = false
+        }
+        else if textField.isEqual(companyNameInputTxt){
+            companyNameError.isHidden = true
+            companyNameLbl.isHidden = false
+        }
+        else if textField.isEqual(linkedInInputTxt){
+            linkedInError.isHidden = true
+            linkedInLbl.isHidden = false
+        }
+        else if textField.isEqual(othersInputTxt){
+            othersError.isHidden = true
+            othersLbl.isHidden = false
+        }
+        else if textField.isEqual(titleInputTxt){
+            titleError.isHidden = true
+            titleLbl.isHidden = false
+        }
+        else if textField.isEqual(phoneInputTxt){
+            phoneError.isHidden = true
+            phoneLbl.isHidden = false
+        }
+     
     }
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         //Email Validation
@@ -184,7 +252,7 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
         else if textField.isEqual(passwordInputTxt){
             passwordTriming = passwordInputTxt.text
             if passwordTriming?.trimmingCharacters(in: .whitespacesAndNewlines) != "" && passwordTriming != nil && passwordTriming != "null" && (passwordTriming?.characters.count)! != 0 && (passwordTriming?.characters.count)! >= 6 {
-                validPassword = true
+               // validPassword = true
             } else if (passwordTriming?.characters.count)! < 6 {
                 passwordError.text = "password at least 6!"
                 passwordError.isHidden = false
@@ -199,11 +267,22 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
                 //Darsh Abo Nassar
             }
         }
+        else if textField.isEqual(confirmPasswordInputTxt){
+            if confirmPasswordInputTxt.text == passwordInputTxt.text {
+                validPassword = true
+            } else {
+                confirmPasswordError.text = "Password doesn't match to each other"
+                confirmPasswordError.isHidden = false
+                validPassword = false
+
+            }
+        }
         return true
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         hideKyebad()
+        registertionMethod()
         self.view.endEditing(true)
         return true
     }
@@ -231,105 +310,51 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
         view.endEditing(true)
     }
 
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 75
-    }
   
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return quest.count
-        
-    }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-       // let cell = tableView.dequeueReusableCell(withIdentifier: "registerscell") as! RegistrationCell
-       //     cell.lblQuestQuest.text = quest[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: "registerscell", for: indexPath) as! RegistrationCell
-         cell.lblQuestQuest.text = quest[indexPath.row]
-        return cell
-    }
+   
     
-    func registertionTableData()-> [String]  {
-        var linkedinCell : String?
-        let i = IndexPath(row: 0, section: 0)
-        let cell: RegistrationCell = self.regestrationTableView.cellForRow(at: i) as! RegistrationCell
-        let emailCell = cell.txtAnswer.text!
-        
-        let i1 = IndexPath(row: 1, section: 0)
-        let cell1: RegistrationCell = self.regestrationTableView.cellForRow(at: i1) as! RegistrationCell
-        let passawordCell = cell1.txtAnswer.text!
-        
-        let i2 = IndexPath(row: 2, section: 0)
-        let cell2: RegistrationCell = self.regestrationTableView.cellForRow(at: i2) as! RegistrationCell
-        let confirmPassawordCell = cell2.txtAnswer.text!
-        
-        let i3 = IndexPath(row: 3, section: 0)
-        let cell3: RegistrationCell = self.regestrationTableView.cellForRow(at: i3) as! RegistrationCell
-        let titleCell = cell3.txtAnswer.text!
-        
-        let i4 = IndexPath(row: 4, section: 0)
-        let cell4: RegistrationCell = self.regestrationTableView.cellForRow(at: i4) as! RegistrationCell
-        let companyNameCell = cell4.txtAnswer.text!
-        
-        let i5 = IndexPath(row: 5, section: 0)
-        let cell5: RegistrationCell = self.regestrationTableView.cellForRow(at: i5) as! RegistrationCell
-        let jobTitleCell = cell5.txtAnswer.text!
-
-        let i6 = IndexPath(row: 6, section: 0)
-        let cell6: RegistrationCell = self.regestrationTableView.cellForRow(at: i6) as! RegistrationCell
-        let phoneCell = cell6.txtAnswer.text!
-      //keyborad
-        
-        let i7 = IndexPath(row: 7, section: 0)
-        let cell7: RegistrationCell = self.regestrationTableView.cellForRow(at: i7) as! RegistrationCell
-        if !((cell7.txtAnswer.text?.isEmpty)!) {
-             linkedinCell = cell7.txtAnswer.text!
-
-        }else {
-             linkedinCell = ""
-
+    func registertionMethod(){
+      //  return [emailCell,passawordCell,confirmPassawordCell,titleCell,companyNameCell,jobTitleCell,phoneCell,linkedinCell ?? "",aboutCell]
+        guard validEmail else {
+            emailError.isHidden = false
+            emailError.text = "you have an Error in filling Email"
+            return
+            
         }
+        guard validPassword else {
+            passwordError.isHidden = false
+            passwordError.text = "you have an Error in filling Password"
+            return } // registerAnswerList?[2] for confirm password
+        guard let tiltleUser = titleInputTxt.text  else { return }
+        guard let companyName = companyNameInputTxt.text  else { return }
         
-        let i8 = IndexPath(row: 8, section: 0)
-        let cell8: RegistrationCell = self.regestrationTableView.cellForRow(at: i8) as! RegistrationCell
-        let aboutCell = cell8.txtAnswer.text!
+        guard let jobTiltle = jobTitleInput.text else { return }
+        guard let phoneNum = phoneInputTxt.text   else { return }
+        guard let linkedIn = linkedInInputTxt.text   else { return }
         
+        guard  let about = othersInputTxt.text  else { return }
         
-        return [emailCell,passawordCell,confirmPassawordCell,titleCell,companyNameCell,jobTitleCell,phoneCell,linkedinCell ?? "",aboutCell]
-    
+       // if TimeLineHomeVC.failMessage !=  "fail" {
+        API.register(Email: (emaiInputlTxt.text?.lowercased())!, Password: passwordInputTxt.text!, Title: tiltleUser , CompanyName: companyName, JobTitle: jobTiltle, About: about, Phone: phoneNum, Picture: imageProfileB64 ?? "", Linkedin: linkedIn) { (error: Error?,succes:Bool) in
+                if succes {
+                    print("Succes")
+                      let alert = UIAlertController(title: "Succes!", message: "Your Are Regestered!", preferredStyle: UIAlertControllerStyle.alert)
+                       alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                       self.present(alert, animated: true, completion: nil)
+                }
+          //  }
+            
+        }// else {
+            
+      //  }
+        //registertionMethod(picBase64: pic64)
     }
+    
     @IBAction func register(_ sender: Any) {
-        registerAnswerList = registertionTableData()
-        guard let email = registerAnswerList?[0].trimmed,isValidEmail(emailID: email), !email.isEmpty else { return }
-        guard let password = registerAnswerList?[1], !password.isEmpty else { return } // registerAnswerList?[2] for confirm password
-        guard let tiltleUser = registerAnswerList?[3]  else { return }
-        guard let companyName = registerAnswerList?[4]  else { return }
-
-        guard let jobTiltle = registerAnswerList?[5] else { return }
-        guard let phoneNum = registerAnswerList?[6]   else { return }
-        guard let linkedIn = registerAnswerList?[7]   else { return }
-
-        guard  let about = registerAnswerList?[8]   else { return }
-     
-        if TimeLineHomeVC.failMessage !=  "fail" {
-            API.register(Email: email.lowercased(), Password: password, Title: tiltleUser , CompanyName: companyName, JobTitle: jobTiltle, About: about, Phone: phoneNum, Picture: imageProfileB64 ?? "", Linkedin: linkedIn) { (error: Error?,succes:Bool) in
-            if succes {
-                print("Succes")
-              //  let alert = UIAlertController(title: "Succes!", message: "Your data is Updated!", preferredStyle: UIAlertControllerStyle.alert)
-             //   alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-            //    self.present(alert, animated: true, completion: nil)
-            }
-        }
-            
-        } else {
-            
-        }
-    //registertionMethod(picBase64: pic64)
-    }
     
- 
+    registertionMethod()
+}
     
     @IBAction func close(_ sender: Any) {
         dismiss(animated: true, completion: nil)

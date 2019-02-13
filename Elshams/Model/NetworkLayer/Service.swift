@@ -214,7 +214,7 @@ class Service: NSObject {
                     callback(json)
                 case .failure(let error):
                     Service.errorConnection = "\(error.localizedDescription)"
-                    NotificationCenter.default.post(name: NSNotification.Name("ErrorConnections"), object: nil)
+                 //   NotificationCenter.default.post(name: NSNotification.Name("ErrorConnections"), object: nil)
 
                     print(error)
                     callback(nil)

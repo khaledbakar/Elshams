@@ -80,7 +80,7 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
                     iDNotNull = false
                     break
                 }
-                self.speakerList.append(Speakers(SpeakerName: speaker_Name ?? "name", JobTitle: speaker_JobTitle ?? "JOB", CompanyName: speaker_CompanyName ?? "Company", SpImageUrl: speaker_ImageUrl ?? "Image", Speaker_id: speaker_ID ?? "ID", ContectInforamtion: speaker_ContectInforamtion ?? contect, About: speaker_About ?? "About"))
+                self.speakerList.append(Speakers(SpeakerName: speaker_Name ?? "", JobTitle: speaker_JobTitle ?? "", CompanyName: speaker_CompanyName ?? "", SpImageUrl: speaker_ImageUrl ?? "", Speaker_id: speaker_ID ?? "", ContectInforamtion: speaker_ContectInforamtion ?? contect, About: speaker_About ?? ""))
                 index = index + 1
                 self.speakerTableView.reloadData()
                 self.speakerCollectionView.reloadData()

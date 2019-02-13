@@ -16,16 +16,31 @@ import SwiftyJSON
 class SpeakerProfileVC: UIViewController {
     var singleItem:Speakers?
     var speakerSessionsList = Array<SpeakerSeasions>()
+    var sessionCounterIndex : Int = 0
+    var sessionFirstConstatContraint : CGFloat?
 
+    @IBOutlet weak var nextBackSessionsContainer: UIView!
+    @IBOutlet weak var nextBtnSession: UIButton!
+    @IBOutlet weak var backBtnSession: UIButton!
+    @IBOutlet weak var nextImgSession: UIImageView!
+    
+    @IBOutlet weak var backImgSession: UIImageView!
+    
+    
+    @IBOutlet weak var informatonViewContainer: UIView!
+    @IBOutlet weak var aboutTopConstraints: NSLayoutConstraint!
+    @IBOutlet weak var aboutViewContainer: UIView!
+    @IBOutlet weak var sessionViewContainer: UIView!
+    @IBOutlet weak var sessionTopConstraints: NSLayoutConstraint!
     @IBOutlet weak var speakerName: UILabel!
     @IBOutlet weak var speakerEmail: UILabel!
     @IBOutlet weak var aboutSpeaker: UITextView!
-    @IBOutlet weak var speakerSecSName: UILabel!
+   // @IBOutlet weak var speakerSecSName: UILabel!
     @IBOutlet weak var speakerFSLocation: UILabel!
     @IBOutlet weak var connectColor: UIView!
     
-    @IBOutlet weak var speakerSecSTime: UILabel!
-    @IBOutlet weak var speakerSecSLocation: UILabel!
+   // @IBOutlet weak var speakerSecSTime: UILabel!
+  //  @IBOutlet weak var speakerSecSLocation: UILabel!
     @IBOutlet weak var speakerFSTime: UILabel!
     @IBOutlet weak var speakerFSName: UILabel!
     @IBOutlet weak var speakerFacebook: UILabel!
@@ -49,6 +64,8 @@ class SpeakerProfileVC: UIViewController {
         speakerName.text = singleItem?.name
         speakerJobTitle.text = singleItem?.jobTitle
         
+        sessionFirstConstatContraint = sessionTopConstraints.constant
+        
         if singleItem?.speakerImageUrl != nil {
             imgUrl(imgUrl: (singleItem?.speakerImageUrl)!)
         }
@@ -57,10 +74,25 @@ class SpeakerProfileVC: UIViewController {
         email = singleItem?.contectInforamtion!["Email"] as! String
         faceBookLinkEdinNow = singleItem?.contectInforamtion!["linkedin"] as! String
         speakerPhone.text = phoneNumber
-        speakerFacebook.text = faceBookLinkEdinNow
+        
+        if faceBookLinkEdinNow == nil || faceBookLinkEdinNow == ""{
+            speakerFacebook.text = "Na"
+        }else {
+            speakerFacebook.text = faceBookLinkEdinNow
+
+        }
+        
         speakerEmail.text = email
         speakerWebsite.text = faceBookLinkEdinNow
-        aboutSpeaker.text = singleItem?.about
+        if singleItem?.about == nil  || singleItem?.about == ""{
+            noAboutMethod()
+        } else {
+            aboutViewContainer.isHidden = false
+            aboutSpeaker.text = singleItem?.about
+
+        }
+        sessionViewContainer.isHidden = true
+        
         connectColor.isHidden = true
         connectColor.backgroundColor  = UIColor.green
         activeNow.isHidden = true
@@ -143,24 +175,29 @@ class SpeakerProfileVC: UIViewController {
                 self.speakerEmail.text = speaker_Email
                 self.speakerWebsite.text = speaker_Linkedin
                 self.speakerFacebook.text = speaker_Linkedin
-                self.aboutSpeaker.text = speaker_About
+                if speaker_About == nil || speaker_About == ""{
+              //      self.noAboutMethod()
+                } else {
+                    self.showAboutMethod()
+                    self.aboutSpeaker.text = speaker_About
+
+                }
                 if !(self.speakerSessionsList.isEmpty) {
-                    for ind in 0..<self.speakerSessionsList.count{
-                        if ind == 0 {
-                            self.speakerFSName.text = self.speakerSessionsList[ind].session_Title
-                            self.speakerFSTime.text = self.speakerSessionsList[ind].session_Time
-                            self.speakerFSLocation.text = self.speakerSessionsList[ind].session_Location
-                            
-                        }
-                        else if ind == 1 {
-                            self.speakerSecSName.text = self.speakerSessionsList[ind].session_Title
-                            self.speakerSecSTime.text = self.speakerSessionsList[ind].session_Time
-                            self.speakerSecSLocation.text = self.speakerSessionsList[ind].session_Location
-                        }
-                    }
-               
+                  //  for ind in 0..<self.speakerSessionsList.count{
+                        //if ind == 0 {
+                    self.sessionViewContainer.isHidden = false
+                    if self.speakerSessionsList.count == 1{
+                        self.nextBackSessionsContainer.isHidden = true
+                        } else {
+                    self.nextBackSessionsContainer.isHidden = false
+                }
+                            self.speakerFSName.text = self.speakerSessionsList[0].session_Title
+                            self.speakerFSTime.text = self.speakerSessionsList[0].session_Time
+                            self.speakerFSLocation.text = self.speakerSessionsList[0].session_Location
+
                 } else {
                     // session view hidden
+                    self.noSessionsMethod()
                 }
                
                 }
@@ -251,6 +288,70 @@ class SpeakerProfileVC: UIViewController {
         }
         UIApplication.shared.open(url)
     }
+    }
+    
+    @IBAction func backSessionMethod(_ sender: Any) {
+        if sessionCounterIndex > 0   {
+            print(sessionCounterIndex)
+            sessionCounterIndex = sessionCounterIndex - 1
+            nextBtnSession.isHidden = false
+            nextImgSession.isHidden = false
+            if sessionCounterIndex == 0 {
+                backImgSession.isHidden = true
+                backBtnSession.isHidden = true
+            }
+            
+        } else if sessionCounterIndex == 0 {
+            backImgSession.isHidden = true
+            backBtnSession.isHidden = true
+            nextBtnSession.isHidden = false
+            nextImgSession.isHidden = false
+        }
+        if !(speakerSessionsList.isEmpty) { // != nil
+            speakerFSName.text = speakerSessionsList[sessionCounterIndex].session_Title
+            speakerFSTime.text = speakerSessionsList[sessionCounterIndex].session_Time
+            speakerFSLocation.text = speakerSessionsList[sessionCounterIndex].session_Location
+
+        }
+        
+    }
+    
+    @IBAction func nextSessionMethod(_ sender: Any) {
+        if sessionCounterIndex < speakerSessionsList.count - 1 {
+            print(sessionCounterIndex)
+            sessionCounterIndex = sessionCounterIndex + 1
+            backImgSession.isHidden = false
+            backBtnSession.isHidden = false
+            if sessionCounterIndex == speakerSessionsList.count - 1 {
+                nextBtnSession.isHidden = true
+                nextImgSession.isHidden = true
+            }
+            
+        } else if sessionCounterIndex == speakerSessionsList.count - 1 {
+            backImgSession.isHidden = false
+            backBtnSession.isHidden = false
+            nextBtnSession.isHidden = true
+            nextImgSession.isHidden = true
+        }
+        if !(speakerSessionsList.isEmpty) { // != nil
+            speakerFSName.text = speakerSessionsList[sessionCounterIndex].session_Title
+            speakerFSTime.text = speakerSessionsList[sessionCounterIndex].session_Time
+            speakerFSLocation.text = speakerSessionsList[sessionCounterIndex].session_Location
+        }
+    }
+    //Mark:- Shw/HideContainers
+    func noAboutMethod()  {
+        aboutViewContainer.isHidden = true
+        sessionTopConstraints.constant = -(aboutViewContainer.frame.height) + (sessionTopConstraints.constant)
+
+    }
+    func showAboutMethod()  {
+        aboutViewContainer.isHidden = false
+        sessionTopConstraints.constant = sessionFirstConstatContraint!
+        
+    }
+    func noSessionsMethod()  {
+        sessionViewContainer.isHidden = true
     }
     @objc func tapOpenLinkFunc(sender:UIGestureRecognizer) {
        guard let url = URL(string: (speakerWebsite.text)!)
