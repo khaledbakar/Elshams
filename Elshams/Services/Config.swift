@@ -20,8 +20,11 @@ struct URLs {
     static let getNetwork = main + "/Event/getNetwork"
     static let getPersonDetails = main + "/Event/getPersonDetails"
     
-    static let getNews = main + "/Event/GetHome" // have item number and page number some issue that don't resposne page numers and current number
+    static let getNews = main + "/Event/GetHome"
+    // have item number and page number some issue that don't resposne page numers and current number
 
+    
+    
     static let getAgenda = main + "/Event/getAgenda"
     static let askQuestion = main + "/Event/askQuestion"
 
@@ -45,6 +48,9 @@ struct URLs {
     static let unfavourateAction = main + "/Event/unfavourateAction"
    
     static let getAllPosts = main + "/Event/getAllPosts"
+    static let addUnLikeTopost = main + "/Event/AddUnLikeTopost"
+    static let addLikeTopost = main + "/Event/AddLikeTopost"
+
     static let getAbout = main + "/Event/getAbout"
 
 

@@ -12,16 +12,27 @@ import AlamofireImage
 import SwiftyJSON
 
 class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollectionViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate , UITextFieldDelegate {
+    
+    
     @IBOutlet weak var scrollTimeLineView: UIScrollView!
     @IBOutlet weak var viewPostContols: UIView!
     
     @IBOutlet weak var viewTimeLineView: UIView!
     @IBOutlet weak var homeLogo: UIImageView!
     
+    @IBOutlet weak var showPostTypeContainer: UIView!
     @IBOutlet weak var homeNameAbout: UIImageView!
     
     @IBOutlet weak var homeAbout: UITextView!
     var newsFeedList = Array<NewsFeedData>()
+    var masterDataNewsFeedList = Array<NewsFeedData>()
+
+    var videoNewsFeedList = Array<NewsFeedData>()
+    var textNewsFeedList = Array<NewsFeedData>()
+    var videoTextNewsFeedList = Array<NewsFeedData>()
+
+    var commentNewsFeedList = Array<CommentsNewsFeed>()
+
     var speakerList = Array<Speakers>()
     var sponserList = Array<Sponsers>()
     static var failMessage = ""
@@ -88,6 +99,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         imagePicker.delegate = self
         postText.delegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorLikeSignIn"), object: nil)
 
         loadPostsData()
         loadAllSpeakerData()
@@ -100,6 +112,12 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         self.present(alert, animated: true, completion: nil)
         } */
   
+    }
+    @objc func errorSignLikeAlert(){
+
+    let alert = UIAlertController(title: "Error", message: "You must sign in to Do this Part", preferredStyle: UIAlertControllerStyle.alert)
+    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+    self.present(alert, animated: true, completion: nil)
     }
     
     @objc func errorAlert(){
@@ -246,7 +264,74 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
     }
     
     func loadPostsData()  {
-      
+        if let  apiToken  = Helper.getApiToken() {
+            Service.getServiceWithAuth(url: (URLs.getAllPosts)) {
+                (response) in
+                print("this is Posts ")
+                print(response)
+                //  if response != nil {
+                
+                let json = JSON(response)
+                
+                let result = json["AllPosts"]
+                if !(result.isEmpty){
+                    var iDNotNull = true
+                    var index = 0
+                    while iDNotNull {
+                        let post_ID = result[index]["ID"].string
+                        if post_ID == nil || post_ID?.trimmed == "" || post_ID == "null" || post_ID == "nil" {
+                            iDNotNull = false
+                            break
+                        }
+                        let post_Author = result[index]["author"].string
+                        let post_AutherPic = result[index]["autherPic"].string
+                        let post_VedioURl = result[index]["vedioURl"].string
+                        let post_Discription = result[index]["postDiscription"].string
+                        let post_Type = result[index]["postType"].string
+                        
+                        let post_LikeCount = result[index]["likeCount"].int
+                        let post_Comments = result[index]["Comments"]
+                        
+                        var iDCommentNotNull = true
+                        var indexComment = 0
+                        while iDCommentNotNull {
+                            let comment_Auth = post_Comments[indexComment]["author"].string
+                            if comment_Auth == nil || comment_Auth?.trimmed == "" || comment_Auth == "null" || comment_Auth == "nil" {
+                                iDCommentNotNull = false
+                                break
+                            }
+                            let comment_AutherPic = post_Comments[indexComment]["autherPic"].string
+                            let comment_Discription = post_Comments[indexComment]["commentDiscription"].string
+                            self.commentNewsFeedList.append(CommentsNewsFeed(Author: comment_Auth ?? "", AutherPic: comment_AutherPic ?? "", CommentDiscription: comment_Discription ?? ""))
+                            indexComment = indexComment + 1
+                            
+                        }
+                        let post_Islike = result[index]["Islike"].bool
+                        let post_SharingLink = result[index]["sharingLink"].string
+                        let post_Image = result[index]["image"].string
+                        
+                        
+                        self.newsFeedList.append(NewsFeedData(Post_ID: post_ID ?? "", Post_Author: post_Author ?? "", Post_AutherPicture: post_AutherPic ?? "", Post_VideoURl: post_VedioURl ?? "" , Post_Discription: post_Discription ?? "", Post_LikeCount: post_LikeCount ?? 0, Post_Comments: self.commentNewsFeedList, Post_Islike: post_Islike ?? false, Post_SharingLink: post_SharingLink ?? "", Post_Image: post_Image ?? "", Post_Type: post_Type ?? ""))
+                        self.masterDataNewsFeedList.append(NewsFeedData(Post_ID: post_ID ?? "", Post_Author: post_Author ?? "", Post_AutherPicture: post_AutherPic ?? "", Post_VideoURl: post_VedioURl ?? "" , Post_Discription: post_Discription ?? "", Post_LikeCount: post_LikeCount ?? 0, Post_Comments: self.commentNewsFeedList, Post_Islike: post_Islike ?? false, Post_SharingLink: post_SharingLink ?? "", Post_Image: post_Image ?? "", Post_Type: post_Type ?? ""))
+                        if post_Type == "text" {
+                            self.textNewsFeedList.append(NewsFeedData(Post_ID: post_ID ?? "", Post_Author: post_Author ?? "", Post_AutherPicture: post_AutherPic ?? "", Post_VideoURl: post_VedioURl ?? "" , Post_Discription: post_Discription ?? "", Post_LikeCount: post_LikeCount ?? 0, Post_Comments: self.commentNewsFeedList, Post_Islike: post_Islike ?? false, Post_SharingLink: post_SharingLink ?? "", Post_Image: post_Image ?? "", Post_Type: post_Type ?? ""))
+                        } else if post_Type == "video_text" {
+                            self.videoTextNewsFeedList.append(NewsFeedData(Post_ID: post_ID ?? "", Post_Author: post_Author ?? "", Post_AutherPicture: post_AutherPic ?? "", Post_VideoURl: post_VedioURl ?? "" , Post_Discription: post_Discription ?? "", Post_LikeCount: post_LikeCount ?? 0, Post_Comments: self.commentNewsFeedList, Post_Islike: post_Islike ?? false, Post_SharingLink: post_SharingLink ?? "", Post_Image: post_Image ?? "", Post_Type: post_Type ?? ""))
+                        }
+                        else if post_Type == "video" {
+                            self.videoNewsFeedList.append(NewsFeedData(Post_ID: post_ID ?? "", Post_Author: post_Author ?? "", Post_AutherPicture: post_AutherPic ?? "", Post_VideoURl: post_VedioURl ?? "" , Post_Discription: post_Discription ?? "", Post_LikeCount: post_LikeCount ?? 0, Post_Comments: self.commentNewsFeedList, Post_Islike: post_Islike ?? false, Post_SharingLink: post_SharingLink ?? "", Post_Image: post_Image ?? "", Post_Type: post_Type ?? ""))
+                        }
+                        index = index + 1
+                        self.timeLineCollView.reloadData()
+                        // }
+                    }
+                } else {
+                    // if no data in posts what doing ??
+                    
+                }
+            }
+            
+        } else {
         Service.getService(url: (URLs.getAllPosts)) {
             (response) in
             print("this is Posts ")
@@ -269,28 +354,40 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
                 let post_AutherPic = result[index]["autherPic"].string
                 let post_VedioURl = result[index]["vedioURl"].string
                 let post_Discription = result[index]["postDiscription"].string
-                let post_LikeCount = result[index]["about"].int
-                let post_Comments = result[index]["Comments"].array
+                let post_Type = result[index]["postType"].string
+
+                let post_LikeCount = result[index]["likeCount"].int
+                let post_Comments = result[index]["Comments"]
+                
+                var iDCommentNotNull = true
+                var indexComment = 0
+                while iDCommentNotNull {
+                    let comment_Auth = post_Comments[indexComment]["author"].string
+                    if comment_Auth == nil || comment_Auth?.trimmed == "" || comment_Auth == "null" || comment_Auth == "nil" {
+                        iDCommentNotNull = false
+                        break
+                    }
+                    let comment_AutherPic = post_Comments[indexComment]["autherPic"].string
+                    let comment_Discription = post_Comments[indexComment]["commentDiscription"].string
+                  self.commentNewsFeedList.append(CommentsNewsFeed(Author: comment_Auth ?? "", AutherPic: comment_AutherPic ?? "", CommentDiscription: comment_Discription ?? ""))
+                    indexComment = indexComment + 1
+                   
+                }
                 let post_Islike = result[index]["Islike"].bool
                 let post_SharingLink = result[index]["sharingLink"].string
                 let post_Image = result[index]["image"].string
-                /*   var iDNotNullComment = true
-                 var indexComm = 0
-                 while iDNotNullComment {
-                 let post_CommentDiscription = post_Comments?[indexComm]["commentDiscription"].string
-                 
-                 if post_CommentDiscription == nil || post_CommentDiscription?.trimmed == "" || post_CommentDiscription == "null" || post_CommentDiscription == "nil" {
-                 iDNotNull = false
-                 break
-                 }
-                 let post_author = post_Comments?[indexComm]["author"].string
-                 let post_autherPic = post_Comments?[indexComm]["autherPic"].string
-                 indexComm = indexComm + 1
-                 }
-                 */
                 
                 
-                self.newsFeedList.append(NewsFeedData(Post_ID: post_ID ?? "", Post_Author: post_Author ?? "", Post_AutherPicture: post_AutherPic ?? "", Post_VideoURl: post_VedioURl ?? "" , Post_Discription: post_Discription ?? "", Post_LikeCount: post_LikeCount ?? 0, Post_Comments: post_Comments ?? [result], Post_Islike: post_Islike ?? false, Post_SharingLink: post_SharingLink ?? "", Post_Image: post_Image ?? ""))
+                self.newsFeedList.append(NewsFeedData(Post_ID: post_ID ?? "", Post_Author: post_Author ?? "", Post_AutherPicture: post_AutherPic ?? "", Post_VideoURl: post_VedioURl ?? "" , Post_Discription: post_Discription ?? "", Post_LikeCount: post_LikeCount ?? 0, Post_Comments: self.commentNewsFeedList, Post_Islike: post_Islike ?? false, Post_SharingLink: post_SharingLink ?? "", Post_Image: post_Image ?? "", Post_Type: post_Type ?? ""))
+                  self.masterDataNewsFeedList.append(NewsFeedData(Post_ID: post_ID ?? "", Post_Author: post_Author ?? "", Post_AutherPicture: post_AutherPic ?? "", Post_VideoURl: post_VedioURl ?? "" , Post_Discription: post_Discription ?? "", Post_LikeCount: post_LikeCount ?? 0, Post_Comments: self.commentNewsFeedList, Post_Islike: post_Islike ?? false, Post_SharingLink: post_SharingLink ?? "", Post_Image: post_Image ?? "", Post_Type: post_Type ?? ""))
+                if post_Type == "text" {
+                        self.textNewsFeedList.append(NewsFeedData(Post_ID: post_ID ?? "", Post_Author: post_Author ?? "", Post_AutherPicture: post_AutherPic ?? "", Post_VideoURl: post_VedioURl ?? "" , Post_Discription: post_Discription ?? "", Post_LikeCount: post_LikeCount ?? 0, Post_Comments: self.commentNewsFeedList, Post_Islike: post_Islike ?? false, Post_SharingLink: post_SharingLink ?? "", Post_Image: post_Image ?? "", Post_Type: post_Type ?? ""))
+                } else if post_Type == "video_text" {
+                    self.videoTextNewsFeedList.append(NewsFeedData(Post_ID: post_ID ?? "", Post_Author: post_Author ?? "", Post_AutherPicture: post_AutherPic ?? "", Post_VideoURl: post_VedioURl ?? "" , Post_Discription: post_Discription ?? "", Post_LikeCount: post_LikeCount ?? 0, Post_Comments: self.commentNewsFeedList, Post_Islike: post_Islike ?? false, Post_SharingLink: post_SharingLink ?? "", Post_Image: post_Image ?? "", Post_Type: post_Type ?? ""))
+                }
+                else if post_Type == "video" {
+                    self.videoNewsFeedList.append(NewsFeedData(Post_ID: post_ID ?? "", Post_Author: post_Author ?? "", Post_AutherPicture: post_AutherPic ?? "", Post_VideoURl: post_VedioURl ?? "" , Post_Discription: post_Discription ?? "", Post_LikeCount: post_LikeCount ?? 0, Post_Comments: self.commentNewsFeedList, Post_Islike: post_Islike ?? false, Post_SharingLink: post_SharingLink ?? "", Post_Image: post_Image ?? "", Post_Type: post_Type ?? ""))
+                }
                 index = index + 1
                 self.timeLineCollView.reloadData()
            // }
@@ -298,6 +395,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
             } else {
                 // if no data in posts what doing ??
 
+            }
             }
     }
     }
@@ -351,6 +449,28 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         */
  
         performSegue(withIdentifier: "speakerpage", sender: nil)
+    }
+    //Mark:- Filtters Methods
+    @IBAction func allTypePosts(_ sender: Any) {
+        newsFeedList.removeAll()
+        newsFeedList = masterDataNewsFeedList
+        timeLineCollView.reloadData()
+    }
+    @IBAction func videoPostsType(_ sender: Any) {
+        newsFeedList.removeAll()
+        newsFeedList = videoNewsFeedList
+        timeLineCollView.reloadData()
+    }
+    
+    @IBAction func videoTextPostsType(_ sender: Any) {
+        newsFeedList.removeAll()
+        newsFeedList = videoTextNewsFeedList
+        timeLineCollView.reloadData()
+    }
+    @IBAction func textPostType(_ sender: Any) {
+        newsFeedList.removeAll()
+        newsFeedList = textNewsFeedList
+        timeLineCollView.reloadData()
     }
     
     @IBAction func btnPost(_ sender: Any) {

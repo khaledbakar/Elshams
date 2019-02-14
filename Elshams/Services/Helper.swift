@@ -76,7 +76,7 @@ import UIKit
             vc = sb.instantiateInitialViewController()!
         } else {
             
-           loadUserData()
+//           loadUserData()
             vc = sb.instantiateViewController(withIdentifier: "NavTimeLine")
         }
         window.rootViewController = vc
