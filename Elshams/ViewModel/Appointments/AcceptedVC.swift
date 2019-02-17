@@ -17,6 +17,8 @@ class AcceptedVC: BaseViewController , UITableViewDataSource ,UITableViewDelegat
     var acceptedList = Array<StartUpsData>()
     @IBOutlet weak var acceptedTableView: UITableView!
     @IBOutlet weak var activeLoader: UIActivityIndicatorView!
+    @IBOutlet weak var noDataErrorContainer: UIView!
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +26,13 @@ class AcceptedVC: BaseViewController , UITableViewDataSource ,UITableViewDelegat
 
         acceptedTableView.isHidden = true
         activeLoader.startAnimating()
+        noDataErrorContainer.isHidden = true
+
         loadAcceptedData()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
     }
     
     func loadAcceptedData()  {
@@ -64,8 +72,12 @@ class AcceptedVC: BaseViewController , UITableViewDataSource ,UITableViewDelegat
                 self.activeLoader.isHidden = true
                 self.activeLoader.stopAnimating()
                 self.acceptedTableView.isHidden = false
+                self.noDataErrorContainer.isHidden = true
+
             }
             }  else {
+                self.noDataErrorContainer.isHidden = false
+
                 let alert = UIAlertController(title: "No Accepted found!", message: "No Accepted Appointment till now", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
@@ -111,6 +123,8 @@ class AcceptedVC: BaseViewController , UITableViewDataSource ,UITableViewDelegat
     }
   
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
         performSegue(withIdentifier: "acceptedstartup", sender: acceptedList[indexPath.row])
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

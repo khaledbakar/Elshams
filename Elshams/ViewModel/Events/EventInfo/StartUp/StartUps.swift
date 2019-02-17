@@ -15,6 +15,7 @@ import SwiftyJSON
 class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource {
     var startUpList = Array<StartUpsData>()
     var startUpListPaging = Array<StartUpsData>()
+    @IBOutlet weak var noDataErrorContainer: UIView!
 
     @IBOutlet weak var startupTableView: UITableView!
     var availableAppointmentList = Array<AvailableAppointment>()
@@ -31,11 +32,16 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
             }
         startupTableView.isHidden = true
         activeLoader.startAnimating()
+        noDataErrorContainer.isHidden = true
+
          NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
        // loadAllStartUpData()
     }
     override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
+
         loadAllStartUpData()
+        
 
       //  self.startupTableView.reloadData()
     }
@@ -97,9 +103,13 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
                 self.activeLoader.isHidden = true
                 self.activeLoader.stopAnimating()
                 self.startupTableView.isHidden = false
+                self.noDataErrorContainer.isHidden = true
+
         }
             
             else {
+                self.noDataErrorContainer.isHidden = false
+
                 let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
@@ -146,7 +156,11 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
                     self.activeLoader.isHidden = true
                     self.activeLoader.stopAnimating()
                     self.startupTableView.isHidden = false
+                    self.noDataErrorContainer.isHidden = true
+
                 } else {
+                    self.noDataErrorContainer.isHidden = false
+
                     let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
                     alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                     self.present(alert, animated: true, completion: nil)

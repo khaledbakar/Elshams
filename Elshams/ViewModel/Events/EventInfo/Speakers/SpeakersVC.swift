@@ -11,10 +11,13 @@ import XLPagerTabStrip
 import AlamofireImage
 import Alamofire
 import SwiftyJSON
+import SafariServices
+
 
 class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelegate , UICollectionViewDelegate , UICollectionViewDataSource {
     
-    
+    @IBOutlet weak var noDataErrorContainer: UIView!
+
     @IBOutlet weak var activeLoader: UIActivityIndicatorView!
     
     @IBOutlet weak var shapeContainerView: UIView!
@@ -34,6 +37,8 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
         activeLoader.startAnimating()
         speakerTableView.isHidden = true
         speakerCollectionView.isHidden = true
+        noDataErrorContainer.isHidden = true
+
           NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
         loadAllSpeakerData()
 
@@ -67,7 +72,7 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
                 let speaker_JobTitle = result[index]["jobTitle"].string
                 let speaker_CompanyName = result[index]["companyName"].string
                 let speaker_ImageUrl = result[index]["imageUrl"].string
-                let speaker_About = result[index]["about"].string
+                let speaker_About = result[index]["linkedin"].string // linked in after edit
                 let speaker_ContectInforamtion = result[index]["ContectInforamtion"].dictionaryObject
                 let speaker_Email = result[index]["ContectInforamtion"]["Email"].string
                 let speaker_Linkedin = result[index]["ContectInforamtion"]["linkedin"].string
@@ -88,14 +93,40 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
                 self.activeLoader.stopAnimating()
                 self.speakerTableView.isHidden = true
                 self.speakerCollectionView.isHidden = false
+                self.noDataErrorContainer.isHidden = true
+
             }
         }
             else {
+                self.noDataErrorContainer.isHidden = false
+
                 let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
                 self.activeLoader.isHidden = true
             }
+        }
+    }
+    
+    @IBAction func linkedInBtn(_ sender: Any) {
+        
+        let buttonPosition:CGPoint = (sender as AnyObject).convert(CGPoint.zero, to:self.speakerCollectionView)
+        var indexPath = self.speakerCollectionView.indexPathForItem(at: buttonPosition)
+        let linkedInSpeaker = speakerList[(indexPath?.row)!]
+        let linkedIN = linkedInSpeaker.about
+        if linkedIN == nil || linkedIN == "" {
+            return
+        } else {
+       // if (linkedIN?.contains("htttp"))! {
+            guard let url = URL(string: (linkedIN!))
+                else {
+                    return
+            }
+            let safariVC = SFSafariViewController(url: url)
+            present(safariVC, animated: true, completion: nil)
+            
+            
+       // }
         }
     }
     
@@ -164,7 +195,9 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
             }
         }
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
+    }
     @IBAction func changeViewStyle(_ sender: Any) {
             speakerCollectionView.isHidden = false
             speakerTableView.isHidden = true

@@ -246,6 +246,9 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
             passwordInputTxt.text = ""
         } */
     }
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
+    }
     
     @IBAction func skipLogin(_ sender: Any) {
         let def = UserDefaults.standard

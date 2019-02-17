@@ -19,6 +19,8 @@ class NetworkDetailsVC: UIViewController {
     @IBOutlet weak var viewProfile: UIView!
     let reachabilityManager = NetworkReachabilityManager(host: "https://baseURL.com")!
     var singleItem:Networks?
+    var singleSponserItem:Sponsers?
+
     
     @IBOutlet weak var profileJobTitle: UILabel!
     @IBOutlet weak var profileImg: UIImageView!
@@ -28,11 +30,19 @@ class NetworkDetailsVC: UIViewController {
     @IBOutlet weak var profileLinkedIn: UILabel!
     @IBOutlet weak var profileAbout: UITextView!
     
+    var jobTitle: String?
+    var image: String?
+    var name: String?
+    var eMail: String?
+    var phone: String?
+    var linkedIn: String?
+    var about: String?
+    
     var frameAbout = CGRect(x: 8.0, y: 385, width: 358.0, height: 206.0)
 
     override func viewDidLoad() {
         super.viewDidLoad()
-       profileName.text = ""
+        profileName.text = ""
         profileJobTitle.text = ""
         profileAbout.text = ""
         profileEMail.text = ""
@@ -40,9 +50,11 @@ class NetworkDetailsVC: UIViewController {
         profileLinkedIn.text = ""
         profileImg.layer.cornerRadius = profileImg.frame.width / 2
         profileImg.clipsToBounds = true
-        imgUrl(imgUrl: (singleItem?.imageUrl)!)
-        loadSetData(personId: (singleItem?.network_Id)!)
+       // imgUrl(imgUrl: (singleItem?.imageUrl)!)
+       // loadSetData(personId: (singleItem?.network_Id)!)
+        
         viewAbout.frame = frameAbout
+        loadSponser()
         
         let tapCall = UITapGestureRecognizer(target: self, action: #selector(NetworkDetailsVC.tapCallFunc))
         profilePhone.isUserInteractionEnabled = true
@@ -57,7 +69,49 @@ class NetworkDetailsVC: UIViewController {
         profileLinkedIn.addGestureRecognizer(tapLinkedIn)
       
     }
-   
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
+    }
+    
+    func loadSponser()  {
+        profileName.text = singleSponserItem?.sponserName
+        let sposnserTypeRank = singleSponserItem?.sponsertype!["name"] as? String
+        
+     //   profileJobTitle.text = singleSponserItem?.sponserAddress
+         profileJobTitle.text = sposnserTypeRank
+        if singleSponserItem?.sponserAbout == "" || singleSponserItem?.sponserAbout == nil {
+            viewAbout.isHidden = true
+        } else {
+            viewAbout.isHidden = false
+            profileAbout.text = singleSponserItem?.sponserAbout
+        }
+        
+        eMail = singleSponserItem?.contectInforamtion!["Email"] as? String
+        if eMail == nil || eMail == "" {
+             profileEMail.text = "NA"
+        } else {
+            profileEMail.text = eMail
+
+        }
+        phone = singleSponserItem?.contectInforamtion!["phone"] as? String
+        if phone == nil || phone == "" {
+            profilePhone.text = "NA"
+        }else {
+        profilePhone.text = phone
+        }
+        
+        linkedIn = singleSponserItem?.contectInforamtion!["linkedin"] as? String
+        if linkedIn == nil || linkedIn == "" {
+            profileLinkedIn.text = "NA"
+            
+        }else {
+            profileLinkedIn.text = linkedIn
+
+        }
+        imgUrl(imgUrl: (singleSponserItem?.sponserImageUrl)!)
+        
+
+    }
 
     func  loadSetData(personId:String)  {
         if let  apiToken  = Helper.getApiToken() {
@@ -90,6 +144,9 @@ class NetworkDetailsVC: UIViewController {
     }
     
     func imgUrl(imgUrl:String)  {
+        if imgUrl == "" || imgUrl == nil {
+            return
+        } else {
         if let imagUrlAl = imgUrl as? String {
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
                 print(response)
@@ -100,9 +157,10 @@ class NetworkDetailsVC: UIViewController {
                 }
             })
         }
+        }
     }
     @objc func tapLinkedinFunc(sender:UIGestureRecognizer) {
-        if let openURL = URL(string: "twitter://"){
+      /*  if let openURL = URL(string: "twitter://"){
             let canOpen = UIApplication.shared.canOpenURL(openURL)
         }
         let apppName = "linkedin"
@@ -113,36 +171,53 @@ class NetworkDetailsVC: UIViewController {
             UIApplication.shared.open(appSchemeUrl!, options: [:], completionHandler: nil)
         }
         else {
+            */
             //stop borwser till know who will check or add https to avoid safari error
-          /*  guard let url = URL(string: (profileLinkedIn.text)!)
+        let linkStr = (profileLinkedIn.text)!
+        if linkStr == "NA" || linkStr == "" {
+            
+        }else {
+           guard let url = URL(string: linkStr)
                 else {
                     return
             }
+      
             let safariVC = SFSafariViewController(url: url)
             present(safariVC, animated: true, completion: nil)
- */
+        }
+ /*
             let alert = UIAlertController(title: "\(apppName) Error...", message: "the app named \(apppName) not found,please install it fia app store.", preferredStyle: .alert )
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
-        }
+ */
+       // }
     }
     
     @objc func tapMailFunc(sender:UIGestureRecognizer) {
+        let mailStr = (profileEMail.text)!
+        if mailStr == "NA" || mailStr == "" {
+            
+        }else {
         guard MFMailComposeViewController.canSendMail()
             else {
                 return
         }
         let compser = MFMailComposeViewController()
         compser.mailComposeDelegate = self
-        compser.setToRecipients([(profileEMail.text)!])
+        compser.setToRecipients([mailStr])
         compser.setSubject("Event User Want to connect")
         compser.setMessageBody("i love your session ana want to connect with you in other deal", isHTML: false)
         present(compser, animated: true, completion: nil)
         
     }
-    
+    }
     @objc func tapCallFunc(sender:UIGestureRecognizer) {
-        PhoneCall.makeCall(PhoneNumber: (profilePhone.text)!)
+        let phonelStr = (profilePhone.text)!
+        if phonelStr == "NA" || phonelStr == "" {
+            
+        }else {
+        PhoneCall.makeCall(PhoneNumber: phonelStr)
+    }
     }
 }
 

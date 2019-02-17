@@ -128,7 +128,9 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
         companyNameLbl.isHidden = true
         titleLbl.isHidden  = true
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
+    }
     @objc func succesRegister(){
       
         let alert = UIAlertController(title: "Succes!", message: "You are just registered!", preferredStyle: UIAlertControllerStyle.alert)

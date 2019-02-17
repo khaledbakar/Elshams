@@ -133,6 +133,7 @@ class SpeakerProfileVC: UIViewController {
         
     }
     override func viewWillAppear(_ animated: Bool) {
+            UIApplication.shared.isStatusBarHidden = false
         loadAllSpeakerData()
     }
     
@@ -179,7 +180,7 @@ class SpeakerProfileVC: UIViewController {
               //      self.noAboutMethod()
                 } else {
                     self.showAboutMethod()
-                    self.aboutSpeaker.text = speaker_About
+                    self.aboutSpeaker.text = speaker_About?.htmlToString
 
                 }
                 if !(self.speakerSessionsList.isEmpty) {
@@ -353,6 +354,7 @@ class SpeakerProfileVC: UIViewController {
     func noSessionsMethod()  {
         sessionViewContainer.isHidden = true
     }
+    
     @objc func tapOpenLinkFunc(sender:UIGestureRecognizer) {
        guard let url = URL(string: (speakerWebsite.text)!)
             else {

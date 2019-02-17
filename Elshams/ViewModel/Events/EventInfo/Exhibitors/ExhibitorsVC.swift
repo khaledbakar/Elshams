@@ -19,7 +19,8 @@ class ExhibitorsVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
     var availableAppointmentList = Array<AvailableAppointment>()
     
     @IBOutlet weak var activeLoader: UIActivityIndicatorView!
-    
+    @IBOutlet weak var noDataErrorContainer: UIView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,8 +32,13 @@ class ExhibitorsVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
         }
         startupTableView.isHidden = true
         activeLoader.startAnimating()
+        noDataErrorContainer.isHidden = true
+
         NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
         loadAllStartUpData()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
     }
     
     @objc func errorAlert(){
@@ -50,7 +56,7 @@ class ExhibitorsVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
     func loadAllStartUpData()  {
         if let  apiToken  = Helper.getApiToken() {
             
-            Service.getServiceWithAuth(url: URLs.getAllStartups) { //WithAuth
+            Service.getServiceWithAuth(url: URLs.getAllExhibitors) { //WithAuth
                 (response) in
                 print(response)
                 let json = JSON(response)
@@ -71,20 +77,24 @@ class ExhibitorsVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
                         let startUp_Phone = result[index]["ContectInforamtion"]["phone"].string
                         
                         let contect = ["Email": "","linkedin": "","phone": ""]
-                        if startUp_ID == nil || startUp_ID?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || startUp_ID == "null" || startUp_ID == "nil" {
+                        if startUp_ID == nil || startUp_ID?.trimmed == "" || startUp_ID == "null" || startUp_ID == "nil" {
                             iDNotNull = false
                             break
                         }
-                        self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: startUp_ImageUrl ?? "Image", StartUpAbout: startUp_About ?? "about", AppoimentStatus: startUp_Appoimentstatus ?? "Appointmentstatus", AppoimentTime: startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                        self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect))
                         index = index + 1
                         self.startupTableView.reloadData()
                         self.activeLoader.isHidden = true
                         self.activeLoader.stopAnimating()
                         self.startupTableView.isHidden = false
+                        self.noDataErrorContainer.isHidden = true
+
                     }
                 }
                     
                 else {
+                    self.noDataErrorContainer.isHidden = false
+
                     let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
                     alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
@@ -93,7 +103,7 @@ class ExhibitorsVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
             }
         }
         else {
-            Service.getService(url: URLs.getAllStartups) { //WithAuth
+            Service.getService(url: URLs.getAllExhibitors) { //WithAuth
                 (response) in
                 print(response)
                 let json = JSON(response)
@@ -114,18 +124,22 @@ class ExhibitorsVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
                         let startUp_Phone = result[index]["ContectInforamtion"]["phone"].string
                         
                         let contect = ["Email": "","linkedin": "","phone": ""]
-                        if startUp_ID == nil || startUp_ID?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || startUp_ID == "null" || startUp_ID == "nil" {
+                        if startUp_ID == nil || startUp_ID?.trimmed == "" || startUp_ID == "null" || startUp_ID == "nil" {
                             iDNotNull = false
                             break
                         }
-                        self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: startUp_ImageUrl ?? "Image", StartUpAbout: startUp_About ?? "about", AppoimentStatus: startUp_Appoimentstatus ?? "Appointmentstatus", AppoimentTime: startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                        self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect))
                         index = index + 1
                         self.startupTableView.reloadData()
                         self.activeLoader.isHidden = true
                         self.activeLoader.stopAnimating()
                         self.startupTableView.isHidden = false
+                        self.noDataErrorContainer.isHidden = true
+
                     }
                 } else {
+                    self.noDataErrorContainer.isHidden = false
+
                     let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
                     alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                     self.present(alert, animated: true, completion: nil)

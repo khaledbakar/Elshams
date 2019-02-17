@@ -126,7 +126,9 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         view.addGestureRecognizer(tapGesture)
 
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
+    }
     
     func initalViewLoad()  {
         // nextQuestion.ges

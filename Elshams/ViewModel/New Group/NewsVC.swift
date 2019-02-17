@@ -51,7 +51,9 @@ class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate ,
         //reload after
         //
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
+    }
     func loadTopNews()  {
         scrollContainer.contentSize = CGSize(width: (scrollContainer.frame.size.width * CGFloat(topNewsList .count)) , height: scrollContainer.frame.size.height)
         scrollContainer.delegate = self
@@ -109,6 +111,7 @@ class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate ,
     @objc func topNewsTitleFunc(sender:UIGestureRecognizer) {//UIGestureRecognizer
       //  guard let TagRe = (sender.view as? UILabel)?.text else { return }
           guard let tag = (sender.view as? UILabel)?.tag else { return }
+
         performSegue(withIdentifier: "newsdetail", sender: topNewsList[tag - 1]) //topNewsList[]
 
     }

@@ -38,6 +38,7 @@
 		045EF19E21B96098009DCA7A /* AllQuestionsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045EF19D21B96098009DCA7A /* AllQuestionsCell.swift */; };
 		045EF1A021B96180009DCA7A /* MyQuestionsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045EF19F21B9617F009DCA7A /* MyQuestionsCell.swift */; };
 		045EF1A321B98051009DCA7A /* NewsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 045EF1A221B98051009DCA7A /* NewsVC.swift */; };
+		046238DB2219965B00F4AE04 /* postsDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046238DA2219965B00F4AE04 /* postsDetails.swift */; };
 		0466C05521B55B1100C9C555 /* CompanyItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C05421B55B1100C9C555 /* CompanyItems.swift */; };
 		0466C05C21B5717E00C9C555 /* CollectioViewItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C05B21B5717E00C9C555 /* CollectioViewItems.swift */; };
 		0466C05F21B5796A00C9C555 /* EventInfoContainerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0466C05E21B5796A00C9C555 /* EventInfoContainerVC.swift */; };
@@ -94,6 +95,8 @@
 		04BE00F921D0F02000809834 /* AllEventsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BE00F821D0F02000809834 /* AllEventsVC.swift */; };
 		04BE00FB21D0F09500809834 /* AllEventsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BE00FA21D0F09500809834 /* AllEventsCell.swift */; };
 		04BE00FD21D0F26A00809834 /* EventsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04BE00FC21D0F26A00809834 /* EventsData.swift */; };
+		04E2886A2217BEBA0050557C /* InnovationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E288692217BEBA0050557C /* InnovationCell.swift */; };
+		04E2886C2217BEDA0050557C /* InnovationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E2886B2217BEDA0050557C /* InnovationVC.swift */; };
 		04E994F621EB438E006070B3 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E994F521EB438E006070B3 /* Service.swift */; };
 		04E994F821EB89D2006070B3 /* MdcText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E994F721EB89D2006070B3 /* MdcText.swift */; };
 		04E994FA21ECB7B0006070B3 /* AgendaSectionDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E994F921ECB7B0006070B3 /* AgendaSectionDate.swift */; };
@@ -134,6 +137,7 @@
 		045EF19D21B96098009DCA7A /* AllQuestionsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllQuestionsCell.swift; sourceTree = "<group>"; };
 		045EF19F21B9617F009DCA7A /* MyQuestionsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyQuestionsCell.swift; sourceTree = "<group>"; };
 		045EF1A221B98051009DCA7A /* NewsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsVC.swift; sourceTree = "<group>"; };
+		046238DA2219965B00F4AE04 /* postsDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = postsDetails.swift; sourceTree = "<group>"; };
 		0466C05421B55B1100C9C555 /* CompanyItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyItems.swift; sourceTree = "<group>"; };
 		0466C05B21B5717E00C9C555 /* CollectioViewItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectioViewItems.swift; sourceTree = "<group>"; };
 		0466C05E21B5796A00C9C555 /* EventInfoContainerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventInfoContainerVC.swift; sourceTree = "<group>"; };
@@ -192,6 +196,8 @@
 		04BE00F821D0F02000809834 /* AllEventsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllEventsVC.swift; sourceTree = "<group>"; };
 		04BE00FA21D0F09500809834 /* AllEventsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllEventsCell.swift; sourceTree = "<group>"; };
 		04BE00FC21D0F26A00809834 /* EventsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsData.swift; sourceTree = "<group>"; };
+		04E288692217BEBA0050557C /* InnovationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InnovationCell.swift; sourceTree = "<group>"; };
+		04E2886B2217BEDA0050557C /* InnovationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InnovationVC.swift; sourceTree = "<group>"; };
 		04E994F521EB438E006070B3 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		04E994F721EB89D2006070B3 /* MdcText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MdcText.swift; sourceTree = "<group>"; };
 		04E994F921ECB7B0006070B3 /* AgendaSectionDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgendaSectionDate.swift; sourceTree = "<group>"; };
@@ -374,6 +380,7 @@
 		0466C05D21B5793D00C9C555 /* EventInfo */ = {
 			isa = PBXGroup;
 			children = (
+				04E288682217BE970050557C /* Innovation */,
 				044BCA2E220AF0C300A4CA78 /* Agenda */,
 				0466C0A221B7E32200C9C555 /* MyFavourites */,
 				044BCA2D220AF08900A4CA78 /* Sponsers */,
@@ -419,6 +426,7 @@
 			children = (
 				0466C09421B6CF6100C9C555 /* TimeLineHomeVC.swift */,
 				0439DACE21C68A510041CDCB /* NewFeedsCell.swift */,
+				046238DA2219965B00F4AE04 /* postsDetails.swift */,
 			);
 			path = TimeLine;
 			sourceTree = "<group>";
@@ -515,6 +523,15 @@
 				04BE00FA21D0F09500809834 /* AllEventsCell.swift */,
 			);
 			path = AllEvents;
+			sourceTree = "<group>";
+		};
+		04E288682217BE970050557C /* Innovation */ = {
+			isa = PBXGroup;
+			children = (
+				04E288692217BEBA0050557C /* InnovationCell.swift */,
+				04E2886B2217BEDA0050557C /* InnovationVC.swift */,
+			);
+			path = Innovation;
 			sourceTree = "<group>";
 		};
 		04E994F221EB431C006070B3 /* NetworkLayer */ = {
@@ -677,6 +694,7 @@
 				0466C07321B5973900C9C555 /* Sponsers.swift in Sources */,
 				04B872AB21AD6E8F00C6629E /* SideMenuContainerVC.swift in Sources */,
 				04AD60EB221244E200648C7E /* MultiAnswers.swift in Sources */,
+				046238DB2219965B00F4AE04 /* postsDetails.swift in Sources */,
 				0466C06921B57B4100C9C555 /* StartUps.swift in Sources */,
 				04B872B421AD962E00C6629E /* SideMenuCell.swift in Sources */,
 				0469B49221AC1674000A337B /* ViewController.swift in Sources */,
@@ -691,6 +709,7 @@
 				045EF19A21B96004009DCA7A /* QuestionsData.swift in Sources */,
 				0416E74F21ADABBC004E7368 /* TabTestViewController.swift in Sources */,
 				0466C0A621B7E37A00C9C555 /* MyFavouritesVC.swift in Sources */,
+				04E2886C2217BEDA0050557C /* InnovationVC.swift in Sources */,
 				0466C06F21B58B8100C9C555 /* SponsersCell.swift in Sources */,
 				0466C06321B57AE000C9C555 /* AgendaVC.swift in Sources */,
 				04B872A721AD536500C6629E /* SelectFavCompVC.swift in Sources */,
@@ -713,6 +732,7 @@
 				045EF19121B93C24009DCA7A /* AcceptedCell.swift in Sources */,
 				044C648321FF342600434BB1 /* Config.swift in Sources */,
 				0439DAC721C111510041CDCB /* AllNewsCell.swift in Sources */,
+				04E2886A2217BEBA0050557C /* InnovationCell.swift in Sources */,
 				0410D75521F0BBED005A304E /* PhoneCall.swift in Sources */,
 				044C648721FF571500434BB1 /* String-Extension.swift in Sources */,
 				0466C07A21B6906B00C9C555 /* NotificationsVC.swift in Sources */,

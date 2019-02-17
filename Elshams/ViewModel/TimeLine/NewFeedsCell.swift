@@ -46,13 +46,16 @@ class NewFeedsCell: UICollectionViewCell {
         if likeCounter == 0 || likeCounter == nil {
             if NewsfeedList.post_Islike == true {
                 likeCounterLabel.isHidden = false
-                likeImage.backgroundColor = UIColor.blue
-                likeImage.backgroundColor = UIColor.blue
+             //   likeImage.backgroundColor = UIColor.blue
+              //  likeImage.backgroundColor = UIColor.blue
+                likeImage.image = UIImage(named: "liked")
 
                 likeCounterLabel.text = "You like this"
             } else {
-                likeImage.backgroundColor = UIColor.clear
+              //  likeImage.backgroundColor = UIColor.clear
                 likeCounterLabel.textColor = UIColor.black
+                likeImage.image = UIImage(named: "like")
+
               //  likeCounterLabel.text = "You,and \((NewsfeedList.post_LikeCount)!) likes"
                 likeCounterLabel.isHidden = true
             }
@@ -60,12 +63,15 @@ class NewFeedsCell: UICollectionViewCell {
             postLikeCounter = "\(likeCounter!)"
             if NewsfeedList.post_Islike == true {
                 likeCounterLabel.isHidden = false
-                likeImage.backgroundColor = UIColor.blue
+               // likeImage.backgroundColor = UIColor.blue
+                likeImage.image = UIImage(named: "liked")
+
                 likeCounterLabel.textColor = UIColor.blue
                 likeCounterLabel.text = "You,and \(likeCounter!) like this"
             } else {
-                likeImage.backgroundColor = UIColor.clear
+               // likeImage.backgroundColor = UIColor.clear
                 likeCounterLabel.textColor = UIColor.black
+                likeImage.image = UIImage(named: "like")
 
                 likeCounterLabel.isHidden = false
                   likeCounterLabel.text = "\(likeCounter!) likes this"
@@ -150,6 +156,11 @@ class NewFeedsCell: UICollectionViewCell {
         */
         
     }
+    func getId(url:String) {
+      //  let  pattern = @"(?:https?:\/\/)?(?:www\.)?(?:(?:(?:youtube.com\/watch\?[^?]*v=|youtu.be\/)([\w\-]+))(?:[^\s?]+)?)"
+
+    }
+    
     
     @IBAction func btnLike(_ sender: Any) {
         if let  apiToken  = Helper.getApiToken() {
@@ -157,7 +168,9 @@ class NewFeedsCell: UICollectionViewCell {
             if postIsLike == true {
                 postIsLike = false
                 OpenSessionVC.likeFlag = "faveMethod"
-                likeImage.backgroundColor = UIColor.clear
+               // likeImage.backgroundColor = UIColor.clear
+                likeImage.image = UIImage(named: "like")
+
                 likeCounterLabel.isHidden = false
                 likeCounterLabel.text = "\(postLikeCounter) "
                 likeCounterLabel.textColor = UIColor.black
@@ -172,7 +185,8 @@ class NewFeedsCell: UICollectionViewCell {
             else {
                 postIsLike = true
                 OpenSessionVC.likeFlag = "faveMethod"
-                likeImage.backgroundColor = UIColor.blue
+              //  likeImage.backgroundColor = UIColor.blue
+                likeImage.image = UIImage(named: "liked")
                 likeCounterLabel.isHidden = false
                 likeCounterLabel.text = "You,and \(postLikeCounter) like this"
                 likeCounterLabel.textColor = UIColor.blue

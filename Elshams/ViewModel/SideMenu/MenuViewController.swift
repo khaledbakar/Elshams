@@ -30,8 +30,8 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
     @IBOutlet weak var userProfile: UIImageView!
     
     var btnMenu : UIButton!
-    var SideMenuTitles = ["TimeLine","Myfavorites","Agenda","Speakers","Sponsers","Exhibitors","Startups","News","Notifications","Questions","Appointment","Settings","Logout"] //,"AllEvents" "Networks",
-    var SideMenuIcons = ["home","favourite","agenda","speaker","sponsers","startup","startup","news","notifications","questation","appointment","home","logout"]//"events", "networks",
+    var SideMenuTitles = ["TimeLine","Myfavorites","Agenda","Speakers","Sponsers","Exhibitors","Innovation","Startups","News","Notifications","Questions","Appointment","Settings","Logout"] //,"AllEvents" "Networks",
+    var SideMenuIcons = ["home","favourite","agenda","speaker","sponsers","startup","agenda","startup","news","notifications","questation","appointment","home","logout"]//"events", "networks",
     @IBOutlet weak var btnCloseMenuOverlay: UIButton!
     var delegate : SlideMenuDelegate?
     override func viewDidLoad() {
@@ -167,13 +167,15 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             controllerSelect = "EventExhibitors"
             MenuViewController.startupEventOrMenu = true
         case 6 :
+            controllerSelect = "EventInnovation"
+        case 7 :
             controllerSelect = "EventStartups"
             MenuViewController.startupEventOrMenu = true
 
-        case 7 :
+        case 8 :
             controllerSelect = "AllNews"
             
-        case 8 :
+        case 9 :
             if let  apiToken  = Helper.getApiToken() {
 
             controllerSelect = "NotificationEvent"
@@ -181,7 +183,7 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             controllerSelect = "NotLogin"
             
         }
-        case 9 :
+        case 10 :
         if let  apiToken  = Helper.getApiToken() {
 
             controllerSelect = "QuestionsContainer"
@@ -190,7 +192,7 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
     
     }
         
-        case 10 :
+        case 11 :
             if let  apiToken  = Helper.getApiToken() {
             controllerSelect = "AppointmentContainer"
             } else {
@@ -200,7 +202,7 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
     /*    case 11 :
             controllerSelect = "AllMainEvents" //EventContainer
             MenuViewController.agendaEventOrMenu = true */
-        case 11 :
+        case 12 :
              if let  apiToken  = Helper.getApiToken() {
             controllerSelect = "Settings"
             
@@ -208,7 +210,7 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             controllerSelect = "NotLogin"
             
         }
-        case 12 :
+        case 13 :
             //fe sho8l hna kteer 3shan el remember me
             controllerSelect = "Logout"
             let def = UserDefaults.standard
@@ -266,7 +268,9 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
         
         
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
+    }
     @IBAction func btnRegister(_ sender: Any) {
          performSegue(withIdentifier: "register", sender: nil)
     }

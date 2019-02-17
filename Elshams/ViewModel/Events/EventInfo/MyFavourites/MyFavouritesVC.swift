@@ -15,7 +15,8 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
  //   var agendaFavList = Array<ProgramAgendaItems>()
    
     @IBOutlet weak var favourSessionTableView: UITableView!
-    
+    @IBOutlet weak var noDataErrorContainer: UIView!
+
     @IBOutlet weak var activeLoader: UIActivityIndicatorView!
     var agendaDate = Array<String>()
     var agendaAllDate = Array<String>()
@@ -33,6 +34,8 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
     
         activeLoader.startAnimating()
         favourSessionTableView.isHidden = true
+        noDataErrorContainer.isHidden = true
+
           NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
         loadFavourSessionsData()
         var secCount = 0
@@ -56,6 +59,9 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
         activeLoader.stopAnimating()
         //reload
         
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
     }
    func loadFavourSessionsData(){
     if let  apiToken  = Helper.getApiToken() {
@@ -118,9 +124,13 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
             self.activeLoader.isHidden = true
             self.activeLoader.stopAnimating()
             self.favourSessionTableView.isHidden = false
+            self.noDataErrorContainer.isHidden = true
+
         }
         }
         else {
+            self.noDataErrorContainer.isHidden = false
+
             let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)

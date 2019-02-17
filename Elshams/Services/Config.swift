@@ -33,7 +33,15 @@ struct URLs {
     static let getAllSponsors = main + "/Event/getAllSponsors"
     
     static let getAllStartups = main + "/Event/getAllStartups"
+    static let getInnovation = main + "/Event/getInnovation"
+    static let getAllExhibitors = main + "/Event/getAllExhibitors"
+
+
     static let getStartupDetailsByID = main + "/Event/getStartupDetailsByID"
+    static let getExhibitorDetailsByID = main + "/Event/getExhibitorDetailsByID"
+    static let getInnovationSessionDetailsByID = main + "/Event/getInnovationSessionDetails"
+
+
     static let getAvaliableAppoiments = main + "/Event/getAvaliableAppoiments"
     static let getAppoiments = main + "/Event/getAppoiments"
     static let requestAppoiment = main + "/Event/requestAppoiment"

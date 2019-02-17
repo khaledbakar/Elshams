@@ -26,23 +26,27 @@ class SpeakersCell: UITableViewCell {
 
     }
     func imgUrl(imgUrl:String)  {
-        
-        if let imagUrlAl = imgUrl as? String {
-            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
-                print(response)
-                switch response.result {
-                case .success(let value):
-                if let image = response.result.value {
-                    DispatchQueue.main.async{
-                        
-                        self.speakerImage.image = image
+        if imgUrl == nil || imgUrl.trimmed == "" {
+            return
+        } else {
+            if let imagUrlAl = imgUrl as? String {
+                Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
+                    print(response)
+                    switch response.result {
+                    case .success(let value):
+                        if let image = response.result.value {
+                            DispatchQueue.main.async{
+                                
+                                self.speakerImage.image = image
+                            }
+                        }
+                    case .failure(let error):
+                        print(error)
                     }
-                }
-                case .failure(let error):
-                    print(error)
-                }
-            })
+                })
+            }
         }
+        
     }
     
     func setSpeakerCell(speakerList:Speakers) {
@@ -51,6 +55,7 @@ class SpeakersCell: UITableViewCell {
         speakerName.text = speakerList.name
         speakerJobTitle.text = speakerList.jobTitle
         speakerJobDescribtion.text = speakerList.companyName
+       
         imgUrl(imgUrl: (speakerList.speakerImageUrl)!)
         
        // speakerImage.image = UIImage(named: "\((speakerList.speakerImage)!)")

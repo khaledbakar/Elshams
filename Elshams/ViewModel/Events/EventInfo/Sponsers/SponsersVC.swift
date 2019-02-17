@@ -13,7 +13,8 @@ import Alamofire
 import SwiftyJSON
 
 class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSource , UICollectionViewDelegate , UICollectionViewDataSource{  
-    
+    @IBOutlet weak var noDataErrorContainer: UIView!
+
     @IBOutlet weak var activeLoader: UIActivityIndicatorView!
     @IBOutlet weak var sponserTableView: UITableView!
     @IBOutlet weak var sponserCollectionView: UICollectionView!
@@ -32,6 +33,8 @@ class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSour
         activeLoader.startAnimating()
         sponserTableView.isHidden = true
         sponserCollectionView.isHidden = true
+        noDataErrorContainer.isHidden = true
+
           NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
         loadAllSponserData()
      //   self.navigationItem.bar
@@ -93,12 +96,16 @@ class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSour
                     self.activeLoader.stopAnimating()
                     self.sponserTableView.isHidden = true
                     self.sponserCollectionView.isHidden = false
+                    self.noDataErrorContainer.isHidden = true
+
                     
                // }
             }
             
         }
                 else {
+                    self.noDataErrorContainer.isHidden = false
+
                     let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
                     alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
@@ -138,7 +145,10 @@ class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSour
         cell.setSponserColCell(sponserList:  sponserList[indexPath.row])
         return cell
     }
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "sponserdetail", sender: sponserList[indexPath.row])
+
+    }
     
     //tableview methods
 
@@ -161,8 +171,20 @@ class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSour
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        performSegue(withIdentifier: "sponserdetail", sender: sponserList[indexPath.row])
+
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let dis = segue.destination as? NetworkDetailsVC {
+            if let favDetail = sender as? Sponsers {
+                dis.singleSponserItem = favDetail
+            }
+        }
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
+    }
     @IBAction func changeViewStyle(_ sender: Any) {
         sponserCollectionView.isHidden = false
         sponserTableView.isHidden = true

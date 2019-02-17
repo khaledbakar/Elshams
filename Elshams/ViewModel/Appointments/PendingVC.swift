@@ -14,6 +14,8 @@ import SwiftyJSON
 
 class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegate {
 
+    @IBOutlet weak var noDataErrorContainer: UIView!
+
     @IBOutlet weak var pendingTableView: UITableView!
     @IBOutlet weak var activeLoader: UIActivityIndicatorView!
     var pendingList = Array<StartUpsData>()
@@ -24,6 +26,8 @@ class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegat
         
         pendingTableView.isHidden = true
         activeLoader.startAnimating()
+        noDataErrorContainer.isHidden = true
+
          NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
         loadPendingAppointmentsData()
       
@@ -82,11 +86,15 @@ class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegat
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
                 self.activeLoader.isHidden = true
+                self.noDataErrorContainer.isHidden = true
+
 
             }
           }
         }
         else {
+            self.noDataErrorContainer.isHidden = false
+
             self.activeLoader.isHidden = true
             self.pendingTableView.isHidden = true
           //  print(error.localizedDescription)
@@ -97,7 +105,10 @@ class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegat
         }
     }
     
-   
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -132,6 +143,8 @@ class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegat
     }
    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
         performSegue(withIdentifier: "pendingstartup", sender: pendingList[indexPath.row])
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

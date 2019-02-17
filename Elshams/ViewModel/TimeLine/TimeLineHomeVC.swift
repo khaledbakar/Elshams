@@ -113,6 +113,9 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         } */
   
     }
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
+    }
     @objc func errorSignLikeAlert(){
 
     let alert = UIAlertController(title: "Error", message: "You must sign in to Do this Part", preferredStyle: UIAlertControllerStyle.alert)
@@ -430,7 +433,20 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         cell.setNewsFeedCeel(NewsfeedList: newsFeedList[indexPath.row])
         return cell
     }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+      //  NewsDetails.PostOrNews == true
+        print(newsFeedList[indexPath.row])
+        performSegue(withIdentifier: "timelinepostdetail", sender: newsFeedList[indexPath.row])
+
+    }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let dis = segue.destination as? postsDetails {
+            if let favDetail = sender as? NewsFeedData {
+                dis.singlePostsItem = favDetail
+            }
+        }
+    }
     
     @IBAction func moreSponsers(_ sender: Any) {
         MenuViewController.sponserEventOrMenu = true

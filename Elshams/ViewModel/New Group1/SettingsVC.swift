@@ -330,7 +330,9 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
         imagePicker.dismiss(animated: true, completion: nil)
     }
     
-    
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
+    }
     @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer)  {
         view.endEditing(true)
     }

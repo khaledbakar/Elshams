@@ -15,6 +15,7 @@ import SwiftyJSON
 class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate {
     @IBOutlet weak var tableViewAgenda: UITableView!
     @IBOutlet weak var activeLoader: UIActivityIndicatorView!
+    @IBOutlet weak var noDataErrorContainer: UIView!
 
     @IBOutlet weak var reloadConnection: UIImageView!
     @IBOutlet weak var reloadBtnShow: UIButton!
@@ -40,6 +41,8 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
     activeLoader.startAnimating()
     reloadBtnShow.isHidden = true
     reloadConnection.isHidden = true
+    noDataErrorContainer.isHidden = true
+
       NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
     loadTableData()
  /*   if TimeLineHomeVC.failMessage ==  "fail"
@@ -53,6 +56,9 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
         self.present(alert, animated: true, completion: nil)
     } */
 
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
     }
     
     @objc func errorAlert(){
@@ -140,11 +146,15 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
                     self.activeLoader.isHidden = true
                     self.activeLoader.stopAnimating()
                     self.tableViewAgenda.isHidden = false
+                    self.noDataErrorContainer.isHidden = true
+
                 }
             }
                     
                 else
                 {
+                    self.noDataErrorContainer.isHidden = false
+
                     let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
                     alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
@@ -210,11 +220,15 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
                         self.activeLoader.isHidden = true
                         self.activeLoader.stopAnimating()
                         self.tableViewAgenda.isHidden = false
+                        self.noDataErrorContainer.isHidden = true
+
                     }
                
             }
                     // }
             else {
+                    self.noDataErrorContainer.isHidden = false
+
                     let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
                     alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                     self.present(alert, animated: true, completion: nil)

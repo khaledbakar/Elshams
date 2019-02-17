@@ -35,6 +35,10 @@ class NetworksVC: BaseViewController , UITableViewDataSource , UITableViewDelega
 
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
+    }
+    
     func loadTableData()  {
         if let  apiToken  = Helper.getApiToken() {
 

@@ -14,18 +14,25 @@ import SwiftyJSON
 class NotificationsVC: BaseViewController , UITableViewDataSource , UITableViewDelegate {
     @IBOutlet weak var notifyTableView: UITableView!
     @IBOutlet weak var activityLoader: UIActivityIndicatorView!
+    @IBOutlet weak var noDataErrorContainer: UIView!
+
     var notificationList = Array<Notifications>()
     override func viewDidLoad() {
         super.viewDidLoad()
         addSlideMenuButton()
         notifyTableView.isHidden = true
         activityLoader.startAnimating()
+        noDataErrorContainer.isHidden = true
+
            NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
         loadNotifyData()
       //  btnRightBar()
         self.navigationItem.title = "Notifications"
        // notificationList.append(Notifications(NotificationName: "MEDGRAM", NotificationDetails: "rod 3lya msh 2ader atnfs", NotitficationImageUrl: "avatar"))
 
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
     }
     
     @objc func errorAlert(){
@@ -70,7 +77,11 @@ class NotificationsVC: BaseViewController , UITableViewDataSource , UITableViewD
                 self.activityLoader.isHidden = true
                 self.activityLoader.stopAnimating()
                 self.notifyTableView.isHidden = false
+                self.noDataErrorContainer.isHidden = true
+
             } else {
+                self.noDataErrorContainer.isHidden = false
+
                 let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)

@@ -15,6 +15,8 @@ import SwiftyJSON
 class MyQuestions: UIViewController , UITableViewDataSource ,UITableViewDelegate {
     var questionList = Array<QuestionsData>()
     @IBOutlet weak var activeLoader: UIActivityIndicatorView!
+    @IBOutlet weak var noDataErrorContainer: UIView!
+
     @IBOutlet weak var questionTableView: UITableView!
 
     override func viewDidLoad() {
@@ -22,6 +24,8 @@ class MyQuestions: UIViewController , UITableViewDataSource ,UITableViewDelegate
 
         questionTableView.isHidden = true
         activeLoader.startAnimating()
+        noDataErrorContainer.isHidden = true
+
          NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
         loadMyQuestionData()
  
@@ -36,6 +40,9 @@ class MyQuestions: UIViewController , UITableViewDataSource ,UITableViewDelegate
         //  activeLoader.stopAnimating()
         //reload after
         //
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
     }
     
     func loadMyQuestionData()  {
@@ -65,12 +72,16 @@ class MyQuestions: UIViewController , UITableViewDataSource ,UITableViewDelegate
                 self.questionList.append(QuestionsData(Questions: question_head ?? "", Answer: question_answer ?? "", QuestionsID: question_ID ?? "", QuestionTimeStamp: question_TimeStamp ?? ""))
                 
                 index = index + 1
+                self.noDataErrorContainer.isHidden = true
+
                 self.questionTableView.reloadData()
                 self.activeLoader.isHidden = true
                 self.activeLoader.stopAnimating()
                 self.questionTableView.isHidden = false
             }
             }else {
+                self.noDataErrorContainer.isHidden = false
+
                 let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)

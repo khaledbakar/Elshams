@@ -266,7 +266,9 @@ func imgUrl(imgUrl:String)  {
         present(compser, animated: true, completion: nil)
         
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
+    }
     @objc func tapCallFunc(sender:UIGestureRecognizer) {
         PhoneCall.makeCall(PhoneNumber: (self.startUp_Phone)!)
     }
