@@ -162,7 +162,7 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
         }
         if  notification.name == Notification.Name.UIKeyboardWillShow ||
             notification.name == Notification.Name.UIKeyboardWillChangeFrame {
-            view.frame.origin.y = -190
+            view.frame.origin.y = -210
         } else {
             view.frame.origin.y = 0
         }

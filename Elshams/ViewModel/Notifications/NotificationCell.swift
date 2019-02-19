@@ -26,34 +26,15 @@ class NotificationCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    func imgUrl(imgUrl:String)  {
-        if let imagUrlAl = imgUrl as? String {
-            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
-                print(response)
-                switch response.result {
-                case .success(let value):
-                if let image = response.result.value {
-                    DispatchQueue.main.async{
-                        self.notificationImage.image = image
-                    }
-                }
-                case .failure(let error):
-                print(error)
-            }
-            })
-        }
-    }
-    
+
     func setNotificationCell(NotificationList:Notifications)  {
         notificationTitle.text = NotificationList.notification_Title
         notificationDetail.text = NotificationList.notification_Body
         if NotificationList.notification_ImageUrl != nil {
-            imgUrl(imgUrl: (NotificationList.notification_ImageUrl)!)
-
+         Helper.loadImagesKingFisher(imgUrl: (NotificationList.notification_ImageUrl)!, ImgView: notificationImage)
         }
         notificationImage.layer.cornerRadius = notificationImage.frame.width / 2
         notificationImage.clipsToBounds = true
-     //   notificationImage.image = UIImage(named: "\((NotificationList.notificationImageUrl)!)")
     }
 
 }

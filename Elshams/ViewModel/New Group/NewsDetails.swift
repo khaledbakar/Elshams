@@ -7,8 +7,8 @@
 //
 
 import UIKit
-import AlamofireImage
-import Alamofire
+//import AlamofireImage
+//import Alamofire
 
 class NewsDetails: UIViewController {
 
@@ -29,32 +29,14 @@ class NewsDetails: UIViewController {
        
         }
         else {
-             imgUrl(imgUrl: (singleItem?.newsImgUrl)!)
+            Helper.loadImagesKingFisher(imgUrl: (singleItem?.newsImgUrl)!, ImgView: newsImage )
         }
-        // need to nil handler
-       // newsImage.image = UIImage(named: "\((singleItem?.newsImgUrl)!)")
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
         UIApplication.shared.isStatusBarHidden = false
     }
-    func imgUrl(imgUrl:String)  {
-        if let imagUrlAl = imgUrl as? String {
-            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
-                print(response)
-                switch response.result {
-                case .success(let value):
-                if let image = response.result.value {
-                    DispatchQueue.main.async{
-                        self.newsImage.image = image
-                    }
-                }
-                case .failure(let error):
-                    print(error)
-                }
-            })
-        }
-    }
+    
+ 
 
 }

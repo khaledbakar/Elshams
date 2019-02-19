@@ -21,7 +21,7 @@ class SpeakerCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var speakerColJobTitle: UILabel!
     @IBOutlet weak var speakerColName: UILabel!
     
-    func imgUrl(imgUrl:String)  {
+ /*   func imgUrl(imgUrl:String)  {
         if imgUrl == nil || imgUrl.trimmed == "" {
             return
         } else {
@@ -43,7 +43,7 @@ class SpeakerCollectionViewCell: UICollectionViewCell {
         }
         }
     }
-    
+    */
     func setSpeakerColCell(speakerList:Speakers) {
 
         speakerColImage.layer.cornerRadius = speakerColImage.frame.width / 2
@@ -63,8 +63,8 @@ class SpeakerCollectionViewCell: UICollectionViewCell {
         }
         
         if speakerList.speakerImageUrl != nil {
-            imgUrl(imgUrl: (speakerList.speakerImageUrl)!)
-
+           // imgUrl(imgUrl: (speakerList.speakerImageUrl)!)
+         Helper.loadImagesKingFisher(imgUrl: (speakerList.speakerImageUrl)!, ImgView: speakerColImage)
         }
       //  speakerColImage.image = UIImage(named: "\((speakerList.speakerImage)!)")
     }

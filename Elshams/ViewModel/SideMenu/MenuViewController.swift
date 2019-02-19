@@ -7,9 +7,11 @@
 //
 
 import UIKit
-import AlamofireImage
+//import AlamofireImage
 import Alamofire
 import SwiftyJSON
+import Kingfisher
+
 protocol SlideMenuDelegate {
     func slideMenuItemSelectedAtIndex(_ index : Int32)
 }
@@ -44,8 +46,8 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
         userProfile.clipsToBounds = true
         NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
       //  btnCloseMenuOverlay.backgroundColor = UIColor.red
-
-        loadUserData()
+       loadCasheDate()
+      //  loadUserData()
     //    imgUrl(imgUrl: MenuViewController.imgUserTestUrl)
        
     }
@@ -59,6 +61,33 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
         //reload after
         //
     }
+    
+    func loadCasheDate()  {
+        if let  apiToken  = Helper.getApiToken() {
+            btnLogin.isHidden = true
+            btnRegister.isHidden = true
+            if let user_Name = Helper.getUserName() {
+                self.userNameLbl.isHidden = false
+                self.userNameLbl.text = user_Name
+            }
+            if let user_JobTitle = Helper.getUserJobTitle() {
+                self.jobTitle.isHidden = false
+                self.jobTitle.text = user_JobTitle
+            }
+         
+            if let user_ImageUrl = Helper.getUserImageUrl() {
+                Helper.loadImagesKingFisher(imgUrl: (user_ImageUrl), ImgView: userProfile)
+
+            }
+        } else {
+            btnLogin.isHidden = false
+            btnRegister.isHidden = false
+            userNameLbl.isHidden = true
+            jobTitle.isHidden = true
+        }
+    }
+    
+    
     func  loadUserData()  {
         if let  apiToken  = Helper.getApiToken() {
             btnLogin.isHidden = true
@@ -89,7 +118,8 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             }
            
             if user_ImageUrl != nil {
-                self.imgUrl(imgUrl: (user_ImageUrl)!)
+               // self.imgUrl(imgUrl: (user_ImageUrl)!)
+                Helper.loadImagesKingFisher(imgUrl: (user_ImageUrl)!, ImgView: self.userProfile)
             }
         }
         } else {
@@ -99,28 +129,7 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             jobTitle.isHidden = true
         }
     }
-    func imgUrl(imgUrl:String)  {
-       // if  TimeLineHomeVC.failMessage !=  "fail"{
 
-        if let imagUrlAl = imgUrl as? String {
-            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
-                print(response)
-                switch response.result {
-                case .success(let value):
-                if let image = response.result.value {
-                    DispatchQueue.main.async{
-                        self.userProfile.image = image
-                    }
-                }
-                    
-                case .failure(let error):
-                    print(error)
-                    
-                }
-            })
-        }
-       // }
-    }
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -211,30 +220,25 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
             
         }
         case 13 :
-            //fe sho8l hna kteer 3shan el remember me
             controllerSelect = "Logout"
             let def = UserDefaults.standard
             def.setValue(nil, forKey: "api_token")
             def.synchronize()
             performSegue(withIdentifier: "login", sender: nil)
-            
-            
-           /* //fe sho8l hna kteer 3shan el remember me
-            controllerSelect = "Logout"
-            let def = UserDefaults.standard
-            def.setValue(nil, forKey: "api_token")
-            def.synchronize()
+
             let userProfile = UserDefaults.standard
-            userProfile.setValue(nil, forKey: "user_profile")
+            userProfile.setValue(nil, forKey: "user_profileurl")
             userProfile.synchronize()
             let userName = UserDefaults.standard
             userName.setValue(nil, forKey: "user_name")
-            def.synchronize()
-            performSegue(withIdentifier: "login", sender: nil) */
-            //notify for show buttons
-            //notify for show buttons
-
-           // dismiss(animated: true, completion: nil)
+            userName.synchronize()
+            let userJobTitle = UserDefaults.standard
+            userJobTitle.setValue(nil, forKey: "user_jobtitle")
+            userJobTitle.synchronize()
+            let userSettingData = UserDefaults.standard
+            userSettingData.setValue(nil, forKey: "user_data")
+            userSettingData.synchronize()
+        
         default:
             controllerSelect = "EventAgenda"
 

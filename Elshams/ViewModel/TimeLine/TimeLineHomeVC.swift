@@ -8,7 +8,7 @@
 
 import UIKit
 import Alamofire
-import AlamofireImage
+//import AlamofireImage
 import SwiftyJSON
 
 class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollectionViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate , UITextFieldDelegate {
@@ -105,13 +105,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         loadAllSpeakerData()
         loadAllSponserData()
         
-     /*   if TimeLineHomeVC.failMessage ==  "fail"
-      {
-        let alert = UIAlertController(title: "Error", message: "No internet connection please turn on it", preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
-        } */
-  
+
     }
     override func viewWillAppear(_ animated: Bool) {
         UIApplication.shared.isStatusBarHidden = false
@@ -127,11 +121,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
-        //  startupTableView.isHidden = true
-    //    activeLoader.isHidden = true
-        //  activeLoader.stopAnimating()
-        //reload after
-        //
+     
     }
 
     func loadAllSpeakerData()  {
@@ -162,11 +152,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
                 }
                 self.speakerList.append(Speakers(SpeakerName: speaker_Name ?? "name", JobTitle: speaker_JobTitle ?? "JOB", CompanyName: speaker_CompanyName ?? "Company", SpImageUrl: speaker_ImageUrl ?? "Image", Speaker_id: speaker_ID ?? "ID", ContectInforamtion: speaker_ContectInforamtion ?? contect, About: speaker_About ?? "About"))
                 index = index + 1
-               /* self.speakerTableView.reloadData()
-                self.speakerCollectionView.reloadData()
-                self.activeLoader.isHidden = true
-                self.activeLoader.stopAnimating()
-                self.speakerTableView.isHidden = false */
+             
             }
                 if !(self.speakerList.isEmpty){
             self.speakerName1.text = self.speakerList[0].name
@@ -174,13 +160,12 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
             self.speakerName3.text = self.speakerList[2].name
             self.speakerName4.text = self.speakerList[3].name
               //  if self.speakerList[0].speakerImageUrl != nil{
-            self.imgUrl(imgUrl: self.speakerList[0].speakerImageUrl!, ImageViewSet: self.speakerImg1)
-             //   }
-            self.imgUrl(imgUrl: self.speakerList[1].speakerImageUrl!, ImageViewSet: self.speakerImg2)
-            self.imgUrl(imgUrl: self.speakerList[2].speakerImageUrl!, ImageViewSet: self.speakerImg3)
-            self.imgUrl(imgUrl: self.speakerList[3].speakerImageUrl!, ImageViewSet: self.speakerImg4)
+            Helper.loadImagesKingFisher(imgUrl: self.speakerList[0].speakerImageUrl!, ImgView: self.speakerImg1)
+            Helper.loadImagesKingFisher(imgUrl: self.speakerList[1].speakerImageUrl!, ImgView: self.speakerImg2)
+            Helper.loadImagesKingFisher(imgUrl: self.speakerList[2].speakerImageUrl!, ImgView: self.speakerImg3)
+            Helper.loadImagesKingFisher(imgUrl: self.speakerList[3].speakerImageUrl!, ImgView: self.speakerImg4)
+
                 }
-           //MenuViewController.imgUserTestUrl = self.speakerList[0].speakerImageUrl!  //test menu user image
             } else {
                 // if no data in speaker what doing ??
             }
@@ -234,10 +219,12 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
             self.sponserName2.text = self.sponserList[1].sponserName
             self.sponserName3.text = self.sponserList[2].sponserName
             self.sponserName4.text = self.sponserList[3].sponserName
-            self.imgUrl(imgUrl: self.sponserList[0].sponserImageUrl!, ImageViewSet: self.sponserImg1)
-            self.imgUrl(imgUrl: self.sponserList[1].sponserImageUrl!, ImageViewSet: self.sponserImg2)
-            self.imgUrl(imgUrl: self.sponserList[2].sponserImageUrl!, ImageViewSet: self.sponserImg3)
-            self.imgUrl(imgUrl: self.sponserList[3].sponserImageUrl!, ImageViewSet: self.sponserImg4)
+            Helper.loadImagesKingFisher(imgUrl: self.sponserList[0].sponserImageUrl!, ImgView: self.sponserImg1)
+            Helper.loadImagesKingFisher(imgUrl: self.sponserList[1].sponserImageUrl!, ImgView: self.sponserImg2)
+            Helper.loadImagesKingFisher(imgUrl: self.sponserList[2].sponserImageUrl!, ImgView: self.sponserImg3)
+            Helper.loadImagesKingFisher(imgUrl: self.sponserList[3].sponserImageUrl!, ImgView: self.sponserImg4)
+
+         
         }
         } else {
             // if no data in sponser what doing ??
@@ -248,7 +235,10 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
     }
     
     func loadAboutData()  {
-        
+        if let casheAbout = Helper.getCITAbout(){
+            self.homeAbout.text = casheAbout
+
+        } else {
         Service.getService(url: (URLs.getAbout)) {
             (response) in
             print("this is About ")
@@ -257,13 +247,16 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
             let json = JSON(response)
             
             let result = json["AboutInfo"].string
-            if !(result!.isEmpty){
-                self.homeAbout.text = result?.htmlToString
+            if result != nil && !(result!.isEmpty) && result != ""{
+                let resultHtml = result?.htmlToString
+                self.homeAbout.text = resultHtml
+                Helper.saveCITAbout(CITAbout: resultHtml!)
             } else {
                 // if no data in posts what doing ??
                 
             }
         }
+     }
     }
     
     func loadPostsData()  {
@@ -277,6 +270,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
                 let json = JSON(response)
                 
                 let result = json["AllPosts"]
+                
                 if !(result.isEmpty){
                     var iDNotNull = true
                     var index = 0
@@ -403,26 +397,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
     }
     }
     
-    func imgUrl(imgUrl:String,ImageViewSet:UIImageView)  {
-        
-        if let imagUrlAl = imgUrl as? String {
-            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
-                print(response)
-                if response != nil {
-                    switch response.result {
-                    case .success(let value):
-                if let image = response.result.value {
-                    DispatchQueue.main.async{
-                        ImageViewSet.image = image
-                    }
-                    }
-                    case .failure(let error):
-                        print(error)
-                    }
-                }
-            })
-        }
-    }
+
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return newsFeedList.count

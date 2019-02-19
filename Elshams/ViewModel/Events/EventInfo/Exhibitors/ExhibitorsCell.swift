@@ -8,7 +8,6 @@
 
 import UIKit
 import Alamofire
-import AlamofireImage
 
 class ExhibitorsCell: UITableViewCell {
 
@@ -27,31 +26,14 @@ class ExhibitorsCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    func imgUrl(imgUrl:String)  {
-        
-        if let imagUrlAl = imgUrl as? String {
-            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
-                print(response)
-                switch response.result {
-                case .success(let value):
-                if let image = response.result.value {
-                    DispatchQueue.main.async{
-                        self.exhibitorsImage.image = image
-                    }
-                }
-                case .failure(let error):
-                    print(error)
-                }
-            })
-        }
-    }
-    
+   
+   
     func setExibitorsListCell(exibitorsList:StartUpsData) {
         exhibitorsImage.layer.cornerRadius = exhibitorsImage.frame.width / 2
         exhibitorsImage.clipsToBounds = true
         exhibitorsName.text = exibitorsList.startupName
         if exibitorsList.startupImageUrl != nil {
-            imgUrl(imgUrl: (exibitorsList.startupImageUrl)!)
+            Helper.loadImagesKingFisher(imgUrl:  (exibitorsList.startupImageUrl)!, ImgView: exhibitorsImage)
 
         }
         let email = exibitorsList.contectInforamtion?["Email"]
@@ -70,8 +52,7 @@ class ExhibitorsCell: UITableViewCell {
             
         }
         
-        // startupImage.image = UIImage(named: "\((startupsList.startupImage)!)")
-        //   print( "\((startupsList.startupImage)!)")
+       
     }
     
 }

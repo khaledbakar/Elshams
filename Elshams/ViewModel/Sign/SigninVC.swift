@@ -10,7 +10,7 @@ import UIKit
 import  MaterialComponents.MaterialTextFields
 import SwiftyJSON
 import Alamofire
-import AlamofireImage
+//import AlamofireImage
 //import  MaterialComponents.MDCTextInputControllerFilled
 
 class SigninVC: UIViewController ,  UITextFieldDelegate { 
@@ -159,6 +159,8 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
     override func viewWillAppear(_ animated: Bool) {
         passwordError.isHidden = true
         userNameError.isHidden = true
+        UIApplication.shared.isStatusBarHidden = false
+
       //  userNameLbl.isHidden = true
      //   passwordLbl.isHidden = true
     }
@@ -246,9 +248,7 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
             passwordInputTxt.text = ""
         } */
     }
-    override func viewWillAppear(_ animated: Bool) {
-        UIApplication.shared.isStatusBarHidden = false
-    }
+   
     
     @IBAction func skipLogin(_ sender: Any) {
         let def = UserDefaults.standard
@@ -280,6 +280,7 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
                 }
                 if user_ImageUrl != nil {
                     self.imgUrl(imgUrl: (user_ImageUrl)!)
+                   // Helper.loadImagesKingFisher(imgUrl: (user_ImageUrl)!, ImgView: <#T##UIImageView#>)
                 }
             }
         }
@@ -310,7 +311,7 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
         }
         // }
     }
-    
+   
     @IBAction func forgotPassword(_ sender: Any) {
     }
     

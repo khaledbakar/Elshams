@@ -29,7 +29,6 @@ class AllQuestionsCell: UITableViewCell {
         } else {
             answerTxt.text = QuestionList.answer
              answerTxt.textColor = UIColor(hex: 0xC2C2C0)
-            
         }
         
     }

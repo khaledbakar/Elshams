@@ -9,7 +9,7 @@
 import UIKit
 import XLPagerTabStrip
 import Alamofire
-import AlamofireImage
+//import AlamofireImage
 import SwiftyJSON
 
 class MyQuestions: UIViewController , UITableViewDataSource ,UITableViewDelegate {
@@ -35,11 +35,8 @@ class MyQuestions: UIViewController , UITableViewDataSource ,UITableViewDelegate
         let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
-        //  startupTableView.isHidden = true
+        questionTableView.isHidden = true
         activeLoader.isHidden = true
-        //  activeLoader.stopAnimating()
-        //reload after
-        //
     }
     override func viewWillAppear(_ animated: Bool) {
         UIApplication.shared.isStatusBarHidden = false

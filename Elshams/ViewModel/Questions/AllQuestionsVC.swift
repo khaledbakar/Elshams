@@ -9,7 +9,7 @@
 import UIKit
 import XLPagerTabStrip
 import Alamofire
-import AlamofireImage
+//import AlamofireImage
 import SwiftyJSON
 
 
@@ -39,11 +39,10 @@ class AllQuestionsVC: UIViewController , UITableViewDataSource ,UITableViewDeleg
         let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
-        //  startupTableView.isHidden = true
          activeLoader.isHidden = true
-        //  activeLoader.stopAnimating()
-        //reload after
-        //
+        questionTableView.isHidden = true
+
+     
     }
     
     func loadQuestionData()  {
@@ -51,10 +50,7 @@ class AllQuestionsVC: UIViewController , UITableViewDataSource ,UITableViewDeleg
         Service.getService(url: URLs.getQuestions) { // authorizre or not ?  WithAuth
             (response) in
             print(response)
-           
             let json = JSON(response)
-            
-         
             let result = json["All"]
             print("All question \(result)")
             if !(result.isEmpty){
@@ -83,13 +79,11 @@ class AllQuestionsVC: UIViewController , UITableViewDataSource ,UITableViewDeleg
             }
             } else {
                 self.noDataErrorContainer.isHidden = false
-
                 let alert = UIAlertController(title: "No Data", message: "No Data found till now", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
                 self.activeLoader.isHidden = true
-                
-            }
+             }
             }
         
         }else {

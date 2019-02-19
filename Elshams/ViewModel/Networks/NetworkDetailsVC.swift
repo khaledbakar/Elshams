@@ -9,7 +9,7 @@
 import UIKit
 import SafariServices
 import MessageUI
-import AlamofireImage
+//import AlamofireImage
 import Alamofire
 import SwiftyJSON
 
@@ -50,8 +50,7 @@ class NetworkDetailsVC: UIViewController {
         profileLinkedIn.text = ""
         profileImg.layer.cornerRadius = profileImg.frame.width / 2
         profileImg.clipsToBounds = true
-       // imgUrl(imgUrl: (singleItem?.imageUrl)!)
-       // loadSetData(personId: (singleItem?.network_Id)!)
+     
         
         viewAbout.frame = frameAbout
         loadSponser()
@@ -108,8 +107,7 @@ class NetworkDetailsVC: UIViewController {
             profileLinkedIn.text = linkedIn
 
         }
-        imgUrl(imgUrl: (singleSponserItem?.sponserImageUrl)!)
-        
+        Helper.loadImagesKingFisher(imgUrl: (singleSponserItem?.sponserImageUrl)!, ImgView: self.profileImg)
 
     }
 
@@ -129,7 +127,7 @@ class NetworkDetailsVC: UIViewController {
                 let network_Phone = result["ContectInforamtion"]["phone"].string
                 let network_about = result["about"].string
             self.profileName.text = network_Name
-            self.imgUrl(imgUrl: network_ImageUrl!)
+            Helper.loadImagesKingFisher(imgUrl: network_ImageUrl!, ImgView: self.profileImg)
             self.profileAbout.text = network_about
             self.profileEMail.text = network_Email
             self.profilePhone.text = network_Phone
@@ -143,55 +141,8 @@ class NetworkDetailsVC: UIViewController {
       }
     }
     
-    func imgUrl(imgUrl:String)  {
-        if imgUrl == "" || imgUrl == nil {
-            return
-        } else {
-        if let imagUrlAl = imgUrl as? String {
-            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
-                print(response)
-                if let image = response.result.value {
-                    DispatchQueue.main.async{
-                        self.profileImg.image = image
-                    }
-                }
-            })
-        }
-        }
-    }
-    @objc func tapLinkedinFunc(sender:UIGestureRecognizer) {
-      /*  if let openURL = URL(string: "twitter://"){
-            let canOpen = UIApplication.shared.canOpenURL(openURL)
-        }
-        let apppName = "linkedin"
-        let appScheme = "\(apppName)://"
-        let appSchemeUrl = URL(string: appScheme)
-        
-        if UIApplication.shared.canOpenURL(appSchemeUrl! as URL) {
-            UIApplication.shared.open(appSchemeUrl!, options: [:], completionHandler: nil)
-        }
-        else {
-            */
-            //stop borwser till know who will check or add https to avoid safari error
-        let linkStr = (profileLinkedIn.text)!
-        if linkStr == "NA" || linkStr == "" {
-            
-        }else {
-           guard let url = URL(string: linkStr)
-                else {
-                    return
-            }
-      
-            let safariVC = SFSafariViewController(url: url)
-            present(safariVC, animated: true, completion: nil)
-        }
- /*
-            let alert = UIAlertController(title: "\(apppName) Error...", message: "the app named \(apppName) not found,please install it fia app store.", preferredStyle: .alert )
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
- */
-       // }
-    }
+
+
     
     @objc func tapMailFunc(sender:UIGestureRecognizer) {
         let mailStr = (profileEMail.text)!
@@ -218,6 +169,40 @@ class NetworkDetailsVC: UIViewController {
         }else {
         PhoneCall.makeCall(PhoneNumber: phonelStr)
     }
+    }
+    
+    @objc func tapLinkedinFunc(sender:UIGestureRecognizer) {
+        /*  if let openURL = URL(string: "twitter://"){
+         let canOpen = UIApplication.shared.canOpenURL(openURL)
+         }
+         let apppName = "linkedin"
+         let appScheme = "\(apppName)://"
+         let appSchemeUrl = URL(string: appScheme)
+         
+         if UIApplication.shared.canOpenURL(appSchemeUrl! as URL) {
+         UIApplication.shared.open(appSchemeUrl!, options: [:], completionHandler: nil)
+         }
+         else {
+         */
+        //stop borwser till know who will check or add https to avoid safari error
+        let linkStr = (profileLinkedIn.text)!
+        if linkStr == "NA" || linkStr == "" {
+            
+        }else {
+            guard let url = URL(string: linkStr)
+                else {
+                    return
+            }
+            
+            let safariVC = SFSafariViewController(url: url)
+            present(safariVC, animated: true, completion: nil)
+        }
+        /*
+         let alert = UIAlertController(title: "\(apppName) Error...", message: "the app named \(apppName) not found,please install it fia app store.", preferredStyle: .alert )
+         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+         self.present(alert, animated: true, completion: nil)
+         */
+        // }
     }
 }
 

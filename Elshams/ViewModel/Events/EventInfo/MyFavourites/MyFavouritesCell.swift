@@ -8,7 +8,7 @@
 
 import UIKit
 import Alamofire
-import AlamofireImage
+//import AlamofireImage
 
 class MyFavouritesCell: UITableViewCell {
     @IBOutlet weak var locationIcon: UIImageView!
@@ -31,27 +31,7 @@ class MyFavouritesCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
-    func imgUrl(imgUrl:String,imageSpeakerView:UIImageView)  {
-        if let imagUrlAl = imgUrl as? String {
-            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
-                print(response)
-                switch response.result {
-                case .success(let value):
-                    if let image = response.result.value {
-                        DispatchQueue.main.async{
-                            print(imagUrlAl)
-                            imageSpeakerView.isHidden = false
-                            imageSpeakerView.image = image
-                        }
-                    }
-                case .failure(let error):
-                    print(error)
-                }
-            })
-        }
-    }
-    
+
     func setAgendaCell(AgendaProgram:ProgramAgendaItems,IndexPath:Int)  {
         timeIcon.layer.cornerRadius = timeIcon.frame.width / 2
         timeIcon.clipsToBounds = true
@@ -105,15 +85,15 @@ class MyFavouritesCell: UITableViewCell {
             }else {
                 speakerOneImage.isHidden = false
                 
-                imgUrl(imgUrl: sp1!, imageSpeakerView: speakerOneImage)
+                Helper.loadImagesKingFisher(imgUrl: sp1!, ImgView: speakerOneImage)
                 
             }
             if sp2 == nil {
                 speakerTwoImage.isHidden = true
             }else {
                 speakerTwoImage.isHidden = false
-                imgUrl(imgUrl: sp2!, imageSpeakerView: speakerTwoImage)
-                
+                Helper.loadImagesKingFisher(imgUrl: sp2!, ImgView: speakerTwoImage)
+
             }
         } else {
             speakerOneImage.isHidden = true

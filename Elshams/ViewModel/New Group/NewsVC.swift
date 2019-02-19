@@ -7,34 +7,29 @@
 //
 
 import UIKit
-import AlamofireImage
+//import AlamofireImage
 import Alamofire
 import SwiftyJSON
 
 class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate , UITableViewDataSource{
-   // @IBOutlet weak var newTitle: UILabel!
-    @IBOutlet weak var normalNewsTableView: UITableView!
-    
     var newsList = Array<NewsData>()
     var topNewsList = Array<NewsData>()
     var scrolImageUrl : String?
-
+    
+    @IBOutlet weak var normalNewsTableView: UITableView!
     @IBOutlet weak var scrollContainer: UIScrollView!
     @IBOutlet weak var newsControl: UIPageControl!
- //   @IBOutlet weak var newsImg: UIImageView!
+    
     var timer:Timer!
     var updateCounter : Int!
-    var images = ["rest","map_ic","profile1","profile2"]
     var frame = CGRect(x: 0, y: 0, width: 0, height: 0)
     var frameView = CGRect(x: 0, y: 0, width: 0, height: 0)
-
     var frameTitle = CGRect(x: 20, y: 110, width: 320, height: 70)
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
         addSlideMenuButton()
-      //  newTitle.isHidden = true
         self.navigationItem.title = "News"
         NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
        
@@ -45,15 +40,12 @@ class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate ,
     let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
-      //  startupTableView.isHidden = true
-      //  activeLoader.isHidden = true
-      //  activeLoader.stopAnimating()
-        //reload after
-        //
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         UIApplication.shared.isStatusBarHidden = false
     }
+    
     func loadTopNews()  {
         scrollContainer.contentSize = CGSize(width: (scrollContainer.frame.size.width * CGFloat(topNewsList .count)) , height: scrollContainer.frame.size.height)
         scrollContainer.delegate = self
@@ -69,8 +61,6 @@ class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate ,
             titleLbl.font = titleLbl.font.withSize(22.0)
             titleLbl.tag = index + 1
             print(titleLbl.tag)
-
-            // newTitle.text = newsList[0].newsTitle
             
             let topNewsTitle = UITapGestureRecognizer(target: self, action: #selector(NewsVC.topNewsTitleFunc))
             titleLbl.isUserInteractionEnabled = true
@@ -78,17 +68,14 @@ class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate ,
             
             let imgView = UIImageView(frame: frame)
             scrolImageUrl = topNewsList[index].newsImgUrl
-           // imgView.image = UIImage(named: images[index])
             if scrolImageUrl != nil {
-                imgScrollUrl(imgUrl: scrolImageUrl!, ScrollImage: imgView)
+                Helper.loadImagesKingFisher(imgUrl: scrolImageUrl!, ImgView: imgView)
             }
             
             imgView.widthAnchor.constraint(equalToConstant: self.view.frame.size.width)
             imgView.topAnchor.constraint(equalTo:  scrollContainer.topAnchor, constant: 0)
             imgView.bottomAnchor.constraint(equalTo:  scrollContainer.bottomAnchor, constant: 0)
             imgView.tag = index + 1
-
-            
             
             let titleView = UIView(frame: frame)
             titleView.backgroundColor = UIColor.black
@@ -96,7 +83,6 @@ class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate ,
             
             let topNewsImage = UITapGestureRecognizer(target: self, action: #selector(NewsVC.topNewsImageFunc))
             titleView.isUserInteractionEnabled = true
-         //   topNewsImage.valu
             titleView.addGestureRecognizer(topNewsImage)
             titleView.tag = index + 1
             print(titleView.tag)
@@ -108,15 +94,13 @@ class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate ,
         }
     }
 
-    @objc func topNewsTitleFunc(sender:UIGestureRecognizer) {//UIGestureRecognizer
-      //  guard let TagRe = (sender.view as? UILabel)?.text else { return }
+    @objc func topNewsTitleFunc(sender:UIGestureRecognizer) {
           guard let tag = (sender.view as? UILabel)?.tag else { return }
-
-        performSegue(withIdentifier: "newsdetail", sender: topNewsList[tag - 1]) //topNewsList[]
+        performSegue(withIdentifier: "newsdetail", sender: topNewsList[tag - 1])
 
     }
     
-    @objc func topNewsImageFunc(sender:UIGestureRecognizer) {//UIGestureRecognizer
+    @objc func topNewsImageFunc(sender:UIGestureRecognizer) {
         guard let tag = (sender.view as? UIView)?.tag else { return }
         performSegue(withIdentifier: "newsdetail", sender: topNewsList[tag - 1])
     }
@@ -124,8 +108,7 @@ class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate ,
     func loadNewsData()  {
         Service.getService(url: "\(URLs.getNews)/50/1"){ //because no pagging refernce fixed number of news
             (response) in
-         //   print(response)
-            
+           print(response)
             let result = JSON(response)
             let topNews = result["topNews"]
             let normalNews = result["normalNews"]
@@ -169,28 +152,10 @@ class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate ,
             
            self.normalNewsTableView.reloadData()
             self.loadTopNews()
-           /* self.activityLoader.isHidden = true
-            self.activityLoader.stopAnimating()
-            self.notifyTableView.isHidden = false */
+      
         }
     }
-    func imgScrollUrl(imgUrl:String,ScrollImage:UIImageView)  {
-        if let imagUrlAl = imgUrl as? String {
-            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
-                print(response)
-                switch response.result {
-                case .success(let value):
-                if let image = response.result.value {
-                    DispatchQueue.main.async{
-                        ScrollImage.image = image
-                    }
-                    }
-                case .failure(let error):
-                    print(error)
-                }
-            })
-        }
-    }
+
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -213,7 +178,6 @@ class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate ,
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-
         performSegue(withIdentifier: "newsdetail", sender:  newsList[indexPath.row])
     
     }

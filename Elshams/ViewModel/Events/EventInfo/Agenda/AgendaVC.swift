@@ -132,12 +132,12 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
                     let agenda_IsFavourate_String = "\(agenda_isFavourate)"
                     
                     if agenda_Type == "head" {
-                        self.agendaHeadList.append(AgendaHeadData(HeadTitle: agenda_dateTitle ?? "title", HeadDate: agenda_date ?? "date", HeadType: agenda_Type ?? "type"))
+                        self.agendaHeadList.append(AgendaHeadData(HeadTitle: agenda_dateTitle ?? "", HeadDate: agenda_date ?? "", HeadType: agenda_Type ?? ""))
                     }
                     else if agenda_Type == "session" {
-                        self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "Title", SessionTime: agenda_Time ?? "Time", SessionLocation: agenda_SessionLocation ?? "location", SpeakersSession: agenda_SpeakersDict ?? ["ID" : "314",
-                                                                                                                                                                                                                                                                                  "imageUrl" : "http:-b01d-582382a5795e.jpg"]
-                            , AgendaDate: agenda_date ?? "date", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String , RondomColor: agenda_rondomColor ?? "red", AgendaType: agenda_Type ?? "session", SpeakersIdImg: self.agendaSpeakerIDImgList))
+                        self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "", SessionTime: agenda_Time ?? "", SessionLocation: agenda_SessionLocation ?? "", SpeakersSession: agenda_SpeakersDict ?? ["ID" : "",
+                                                                                                                                                                                                                                                                                  "imageUrl" : ""]
+                            , AgendaDate: agenda_date ?? "", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String , RondomColor: agenda_rondomColor ?? "", AgendaType: agenda_Type ?? "", SpeakersIdImg: self.agendaSpeakerIDImgList))
                     }
                     
                     index = index + 1
@@ -206,13 +206,13 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
                         let agenda_IsFavourate_String = "\(agenda_isFavourate)"
                         
                         if agenda_Type == "head" {
-                            self.agendaHeadList.append(AgendaHeadData(HeadTitle: agenda_dateTitle ?? "title", HeadDate: agenda_date ?? "date", HeadType: agenda_Type ?? "type"))
+                            self.agendaHeadList.append(AgendaHeadData(HeadTitle: agenda_dateTitle ?? "", HeadDate: agenda_date ?? "", HeadType: agenda_Type ?? ""))
                         }
                         else if agenda_Type == "session" {
-                            self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "Title", SessionTime: agenda_Time ?? "Time", SessionLocation: agenda_SessionLocation ?? "location", SpeakersSession: agenda_SpeakersDict ?? [
-                                "ID" : "314",
-                                "imageUrl" : "http:-b01d-582382a5795e.jpg"]
-                                , AgendaDate: agenda_date ?? "date", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String , RondomColor: agenda_rondomColor ?? "red", AgendaType: agenda_Type ?? "session", SpeakersIdImg: self.agendaSpeakerIDImgList))
+                            self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "", SessionTime: agenda_Time ?? "", SessionLocation: agenda_SessionLocation ?? "", SpeakersSession: agenda_SpeakersDict ?? [
+                                "ID" : "",
+                                "imageUrl" : ""]
+                                , AgendaDate: agenda_date ?? "", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String , RondomColor: agenda_rondomColor ?? "", AgendaType: agenda_Type ?? "", SpeakersIdImg: self.agendaSpeakerIDImgList))
                         }
                         index = index + 1
                         self.agendaSpeakerIDImgList.removeAll()

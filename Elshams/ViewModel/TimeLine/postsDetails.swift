@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import AlamofireImage
+//import AlamofireImage
 import Alamofire
 import WebKit
 
@@ -34,7 +34,7 @@ class postsDetails: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         UIApplication.shared.isStatusBarHidden = false
     }
-    func imgUrl(imgUrl:String,imageView:UIImageView)  {
+ /*   func imgUrl(imgUrl:String,imageView:UIImageView)  {
         if imgUrl == "" || imgUrl == nil {
             return
         } else {
@@ -55,14 +55,15 @@ class postsDetails: UIViewController {
             }
         }
     }
+    */
     
     func loadPostData()  {
         self.navigationItem.title = "Post"
         postsTimeLineContainer.isHidden = false
         if singlePostsItem?.post_Type == "text" || singlePostsItem?.post_Type == "video_text" {
             videoContainerWV.isHidden = true
-            imgUrl(imgUrl: (singlePostsItem?.post_Image)!, imageView: imagePost)
-            
+           // imgUrl(imgUrl: (singlePostsItem?.post_Image)!, imageView: imagePost)
+            Helper.loadImagesKingFisher(imgUrl:  (singlePostsItem?.post_Image)!, ImgView: imagePost)
         }
         else if singlePostsItem?.post_Type == "video"  {
             videoContainerWV.isHidden = false
@@ -78,7 +79,9 @@ class postsDetails: UIViewController {
             authorPic.image = UIImage(named: "home-logo")        
 
         }else {
-        imgUrl(imgUrl: (singlePostsItem?.post_AutherPicture)!, imageView: authorPic)
+       // imgUrl(imgUrl: (singlePostsItem?.post_AutherPicture)!, imageView: authorPic)
+            Helper.loadImagesKingFisher(imgUrl:  (singlePostsItem?.post_AutherPicture)!, ImgView: authorPic)
+
         }
         if singlePostsItem?.post_Author == "" || singlePostsItem?.post_Author == nil {
             authorPost.text = "CIT"
@@ -128,17 +131,6 @@ class postsDetails: UIViewController {
                 // likeCounterLabel.isHidden = true
             }
         }
-        
-        
-        
-        /*   if singlePostsItem?.post_Islike == {
-         
-         } else {
-         
-         } */
-        
-        
-        
     }
 
     

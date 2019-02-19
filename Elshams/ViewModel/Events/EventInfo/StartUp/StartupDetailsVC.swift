@@ -81,7 +81,7 @@ class StartupDetailsVC: UIViewController {
         if singleItem?.startupImageUrl == nil || singleItem?.startupImageUrl == "" {
             
         } else {
-            imgUrl(imgUrl: (singleItem?.startupImageUrl)!)
+            Helper.loadImagesKingFisher(imgUrl: (singleItem?.startupImageUrl)!, ImgView: startUpLogo)
         }
         
         startUpName.text = singleItem?.startupName
@@ -212,26 +212,6 @@ class StartupDetailsVC: UIViewController {
             popUpView.addSubview(btnCheck)
         }
     }
-    
-
-func imgUrl(imgUrl:String)  {
-   // if let  apiToken  = Helper.getApiToken() {
-    if imgUrl != nil {
-        if let imagUrlAl = imgUrl as? String {
-            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
-                print(response)
-                if let image = response.result.value {
-                    DispatchQueue.main.async{
-                        self.startUpLogo.image = image
-                    }
-                }
-            })
-        }
-    }
-  
-   // } else { }
-    
-}
 
    
     @objc func tapLinkedInFunc(sender:UIGestureRecognizer) {
@@ -459,7 +439,8 @@ func imgUrl(imgUrl:String)  {
                     
                 }
                 // self.sureMessageTxt
-                self.imgUrl(imgUrl: (self.startUp_ImageURl)!)
+                Helper.loadImagesKingFisher(imgUrl: (self.singleItem?.startupImageUrl)!, ImgView: self.startUpLogo)
+
                 if self.startUp_Appoimentstatus != nil && self.startUp_Appoimentstatus != "notSent" {
                     self.afterRescadualeFrame()
                 } else {
@@ -496,7 +477,8 @@ func imgUrl(imgUrl:String)  {
                 self.startUpLinkedIn.text = self.startUp_Linkedin
                 self.aboutStartUp.text  = self.startUp_About
                 // self.sureMessageTxt
-                self.imgUrl(imgUrl: (self.startUp_ImageURl)!)
+                Helper.loadImagesKingFisher(imgUrl: (self.startUp_ImageURl)!, ImgView: self.startUpLogo)
+
                 if self.startUp_Appoimentstatus != nil && self.startUp_Appoimentstatus != "notSent" {
                     self.afterRescadualeFrame()
                 } else {

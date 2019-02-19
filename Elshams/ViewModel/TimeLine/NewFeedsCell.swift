@@ -9,7 +9,6 @@
 import UIKit
 import WebKit
 import Alamofire
-import AlamofireImage
 import SwiftyJSON
 
 class NewFeedsCell: UICollectionViewCell {
@@ -32,7 +31,7 @@ class NewFeedsCell: UICollectionViewCell {
         userPostImage.layer.cornerRadius = userPostImage.frame.width / 2
         userPostImage.clipsToBounds = true
         if NewsfeedList.post_AutherPicture != nil {
-            imgUrl(imgUrl: (NewsfeedList.post_AutherPicture)!, imageView: userPostImage)
+            Helper.loadImagesKingFisher(imgUrl: (NewsfeedList.post_AutherPicture)!, ImgView: userPostImage)
         }
         if NewsfeedList.post_Author == nil || NewsfeedList.post_Author == "" {
             userPostName.text = "CIT"
@@ -46,54 +45,35 @@ class NewFeedsCell: UICollectionViewCell {
         if likeCounter == 0 || likeCounter == nil {
             if NewsfeedList.post_Islike == true {
                 likeCounterLabel.isHidden = false
-             //   likeImage.backgroundColor = UIColor.blue
-              //  likeImage.backgroundColor = UIColor.blue
+             
                 likeImage.image = UIImage(named: "liked")
 
                 likeCounterLabel.text = "You like this"
             } else {
-              //  likeImage.backgroundColor = UIColor.clear
                 likeCounterLabel.textColor = UIColor.black
                 likeImage.image = UIImage(named: "like")
 
-              //  likeCounterLabel.text = "You,and \((NewsfeedList.post_LikeCount)!) likes"
                 likeCounterLabel.isHidden = true
             }
         } else {
             postLikeCounter = "\(likeCounter!)"
             if NewsfeedList.post_Islike == true {
                 likeCounterLabel.isHidden = false
-               // likeImage.backgroundColor = UIColor.blue
                 likeImage.image = UIImage(named: "liked")
 
                 likeCounterLabel.textColor = UIColor.blue
                 likeCounterLabel.text = "You,and \(likeCounter!) like this"
             } else {
-               // likeImage.backgroundColor = UIColor.clear
                 likeCounterLabel.textColor = UIColor.black
                 likeImage.image = UIImage(named: "like")
 
                 likeCounterLabel.isHidden = false
                   likeCounterLabel.text = "\(likeCounter!) likes this"
-               // likeCounterLabel.isHidden = true
             }
         }
-    /*    if NewsfeedList.post_Islike == true {
-            
-            likeCounterLabel.text = "You,and \((NewsfeedList.post_LikeCount)!) likes"
-        } else {
-            likeCounterLabel.text = "You,and \((NewsfeedList.post_LikeCount)!) likes"
-
-        }
-        */
-        
+ 
         photoPost.isHidden = true
         textPost.isHidden = true
-        
-        
-       
-       
-       
         postType = NewsfeedList.post_Type!
      if postType == "video" {
      photoPost.isHidden = true
@@ -110,12 +90,12 @@ class NewFeedsCell: UICollectionViewCell {
             photoPost.isHidden = false
             textPost.isHidden = true
             videoContainer.isHidden = true
-        imgUrl(imgUrl: NewsfeedList.post_Image!, imageView: photoPost)
-         //   photoPost.image = NewsfeedList.imagePost
+        Helper.loadImagesKingFisher(imgUrl: NewsfeedList.post_Image!, ImgView: photoPost)
         
         }
         else if postType == "video_text" {
-        imgUrl(imgUrl: NewsfeedList.post_Image!, imageView: photoPost)
+        Helper.loadImagesKingFisher(imgUrl: NewsfeedList.post_Image!, ImgView: photoPost)
+
         textPost.text = NewsfeedList.post_Discription!
 
             photoPost.isHidden = false
@@ -124,26 +104,7 @@ class NewFeedsCell: UICollectionViewCell {
         }
     }
     
-    func imgUrl(imgUrl:String,imageView:UIImageView)  {
-        if imgUrl != nil {
-            if let imagUrlAl = imgUrl as? String {
-                Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
-                    print(response)
-                    switch response.result {
-                    case .success(let value):
-                        if let image = response.result.value {
-                            DispatchQueue.main.async{
-                                imageView.image = image
-                            }
-                        }
-                    case .failure(let error):
-                        print(error)
-                    }
-                })
-            }
-        }
-     
-    }
+  
     
     @IBAction func btnComment(_ sender: Any) {
        /* if  userPostName.textColor ==  UIColor.red {

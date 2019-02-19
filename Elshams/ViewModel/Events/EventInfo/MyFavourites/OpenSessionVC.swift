@@ -392,7 +392,7 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         
     }
     
-    func imgUrl(imgUrl:String)  { //,listImage:[UIImage]
+  /*  func imgUrl(imgUrl:String)  { //,listImage:[UIImage]
         if imgUrl != nil {
             if let imagUrlAl = imgUrl as? String {
                 Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
@@ -417,7 +417,7 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         }
        
     }
-    
+    */
     func mangeSessionDetails(SeseionTitle:String,AgendaDate:String,SessionTime:String,SessionLocation:String,SessionDescribtion:String,SpeakerName:String,SpeakerJobTitle:String,SpeakerImgUrl:String,QestionHead:String,Speakers:[Speakers],QuestVotesParam: [QuestionsVote]){
  
         if !(SeseionTitle.isEmpty) {
@@ -454,7 +454,8 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
             speakerName.text = Speakers[0].name
             speakerJobTitle.text = Speakers[0].jobTitle
             //array of image and cashe the images
-            imgUrl(imgUrl: Speakers[0].speakerImageUrl!)
+            //imgUrl(imgUrl: Speakers[0].speakerImageUrl!)
+            Helper.loadImagesKingFisher(imgUrl: Speakers[0].speakerImageUrl!, ImgView: speakerProfile)
             if Speakers.count == 1 {
                 nextBackSpeakerCont.isHidden = true
             } else {
@@ -679,7 +680,9 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         if !(speakerList.isEmpty) { // != nil
             speakerName.text = speakerList[speakerCounterIndex].name
             speakerJobTitle.text = speakerList[speakerCounterIndex].jobTitle
-            imgUrl(imgUrl: speakerList[speakerCounterIndex].speakerImageUrl!)
+           // imgUrl(imgUrl: speakerList[speakerCounterIndex].speakerImageUrl!)
+            Helper.loadImagesKingFisher(imgUrl: speakerList[speakerCounterIndex].speakerImageUrl!, ImgView: speakerProfile)
+
         }
     }
     
@@ -703,7 +706,9 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         if !(speakerList.isEmpty) { // != nil
         speakerName.text = speakerList[speakerCounterIndex].name
         speakerJobTitle.text = speakerList[speakerCounterIndex].jobTitle
-        imgUrl(imgUrl: speakerList[speakerCounterIndex].speakerImageUrl!)
+            Helper.loadImagesKingFisher(imgUrl: speakerList[speakerCounterIndex].speakerImageUrl!, ImgView: speakerProfile)
+
+        //imgUrl(imgUrl: speakerList[speakerCounterIndex].speakerImageUrl!)
         }
       
 //cashe image needed

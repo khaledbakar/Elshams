@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import AlamofireImage
+//import AlamofireImage
 import Alamofire
 import SwiftyJSON
 
@@ -16,6 +16,15 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
     var settingList = Array<UserData>()
     var statSettingList : [String]?
     var cellSettingList : [String]?
+    var imageProfileB64 : String = ""
+    static var udapatedMessage = ""
+    var validPassword:Bool = true
+    var validEmail:Bool = true
+    var imagePicker: UIImagePickerController!
+    
+    var passwordTriming:String?
+    var emailTrim:String?
+    
 
     @IBOutlet weak var emaiInputlTxt: UITextField!
     @IBOutlet weak var emailLbl: UILabel!
@@ -54,25 +63,8 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
     @IBOutlet weak var titleLbl: UILabel!
     @IBOutlet weak var titleInputTxt: UITextField!
     
-    var sections = ["Information"] //,"Praivacy"
-    var quest = ["Email","Password","Confirm Password","Title","CompanyName","Job Title","Phone","Linkedin","About"]
-  //  var ans =  ["Kzaky@ikdynamics.com","12345","IOS Developer","01060136503","NO"]
-   // var privacy = ["public"]
-   // var ansPraivacy
-    var imageProfileB64 : String = ""
-    
-
     @IBOutlet weak var profileImg: UIImageView!
-   // @IBOutlet weak var settingTableView: UITableView!
     @IBOutlet weak var updateBtn: UIButton!
-    static var udapatedMessage = ""
-    var validPassword:Bool = true
-    var validEmail:Bool = true
-    var imagePicker: UIImagePickerController!
-
-    // var userTriming:String?
-    var passwordTriming:String?
-    var emailTrim:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,8 +74,8 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
         imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         firstHideErrors()
-     //   firstHideHintLabel()
         textFieldsDelegats()
+        
         if let  apiToken  = Helper.getApiToken() {
             profileImg.isHidden = false
             updateBtn.isHidden = false
@@ -96,8 +88,8 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
             let alert = UIAlertController(title: "Error", message: "You must sign in to Show this Part", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
-          //  dismiss(animated: true, completion: nil)
         }
+        
          NotificationCenter.default.addObserver(self, selector: #selector(succesUpdate), name: NSNotification.Name("SuccesUpdate"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
@@ -132,12 +124,14 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
         companyNameLbl.isHidden = true
         titleLbl.isHidden  = true
     }
+    
     @objc func succesUpdate(){
         
         let alert = UIAlertController(title: "Succes!", message: "Your data is Updated!", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
+    
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -149,13 +143,11 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
         confirmPasswordInputTxt.delegate = self
     }
     func hideKyebad() {
-       
        passwordInputTxt.resignFirstResponder()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
-    //    self.settingTableView.endEditing(true)
         view.frame.origin.y = 0
         
     }
@@ -166,7 +158,8 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
         }
         if  notification.name == Notification.Name.UIKeyboardWillShow ||
             notification.name == Notification.Name.UIKeyboardWillChangeFrame {
-            view.frame.origin.y = -150
+            view.frame.origin.y = -200
+            
         } else {
             view.frame.origin.y = 0
         }
@@ -201,36 +194,7 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
                 emailError.isHidden = true
             }
         }
-            /*
-             //UserName Validation
-             else if textField.isEqual(lblUserName) {
-             userTriming = lblUserName.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-             if userTriming != "" && userTriming != nil && userTriming != "null" && userTriming?.characters.count != 0  {
-             loadUserName(UserNameDouble: userTriming!)
-             if(userTriming == UserAccountDouble.first?.username){
-             lblUserError.text = "Already have this account!"
-             lblUserError.isHidden = false
-             validUserName = false
-             }
-             else if (userTriming?.characters.count)! > 50 {
-             lblUserError.text = "Long UserName!"
-             lblUserError.isHidden = false
-             validUserName = false
-             }
-             else {
-             lblUserError.isHidden = true
-             validUserName = true
-             }
-             }
-             
-             //Password Validation
-             else {
-             lblUserError.text = "please enter your name"
-             lblShowFullName.isHidden = true
-             lblUserError.isHidden = false
-             validUserName = false
-             }
-             }*/
+            
         else if textField.isEqual(passwordInputTxt){
             passwordTriming = passwordInputTxt.text
             if passwordTriming?.trimmingCharacters(in: .whitespacesAndNewlines) != "" && passwordTriming != nil && passwordTriming != "null" && (passwordTriming?.characters.count)! != 0 && (passwordTriming?.characters.count)! >= 6 {
@@ -246,7 +210,6 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
                 passwordError.isHidden = false
                 // lblShowPassword.isHidden = true
                 validPassword = false
-                //Darsh Abo Nassar
             }
         }
         else if textField.isEqual(confirmPasswordInputTxt){
@@ -312,10 +275,6 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
          present(imagePicker,animated: true , completion: nil)
     }
     
-    /* @IBAction func imageSelect(_ sender: Any) {
-        present(imagePicker,animated: true , completion: nil)
-        
-    } */
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage{
             profileImg.image = image
@@ -323,9 +282,7 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
             if let base64String = UIImageJPEGRepresentation(image, jpegCompressionQuality)?.base64EncodedString() {
                 // Upload base64String to your database
                 imageProfileB64 = base64String
-          //      print(base64String)
             }
-            
         }
         imagePicker.dismiss(animated: true, completion: nil)
     }
@@ -338,6 +295,18 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
     }
     
     func  loadSettingData()  {
+        if let userSettingData = Helper.getSettingUserData() {
+            self.emaiInputlTxt.text = userSettingData[0]
+            self.passwordInputTxt.text = userSettingData[1]
+            self.confirmPasswordInputTxt.text = userSettingData[1]
+            self.jobTitleInput.text = userSettingData[2]
+            self.phoneInputTxt.text = userSettingData[3]
+            self.othersInputTxt.text = userSettingData[4]
+            self.titleInputTxt.text = userSettingData[5]
+            self.companyNameInputTxt.text = userSettingData[6]
+            self.linkedInInputTxt.text = userSettingData[7]
+            Helper.loadImagesKingFisher(imgUrl: userSettingData[8], ImgView: profileImg)
+        } else {
         Service.getServiceWithAuth(url: URLs.getSettingData){
             (response) in
             print(response)
@@ -353,40 +322,12 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
             let user_about = result["about"].string
             let user_Ispublic_str = result["isPublic"].string
             self.statSettingList = [user_Email!,user_Password!,user_JobTitle!,user_Phone!,user_about!,user_Ispublic_str!]
-            self.imgUrl(imgUrl: user_ImageUrl!)
-            self.emaiInputlTxt.text = user_Email
-            self.passwordInputTxt.text = user_Password
-            self.confirmPasswordInputTxt.text = user_Password
-            self.jobTitleInput.text = user_JobTitle
-            self.emaiInputlTxt.text = user_Email
-            self.linkedInInputTxt.text = user_Linkedin
-            self.othersInputTxt.text = user_about
-            self.phoneInputTxt.text = user_Phone
-            self.titleInputTxt.text = user_Name
-
+           
+            }
         }
     }
  
-    
-    func imgUrl(imgUrl:String)  {
-       // if  TimeLineHomeVC.failMessage !=  "fail"{
-        if imgUrl != nil {
-           
-            if let imagUrlAl = imgUrl as? String {
-                Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
-                    print(response)
-                    if let image = response.result.value {
-                        DispatchQueue.main.async{
-                            self.profileImg.image = image
-                        }
-                    }
-                })
-            }
-        }
-        //}
-    }
-  
-
+   
     @IBAction func btnClose(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -396,8 +337,8 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
             emailError.isHidden = false
             emailError.text = "you have an Error in filling Email"
             return
-            
         }
+        
         guard validPassword else {
             passwordError.isHidden = false
             passwordError.text = "you have an Error in filling Password"
@@ -411,32 +352,24 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
         
         guard  let about = othersInputTxt.text  else { return }
         
-        API.updateUserData(Email:  (emaiInputlTxt.text?.lowercased())!, Password: passwordInputTxt.text!, Title: tiltleUser , CompanyName: companyName , JobTitle: jobTiltle, About: about , Phone: phoneNum, Picture: imageProfileB64 ?? "", Linkedin: "", Ispublic: "True") { (error: Error?,succes:Bool) in
+        API.updateUserData(Email:  (emaiInputlTxt.text?.lowercased())!, Password: passwordInputTxt.text!, Title: tiltleUser , CompanyName: companyName , JobTitle: jobTiltle, About: about , Phone: phoneNum, Picture: imageProfileB64 ?? "", Linkedin: linkedIn , Ispublic: "True") { (error: Error?,succes:Bool) in
             if succes {
                 print("Succes")
             }
+            let user_Email = (self.emaiInputlTxt.text?.lowercased())
+            let user_Password = self.passwordInputTxt.text
+            
+          //  let settingUserData : [String] = [user_Email ?? "",user_Password ?? "",jobTiltle ?? "",phoneNum ?? "",about ?? "",tiltleUser ?? "",companyName ?? "",linkedIn ?? "",self.imageProfileB64 ?? ""] // change image and load url of it
+            
+          //  Helper.saveSettingUserData(UserData: settingUserData)
             let alert = UIAlertController(title: "Succes!", message: "Your data is Updated!", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
-            //updateSettingData()
         }
     }
     
     @IBAction func btnDone(_ sender: Any) {
-        //alert
      updateProfileData()
-     /*   let isPublicSwitchCell = cell5.privacySwitch
-       var isPublicCell = ""
-        if isPublicSwitchCell?.isOn == true {
-            isPublicCell = "True"
-        } else {
-            isPublicCell = "False"
-
-        }
-        */
-        
-       /* guard let email = emailCell.trimmed, !email.isEmpty, let password = passawordCell, !password.isEmpty, let jobTiltle = jobTitleCell.trimmed , !jobTiltle.isEmpty, let phoneNum = otherCell.trimmed , !phoneNum.isEmpty , let other = otherCell.trimmed , !other.isEmpty else { return } */ //emailCell.lowercased()
-        
     }
 }
 

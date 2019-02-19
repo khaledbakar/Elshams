@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import Alamofire
-import AlamofireImage
 
 class PendingCell: UITableViewCell {
     @IBOutlet weak var startupImage: UIImageView!
@@ -24,32 +22,22 @@ class PendingCell: UITableViewCell {
 
     }
     
-    func imgUrl(imgUrl:String)  {
-        
-        if let imagUrlAl = imgUrl as? String {
-            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
-                print(response)
-                if let image = response.result.value {
-                    DispatchQueue.main.async{
-                        self.startupImage.image = image
-                    }
-                }
-            })
-        }
-    }
-    
-  
+ 
     func setStartupCell(startupsList:StartUpsData) {
         startupName.text = startupsList.startupName
-        if startupsList.startupImageUrl != nil {
-        imgUrl(imgUrl: (startupsList.startupImageUrl)!)
-        }
-        // startupAddress.text = startupsList.startupAddress
-       // startupImage.image = UIImage(named: "\((startupsList.startupImage)!)")
         startupImage.layer.cornerRadius = startupImage.frame.width / 2
         startupImage.clipsToBounds = true
-        let email = startupsList.contectInforamtion?["Email"]
-        startupAddress.text = "\((email)!)"
+        if startupsList.startupImageUrl != nil {
+
+       Helper.loadImagesKingFisher(imgUrl: (startupsList.startupImageUrl)!, ImgView: startupImage)
+        }
+        let email = startupsList.contectInforamtion?["Email"] as? String
+        if email == nil || email == "" {
+            startupAddress.text = "NA"
+        } else {
+            startupAddress.text = email
+        }
+       
     }
     
 }

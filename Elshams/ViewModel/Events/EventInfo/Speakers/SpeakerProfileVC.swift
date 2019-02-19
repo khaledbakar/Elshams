@@ -9,7 +9,7 @@
 import UIKit
 import SafariServices
 import MessageUI
-import AlamofireImage
+//import AlamofireImage
 import Alamofire
 import SwiftyJSON
 
@@ -43,7 +43,7 @@ class SpeakerProfileVC: UIViewController {
   //  @IBOutlet weak var speakerSecSLocation: UILabel!
     @IBOutlet weak var speakerFSTime: UILabel!
     @IBOutlet weak var speakerFSName: UILabel!
-    @IBOutlet weak var speakerFacebook: UILabel!
+  //  @IBOutlet weak var speakerFacebook: UILabel!
     @IBOutlet weak var speakerWebsite: UILabel!
     @IBOutlet weak var speakerPhone: UILabel!
     @IBOutlet weak var activeNow: UILabel!
@@ -67,7 +67,7 @@ class SpeakerProfileVC: UIViewController {
         sessionFirstConstatContraint = sessionTopConstraints.constant
         
         if singleItem?.speakerImageUrl != nil {
-            imgUrl(imgUrl: (singleItem?.speakerImageUrl)!)
+            Helper.loadImagesKingFisher(imgUrl: (singleItem?.speakerImageUrl)!, ImgView: speakerProfileImg)
         }
         
         phoneNumber = singleItem?.contectInforamtion!["phone"] as! String
@@ -76,9 +76,9 @@ class SpeakerProfileVC: UIViewController {
         speakerPhone.text = phoneNumber
         
         if faceBookLinkEdinNow == nil || faceBookLinkEdinNow == ""{
-            speakerFacebook.text = "Na"
+           // speakerFacebook.text = "Na"
         }else {
-            speakerFacebook.text = faceBookLinkEdinNow
+          //  speakerFacebook.text = faceBookLinkEdinNow
 
         }
         
@@ -99,17 +99,7 @@ class SpeakerProfileVC: UIViewController {
         
         
 
-      /*  if singleItem?.activeOrNot == true {
-            connectColor.backgroundColor  = UIColor.green
-            activeNow.text = "Now"
-        }
-        else {
-            connectColor.backgroundColor = UIColor.red
-            activeNow.text = "Offline"
-
-        } */
-        
-       // speakerPhone.addGestureRecognizer(<#T##gestureRecognizer: UIGestureRecognizer##UIGestureRecognizer#>)
+     
         let tapCall = UITapGestureRecognizer(target: self, action: #selector(SpeakerProfileVC.tapCallFunc))
         speakerPhone.isUserInteractionEnabled = true
         speakerPhone.addGestureRecognizer(tapCall)
@@ -117,19 +107,13 @@ class SpeakerProfileVC: UIViewController {
         let tapLink = UITapGestureRecognizer(target: self, action: #selector(SpeakerProfileVC.tapOpenLinkFunc))
         speakerWebsite.isUserInteractionEnabled = true
         speakerWebsite.addGestureRecognizer(tapLink)
-         //      speakerFacebook.isUserInteractionEnabled = true
-      //  speakerFacebook.addGestureRecognizer(tapLink)
+       
         
         let tapMail = UITapGestureRecognizer(target: self, action: #selector(SpeakerProfileVC.tapMailFunc))
         speakerEmail.isUserInteractionEnabled = true
         speakerEmail.addGestureRecognizer(tapMail)
         
-        let tapFacebook = UITapGestureRecognizer(target: self, action: #selector(SpeakerProfileVC.tapFacebookLinkFunc))
-        speakerFacebook.isUserInteractionEnabled = true
-        speakerFacebook.addGestureRecognizer(tapFacebook)
-        
-     //   speakerProfileImg.image = UIImage(named: "\((singleItem?.speakerImage)!)")
-     //   speakerJobTitle.text = singleItem?.jobTitle
+   
         
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -175,7 +159,6 @@ class SpeakerProfileVC: UIViewController {
                 self.speakerPhone.text = speaker_Phone
                 self.speakerEmail.text = speaker_Email
                 self.speakerWebsite.text = speaker_Linkedin
-                self.speakerFacebook.text = speaker_Linkedin
                 if speaker_About == nil || speaker_About == ""{
               //      self.noAboutMethod()
                 } else {
@@ -210,28 +193,7 @@ class SpeakerProfileVC: UIViewController {
             }
         }
     }
-    
-    func imgUrl(imgUrl:String)  {
-        if imgUrl != nil {
-            
-       
-        if let imagUrlAl = imgUrl as? String {
-            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
-                print(response)
-                switch response.result {
-                case .success(let value):
-                if let image = response.result.value {
-                    DispatchQueue.main.async{
-                        self.speakerProfileImg.image = image
-                    }
-                }
-                case .failure(let error):
-                    print(error)
-                }
-            })
-        }
-             }
-    }
+  
     @objc func tapFacebookLinkFunc(sender:UIGestureRecognizer) {
         if let openURL = URL(string: "twitter://"){
         let canOpen = UIApplication.shared.canOpenURL(openURL)
@@ -243,16 +205,7 @@ class SpeakerProfileVC: UIViewController {
         
 
         let appScheme = "\(apppName)://profile"
-       // let appScheme = "\(apppName)://trikaofficial" can't open specficprofile
-       /* let appName = "whatsapp"
-         The link you need to open is “https://api.whatsapp.com/send?phone=YourPhoneNumberHere”
-        ://khaledbakarphotography
-         https://stackoverflow.com/questions/5707722/what-are-all-the-custom-url-schemes-supported-by-the-facebook-iphone-app
-         profile?id=%@10000008024279
-         profiles/[facebookID]
-         let appScheme = "\(apppName)://send?phone=+201146803004"
-
-        let appScheme = "\(appName)://send?phone=\+233204344223" */
+      
 
         let appSchemeUrl = URL(string: appScheme)
        

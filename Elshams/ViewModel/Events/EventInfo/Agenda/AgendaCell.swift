@@ -8,7 +8,7 @@
 
 import UIKit
 import Alamofire
-import AlamofireImage
+//import AlamofireImage
 
 class AgendaCell: UITableViewCell {
     @IBOutlet weak var favourIcon: UIImageView!
@@ -32,7 +32,7 @@ class AgendaCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
+    /*
     func imgUrl(imgUrl:String,imageSpeakerView:UIImageView)  {
         
         if let imagUrlAl = imgUrl as? String {
@@ -53,6 +53,7 @@ class AgendaCell: UITableViewCell {
             })
         }
     }
+    */
     
     func setAgendaCell(AgendaProgram:ProgramAgendaItems,IndexPath:Int)  {
         timeIcon.layer.cornerRadius = timeIcon.frame.width / 2
@@ -110,14 +111,15 @@ class AgendaCell: UITableViewCell {
         }else {
             speakerOneImage.isHidden = false
 
-            imgUrl(imgUrl: sp1!, imageSpeakerView: speakerOneImage)
+         //   imgUrl(imgUrl: sp1!, imageSpeakerView: speakerOneImage)
+            Helper.loadImagesKingFisher(imgUrl: sp1!, ImgView: speakerOneImage)
 
         }
         if sp2 == nil {
             speakerTwoImage.isHidden = true
         }else {
             speakerTwoImage.isHidden = false
-            imgUrl(imgUrl: sp2!, imageSpeakerView: speakerTwoImage)
+            Helper.loadImagesKingFisher(imgUrl: sp2!, ImgView: speakerTwoImage)
 
         }
         } else {

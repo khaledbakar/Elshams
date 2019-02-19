@@ -24,32 +24,15 @@ class SponsersCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
     }
-    func imgUrl(imgUrl:String)  {
-        
-        if let imagUrlAl = imgUrl as? String {
-            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
-                print(response)
-                switch response.result {
-                case .success(let value):
-                if let image = response.result.value {
-                    DispatchQueue.main.async{
-                        
-                        self.sponserImage.image = image
-                    }
-                }
-                case .failure(let error):
-                    print(error)
-                }
-            })
-        }
-    }
+
     func setSponserCell(sponsersList:Sponsers) {
         sponserImage.layer.cornerRadius = sponserImage.frame.width / 2
         sponserImage.clipsToBounds = true
         sponserName.text = sponsersList.sponserName
         sponserAddress.text = sponsersList.sponserAddress
         if sponsersList.sponserImageUrl != nil ||  !((sponsersList.sponserImageUrl?.isEmpty)!) {
-        imgUrl(imgUrl: (sponsersList.sponserImageUrl)!)
+      //  imgUrl(imgUrl: )
+            Helper.loadImagesKingFisher(imgUrl: (sponsersList.sponserImageUrl)!, ImgView: sponserImage)
         }
        // sponserImage.image = UIImage(named: "\((sponsersList.sponserImage)!)")
     }

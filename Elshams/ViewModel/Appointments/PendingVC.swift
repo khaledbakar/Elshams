@@ -9,7 +9,7 @@
 import UIKit
 import XLPagerTabStrip
 import Alamofire
-import AlamofireImage
+//import AlamofireImage
 import SwiftyJSON
 
 class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegate {
@@ -37,12 +37,10 @@ class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegat
         let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
-        //  startupTableView.isHidden = true
         activeLoader.isHidden = true
-        //  activeLoader.stopAnimating()
-        //reload after
-        //
+        pendingTableView.isHidden = true
     }
+    
     func loadPendingAppointmentsData()  {
         if let  apiToken  = Helper.getApiToken() {
 
@@ -67,20 +65,19 @@ class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegat
                 let startUp_Linkedin = result[index]["ContectInforamtion"]["linkedin"].string
                 let startUp_Phone = result[index]["ContectInforamtion"]["phone"].string
                 
-                let contect = ["Email": "",
-                               "linkedin": "",
-                               "phone": ""]
+                let contect = ["Email": "","linkedin": "","phone": ""]
                 if startUp_ID == nil || startUp_ID?.trimmed == "" || startUp_ID == "null" || startUp_ID == "nil" {
                     iDNotNull = false
                     break
                 }
-                self.pendingList.append(StartUpsData(StartupName: startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: startUp_ImageUrl ?? "Image", StartUpAbout: startUp_About ?? "about", AppoimentStatus: startUp_Appoimentstatus ?? "Appointmentstatus", AppoimentTime: startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                self.pendingList.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect))
                 index = index + 1
                 self.pendingTableView.reloadData()
                 self.activeLoader.isHidden = true
                 self.activeLoader.stopAnimating()
                 self.pendingTableView.isHidden = false
             }
+                
             } else {
                 let alert = UIAlertController(title: "No Pending found!", message: "No Pending Appointment till now", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
@@ -88,13 +85,11 @@ class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegat
                 self.activeLoader.isHidden = true
                 self.noDataErrorContainer.isHidden = true
 
-
             }
           }
         }
         else {
             self.noDataErrorContainer.isHidden = false
-
             self.activeLoader.isHidden = true
             self.pendingTableView.isHidden = true
           //  print(error.localizedDescription)

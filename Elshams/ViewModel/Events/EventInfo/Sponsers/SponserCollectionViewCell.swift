@@ -8,14 +8,14 @@
 
 import UIKit
 import Alamofire
-import AlamofireImage
+//import AlamofireImage
 
 class SponserCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var sponserColImage: UIImageView!
     @IBOutlet weak var sponserRank: UILabel!
     @IBOutlet weak var sponserColName: UILabel!
     
-    func imgUrl(imgUrl:String)  {
+  /*
         if let imagUrlAl = imgUrl as? String {
             //let s :Int = 0x0020
             Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
@@ -34,6 +34,7 @@ class SponserCollectionViewCell: UICollectionViewCell {
             })
         }
     }
+    */
     func setSponserColCell(sponserList:Sponsers) {
         sponserColImage.layer.cornerRadius = sponserColImage.frame.width / 2
         sponserColImage.clipsToBounds = true
@@ -72,7 +73,9 @@ class SponserCollectionViewCell: UICollectionViewCell {
             }
         }
         if sponserList.sponserImageUrl != nil ||  !((sponserList.sponserImageUrl?.isEmpty)!) {
-            imgUrl(imgUrl: (sponserList.sponserImageUrl)!)
+         //   imgUrl(imgUrl: (sponserList.sponserImageUrl)!)
+            Helper.loadImagesKingFisher(imgUrl: (sponserList.sponserImageUrl)!, ImgView: sponserColImage)
+
         }
       /*  if sponserList.sponsersponserRank == "Gold"{
             sponserRank.textColor = UIColor.orange

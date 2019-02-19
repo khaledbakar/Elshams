@@ -9,7 +9,7 @@
 import UIKit
 import XLPagerTabStrip
 import Alamofire
-import AlamofireImage
+//import AlamofireImage
 import SwiftyJSON
 
 
@@ -27,8 +27,17 @@ class AcceptedVC: BaseViewController , UITableViewDataSource ,UITableViewDelegat
         acceptedTableView.isHidden = true
         activeLoader.startAnimating()
         noDataErrorContainer.isHidden = true
-
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
         loadAcceptedData()
+    }
+    
+    @objc func errorAlert(){
+        let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+        activeLoader.isHidden = true
+        acceptedTableView.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -37,10 +46,8 @@ class AcceptedVC: BaseViewController , UITableViewDataSource ,UITableViewDelegat
     
     func loadAcceptedData()  {
         if let  apiToken  = Helper.getApiToken() {
-
         Service.getServiceWithAuth(url: URLs.getAppoiments) {
             (response) in
-            
             print(response)
             let json = JSON(response)
             let result = json["Accepted"]
@@ -59,9 +66,7 @@ class AcceptedVC: BaseViewController , UITableViewDataSource ,UITableViewDelegat
                 let startUp_Linkedin = result[index]["ContectInforamtion"]["linkedin"].string
                 let startUp_Phone = result[index]["ContectInforamtion"]["phone"].string
                 
-                let contect = ["Email": "",
-                               "linkedin": "",
-                               "phone": ""]
+                let contect = ["Email": "","linkedin": "","phone": ""]
                 if startUp_ID == nil || startUp_ID?.trimmed == "" || startUp_ID == "null" || startUp_ID == "nil" {
                     iDNotNull = false
                     break
@@ -73,7 +78,6 @@ class AcceptedVC: BaseViewController , UITableViewDataSource ,UITableViewDelegat
                 self.activeLoader.stopAnimating()
                 self.acceptedTableView.isHidden = false
                 self.noDataErrorContainer.isHidden = true
-
             }
             }  else {
                 self.noDataErrorContainer.isHidden = false

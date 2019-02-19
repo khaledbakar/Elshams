@@ -8,7 +8,7 @@
 
 import UIKit
 import XLPagerTabStrip
-import AlamofireImage
+//import AlamofireImage
 import Alamofire
 import SwiftyJSON
 
