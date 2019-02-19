@@ -143,6 +143,14 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         activeLoader.isHidden = false
         activeLoader.startAnimating()
         
+        let speakerDetailImg = UITapGestureRecognizer(target: self, action: #selector(OpenSessionVC.speakerDetailImg))
+        speakerProfile.isUserInteractionEnabled = true
+        speakerProfile.addGestureRecognizer(speakerDetailImg)
+        
+        let speakerDetailName = UITapGestureRecognizer(target: self, action: #selector(OpenSessionVC.speakerDetailLabel))
+        speakerName.isUserInteractionEnabled = true
+        speakerName.addGestureRecognizer(speakerDetailName)
+        
         OpenSessionVC.likeFlag = "notFavMethod"
         
         speakerProfile.layer.cornerRadius = speakerProfile.frame.width / 2
@@ -766,6 +774,32 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
     }
     
     @IBAction func vote(_ sender: Any) {
+    }
+    
+    //MARK:- NavTOSpeakerProfile
+    @objc func speakerDetailLabel(sender:UIGestureRecognizer) {
+      /*  guard let tag = (sender.view as? UILabel)?.tag else {
+            // return
+            //   let tag = (sender.view as? UIImageView)?.tag
+            return
+        } */
+        
+        performSegue(withIdentifier: "sessionspeakerdetail", sender: speakerList[speakerCounterIndex])
+        
+    }
+    
+    @objc func speakerDetailImg(sender:UIGestureRecognizer) {
+     /*   guard let tag = (sender.view as? UIImageView)?.tag else {
+            return
+        } */
+        performSegue(withIdentifier: "sessionspeakerdetail", sender: speakerList[speakerCounterIndex])
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let speak = segue.destination as? SpeakerProfileVC {
+            if let favDetail = sender as? Speakers {
+                speak.singleItem = favDetail
+            }
+        }
     }
     
     //MARK:- Show/Hide Views

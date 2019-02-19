@@ -11,9 +11,11 @@ import Alamofire
 //import AlamofireImage
 import SwiftyJSON
 
-class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollectionViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate , UITextFieldDelegate {
+class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollectionViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate , UITextFieldDelegate , UIScrollViewDelegate{
     
+    @IBOutlet weak var scrollSponserContainer: UIScrollView!
     
+    @IBOutlet weak var scrollSpeakerContainer: UIScrollView!
     @IBOutlet weak var scrollTimeLineView: UIScrollView!
     @IBOutlet weak var viewPostContols: UIView!
     
@@ -63,24 +65,63 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
     @IBOutlet weak var postText: UITextField!
     var imagePicker: UIImagePickerController!
     static  var imagePost : UIImage?
+    var frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+    var frameLabel = CGRect(x: 0, y: 0, width: 0, height: 0)
+    var frameSpeaker = CGRect(x: 0, y: 0, width: 0, height: 0)
+    var frameSpeakerLabel = CGRect(x: 0, y: 0, width: 0, height: 0)
+
+    var scrolImageUrl : String?
+    var scrolSpeakerImageUrl : String?
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
         addSlideMenuButton()
-        //sponser round
         loadAboutData()
+
+        hideShowFixedSponser(Order: true)
+        hideShowFixedSpeaker(Order: true)
+
+        viewPostContols.isHidden = true
+        imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        postText.delegate = self
+        NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorLikeSignIn"), object: nil)
+
+        loadPostsData()
+        loadAllSpeakerData()
+        loadAllSponserData()
+
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.isStatusBarHidden = false
+    }
+    //MARK:- Hide & Show Fixed Sponser/Speaker
+    func hideShowFixedSponser(Order:Bool) {
+        //sponser round
         sponserImg1.layer.cornerRadius = sponserImg1.frame.width / 2
         sponserImg1.clipsToBounds = true
-       
+        
         sponserImg2.layer.cornerRadius = sponserImg2.frame.width / 2
         sponserImg2.clipsToBounds = true
-       
+        
         sponserImg3.layer.cornerRadius = sponserImg3.frame.width / 2
         sponserImg3.clipsToBounds = true
-      
+        
         sponserImg4.layer.cornerRadius = sponserImg4.frame.width / 2
         sponserImg4.clipsToBounds = true
         
+        sponserName1.isHidden = Order
+        sponserName2.isHidden = Order
+        sponserName3.isHidden = Order
+        sponserName4.isHidden = Order
+        sponserImg1.isHidden = Order
+        sponserImg2.isHidden = Order
+        sponserImg3.isHidden = Order
+        sponserImg4.isHidden = Order
+    }
+    func hideShowFixedSpeaker(Order:Bool) {
         // speaker round
         speakerImg1.layer.cornerRadius = speakerImg1.frame.width / 2
         speakerImg1.clipsToBounds = true
@@ -94,36 +135,214 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         speakerImg4.layer.cornerRadius = speakerImg4.frame.width / 2
         speakerImg4.clipsToBounds = true
         
-        viewPostContols.isHidden = true
-        imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        postText.delegate = self
-        NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorLikeSignIn"), object: nil)
+        speakerName1.isHidden = Order
+        speakerName2.isHidden = Order
+        speakerName3.isHidden = Order
+        speakerName4.isHidden = Order
+        speakerImg1.isHidden = Order
+        speakerImg2.isHidden = Order
+        speakerImg3.isHidden = Order
+        speakerImg4.isHidden = Order
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        var pageNumber = scrollSponserContainer.contentOffset.x / scrollSponserContainer.frame.size.width
+        var pageNumberSpeaker = scrollSpeakerContainer.contentOffset.x / scrollSpeakerContainer.frame.size.width
 
-        loadPostsData()
-        loadAllSpeakerData()
-        loadAllSponserData()
+       // newsControl.currentPage = Int(pageNumber)
+    }
+    
+    //MARK:- ScrollSponser
+    func loadSponserScroll()  {
+       // scrollSponserContainer.contentSize = CGSize(width: (scrollSponserContainer.frame.size.width * CGFloat(sponserList .count)) , height: scrollSponserContainer.frame.size.height)
+        hideShowFixedSponser(Order: true)
+        scrollSponserContainer.contentSize = CGSize(width: (80 * CGFloat(sponserList .count)) , height: scrollSponserContainer.frame.size.height)
+
+        scrollSponserContainer.delegate = self
+       // newsControl.numberOfPages = topNewsList.count
+        for index in 0..<sponserList.count {
+      /*      if index == 0 {
+                frame.origin.x = 20
+                frameLabel.origin.x = 20
+
+            }
+        /*    else if index == 1 {
+                frame.origin.x = 90
+                frameLabel.origin.x = 86
+
+            } */
+            else { */
+                frame.origin.x = 80 * CGFloat(index)
+            //    frame.origin.x = (frame.origin.x + frame.width + 10) * CGFloat(index)
+
+                frameLabel.origin.x = 80 * CGFloat(index)
+
+       //     }
+            frame.origin.y = 10
+            frameLabel.origin.y = 70
+          //  frame.origin.x = scrollSponserContainer.frame.size.width * CGFloat(index)
+
+          //  frame.size = CGSize(width: scrollSponserContainer.frame.size.width , height: 233.0)
+          //  frame.size = CGSize(width: sponserImg1.frame.width , height: sponserImg1.frame.height)
+            frame.size = CGSize(width: 50 , height: 50)
+            frameLabel.size = CGSize(width: 80 , height: 20)
+
+            let titleLbl = UILabel(frame: frameLabel)
+            titleLbl.text = sponserList[index].sponserName
+            titleLbl.numberOfLines = 1
+            titleLbl.textColor = UIColor.black
+            titleLbl.font = titleLbl.font.withSize(12.0)
+          //  titleLbl.textAlignment = nsa
+            titleLbl.tag = index + 1
+            print(titleLbl.tag)
+            
+            let sponserDetailLbl = UITapGestureRecognizer(target: self, action: #selector(TimeLineHomeVC.sponserDetailLabel))
+            titleLbl.isUserInteractionEnabled = true
+            titleLbl.addGestureRecognizer(sponserDetailLbl)
+            
+            let imgView = UIImageView(frame: frame)
+            scrolImageUrl = sponserList[index].sponserImageUrl
+            if scrolImageUrl != nil {
+                Helper.loadImagesKingFisher(imgUrl: scrolImageUrl!, ImgView: imgView)
+            }
+            imgView.layer.cornerRadius = imgView.frame.width / 2
+            imgView.clipsToBounds = true
+            imgView.contentMode = .scaleAspectFit
+       //     imgView.widthAnchor.constraint(equalToConstant: 80)
+           // imgView.widthAnchor.constraint(equalToConstant: self.view.frame.size.width)
+        //    imgView.topAnchor.constraint(equalTo:  scrollSponserContainer.topAnchor, constant: 15)
+          //  imgView.rightAnchor.constraint(equalTo:  imgView.leftAnchor, constant: 25)
+
+     //       imgView.bottomAnchor.constraint(equalTo:  titleLbl.bottomAnchor, constant: 0)
+            imgView.tag = index + 1
+            let sponserDetailImg = UITapGestureRecognizer(target: self, action: #selector(TimeLineHomeVC.sponserDetailImg))
+            imgView.isUserInteractionEnabled = true
+            imgView.addGestureRecognizer(sponserDetailImg)
+         /*
+            let titleView = UIView(frame: frame)
+            titleView.backgroundColor = UIColor.black
+            titleView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+ 
+            let topNewsImage = UITapGestureRecognizer(target: self, action: #selector(NewsVC.topNewsImageFunc))
+            titleView.isUserInteractionEnabled = true
+            titleView.addGestureRecognizer(topNewsImage)
+            titleView.tag = index + 1
+            print(titleView.tag)
+            
+            titleView.addSubview(titleLbl)  */
+            
+            scrollSponserContainer.addSubview(imgView)
+            scrollSponserContainer.addSubview(titleLbl)
+        }
+    }
+    @objc func sponserDetailLabel(sender:UIGestureRecognizer) {
+        guard let tag = (sender.view as? UILabel)?.tag else {
+           // return
+         //   let tag = (sender.view as? UIImageView)?.tag
+            return
+        }
         
+        performSegue(withIdentifier: "sponsertimelinedetail", sender: sponserList[tag - 1])
+        
+    }
+    
+    @objc func sponserDetailImg(sender:UIGestureRecognizer) {
+        guard let tag = (sender.view as? UIImageView)?.tag else {
+            // return
+            //   let tag = (sender.view as? UIImageView)?.tag
+            return
+        }
+        
+        performSegue(withIdentifier: "sponsertimelinedetail", sender: sponserList[tag - 1])
+        
+    }
+  
+    //MARK:- Scroll Speaker
+    func loadSpeakerScroll()  {
+        hideShowFixedSpeaker(Order: true)
+        scrollSpeakerContainer.contentSize = CGSize(width: (80 * CGFloat(speakerList.count)) , height: scrollSpeakerContainer.frame.size.height)
+        scrollSpeakerContainer.delegate = self
+        for index in 0..<speakerList.count {
+    
+            frameSpeaker.origin.x = 80 * CGFloat(index)
+            frameSpeakerLabel.origin.x = 80 * CGFloat(index)
+        
+            frameSpeaker.origin.y = 10
+            frameSpeakerLabel.origin.y = 70
+         
+            frameSpeaker.size = CGSize(width: 50 , height: 50)
+            frameSpeakerLabel.size = CGSize(width: 80 , height: 20)
+            
+            let titleLbl = UILabel(frame: frameSpeakerLabel)
+            titleLbl.text = speakerList[index].name
+            titleLbl.numberOfLines = 1
+            titleLbl.textColor = UIColor.black
+            titleLbl.font = titleLbl.font.withSize(12.0)
+            titleLbl.tag = index + 1
+            print(titleLbl.tag)
+            
+            let speakerDetailLbl = UITapGestureRecognizer(target: self, action: #selector(TimeLineHomeVC.speakerDetailLabel))
+            titleLbl.isUserInteractionEnabled = true
+            titleLbl.addGestureRecognizer(speakerDetailLbl)
+            
+            let imgView = UIImageView(frame: frameSpeaker)
+            scrolImageUrl = speakerList[index].speakerImageUrl
+            if scrolImageUrl != nil {
+                Helper.loadImagesKingFisher(imgUrl: scrolImageUrl!, ImgView: imgView)
+            }
+            imgView.layer.cornerRadius = imgView.frame.width / 2
+            imgView.clipsToBounds = true
+            imgView.contentMode = .scaleAspectFit
 
+            imgView.tag = index + 1
+            let speakerDetailImg = UITapGestureRecognizer(target: self, action: #selector(TimeLineHomeVC.speakerDetailImg))
+            imgView.isUserInteractionEnabled = true
+            imgView.addGestureRecognizer(speakerDetailImg)
+
+            scrollSpeakerContainer.addSubview(imgView)
+            scrollSpeakerContainer.addSubview(titleLbl)
+        }
     }
-    override func viewWillAppear(_ animated: Bool) {
-        UIApplication.shared.isStatusBarHidden = false
+    
+    @objc func speakerDetailLabel(sender:UIGestureRecognizer) {
+        guard let tag = (sender.view as? UILabel)?.tag else {
+            // return
+            //   let tag = (sender.view as? UIImageView)?.tag
+            return
+        }
+        
+        performSegue(withIdentifier: "speakertimelinedetail", sender: speakerList[tag - 1])
+        
     }
+    
+    @objc func speakerDetailImg(sender:UIGestureRecognizer) {
+        guard let tag = (sender.view as? UIImageView)?.tag else {
+            return
+        }
+        performSegue(withIdentifier: "speakertimelinedetail", sender: speakerList[tag - 1])
+    }
+    
+    //MARK:- Error Methods
     @objc func errorSignLikeAlert(){
-
     let alert = UIAlertController(title: "Error", message: "You must sign in to Do this Part", preferredStyle: UIAlertControllerStyle.alert)
     alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
     self.present(alert, animated: true, completion: nil)
     }
     
     @objc func errorAlert(){
+        scrollSponserContainer.isHidden = true
+        scrollSpeakerContainer.isHidden = true
+        hideShowFixedSponser(Order: false)
+        hideShowFixedSpeaker(Order: false)
+        // is this error for Interner only ??
         let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
      
     }
-
+    
+    
+    //MARK:- SpeakerDataLoading
     func loadAllSpeakerData()  {
         Service.getService(url: URLs.getAllSpeaker) {
             (response) in
@@ -134,7 +353,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
             if !(result.isEmpty){
             var iDNotNull = true
             var index = 0
-            while index < 4 {
+            while index < 8 {
                 let speaker_ID = result[index]["ID"].string
                 let speaker_Name = result[index]["name"].string
                 let speaker_JobTitle = result[index]["jobTitle"].string
@@ -155,6 +374,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
              
             }
                 if !(self.speakerList.isEmpty){
+                    self.loadSpeakerScroll()
             self.speakerName1.text = self.speakerList[0].name
             self.speakerName2.text = self.speakerList[1].name
             self.speakerName3.text = self.speakerList[2].name
@@ -172,6 +392,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         }
     }
     
+    //MARK:- SponserDataLoading
     func loadAllSponserData()  {
         Service.getService(url: URLs.getAllSponsors) {
             (response) in
@@ -183,7 +404,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         if !(result.isEmpty){
             var iDNotNull = true
             var index = 0
-            while index < 4 {
+            while index < 8 {
                 let sponser_ID = result[index]["ID"].string
                 let sponser_Name = result[index]["name"].string
                 let sponser_Address = result[index]["address"].string
@@ -214,7 +435,10 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
              
             }
             //suggestion make it scrollview
-                if !(self.sponserList.isEmpty) {   
+            
+                if !(self.sponserList.isEmpty) {
+                    self.loadSponserScroll()
+
             self.sponserName1.text = self.sponserList[0].sponserName
             self.sponserName2.text = self.sponserList[1].sponserName
             self.sponserName3.text = self.sponserList[2].sponserName
@@ -223,17 +447,15 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
             Helper.loadImagesKingFisher(imgUrl: self.sponserList[1].sponserImageUrl!, ImgView: self.sponserImg2)
             Helper.loadImagesKingFisher(imgUrl: self.sponserList[2].sponserImageUrl!, ImgView: self.sponserImg3)
             Helper.loadImagesKingFisher(imgUrl: self.sponserList[3].sponserImageUrl!, ImgView: self.sponserImg4)
-
          
         }
         } else {
             // if no data in sponser what doing ??
 
             }
-            
-            }
+        }
     }
-    
+    //MARK:- AboutDataLoading
     func loadAboutData()  {
         if let casheAbout = Helper.getCITAbout(){
             self.homeAbout.text = casheAbout
@@ -259,6 +481,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
      }
     }
     
+    //MARK:- PostsDataLoading
     func loadPostsData()  {
         if let  apiToken  = Helper.getApiToken() {
             Service.getServiceWithAuth(url: (URLs.getAllPosts)) {
@@ -397,8 +620,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
     }
     }
     
-
-
+    //MARK:- CollectionViewMethods
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return newsFeedList.count
     }
@@ -421,8 +643,19 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
                 dis.singlePostsItem = favDetail
             }
         }
+        if let spons = segue.destination as? NetworkDetailsVC {
+            if let favDetail = sender as? Sponsers {
+                spons.singleSponserItem = favDetail
+            }
+        }
+        if let speak = segue.destination as? SpeakerProfileVC {
+            if let favDetail = sender as? Speakers {
+                speak.singleItem = favDetail
+            }
+        }
     }
     
+    //MARK:- Nav Buttons
     @IBAction func moreSponsers(_ sender: Any) {
         MenuViewController.sponserEventOrMenu = true
         performSegue(withIdentifier: "sponserspage", sender: nil)
@@ -433,15 +666,10 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
     
     @IBAction func moreSpeaker(_ sender: Any) {
         MenuViewController.speakerEventOrMenu = true
-      /*  Service.getService(url: "http://66.226.74.85:4002/api/Event/getNetwork", callback: { (response) in
-            print("this is json")
-            print(response)
-        })
-        */
- 
         performSegue(withIdentifier: "speakerpage", sender: nil)
     }
-    //Mark:- Filtters Methods
+    
+    //MARK:- Filtters & Control Methods
     @IBAction func allTypePosts(_ sender: Any) {
         newsFeedList.removeAll()
         newsFeedList = masterDataNewsFeedList
