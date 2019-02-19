@@ -66,7 +66,7 @@ import UIKit
     } else {
     ImgView.kf.indicatorType = .activity
     if let url = URL(string: imgUrl) {
-    ImgView.kf.setImage(with: url, placeholder: nil, options: [.transition(ImageTransition.fade(0.5))], progressBlock: nil, completionHandler: nil)
+    ImgView.kf.setImage(with: url, placeholder: UIImage(named: "home-logo"), options: [.transition(ImageTransition.fade(0.5))], progressBlock: nil, completionHandler: nil)
            }
         }
      }

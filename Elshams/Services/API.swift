@@ -190,8 +190,10 @@ class API: NSObject {
             let json = JSON(response)
             let message = json["message"].string
             SettingsVC.udapatedMessage = message!
-             NotificationCenter.default.post(name: NSNotification.Name("SuccesUpdate"), object: nil)
-            
+            // in activity
+            NotificationCenter.default.post(name: NSNotification.Name("SuccesUpdate"), object: nil)
+            Helper.loadUserData()
+
         
         }
     }

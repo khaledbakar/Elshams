@@ -65,6 +65,7 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
     
     @IBOutlet weak var profileImg: UIImageView!
     @IBOutlet weak var updateBtn: UIButton!
+    @IBOutlet weak var activityLoader: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,7 +76,8 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
         imagePicker.delegate = self
         firstHideErrors()
         textFieldsDelegats()
-        
+        activityLoader.isHidden = true
+
         if let  apiToken  = Helper.getApiToken() {
             profileImg.isHidden = false
             updateBtn.isHidden = false
@@ -126,7 +128,8 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
     }
     
     @objc func succesUpdate(){
-        
+        activityLoader.stopAnimating()
+        activityLoader.isHidden = true
         let alert = UIAlertController(title: "Succes!", message: "Your data is Updated!", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
@@ -351,20 +354,17 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
         guard let linkedIn = linkedInInputTxt.text   else { return }
         
         guard  let about = othersInputTxt.text  else { return }
+        activityLoader.isHidden = false
+        activityLoader.startAnimating()
         
         API.updateUserData(Email:  (emaiInputlTxt.text?.lowercased())!, Password: passwordInputTxt.text!, Title: tiltleUser , CompanyName: companyName , JobTitle: jobTiltle, About: about , Phone: phoneNum, Picture: imageProfileB64 ?? "", Linkedin: linkedIn , Ispublic: "True") { (error: Error?,succes:Bool) in
             if succes {
                 print("Succes")
             }
-            let user_Email = (self.emaiInputlTxt.text?.lowercased())
-            let user_Password = self.passwordInputTxt.text
-            
-          //  let settingUserData : [String] = [user_Email ?? "",user_Password ?? "",jobTiltle ?? "",phoneNum ?? "",about ?? "",tiltleUser ?? "",companyName ?? "",linkedIn ?? "",self.imageProfileB64 ?? ""] // change image and load url of it
-            
-          //  Helper.saveSettingUserData(UserData: settingUserData)
+     /*
             let alert = UIAlertController(title: "Succes!", message: "Your data is Updated!", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
+            self.present(alert, animated: true, completion: nil) */
         }
     }
     
