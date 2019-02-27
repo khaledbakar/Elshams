@@ -22,7 +22,10 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
     // static  var agendaList = Array<ProgramAgendaItems>()
     var agendaSessionList = Array<ProgramAgendaItems>()
     var agendaHeadList = Array<AgendaHeadData>()
+    var agendaHeadCount = Array<AgenaHeadCountIndex>()
+
     var agendaSpeakerIDImgList = Array<AgendaSpeakerIdPic>()
+    var AgendaHeadCounter :Int?
 
     var agendaDate = Array<String>()
     var agendaAllDate = Array<String>()
@@ -133,10 +136,15 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
                     
                     if agenda_Type == "head" {
                         self.agendaHeadList.append(AgendaHeadData(HeadTitle: agenda_dateTitle ?? "", HeadDate: agenda_date ?? "", HeadType: agenda_Type ?? ""))
+                        if index != 0 {
+                            self.agendaHeadCount.append(AgenaHeadCountIndex(HeadCount: self.AgendaHeadCounter!))
+                        }
+                        self.AgendaHeadCounter = 0
+
                     }
                     else if agenda_Type == "session" {
-                        self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "", SessionTime: agenda_Time ?? "", SessionLocation: agenda_SessionLocation ?? "", SpeakersSession: agenda_SpeakersDict ?? ["ID" : "",
-                                                                                                                                                                                                                                                                                  "imageUrl" : ""]
+                        self.AgendaHeadCounter =  self.AgendaHeadCounter!  + 1
+                        self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "", SessionTime: agenda_Time ?? "", SessionLocation: agenda_SessionLocation ?? "", SpeakersSession: agenda_SpeakersDict ?? ["ID" : "",                                                                                                                                                                                                                                                                            "imageUrl" : ""]
                             , AgendaDate: agenda_date ?? "", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String , RondomColor: agenda_rondomColor ?? "", AgendaType: agenda_Type ?? "", SpeakersIdImg: self.agendaSpeakerIDImgList))
                     }
                     
@@ -173,7 +181,7 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
                     while iDNotNull {
                         let agenda_Type = result[index]["type"].string
                         
-                        if agenda_Type == nil || agenda_Type?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
+                        if agenda_Type == nil || agenda_Type?.trimmed == "" ||
                             agenda_Type == "null"{
                             iDNotNull = false
                             break
@@ -207,8 +215,14 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
                         
                         if agenda_Type == "head" {
                             self.agendaHeadList.append(AgendaHeadData(HeadTitle: agenda_dateTitle ?? "", HeadDate: agenda_date ?? "", HeadType: agenda_Type ?? ""))
+                            if index != 0 {
+                                self.agendaHeadCount.append(AgenaHeadCountIndex(HeadCount: self.AgendaHeadCounter!))
+                            }
+                            self.AgendaHeadCounter = 0
+                            
                         }
                         else if agenda_Type == "session" {
+                            self.AgendaHeadCounter =  self.AgendaHeadCounter!  + 1
                             self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "", SessionTime: agenda_Time ?? "", SessionLocation: agenda_SessionLocation ?? "", SpeakersSession: agenda_SpeakersDict ?? [
                                 "ID" : "",
                                 "imageUrl" : ""]
@@ -289,6 +303,8 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
                 continue
             }
         }
+       // agendaHeadCount.append(AgenaHeadCountIndex(HeadCount: counter))
+
          return counter
         
     }
@@ -313,10 +329,25 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
         return cell
     }
     
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        OpenSessionVC.AgednaOrFavourite = true
+        OpenSessionVC.AgednaOrFavourite = "Agenda"
         tableView.deselectRow(at: indexPath, animated: true)
-        performSegue(withIdentifier: "opensession", sender: agendaSessionList[indexPath.row])
+        for i in 0..<agendaHeadList.count  {
+            if indexPath.section == i {
+                if indexPath.section == 0{
+                    performSegue(withIdentifier: "opensession", sender: agendaSessionList[indexPath.row])
+                }else {
+                let headCountInt = agendaHeadCount[i - 1].headCount
+                let selectRow = headCountInt! + indexPath.row
+                performSegue(withIdentifier: "opensession", sender: agendaSessionList[selectRow])
+            }
+            }
+        }
+    
+      /*  OpenSessionVC.AgednaOrFavourite = true
+        tableView.deselectRow(at: indexPath, animated: true)
+        performSegue(withIdentifier: "opensession", sender: agendaSessionList[indexPath.row]) */
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

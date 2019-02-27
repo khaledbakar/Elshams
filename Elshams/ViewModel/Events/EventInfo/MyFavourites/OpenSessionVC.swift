@@ -13,7 +13,7 @@ import SwiftyJSON
 
 class OpenSessionVC: UIViewController , UITextViewDelegate{
     //MARK:- StaticValues
-    static var AgednaOrFavourite:Bool = true
+    static var AgednaOrFavourite:String = ""
     static var likeFlag :String?
    
     //MARK:- DataLists
@@ -118,6 +118,7 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         super.viewDidLoad()
 
         initalViewLoad()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
@@ -143,6 +144,8 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         activeLoader.isHidden = false
         activeLoader.startAnimating()
         
+        
+        
         let speakerDetailImg = UITapGestureRecognizer(target: self, action: #selector(OpenSessionVC.speakerDetailImg))
         speakerProfile.isUserInteractionEnabled = true
         speakerProfile.addGestureRecognizer(speakerDetailImg)
@@ -163,12 +166,14 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         questionTxt.layer.borderColor = UIColor.red.cgColor
         favouriteIcon.image = UIImage(named: "unlike-session")
         loadSessionData(SessionID: (singleItem?.agenda_ID)!)
-        if  OpenSessionVC.AgednaOrFavourite == true {
-            self.navigationItem.title = "Agenda"
+        self.navigationItem.title = OpenSessionVC.AgednaOrFavourite
+
+       /* if  OpenSessionVC.AgednaOrFavourite == "Agenda" {
+            self.navigationItem.title = OpenSessionVC.AgednaOrFavourite
             
         } else {
             self.navigationItem.title = "My Favourite"
-        }
+        } */
     }
     
     //MARK:- DismmKeyBoard
@@ -208,12 +213,31 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
     @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer)  {
         sendQuestMainContainer.endEditing(true)
     }
+    
     //MARK:- LoadData
 
     func loadSessionData(SessionID:String)  {
+        var urlSession = ""
+        if  OpenSessionVC.AgednaOrFavourite == "Agenda" {
+           urlSession = URLs.getSessionDetails
+        } else if OpenSessionVC.AgednaOrFavourite == "MyFavourites" {
+            urlSession = URLs.getSessionDetails
+        }
+        else if OpenSessionVC.AgednaOrFavourite == "Innovation Day" {
+            urlSession = URLs.getInnovationSessionDetailsByID
+        }
+        else if OpenSessionVC.AgednaOrFavourite == "Digital Markting" {
+            urlSession = URLs.getDigitalMarketingSessionDetails
+        }
+        else if OpenSessionVC.AgednaOrFavourite == "Cyber Security" {
+            urlSession = URLs.getCyberSecuritySessionDetails
+        }
+        else {
+            urlSession = URLs.getSessionDetails
+        }
         if let  apiToken  = Helper.getApiToken() {
 
-     Service.getServiceWithAuth(url: "\(URLs.getSessionDetails)/\(SessionID)") {
+     Service.getServiceWithAuth(url: "\(urlSession)/\(SessionID)") {
             (response) in
         print("this is SessionDetails ")
            print(response)
@@ -245,13 +269,15 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
             let speaker_CompanyName = speaker_all[indexSpeaker]["companyName"].string
             let speaker_ImageUrl = speaker_all[indexSpeaker]["imageUrl"].string
             let speaker_About = speaker_all[indexSpeaker]["about"].string
+            let speaker_LinkedInOut = result[indexSpeaker]["linkedin"].string // linked in after edit
+
             let speaker_ContectInforamtion = speaker_all[indexSpeaker]["ContectInforamtion"].dictionaryObject
             let speaker_Email = speaker_all[indexSpeaker]["ContectInforamtion"]["Email"].string
             let speaker_Linkedin = speaker_all[indexSpeaker]["ContectInforamtion"]["linkedin"].string
             let speaker_Phone = speaker_all[indexSpeaker]["ContectInforamtion"]["phone"].string
             
             let contect = ["Email": "","linkedin": "","phone": ""]
-            self.speakerList.append(Speakers(SpeakerName: speaker_Name ?? "", JobTitle: speaker_JobTitle ?? "", CompanyName: speaker_CompanyName ?? "", SpImageUrl: speaker_ImageUrl ?? "", Speaker_id: speaker_ID ?? "", ContectInforamtion: speaker_ContectInforamtion ?? contect, About: speaker_About ?? ""))
+            self.speakerList.append(Speakers(SpeakerName: speaker_Name ?? "", JobTitle: speaker_JobTitle ?? "", CompanyName: speaker_CompanyName ?? "", SpImageUrl: speaker_ImageUrl ?? "", Speaker_id: speaker_ID ?? "", ContectInforamtion: speaker_ContectInforamtion ?? contect, About: speaker_About ?? "", LinkedIn: speaker_LinkedInOut ?? ""))
             indexSpeaker = indexSpeaker + 1
         }
         let questions_all = result["Question"]["AllQuestion"]
@@ -301,12 +327,12 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         if !(self.questVotes.isEmpty) {
         self.questionTxt.text = ""
         }
-        self.mangeSessionDetails(SeseionTitle: self.session_Title ?? "Title", AgendaDate: self.session_Date ?? "date", SessionTime:  self.session_Time ?? "Time", SessionLocation: self.session_Location ?? "location", SessionDescribtion: self.session_Description ?? "Describition", SpeakerName: self.speaker_Name ?? "name", SpeakerJobTitle: self.speaker_JobTitle ?? "JOB", SpeakerImgUrl: self.speaker_ImageUrl ?? "Image", QestionHead: self.question_head ?? "question", Speakers: self.speakerList, QuestVotesParam: self.questVotes)
+        self.mangeSessionDetails(SeseionTitle: self.session_Title ?? "", AgendaDate: self.session_Date ?? "", SessionTime:  self.session_Time ?? "", SessionLocation: self.session_Location ?? "", SessionDescribtion: self.session_Description ?? "", SpeakerName: self.speaker_Name ?? "", SpeakerJobTitle: self.speaker_JobTitle ?? "", SpeakerImgUrl: self.speaker_ImageUrl ?? "", QestionHead: self.question_head ?? "", Speakers: self.speakerList, QuestVotesParam: self.questVotes)
         
         }
         }else {
             
-            Service.getService(url: "\(URLs.getSessionDetails)/\(SessionID)") {
+            Service.getService(url: "\(urlSession)/\(SessionID)") {
                 (response) in
                 print("this is SessionDetails ")
                 print(response)
@@ -342,10 +368,11 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
                     let speaker_Email = speaker_all[indexSpeaker]["ContectInforamtion"]["Email"].string
                     let speaker_Linkedin = speaker_all[indexSpeaker]["ContectInforamtion"]["linkedin"].string
                     let speaker_Phone = speaker_all[indexSpeaker]["ContectInforamtion"]["phone"].string
-                    
+                    let speaker_LinkedInOut = result[indexSpeaker]["linkedin"].string // linked in after edit
+
                     let contect = ["Email": "","linkedin": "","phone": ""]
                     
-                    self.speakerList.append(Speakers(SpeakerName: speaker_Name ?? "", JobTitle: speaker_JobTitle ?? "", CompanyName: speaker_CompanyName ?? "", SpImageUrl: speaker_ImageUrl ?? "", Speaker_id: speaker_ID ?? "", ContectInforamtion: speaker_ContectInforamtion ?? contect, About: speaker_About ?? ""))
+                    self.speakerList.append(Speakers(SpeakerName: speaker_Name ?? "", JobTitle: speaker_JobTitle ?? "", CompanyName: speaker_CompanyName ?? "", SpImageUrl: speaker_ImageUrl ?? "", Speaker_id: speaker_ID ?? "", ContectInforamtion: speaker_ContectInforamtion ?? contect, About: speaker_About ?? "", LinkedIn: speaker_LinkedInOut ?? ""))
                     indexSpeaker = indexSpeaker + 1
                 }
                 let questions_all = result["Question"]["AllQuestion"]
@@ -466,7 +493,13 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
             Helper.loadImagesKingFisher(imgUrl: Speakers[0].speakerImageUrl!, ImgView: speakerProfile)
             if Speakers.count == 1 {
                 nextBackSpeakerCont.isHidden = true
-            } else {
+            } else if Speakers.count == 2 {
+                nextBackSpeakerCont.isHidden = false
+                backQuestionBtn.isHidden = true
+                backSpeakerBtnImg.isHidden = true
+            }
+            
+            else {
                 nextBackSpeakerCont.isHidden = false
             }
             
@@ -479,7 +512,13 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
             questionVoteContainer.isHidden = false
            if QuestVotesParam.count == 1 {
                 nextBackQuestionCont.isHidden = true
-            } else {
+           }else if QuestVotesParam.count == 2{
+            nextBackQuestionCont.isHidden = false
+            backQuestionBtn.isHidden = true
+            backQuestion.isHidden = true
+
+           }
+           else {
                 nextBackQuestionCont.isHidden = false
             }
             for i in 0..<questVotes.count{
@@ -851,14 +890,12 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
                 
             Service.postServiceWithAuth(url: URLs.favourateAction, parameters: sessionFavID) {
                 (response) in
-                
                 print(response)
                 let result = JSON(response)
-            
             }
-           
         }
-        } else {
+        }
+        else {
             let alert = UIAlertController(title: "Error", message: "You must sign in to Show this Part", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)

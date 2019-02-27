@@ -82,7 +82,7 @@ class NetworkDetailsVC: UIViewController {
             viewAbout.isHidden = true
         } else {
             viewAbout.isHidden = false
-            profileAbout.text = singleSponserItem?.sponserAbout
+            profileAbout.text = singleSponserItem?.sponserAbout?.htmlToString
         }
         
         eMail = singleSponserItem?.contectInforamtion!["Email"] as? String
@@ -157,7 +157,7 @@ class NetworkDetailsVC: UIViewController {
         compser.mailComposeDelegate = self
         compser.setToRecipients([mailStr])
         compser.setSubject("Event User Want to connect")
-        compser.setMessageBody("i love your session ana want to connect with you in other deal", isHTML: false)
+        compser.setMessageBody("", isHTML: false)
         present(compser, animated: true, completion: nil)
         
     }

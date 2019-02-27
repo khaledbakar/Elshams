@@ -63,6 +63,7 @@ class SpeakerProfileVC: UIViewController {
         connectColor.clipsToBounds = true
         speakerName.text = singleItem?.name
         speakerJobTitle.text = singleItem?.jobTitle
+        speakerPhone.isHidden = true
         
         sessionFirstConstatContraint = sessionTopConstraints.constant
         
@@ -84,7 +85,7 @@ class SpeakerProfileVC: UIViewController {
         
         speakerEmail.text = email
         speakerWebsite.text = faceBookLinkEdinNow
-        if singleItem?.about == nil  || singleItem?.about == ""{
+        if singleItem?.about == nil  || singleItem?.about == "" ||  singleItem?.about == "About"{
             noAboutMethod()
         } else {
             aboutViewContainer.isHidden = false
@@ -159,8 +160,9 @@ class SpeakerProfileVC: UIViewController {
                 self.speakerPhone.text = speaker_Phone
                 self.speakerEmail.text = speaker_Email
                 self.speakerWebsite.text = speaker_Linkedin
-                if speaker_About == nil || speaker_About == ""{
-              //      self.noAboutMethod()
+                if speaker_About == nil || speaker_About == "" {
+                   //self.noAboutMethod()
+                    print("no about")
                 } else {
                     self.showAboutMethod()
                     self.aboutSpeaker.text = speaker_About?.htmlToString
@@ -172,8 +174,18 @@ class SpeakerProfileVC: UIViewController {
                     self.sessionViewContainer.isHidden = false
                     if self.speakerSessionsList.count == 1{
                         self.nextBackSessionsContainer.isHidden = true
-                        } else {
+                        }
+                   else if self.speakerSessionsList.count == 2{
+                        self.nextBackSessionsContainer.isHidden = false
+                        self.backBtnSession.isHidden = true
+                        self.backImgSession.isHidden = true
+
+                    }
+                        
+                    else {
                     self.nextBackSessionsContainer.isHidden = false
+                        self.backBtnSession.isHidden = true
+                        self.backImgSession.isHidden = true
                 }
                             self.speakerFSName.text = self.speakerSessionsList[0].session_Title
                             self.speakerFSTime.text = self.speakerSessionsList[0].session_Time
@@ -293,7 +305,7 @@ class SpeakerProfileVC: UIViewController {
             speakerFSLocation.text = speakerSessionsList[sessionCounterIndex].session_Location
         }
     }
-    //Mark:- Shw/HideContainers
+    //MARK:- Shw/HideContainers
     func noAboutMethod()  {
         aboutViewContainer.isHidden = true
         sessionTopConstraints.constant = -(aboutViewContainer.frame.height) + (sessionTopConstraints.constant)

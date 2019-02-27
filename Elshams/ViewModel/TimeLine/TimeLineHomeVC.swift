@@ -13,6 +13,10 @@ import SwiftyJSON
 
 class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollectionViewDelegate , UIImagePickerControllerDelegate, UINavigationControllerDelegate , UITextFieldDelegate , UIScrollViewDelegate{
     
+  
+    @IBOutlet weak var speakerCollectionView: UICollectionView!
+    @IBOutlet weak var sponserCollectionView: UICollectionView!
+    
     @IBOutlet weak var scrollSponserContainer: UIScrollView!
     
     @IBOutlet weak var scrollSpeakerContainer: UIScrollView!
@@ -369,13 +373,15 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
                     iDNotNull = false
                     break
                 }
-                self.speakerList.append(Speakers(SpeakerName: speaker_Name ?? "name", JobTitle: speaker_JobTitle ?? "JOB", CompanyName: speaker_CompanyName ?? "Company", SpImageUrl: speaker_ImageUrl ?? "Image", Speaker_id: speaker_ID ?? "ID", ContectInforamtion: speaker_ContectInforamtion ?? contect, About: speaker_About ?? "About"))
+                self.speakerList.append(Speakers(SpeakerName: speaker_Name ?? "", JobTitle: speaker_JobTitle ?? "", CompanyName: speaker_CompanyName ?? "", SpImageUrl: speaker_ImageUrl ?? "", Speaker_id: speaker_ID ?? "", ContectInforamtion: speaker_ContectInforamtion ?? contect, About: speaker_About ?? "", LinkedIn: speaker_Linkedin ?? ""))
                 index = index + 1
              
             }
                 if !(self.speakerList.isEmpty){
-                    self.loadSpeakerScroll()
-            self.speakerName1.text = self.speakerList[0].name
+                    self.speakerCollectionView.reloadData()
+
+                   // self.loadSpeakerScroll()
+        /*self.speakerName1.text = self.speakerList[0].name
             self.speakerName2.text = self.speakerList[1].name
             self.speakerName3.text = self.speakerList[2].name
             self.speakerName4.text = self.speakerList[3].name
@@ -384,7 +390,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
             Helper.loadImagesKingFisher(imgUrl: self.speakerList[1].speakerImageUrl!, ImgView: self.speakerImg2)
             Helper.loadImagesKingFisher(imgUrl: self.speakerList[2].speakerImageUrl!, ImgView: self.speakerImg3)
             Helper.loadImagesKingFisher(imgUrl: self.speakerList[3].speakerImageUrl!, ImgView: self.speakerImg4)
-
+*/
                 }
             } else {
                 // if no data in speaker what doing ??
@@ -429,7 +435,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
                     iDNotNull = false
                     break
                 }
-                self.sponserList.append(Sponsers(SponserName: sponser_Name ?? "name", SponserAddress: sponser_Address ?? "address", SponserImageURL: sponser_ImageUrl ?? "Image", SponserAbout: sponser_About ?? "ABout", SponserID: sponser_ID ?? "ID", ContectInforamtion: sponser_ContectInforamtion ?? contectOptionNil, Sponsertype: sponser_Sponsertype ?? sponserTypeOptionNil))
+                self.sponserList.append(Sponsers(SponserName: sponser_Name ?? "", SponserAddress: sponser_Address ?? "", SponserImageURL: sponser_ImageUrl ?? "", SponserAbout: sponser_About ?? "", SponserID: sponser_ID ?? "", ContectInforamtion: sponser_ContectInforamtion ?? contectOptionNil, Sponsertype: sponser_Sponsertype ?? sponserTypeOptionNil))
                 index = index + 1
                
              
@@ -437,9 +443,10 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
             //suggestion make it scrollview
             
                 if !(self.sponserList.isEmpty) {
-                    self.loadSponserScroll()
+                 //   self.loadSponserScroll()
+                    self.sponserCollectionView.reloadData()
 
-            self.sponserName1.text = self.sponserList[0].sponserName
+          /*  self.sponserName1.text = self.sponserList[0].sponserName
             self.sponserName2.text = self.sponserList[1].sponserName
             self.sponserName3.text = self.sponserList[2].sponserName
             self.sponserName4.text = self.sponserList[3].sponserName
@@ -447,7 +454,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
             Helper.loadImagesKingFisher(imgUrl: self.sponserList[1].sponserImageUrl!, ImgView: self.sponserImg2)
             Helper.loadImagesKingFisher(imgUrl: self.sponserList[2].sponserImageUrl!, ImgView: self.sponserImg3)
             Helper.loadImagesKingFisher(imgUrl: self.sponserList[3].sponserImageUrl!, ImgView: self.sponserImg4)
-         
+         */
         }
         } else {
             // if no data in sponser what doing ??
@@ -622,19 +629,55 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
     
     //MARK:- CollectionViewMethods
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return newsFeedList.count
+     //  var collCounter = newsFeedList.count
+        if collectionView == self.sponserCollectionView {
+         //   collCounter = sponserList.count
+            return sponserList.count
+        }
+       else if collectionView == self.speakerCollectionView {
+            //   collCounter = sponserList.count
+            return speakerList.count
+        }
+        else  { //if collectionView == self.timeLineCollView
+        //collCounter = newsFeedList.count
+            return newsFeedList.count
+
+        }
+       // return collCounter
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if collectionView == self.timeLineCollView {
+
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "newsfeedcell", for: indexPath) as! NewFeedsCell
         cell.setNewsFeedCeel(NewsfeedList: newsFeedList[indexPath.row])
         return cell
+        }
+        else if collectionView == self.speakerCollectionView { //speakercell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "speakercell", for: indexPath) as! SpeakerTimeLineCell
+            cell.setSpeakerTimeLineCell(speakersList: speakerList[indexPath.row])
+            return cell
+            
+        }
+        
+        else  { //if  collectionView == self.sponserCollectionView
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "sponsercell", for: indexPath) as! SponserTimeLineCell
+            cell.setSponserTimeLineCell(sponsersList: sponserList[indexPath.row])
+            return cell
+        }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
       //  NewsDetails.PostOrNews == true
+        if collectionView == self.timeLineCollView {
         print(newsFeedList[indexPath.row])
         performSegue(withIdentifier: "timelinepostdetail", sender: newsFeedList[indexPath.row])
+        }else if collectionView == self.speakerCollectionView {
+            performSegue(withIdentifier: "speakertimelinedetail", sender: speakerList[indexPath.row])
 
+        } else {
+            performSegue(withIdentifier: "sponsertimelinedetail", sender: sponserList[indexPath.row])
+
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

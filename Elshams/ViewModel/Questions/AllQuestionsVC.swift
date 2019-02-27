@@ -61,13 +61,15 @@ class AllQuestionsVC: UIViewController , UITableViewDataSource ,UITableViewDeleg
                 let question_ID = result[index]["questionId"].string
                 let question_head = result[index]["question"].string
                 let question_answer = result[index]["answer"].string
+                let question_speakerName = result[index]["speakerName"].string
+
                 let question_TimeStamp = result[index]["questionTimeStamp"].string
               
                 if question_ID == nil || question_ID?.trimmed == "" || question_ID == "null" || question_ID == "nil" {
                     iDNotNull = false
                     break
                 }
-                self.questionList.append(QuestionsData(Questions: question_head ?? "question", Answer: question_answer ?? "answer", QuestionsID: question_ID ?? "ID", QuestionTimeStamp: question_TimeStamp ?? "TimeStamp"))
+                self.questionList.append(QuestionsData(Questions: question_head ?? "", Answer: question_answer ?? "", QuestionsID: question_ID ?? "", QuestionSpeaker: question_speakerName ?? "", QuestionTimeStamp: question_TimeStamp ?? ""))
                 
                 index = index + 1
                 self.questionTableView.reloadData()

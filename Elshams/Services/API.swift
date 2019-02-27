@@ -189,7 +189,7 @@ class API: NSObject {
             print(response)
             let json = JSON(response)
             let message = json["message"].string
-            SettingsVC.udapatedMessage = message!
+            SettingsVC.udapatedMessage = message! //  "Message" : "An error has occurred." setting error
             // in activity
             NotificationCenter.default.post(name: NSNotification.Name("SuccesUpdate"), object: nil)
             Helper.loadUserData()

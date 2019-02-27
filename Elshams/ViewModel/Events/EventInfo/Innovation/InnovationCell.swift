@@ -32,7 +32,7 @@ class InnovationCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
+  /*
     func imgUrl(imgUrl:String,imageSpeakerView:UIImageView)  {
         
         if let imagUrlAl = imgUrl as? String {
@@ -52,7 +52,7 @@ class InnovationCell: UITableViewCell {
                 }
             })
         }
-    }
+    } */
     
     func setInnovationCell(AgendaProgram:ProgramAgendaItems,IndexPath:Int)  {
         timeIcon.layer.cornerRadius = timeIcon.frame.width / 2
@@ -100,31 +100,27 @@ class InnovationCell: UITableViewCell {
         //    let speaker1 = AgendaProgram.speakersSession![0]["imageUrl"]
         let speaker = AgendaProgram.speakersIdImg
         if !(speaker?.isEmpty)! {
-            
-            //   }
-            // if speaker != nil {
-            let sp1 = speaker![0].speakerImageUrl
-            let sp2 = speaker![1].speakerImageUrl
-            if sp1 == nil {
+            if speaker != nil {
+                let sp1 = speaker![0].speakerImageUrl
+                if sp1 == nil {
+                    speakerTwoImage.isHidden = true
+                }else {
+                    speakerTwoImage.isHidden = false
+                    Helper.loadImagesKingFisher(imgUrl: sp1!, ImgView: speakerTwoImage)
+                }
+                if (speaker?.count)! > 1 {
+                    let sp2 = speaker![1].speakerImageUrl
+                    if sp2 == nil {
+                        speakerOneImage.isHidden = true
+                    }else {
+                        speakerOneImage.isHidden = false
+                        Helper.loadImagesKingFisher(imgUrl: sp2!, ImgView: speakerOneImage)
+                    }
+                }
+            } else {
                 speakerOneImage.isHidden = true
-            }else {
-                speakerOneImage.isHidden = false
-                
-                imgUrl(imgUrl: sp1!, imageSpeakerView: speakerOneImage)
-                
-            }
-            if sp2 == nil {
                 speakerTwoImage.isHidden = true
-            }else {
-                speakerTwoImage.isHidden = false
-                imgUrl(imgUrl: sp2!, imageSpeakerView: speakerTwoImage)
-                
             }
-        } else {
-            speakerOneImage.isHidden = true
-            
-            speakerTwoImage.isHidden = true
-            
         }
         
         /*  switch IndexPath % 3 {
@@ -139,5 +135,5 @@ class InnovationCell: UITableViewCell {
          cellColor.backgroundColor = UIColor.yellow
          
          } */
-    }
+}
 }

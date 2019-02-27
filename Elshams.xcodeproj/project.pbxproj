@@ -79,7 +79,10 @@
 		0469B49A21AC1675000A337B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0469B49921AC1675000A337B /* Assets.xcassets */; };
 		0469B49D21AC1675000A337B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0469B49B21AC1675000A337B /* LaunchScreen.storyboard */; };
 		047970DA21CFF46400C5BAFD /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047970D921CFF46400C5BAFD /* UIColor.swift */; };
+		04802E6C2226181D00E252B4 /* SponserTimeLineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04802E6B2226181D00E252B4 /* SponserTimeLineCell.swift */; };
+		04802E6E22261D7100E252B4 /* SpeakerTimeLineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04802E6D22261D7100E252B4 /* SpeakerTimeLineCell.swift */; };
 		048128182214A39500DDEE05 /* CommentsNewsFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048128172214A39500DDEE05 /* CommentsNewsFeed.swift */; };
+		0492F99B2222D07F0014A492 /* AgenaHeadCountIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0492F99A2222D07F0014A492 /* AgenaHeadCountIndex.swift */; };
 		049BF7BC21CBBFF70086F569 /* SponserCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049BF7BB21CBBFF70086F569 /* SponserCollectionViewCell.swift */; };
 		04AD60E5221239CB00648C7E /* SpeakerSessions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AD60E4221239CB00648C7E /* SpeakerSessions.swift */; };
 		04AD60E92212446000648C7E /* QuestionsVote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04AD60E82212446000648C7E /* QuestionsVote.swift */; };
@@ -180,7 +183,10 @@
 		0469B49C21AC1675000A337B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0469B49E21AC1675000A337B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		047970D921CFF46400C5BAFD /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		04802E6B2226181D00E252B4 /* SponserTimeLineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponserTimeLineCell.swift; sourceTree = "<group>"; };
+		04802E6D22261D7100E252B4 /* SpeakerTimeLineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeakerTimeLineCell.swift; sourceTree = "<group>"; };
 		048128172214A39500DDEE05 /* CommentsNewsFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsNewsFeed.swift; sourceTree = "<group>"; };
+		0492F99A2222D07F0014A492 /* AgenaHeadCountIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgenaHeadCountIndex.swift; sourceTree = "<group>"; };
 		049BF7BB21CBBFF70086F569 /* SponserCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponserCollectionViewCell.swift; sourceTree = "<group>"; };
 		04AD60E4221239CB00648C7E /* SpeakerSessions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeakerSessions.swift; sourceTree = "<group>"; };
 		04AD60E82212446000648C7E /* QuestionsVote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionsVote.swift; sourceTree = "<group>"; };
@@ -232,6 +238,7 @@
 		0410D75321F0BBAC005A304E /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				04E994F221EB431C006070B3 /* NetworkLayer */,
 				0410D75421F0BBED005A304E /* PhoneCall.swift */,
 				0410D75621F0BD79005A304E /* OpenSafariLink.swift */,
 				044C648021FF2B0A00434BB1 /* Helper.swift */,
@@ -341,7 +348,6 @@
 		0466C05321B55AF600C9C555 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				04E994F221EB431C006070B3 /* NetworkLayer */,
 				0466C05421B55B1100C9C555 /* CompanyItems.swift */,
 				0466C05B21B5717E00C9C555 /* CollectioViewItems.swift */,
 				0466C07021B590E900C9C555 /* ProgramAgendaItems.swift */,
@@ -358,9 +364,10 @@
 				04BE00FC21D0F26A00809834 /* EventsData.swift */,
 				04E994F921ECB7B0006070B3 /* AgendaSectionDate.swift */,
 				04FE210521F755AB0027DDB3 /* AgendaHeadData.swift */,
+				0492F99A2222D07F0014A492 /* AgenaHeadCountIndex.swift */,
+				0427280D2208693C0028C671 /* AgendaSpeakerIdPic.swift */,
 				04B2C5A72200C1B70039D6AD /* AvailableAppointment.swift */,
 				04B2C5A9220345200039D6AD /* UserData.swift */,
-				0427280D2208693C0028C671 /* AgendaSpeakerIdPic.swift */,
 				04AD60E4221239CB00648C7E /* SpeakerSessions.swift */,
 				04AD60E82212446000648C7E /* QuestionsVote.swift */,
 				04AD60EA221244E200648C7E /* MultiAnswers.swift */,
@@ -380,6 +387,8 @@
 		0466C05D21B5793D00C9C555 /* EventInfo */ = {
 			isa = PBXGroup;
 			children = (
+				04802E682225949D00E252B4 /* DigitalMarkting */,
+				04802E672225948D00E252B4 /* CyberSecurity */,
 				04E288682217BE970050557C /* Innovation */,
 				044BCA2E220AF0C300A4CA78 /* Agenda */,
 				0466C0A221B7E32200C9C555 /* MyFavourites */,
@@ -427,6 +436,8 @@
 				0466C09421B6CF6100C9C555 /* TimeLineHomeVC.swift */,
 				0439DACE21C68A510041CDCB /* NewFeedsCell.swift */,
 				046238DA2219965B00F4AE04 /* postsDetails.swift */,
+				04802E6B2226181D00E252B4 /* SponserTimeLineCell.swift */,
+				04802E6D22261D7100E252B4 /* SpeakerTimeLineCell.swift */,
 			);
 			path = TimeLine;
 			sourceTree = "<group>";
@@ -497,6 +508,20 @@
 				044C648621FF571500434BB1 /* String-Extension.swift */,
 			);
 			path = Extentions;
+			sourceTree = "<group>";
+		};
+		04802E672225948D00E252B4 /* CyberSecurity */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = CyberSecurity;
+			sourceTree = "<group>";
+		};
+		04802E682225949D00E252B4 /* DigitalMarkting */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = DigitalMarkting;
 			sourceTree = "<group>";
 		};
 		04B8729721AC320E00C6629E /* ViewModel */ = {
@@ -711,12 +736,14 @@
 				045EF19A21B96004009DCA7A /* QuestionsData.swift in Sources */,
 				0416E74F21ADABBC004E7368 /* TabTestViewController.swift in Sources */,
 				0466C0A621B7E37A00C9C555 /* MyFavouritesVC.swift in Sources */,
+				04802E6C2226181D00E252B4 /* SponserTimeLineCell.swift in Sources */,
 				04E2886C2217BEDA0050557C /* InnovationVC.swift in Sources */,
 				0466C06F21B58B8100C9C555 /* SponsersCell.swift in Sources */,
 				0466C06321B57AE000C9C555 /* AgendaVC.swift in Sources */,
 				04B872A721AD536500C6629E /* SelectFavCompVC.swift in Sources */,
 				04FE210621F755AB0027DDB3 /* AgendaHeadData.swift in Sources */,
 				045EF19821B95FE8009DCA7A /* MyQuestions.swift in Sources */,
+				0492F99B2222D07F0014A492 /* AgenaHeadCountIndex.swift in Sources */,
 				0466C0AC21B81DB100C9C555 /* OpenSessionVC.swift in Sources */,
 				0466C09021B6CBE300C9C555 /* MenuViewController.swift in Sources */,
 				045EF18821B85C22009DCA7A /* StartupDetailsVC.swift in Sources */,
@@ -781,6 +808,7 @@
 				0466C09721B6E16200C9C555 /* SideMenuDetailCell.swift in Sources */,
 				0466C06121B57AA000C9C555 /* AboutEvent.swift in Sources */,
 				0466C09F21B7E25400C9C555 /* NetworksVC.swift in Sources */,
+				04802E6E22261D7100E252B4 /* SpeakerTimeLineCell.swift in Sources */,
 				0466C07121B590E900C9C555 /* ProgramAgendaItems.swift in Sources */,
 				049BF7BC21CBBFF70086F569 /* SponserCollectionViewCell.swift in Sources */,
 				04BE00F921D0F02000809834 /* AllEventsVC.swift in Sources */,

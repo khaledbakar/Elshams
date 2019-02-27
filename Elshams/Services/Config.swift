@@ -13,6 +13,8 @@ import Alamofire
 
 struct URLs {
     static let main = "http://68.168.111.23:9603/api"
+    //static let main = "http://68.168.111.23:9700/api"
+
     static let login = main + "/account/Login"
     static let register = main + "/account/register"
     static let getSettingData = main + "/Event/getpofile"
@@ -34,12 +36,20 @@ struct URLs {
     
     static let getAllStartups = main + "/Event/getAllStartups"
     static let getInnovation = main + "/Event/getInnovation"
+    static let getCyberSecurity = main + "/Event/getCyberSecurity"
+    static let getDigitalMarketing = main + "/Event/getDigitalMarketing"
     static let getAllExhibitors = main + "/Event/getAllExhibitors"
+
+    static let askStartupExhibtorQuestion = main + "/Event/AddQuestionToStartUp"
+
 
 
     static let getStartupDetailsByID = main + "/Event/getStartupDetailsByID"
     static let getExhibitorDetailsByID = main + "/Event/getExhibitorDetailsByID"
     static let getInnovationSessionDetailsByID = main + "/Event/getInnovationSessionDetails"
+    static let getCyberSecuritySessionDetails = main + "/Event/getCyberSecuritySessionDetails"
+    static let getDigitalMarketingSessionDetails = main + "/Event/getDigitalMarketingSessionDetails"
+
 
 
     static let getAvaliableAppoiments = main + "/Event/getAvaliableAppoiments"

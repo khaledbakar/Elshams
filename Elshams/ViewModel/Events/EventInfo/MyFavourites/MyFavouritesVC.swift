@@ -24,6 +24,9 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
     var agendaSessionList = Array<ProgramAgendaItems>()
     var agendaHeadList = Array<AgendaHeadData>()
     var agendaSpeakerIDImgList = Array<AgendaSpeakerIdPic>()
+    var agendaHeadCount = Array<AgenaHeadCountIndex>()
+    var AgendaHeadCounter :Int?
+
 
    
     override func viewDidLoad() {
@@ -70,6 +73,7 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
         (response) in
         print(response)
         let result = JSON(response)
+        // if auth prop "Message" : "Authorization has been denied for this request."
         if !(result.isEmpty){
         var iDNotNull = true
         var index = 0
@@ -91,14 +95,14 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
             var indexSpeaker = 0
             
             while SpeakeriDNotNull {
-                let agenda_speaker_id = agenda_Speakers["ID"].string
-                
+                let agenda_speaker_id = agenda_Speakers[indexSpeaker]["ID"].string
+              //  Helper.gette
                 if agenda_speaker_id == nil || agenda_speaker_id?.trimmed == "" ||
                     agenda_speaker_id == "null"{
                     SpeakeriDNotNull = false
                     break
                 }
-                let agenda_speaker_url = agenda_Speakers["imageUrl"].string
+                let agenda_speaker_url = agenda_Speakers[indexSpeaker]["imageUrl"].string
                 self.agendaSpeakerIDImgList.append(AgendaSpeakerIdPic(SpImageUrl: agenda_speaker_url ?? "", Speaker_id: agenda_speaker_id ?? ""))
                 indexSpeaker = indexSpeaker + 1
             }
@@ -110,11 +114,18 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
             
             
             if agenda_Type == "head" {
-                self.agendaHeadList.append(AgendaHeadData(HeadTitle: agenda_dateTitle ?? "title", HeadDate: agenda_date ?? "date", HeadType: agenda_Type ?? "type"))
+                self.agendaHeadList.append(AgendaHeadData(HeadTitle: agenda_dateTitle ?? "", HeadDate: agenda_date ?? "", HeadType: agenda_Type ?? ""))
+                if index != 0 {
+                    self.agendaHeadCount.append(AgenaHeadCountIndex(HeadCount: self.AgendaHeadCounter!))
+                }
+                self.AgendaHeadCounter = 0
+                
             }
             else if agenda_Type == "session" {
-                self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "Title", SessionTime: agenda_Time ?? "Time", SessionLocation: agenda_SessionLocation ?? "location", SpeakersSession: agenda_SpeakersDict ?? ["":""]
-                    , AgendaDate: agenda_date ?? "date", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String ?? "" , RondomColor: agenda_rondomColor ?? "red", AgendaType: agenda_Type ?? "session", SpeakersIdImg: self.agendaSpeakerIDImgList))
+                self.AgendaHeadCounter =  self.AgendaHeadCounter!  + 1
+
+                self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "", SessionTime: agenda_Time ?? "", SessionLocation: agenda_SessionLocation ?? "", SpeakersSession: agenda_SpeakersDict ?? ["":""]
+                    , AgendaDate: agenda_date ?? "", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String ?? "" , RondomColor: agenda_rondomColor ?? "", AgendaType: agenda_Type ?? "", SpeakersIdImg: self.agendaSpeakerIDImgList))
                 
                  // ?? [[ "ID" : "314","imageUrl" : "http:-b01d-582382a5795e.jpg"]] as! [[String : Any]]
             }
@@ -221,11 +232,22 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        OpenSessionVC.AgednaOrFavourite = false
+        OpenSessionVC.AgednaOrFavourite = "MyFavourites"
         tableView.deselectRow(at: indexPath, animated: true)
+        for i in 0..<agendaHeadList.count  {
+            if indexPath.section == i {
+                if indexPath.section == 0{
+                    performSegue(withIdentifier: "openfavsession", sender: agendaSessionList[indexPath.row])
+                }else {
+                    let headCountInt = agendaHeadCount[i - 1].headCount
+                    let selectRow = headCountInt! + indexPath.row
+                    performSegue(withIdentifier: "openfavsession", sender: agendaSessionList[selectRow])
+                }
+            }
 
         // el mafrood ab3t filt
-       performSegue(withIdentifier: "openfavsession", sender: agendaSessionList[indexPath.row])
+     //  performSegue(withIdentifier: "openfavsession", sender: agendaSessionList[indexPath.row])
+    }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

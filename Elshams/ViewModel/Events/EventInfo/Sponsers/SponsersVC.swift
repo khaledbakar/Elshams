@@ -94,8 +94,8 @@ class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSour
                     self.sponserCollectionView.reloadData()
                     self.activeLoader.isHidden = true
                     self.activeLoader.stopAnimating()
-                    self.sponserTableView.isHidden = true
-                    self.sponserCollectionView.isHidden = false
+                    self.sponserTableView.isHidden = false
+                    self.sponserCollectionView.isHidden = true
                     self.noDataErrorContainer.isHidden = true
 
                     

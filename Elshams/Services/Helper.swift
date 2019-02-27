@@ -157,6 +157,14 @@ import UIKit
         return def.object(forKey: "api_token") as? String
 
     }
+    
+   // is class like public ??
+    
+ /*   public func getApiTestToken() -> String? {
+        let def = UserDefaults.standard
+        return def.object(forKey: "api_token") as? String
+        
+    } */
  }
 
  

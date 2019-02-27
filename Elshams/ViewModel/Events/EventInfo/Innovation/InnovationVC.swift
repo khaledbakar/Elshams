@@ -18,12 +18,17 @@ class InnovationVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
     @IBOutlet weak var activeLoader: UIActivityIndicatorView!
     @IBOutlet weak var noDataErrorContainer: UIView!
     
+    static var pageSelect = ""
+    
     @IBOutlet weak var reloadConnection: UIImageView!
     @IBOutlet weak var reloadBtnShow: UIButton!
     // static  var agendaList = Array<ProgramAgendaItems>()
     var innovationSessionList = Array<ProgramAgendaItems>()
     var innovationHeadList = Array<AgendaHeadData>()
     var innovationSpeakerIDImgList = Array<AgendaSpeakerIdPic>()
+    var innovationHeadCount = Array<AgenaHeadCountIndex>()
+    var innovationHeadCounter :Int?
+
     
     var innovationDate = Array<String>()
     var innovationAllDate = Array<String>()
@@ -32,7 +37,8 @@ class InnovationVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
         super.viewDidLoad()
         addSlideMenuButton()
         //  btnRightBar()
-        self.navigationItem.title = "Innovation"
+    
+        self.navigationItem.title = InnovationVC.pageSelect
         innovationTableView.isHidden = true
         activeLoader.startAnimating()
         reloadBtnShow.isHidden = true
@@ -53,8 +59,8 @@ class InnovationVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
         let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
-        reloadBtnShow.isHidden = false
-        reloadConnection.isHidden = false
+     //   reloadBtnShow.isHidden = false
+     //   reloadConnection.isHidden = false
         innovationTableView.isHidden = true
         activeLoader.isHidden = true
         activeLoader.stopAnimating()
@@ -73,8 +79,24 @@ class InnovationVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
     }
     
     func loadInnovationData()  {
+        var urlSession = ""
+        if  InnovationVC.pageSelect == "Innovation" {
+            urlSession = URLs.getInnovation
+        } else if InnovationVC.pageSelect == "Cyber" {
+            urlSession = URLs.getCyberSecurity
+        }
+        else if InnovationVC.pageSelect == "Markting" {
+            urlSession = URLs.getDigitalMarketing
+        }
+       
+        else {
+            urlSession = URLs.getInnovation
+            
+        }
         if let  apiToken  = Helper.getApiToken() {
-            Service.getServiceWithAuth(url: URLs.getInnovation) {
+            //Service.getServiceWithAuth(url: URLs.getInnovation) {
+            Service.getServiceWithAuth(url: urlSession) {
+
                 (response) in
                 print(response)
                 let result = JSON(response)
@@ -121,11 +143,17 @@ class InnovationVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
                         
                         if innovation_Type == "head" {
                             self.innovationHeadList.append(AgendaHeadData(HeadTitle: innovation_dateTitle ?? "", HeadDate: innovation_date ?? "", HeadType: innovation_Type ?? ""))
+                            if index != 0 {
+                                self.innovationHeadCount.append(AgenaHeadCountIndex(HeadCount: self.innovationHeadCounter!))
+                            }
+                            self.innovationHeadCounter = 0
+
                         }
                         else if innovation_Type == "session" {
-                            self.innovationSessionList.append(ProgramAgendaItems(Agenda_ID: innovation_ID!, SessionTitle: innovation_sessionTitle ?? "", SessionTime: innovation_Time ?? "", SessionLocation: innovation_SessionLocation ?? "", SpeakersSession: innovation_SpeakersDict ?? ["ID" : "314",
-                                                                                                                                                                                                                                                                                      "imageUrl" : "http:-b01d-582382a5795e.jpg"]
-                                , AgendaDate: innovation_date ?? "", FavouriteSession: innovation_isFavourate ?? true , FavouriteSessionStr: innovation_IsFavourate_String , RondomColor: innovation_rondomColor ?? "red", AgendaType: innovation_Type ?? "session", SpeakersIdImg: self.innovationSpeakerIDImgList))
+                            self.innovationHeadCounter =  self.innovationHeadCounter!  + 1
+
+                            self.innovationSessionList.append(ProgramAgendaItems(Agenda_ID: innovation_ID!, SessionTitle: innovation_sessionTitle ?? "", SessionTime: innovation_Time ?? "", SessionLocation: innovation_SessionLocation ?? "", SpeakersSession: innovation_SpeakersDict ?? ["ID" : "",                                                                                                                                                                                                                                                                        "imageUrl" : ""]
+                                , AgendaDate: innovation_date ?? "", FavouriteSession: innovation_isFavourate ?? true , FavouriteSessionStr: innovation_IsFavourate_String , RondomColor: innovation_rondomColor ?? "", AgendaType: innovation_Type ?? "", SpeakersIdImg: self.innovationSpeakerIDImgList))
                         }
                         
                         index = index + 1
@@ -150,7 +178,7 @@ class InnovationVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
                 }
             }
         } else {
-            Service.getService(url: URLs.getAgenda) {
+            Service.getService(url: urlSession) {
                 (response) in
                 print(response)
                 let result = JSON(response)
@@ -195,12 +223,18 @@ class InnovationVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
                         
                         if agenda_Type == "head" {
                             self.innovationHeadList.append(AgendaHeadData(HeadTitle: agenda_dateTitle ?? "", HeadDate: agenda_date ?? "", HeadType: agenda_Type ?? ""))
+                            if index != 0 {
+                                self.innovationHeadCount.append(AgenaHeadCountIndex(HeadCount: self.innovationHeadCounter!))
+                            }
+                            self.innovationHeadCounter = 0
+                            
                         }
                         else if agenda_Type == "session" {
+                            self.innovationHeadCounter =  self.innovationHeadCounter!  + 1
                             self.innovationSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "", SessionTime: agenda_Time ?? "", SessionLocation: agenda_SessionLocation ?? "", SpeakersSession: agenda_SpeakersDict ?? [
-                                "ID" : "314",
-                                "imageUrl" : "http:-b01d-582382a5795e.jpg"]
-                                , AgendaDate: agenda_date ?? "date", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String , RondomColor: agenda_rondomColor ?? "", AgendaType: agenda_Type ?? "", SpeakersIdImg: self.innovationSpeakerIDImgList))
+                                "ID" : "",
+                                "imageUrl" : ""]
+                                , AgendaDate: agenda_date ?? "", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String , RondomColor: agenda_rondomColor ?? "", AgendaType: agenda_Type ?? "", SpeakersIdImg: self.innovationSpeakerIDImgList))
                         }
                         index = index + 1
                         self.innovationSpeakerIDImgList.removeAll()
@@ -286,6 +320,7 @@ class InnovationVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // el pic w el view byt8iro
         let cell = tableView.dequeueReusableCell(withIdentifier: "innovationcell", for: indexPath) as! InnovationCell
         
         for i in 0..<innovationHeadList.count {
@@ -302,9 +337,32 @@ class InnovationVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        OpenSessionVC.AgednaOrFavourite = true
+        if  InnovationVC.pageSelect == "Innovation" {
+            OpenSessionVC.AgednaOrFavourite = "Innovation Day"
+        } else if InnovationVC.pageSelect == "Cyber" {
+          OpenSessionVC.AgednaOrFavourite = "Cyber Security"
+        }
+        else if InnovationVC.pageSelect == "Markting" {
+            OpenSessionVC.AgednaOrFavourite = "Digital Markting"
+        }
+        else {
+            OpenSessionVC.AgednaOrFavourite = "Innovation Day"
+
+        }
+        
+        
         tableView.deselectRow(at: indexPath, animated: true)
-        performSegue(withIdentifier: "innovationdetails", sender: innovationSessionList[indexPath.row])
+        for i in 0..<innovationHeadList.count  {
+            if indexPath.section == i {
+                if indexPath.section == 0{
+                    performSegue(withIdentifier: "innovationdetails", sender: innovationSessionList[indexPath.row])
+                }else {
+                    let headCountInt = innovationHeadCount[i - 1].headCount
+                    let selectRow = headCountInt! + indexPath.row
+                    performSegue(withIdentifier: "innovationdetails", sender: innovationSessionList[selectRow])
+                }
+            }
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

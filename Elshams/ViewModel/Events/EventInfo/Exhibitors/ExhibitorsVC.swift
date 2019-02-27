@@ -172,8 +172,11 @@ class ExhibitorsVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
         var indexPath = self.startupTableView.indexPathForRow(at: buttonPosition)
         //  StartupDetailsVC.sechadualeBTNSend = true
         let startUpId = (startUpList[indexPath!.row].startup_id)!
+        StartupDetailsVC.sechadualeBTNSend = true
+        
+        self.performSegue(withIdentifier: "exhibitorsdetail", sender: self.startUpList[indexPath!.row])
         print(startUpId)
-        Service.getServiceWithAuth(url: "\(URLs.getAvaliableAppoiments)/\(startUpId)") {
+      /*  Service.getServiceWithAuth(url: "\(URLs.getAvaliableAppoiments)/\(startUpId)") {
             (response) in
             print("this is SessionDetails ")
             print(response)
@@ -182,7 +185,7 @@ class ExhibitorsVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
             var index = 0
             var availableAppointmentListCount = 0
             
-            while iDNotNull {
+          /*  while iDNotNull {
                 let avaAppointment_ID = result[index]["appoimentID"].string
                 
                 if avaAppointment_ID == nil || avaAppointment_ID?.trimmed == "" ||
@@ -200,19 +203,19 @@ class ExhibitorsVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
                 index = index + 1
                 availableAppointmentListCount = self.availableAppointmentList.count
                 
-            }
-            if  availableAppointmentListCount != 0 {
+            } */
+           /* if  availableAppointmentListCount != 0 {
                 StartupDetailsVC.sechadualeBTNSend = true
                 
                 self.performSegue(withIdentifier: "exhibitorsdetail", sender: self.startUpList[indexPath!.row])
                 
-            } else {
+            } */ /*else {
                 let alert = UIAlertController(title: "Error!", message: "There's no Available Appointments", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alert, animated: true, completion: nil)
                 
-            }
-        }
+            } */
+        } */
         
     }
     func numberOfSections(in tableView: UITableView) -> Int {

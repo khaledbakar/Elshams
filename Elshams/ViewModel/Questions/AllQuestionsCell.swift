@@ -12,6 +12,7 @@ class AllQuestionsCell: UITableViewCell {
 
     @IBOutlet weak var answerTxt: UILabel!
     @IBOutlet weak var questionTxt: UILabel!
+    @IBOutlet weak var speakerName: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -23,6 +24,7 @@ class AllQuestionsCell: UITableViewCell {
     }
     func setAllQuestionCell(QuestionList:QuestionsData)  {
         questionTxt.text = QuestionList.questions
+        speakerName.text = QuestionList.questionSpeaker
         if QuestionList.answer == "" || QuestionList.answer == nil{
             answerTxt.text = "No Answer"
             answerTxt.textColor = UIColor.red

@@ -72,7 +72,9 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
                 let speaker_JobTitle = result[index]["jobTitle"].string
                 let speaker_CompanyName = result[index]["companyName"].string
                 let speaker_ImageUrl = result[index]["imageUrl"].string
-                let speaker_About = result[index]["linkedin"].string // linked in after edit
+                let speaker_About = result[index]["about"].string // linked in after edit
+                let speaker_LinkedInOut = result[index]["linkedin"].string // linked in after edit
+
                 let speaker_ContectInforamtion = result[index]["ContectInforamtion"].dictionaryObject
                 let speaker_Email = result[index]["ContectInforamtion"]["Email"].string
                 let speaker_Linkedin = result[index]["ContectInforamtion"]["linkedin"].string
@@ -85,7 +87,7 @@ class SpeakersVC: BaseViewController , UITableViewDataSource , UITableViewDelega
                     iDNotNull = false
                     break
                 }
-                self.speakerList.append(Speakers(SpeakerName: speaker_Name ?? "", JobTitle: speaker_JobTitle ?? "", CompanyName: speaker_CompanyName ?? "", SpImageUrl: speaker_ImageUrl ?? "", Speaker_id: speaker_ID ?? "", ContectInforamtion: speaker_ContectInforamtion ?? contect, About: speaker_About ?? ""))
+                self.speakerList.append(Speakers(SpeakerName: speaker_Name ?? "", JobTitle: speaker_JobTitle ?? "", CompanyName: speaker_CompanyName ?? "", SpImageUrl: speaker_ImageUrl ?? "", Speaker_id: speaker_ID ?? "", ContectInforamtion: speaker_ContectInforamtion ?? contect, About: speaker_About ?? "", LinkedIn: speaker_LinkedInOut ?? ""))
                 index = index + 1
                 self.speakerTableView.reloadData()
                 self.speakerCollectionView.reloadData()

@@ -13,7 +13,8 @@ import Alamofire
 import AlamofireImage
 import SwiftyJSON
 
-class StartupDetailsVC: UIViewController {
+class StartupDetailsVC: UIViewController ,UITextViewDelegate{
+    @IBOutlet weak var sendQuestionSmallContainer: UIView!
     var singleItem : StartUpsData?
     var startUpList = Array<StartUpsData>()
     var availableAppointmentList = Array<AvailableAppointment>()
@@ -26,7 +27,9 @@ class StartupDetailsVC: UIViewController {
     var startUp_ImageURl : String?
     var startUp_Appoimentstatus : String?
     var startUp_AppoimentTime : String?
+    @IBOutlet weak var questionText: UITextView!
     
+    @IBOutlet weak var sendQuestionMainContainer: UIView!
     
     @IBOutlet weak var aboutView: UIView!
     @IBOutlet weak var informationView: UIView!
@@ -72,18 +75,23 @@ class StartupDetailsVC: UIViewController {
         } */
         // pending and accept
        // if  singleItem?.appoimentStatus != nil && singleItem?.appoimentStatus != "notSent" {
+        sendQuestionMainContainer.isHidden = true
 
         if  singleItem?.appoimentStatus == "pending" || singleItem?.appoimentStatus == "accepted" {
             afterRescadualeFrame()
+            
         } else {
             defaultFrame()
+
         }
         if singleItem?.startupImageUrl == nil || singleItem?.startupImageUrl == "" {
             
         } else {
             Helper.loadImagesKingFisher(imgUrl: (singleItem?.startupImageUrl)!, ImgView: startUpLogo)
         }
-        
+        self.questionText.delegate = self
+        self.questionText.layer.borderWidth = 1.0
+        questionText.layer.borderColor = UIColor.red.cgColor
         startUpName.text = singleItem?.startupName
         startUp_Phone = singleItem?.contectInforamtion!["phone"] as! String
         startUpPhone.text = startUp_Phone
@@ -97,7 +105,7 @@ class StartupDetailsVC: UIViewController {
 
         } else {
             aboutView.isHidden = false
-            aboutStartUp.text = singleItem?.about
+            aboutStartUp.text = singleItem?.about?.htmlToString
 
         }
         
@@ -109,7 +117,8 @@ class StartupDetailsVC: UIViewController {
         
         if StartupDetailsVC.sechadualeBTNSend == true {
           // if  availableAppointmentList.count != 0 {
-            popUpContainerView.isHidden = false
+            //popUpContainerView.isHidden = false
+            sendQuestionMainContainer.isHidden = false
          /*  } else {
             let alert = UIAlertController(title: "Error!", message: "There's no Available Appointments", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
@@ -118,8 +127,12 @@ class StartupDetailsVC: UIViewController {
             
         } else
         {
-             popUpContainerView.isHidden = true
+            sendQuestionMainContainer.isHidden = true
+
+             //popUpContainerView.isHidden = true
         }
+        popUpContainerView.isHidden = true
+
         StartupDetailsVC.sechadualeBTNSend = false
 
         startUpLogo.layer.cornerRadius = startUpLogo.frame.width / 2
@@ -140,82 +153,65 @@ class StartupDetailsVC: UIViewController {
         startUpLinkedIn.isUserInteractionEnabled = true
         startUpLinkedIn.addGestureRecognizer(tapLinkedIn)
         
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(RegisterationVC.viewTapped(gestureRecognizer:)))
+        view.addGestureRecognizer(tapGesture)
       
 
     }
     
+    //MARK:- DismmKeyBoard
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillChangeFrame, object: nil)
+    }
     
-
-    func loadavailableAppointment(StartUpID:String)  {
-        if let  apiToken  = Helper.getApiToken() {
-
-        self.availableAppointmentList.removeAll()
-        Service.getServiceWithAuth(url: "\(URLs.getAvaliableAppoiments)/\(StartUpID)") {
-            (response) in
-            print("this is SessionDetails ")
-            print(response)
-            let result = JSON(response)
-            var iDNotNull = true
-            var index = 0
-            while iDNotNull {
-                let avaAppointment_ID = result[index]["appoimentID"].string
-                
-                if avaAppointment_ID == nil || avaAppointment_ID?.trimmed == "" ||
-                    avaAppointment_ID == "null" || avaAppointment_ID == "nil"{
-                    iDNotNull = false
-                    self.popUpViewMethod()
-                    break
-                }
-            let avaAppointment = result[index].dictionaryObject
-            let avaAppointment_Name = result[index]["appoimentName"].string
-            
-            let avaAppointmentOptinal = ["appoimentName": "",
-                           "appoimentID": ""]
-            self.availableAppointmentList.append(AvailableAppointment(AvailableAppointmentDict: avaAppointment ?? avaAppointmentOptinal, AppoimentName: avaAppointment_Name ?? "name", AppoimentID: avaAppointment_ID ?? "id"))
-                index = index + 1
-                
-            }
+    
+    
+    func hideKyebad() {
+        questionText.resignFirstResponder()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.sendQuestionSmallContainer.endEditing(true)
+        sendQuestionSmallContainer.frame.origin.y = 0
+        
+    }
+    
+    @objc func keyboardWillChange(notification: Notification){
+        guard let keyboardRect = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+            return
         }
+        if  notification.name == Notification.Name.UIKeyboardWillShow ||
+            notification.name == Notification.Name.UIKeyboardWillChangeFrame {
+            // view.frame.origin.y = -150
+            sendQuestionMainContainer.frame.origin.y = -150
+            
         } else {
-            
+            sendQuestionMainContainer.frame.origin.y = 0
         }
+        print("Keyboard will show \(notification.name.rawValue)")
+        //  view.frame.origin.y = -150
+    }
+    @objc func viewTapped(gestureRecognizer: UITapGestureRecognizer)  {
+        sendQuestionMainContainer.endEditing(true)
     }
     
-   
-    func popUpViewMethod()  {
-        //PopUp View
-        for index in 0..<availableAppointmentList.count {
-            frame.origin.x = 55
-            frame.origin.y = (45 * CGFloat(index)) + 75
-            frame.size = CGSize(width: 200 , height: 20.0)
-            
-            let lblApointmet = UILabel(frame: frame)
-            lblApointmet.text = availableAppointmentList[index].appoimentName
-            lblApointmet.tag = index+1
-            let titleLabelGest = UITapGestureRecognizer(target: self, action: #selector(StartupDetailsVC.labelChoiseFunc))
-            lblApointmet.isUserInteractionEnabled = true
-            lblApointmet.addGestureRecognizer(titleLabelGest)
-            
-            frameBtn.origin.x = 15
-            frameBtn.origin.y = (45 * CGFloat(index)) + 75
-            frameBtn.size = CGSize(width: 40 , height: 20.0)
-            
-            var btnCheck = UIButton(frame: frameBtn)
-            btnCheck.setTitle("\(index)", for: .normal)
-            btnCheck.isSelected = false
-            btnCheck.addTarget(self, action: #selector(butClic(_:)), for: .touchUpInside)
-            btnCheck.setImage(UIImage(named: "unCheck"), for: UIControlState.normal)
-            btnCheck.setImage(UIImage(named: "check-1"), for: UIControlState.selected)
-            btnCheck.tag = (index + 1) * 2
-            
-            popUpView.addSubview(lblApointmet)
-            popUpView.addSubview(btnCheck)
-        }
-    }
-
+    
    
     @objc func tapLinkedInFunc(sender:UIGestureRecognizer) {
-        if let openURL = URL(string: "linkedin://"){
+        guard let url = URL(string: (self.startUp_Linkedin)!)
+            else {
+                return
+        }
+        let safariVC = SFSafariViewController(url: url)
+        present(safariVC, animated: true, completion: nil)
+     /*   if let openURL = URL(string: "linkedin://"){
             let canOpen = UIApplication.shared.canOpenURL(openURL)
             print("\(canOpen)")
         }
@@ -230,7 +226,7 @@ class StartupDetailsVC: UIViewController {
             let alert = UIAlertController(title: "\(apppName) Error...", message: "the app named \(apppName) not found,please install it fia app store.", preferredStyle: .alert )
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
-        }
+        } */
     }
     
     @objc func tapMailFunc(sender:UIGestureRecognizer) {
@@ -250,7 +246,14 @@ class StartupDetailsVC: UIViewController {
         UIApplication.shared.isStatusBarHidden = false
     }
     @objc func tapCallFunc(sender:UIGestureRecognizer) {
-        PhoneCall.makeCall(PhoneNumber: (self.startUp_Phone)!)
+        
+        let phonelStr = (startUpPhone.text)!
+        if phonelStr == "NA" || phonelStr == "" {
+            
+        }else {
+            PhoneCall.makeCall(PhoneNumber: phonelStr)
+        }
+      //  PhoneCall.makeCall(PhoneNumber: (self.startUp_Phone)!)
     }
     
    /* @objc func tapOpenLinkFunc(sender:UIGestureRecognizer) {
@@ -263,38 +266,97 @@ class StartupDetailsVC: UIViewController {
         
     } */
     
-    
-    func defaultFrame() {
-        rescadualeView.isHidden = true
-        informationTopConstraint.constant = -46
-    }
-    
-    func afterRescadualeFrame() {
-     /*
-        popUpContainerView.isHidden = true
-        rescadualeView.isHidden = false
-        informationTopConstraint.constant = 65
-        */
-    }
-    @IBAction func cancelAppointment(_ sender: Any) {
-        defaultFrame()
-        btnRightBar()
-    }
-    
-    @IBAction func rescadualeAppointment(_ sender: Any) {
-        availableAppointmentList.removeAll()
-        loadavailableAppointment(StartUpID: (singleItem?.startup_id)!)
-      
-        //some issue think loading
-        if  availableAppointmentList.count != 0 {
-        popUpContainerView.isHidden = false
+    //MARK:- LoadSessionData
+    func loadSessionData(StartUpID:String)  {
+        if let  apiToken  = Helper.getApiToken() {
+            
+            Service.getServiceWithAuth(url: "\(URLs.getStartupDetailsByID)/\(StartUpID)") {
+                (response) in
+                print("this is SessionDetails ")
+                print(response)
+                let result = JSON(response)
+                // get startUp
+                let startUp_ID = result["id"].string
+                self.startUp_Name = result["startupName"].string
+                self.startUp_About = result["about"].string
+                self.startUp_ImageURl = result["imageURl"].string
+                self.startUp_Appoimentstatus = result["appoimentstatus"].string
+                self.startUp_AppoimentTime = result["AppoimentTime"].string
+                let startUp_ContectInforamtion = result["ContectInforamtion"].dictionaryObject
+                self.startUp_Email = result["ContectInforamtion"]["Email"].string
+                self.startUp_Linkedin = result["ContectInforamtion"]["linkedin"].string
+                self.startUp_Phone = result["ContectInforamtion"]["phone"].string
+                
+                let contect = ["Email": "",
+                               "linkedin": "",
+                               "phone": ""]
+                
+                self.startUpList.append(StartUpsData(StartupName: self.startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: self.startUp_ImageURl ?? "" , StartUpAbout: self.startUp_About ?? "", AppoimentStatus: self.startUp_Appoimentstatus ?? "" , AppoimentTime: self.startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                
+                self.startUpName.text = self.startUp_Name
+                self.startUpMail.text = self.startUp_Email
+                self.startUpPhone.text = self.startUp_Phone
+                self.startUpLinkedIn.text = self.startUp_Linkedin
+                if self.startUp_About == nil || self.startUp_About == "" {
+                    self.aboutView.isHidden = true
+                    
+                } else {
+                    self.aboutView.isHidden = false
+                    self.aboutStartUp.text  = self.startUp_About?.htmlToString
+                    
+                }
+                // self.sureMessageTxt
+                Helper.loadImagesKingFisher(imgUrl: (self.singleItem?.startupImageUrl)!, ImgView: self.startUpLogo)
+                
+                if self.startUp_Appoimentstatus != nil && self.startUp_Appoimentstatus != "notSent" {
+                    self.afterRescadualeFrame()
+                } else {
+                    self.defaultFrame()
+                }
+            }
         } else {
-            let alert = UIAlertController(title: "Error!", message: "There's no Available Appointments", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
+            Service.getService(url: "\(URLs.getStartupDetailsByID)/\(StartUpID)") {
+                (response) in
+                print("this is SessionDetails ")
+                print(response)
+                let result = JSON(response)
+                // get startUp
+                let startUp_ID = result["id"].string
+                self.startUp_Name = result["startupName"].string
+                self.startUp_About = result["about"].string
+                self.startUp_ImageURl = result["imageURl"].string
+                self.startUp_Appoimentstatus = result["appoimentstatus"].string
+                self.startUp_AppoimentTime = result["AppoimentTime"].string
+                let startUp_ContectInforamtion = result["ContectInforamtion"].dictionaryObject
+                self.startUp_Email = result["ContectInforamtion"]["Email"].string
+                self.startUp_Linkedin = result["ContectInforamtion"]["linkedin"].string
+                self.startUp_Phone = result["ContectInforamtion"]["phone"].string
+                
+                let contect = ["Email": "",
+                               "linkedin": "",
+                               "phone": ""]
+                
+                self.startUpList.append(StartUpsData(StartupName: self.startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: self.startUp_ImageURl ?? "Image" , StartUpAbout: self.startUp_About ?? "About", AppoimentStatus: self.startUp_Appoimentstatus ?? "appoimentstatus" , AppoimentTime: self.startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                
+                self.startUpName.text = self.startUp_Name
+                self.startUpMail.text = self.startUp_Email
+                self.startUpPhone.text = self.startUp_Phone
+                self.startUpLinkedIn.text = self.startUp_Linkedin
+                self.aboutStartUp.text  = self.startUp_About?.htmlToString
+                // self.sureMessageTxt
+                Helper.loadImagesKingFisher(imgUrl: (self.startUp_ImageURl)!, ImgView: self.startUpLogo)
+                
+                if self.startUp_Appoimentstatus != nil && self.startUp_Appoimentstatus != "notSent" {
+                    self.afterRescadualeFrame()
+                } else {
+                    self.defaultFrame()
+                }
+            }
         }
-        btnRightBar()
     }
+    
+    
+   
     
     //MARK:- RadioButtonsSelection
 
@@ -339,7 +401,7 @@ class StartupDetailsVC: UIViewController {
         print(appointmentSelect)
     }
     
-
+    //MARK:- BarButton
     func btnRightBar()  {
         if let  apiToken  = Helper.getApiToken() {
         let btnAppointment = UIButton(type: UIButton.ButtonType.system)
@@ -354,9 +416,133 @@ class StartupDetailsVC: UIViewController {
         }
     }
     
+    //MARK:- SendQuestionMethods
+    func sendQeusetionMethod()  {
+        if let apiToken = Helper.getApiToken() {
+            let questionTextSend = questionText.text
+            if questionTextSend?.trimmed == "" || questionTextSend == nil {
+                let alert = UIAlertController(title: "oPP's!", message: "You didn't write your question!", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            } else {
+                let questionCheckParam : Parameters =
+                    ["StartUPID": "\((self.singleItem?.startup_id)!)",
+                        
+                        "QuestionDescription": "\((questionTextSend)!)"]
+                OpenSessionVC.likeFlag = "faveMethod"
+                
+                Service.postServiceWithAuth(url: URLs.askStartupExhibtorQuestion, parameters: questionCheckParam) {
+                    (response) in
+                    print(response)
+                    if response == nil {
+                        OpenSessionVC.likeFlag = ""
+                        self.questionText.text = ""
+                        self.sendQuestionMainContainer.isHidden = true
+                        let alert = UIAlertController(title: "Succes!", message: "your question is send!", preferredStyle: UIAlertControllerStyle.alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                        //        self.sendQuestMainContainer.isHidden = true
+                        
+                    }
+                }
+                
+            }
+        } else {
+            let alert = UIAlertController(title: "NotAllowed!", message: "you must sign in to do this part!", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    
+    }
+    @IBAction func sendQuestion(_ sender: Any) {
+        sendQeusetionMethod()
+    }
+    @IBAction func dismissQuestionContainer(_ sender: Any) {
+        
+        sendQuestionMainContainer.isHidden = true
+        hideKyebad()
+
+    }
     @objc func popUpTool() {
-        if  availableAppointmentList.count != 0 {
+        sendQuestionMainContainer.isHidden = false
+
+   /*     if  availableAppointmentList.count != 0 {
         popUpContainerView.isHidden = false
+        } else {
+            let alert = UIAlertController(title: "Error!", message: "There's no Available Appointments", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        } */
+        btnRightBar()
+    }
+    
+    //MARK:- Appointment
+    
+    func popUpViewMethod()  {
+        //PopUp View
+        for index in 0..<availableAppointmentList.count {
+            frame.origin.x = 55
+            frame.origin.y = (45 * CGFloat(index)) + 75
+            frame.size = CGSize(width: 200 , height: 20.0)
+            
+            let lblApointmet = UILabel(frame: frame)
+            lblApointmet.text = availableAppointmentList[index].appoimentName
+            lblApointmet.tag = index+1
+            let titleLabelGest = UITapGestureRecognizer(target: self, action: #selector(StartupDetailsVC.labelChoiseFunc))
+            lblApointmet.isUserInteractionEnabled = true
+            lblApointmet.addGestureRecognizer(titleLabelGest)
+            
+            frameBtn.origin.x = 15
+            frameBtn.origin.y = (45 * CGFloat(index)) + 75
+            frameBtn.size = CGSize(width: 40 , height: 20.0)
+            
+            var btnCheck = UIButton(frame: frameBtn)
+            btnCheck.setTitle("\(index)", for: .normal)
+            btnCheck.isSelected = false
+            btnCheck.addTarget(self, action: #selector(butClic(_:)), for: .touchUpInside)
+            btnCheck.setImage(UIImage(named: "unCheck"), for: UIControlState.normal)
+            btnCheck.setImage(UIImage(named: "check-1"), for: UIControlState.selected)
+            btnCheck.tag = (index + 1) * 2
+            
+            popUpView.addSubview(lblApointmet)
+            popUpView.addSubview(btnCheck)
+        }
+    }
+    func defaultFrame() {
+        rescadualeView.isHidden = true
+        informationTopConstraint.constant = -46
+    }
+    
+    func afterRescadualeFrame() {
+        
+        /*     popUpContainerView.isHidden = true
+         rescadualeView.isHidden = false
+         informationTopConstraint.constant = 65 */
+        
+    }
+    @IBAction func cancelAppointment(_ sender: Any) {
+        /*   UIView.animate(withDuration: 0.9, animations: { () -> Void in
+         //   self.view.frame = CGRect(x: -UIScreen.main.bounds.size.width, y: 0, width: UIScreen.main.bounds.size.width,height: UIScreen.main.bounds.size.height)
+         //self.view.layoutIfNeeded()
+         //  self.view.backgroundColor = UIColor.clear
+         self.defaultFrame()
+         self.btnRightBar()
+         
+         }, completion: { (finished) -> Void in
+         // self.view.removeFromSuperview()
+         // self.removeFromParentViewController()
+         }) */
+        defaultFrame()
+        btnRightBar()
+    }
+    
+    @IBAction func rescadualeAppointment(_ sender: Any) {
+        availableAppointmentList.removeAll()
+        loadavailableAppointment(StartUpID: (singleItem?.startup_id)!)
+        
+        //some issue think loading
+        if  availableAppointmentList.count != 0 {
+            popUpContainerView.isHidden = false
         } else {
             let alert = UIAlertController(title: "Error!", message: "There's no Available Appointments", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
@@ -364,8 +550,6 @@ class StartupDetailsVC: UIViewController {
         }
         btnRightBar()
     }
-    
-    
     @IBAction func savePopUpData(_ sender: Any) {
       
         if self.appointmentSelect_Name != nil {
@@ -395,99 +579,46 @@ class StartupDetailsVC: UIViewController {
         }
 
     }
-    
+    func loadavailableAppointment(StartUpID:String)  {
+        if let  apiToken  = Helper.getApiToken() {
+            
+            self.availableAppointmentList.removeAll()
+            Service.getServiceWithAuth(url: "\(URLs.getAvaliableAppoiments)/\(StartUpID)") {
+                (response) in
+                print("this is SessionDetails ")
+                print(response)
+                let result = JSON(response)
+                var iDNotNull = true
+                var index = 0
+                while iDNotNull {
+                    let avaAppointment_ID = result[index]["appoimentID"].string
+                    
+                    if avaAppointment_ID == nil || avaAppointment_ID?.trimmed == "" ||
+                        avaAppointment_ID == "null" || avaAppointment_ID == "nil"{
+                        iDNotNull = false
+                        self.popUpViewMethod()
+                        break
+                    }
+                    let avaAppointment = result[index].dictionaryObject
+                    let avaAppointment_Name = result[index]["appoimentName"].string
+                    
+                    let avaAppointmentOptinal = ["appoimentName": "",
+                                                 "appoimentID": ""]
+                    self.availableAppointmentList.append(AvailableAppointment(AvailableAppointmentDict: avaAppointment ?? avaAppointmentOptinal, AppoimentName: avaAppointment_Name ?? "name", AppoimentID: avaAppointment_ID ?? "id"))
+                    index = index + 1
+                    
+                }
+            }
+        } else {
+            
+        }
+    }
     @IBAction func buDismissPopUp(_ sender: Any) {
         popUpContainerView.isHidden = true
 
     }
-    func loadSessionData(StartUpID:String)  {
-        if let  apiToken  = Helper.getApiToken() {
-            
-            Service.getServiceWithAuth(url: "\(URLs.getStartupDetailsByID)/\(StartUpID)") {
-                (response) in
-                print("this is SessionDetails ")
-                print(response)
-                let result = JSON(response)
-                // get startUp
-                let startUp_ID = result["id"].string
-                self.startUp_Name = result["startupName"].string
-                self.startUp_About = result["about"].string
-                self.startUp_ImageURl = result["imageURl"].string
-                self.startUp_Appoimentstatus = result["appoimentstatus"].string
-                self.startUp_AppoimentTime = result["AppoimentTime"].string
-                let startUp_ContectInforamtion = result["ContectInforamtion"].dictionaryObject
-                self.startUp_Email = result["ContectInforamtion"]["Email"].string
-                self.startUp_Linkedin = result["ContectInforamtion"]["linkedin"].string
-                self.startUp_Phone = result["ContectInforamtion"]["phone"].string
-                
-                let contect = ["Email": "",
-                               "linkedin": "",
-                               "phone": ""]
-                
-                self.startUpList.append(StartUpsData(StartupName: self.startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: self.startUp_ImageURl ?? "Image" , StartUpAbout: self.startUp_About ?? "", AppoimentStatus: self.startUp_Appoimentstatus ?? "" , AppoimentTime: self.startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
-                
-                self.startUpName.text = self.startUp_Name
-                self.startUpMail.text = self.startUp_Email
-                self.startUpPhone.text = self.startUp_Phone
-                self.startUpLinkedIn.text = self.startUp_Linkedin
-                if self.startUp_About == nil || self.startUp_About == "" {
-                    self.aboutView.isHidden = true
-                    
-                } else {
-                    self.aboutView.isHidden = false
-                    self.aboutStartUp.text  = self.startUp_About
-                    
-                }
-                // self.sureMessageTxt
-                Helper.loadImagesKingFisher(imgUrl: (self.singleItem?.startupImageUrl)!, ImgView: self.startUpLogo)
-
-                if self.startUp_Appoimentstatus != nil && self.startUp_Appoimentstatus != "notSent" {
-                    self.afterRescadualeFrame()
-                } else {
-                    self.defaultFrame()
-                }
-            }
-        } else {
-            Service.getService(url: "\(URLs.getStartupDetailsByID)/\(StartUpID)") {
-                (response) in
-                print("this is SessionDetails ")
-                print(response)
-                let result = JSON(response)
-                // get startUp
-                let startUp_ID = result["id"].string
-                self.startUp_Name = result["startupName"].string
-                self.startUp_About = result["about"].string
-                self.startUp_ImageURl = result["imageURl"].string
-                self.startUp_Appoimentstatus = result["appoimentstatus"].string
-                self.startUp_AppoimentTime = result["AppoimentTime"].string
-                let startUp_ContectInforamtion = result["ContectInforamtion"].dictionaryObject
-                self.startUp_Email = result["ContectInforamtion"]["Email"].string
-                self.startUp_Linkedin = result["ContectInforamtion"]["linkedin"].string
-                self.startUp_Phone = result["ContectInforamtion"]["phone"].string
-                
-                let contect = ["Email": "",
-                               "linkedin": "",
-                               "phone": ""]
-                
-                self.startUpList.append(StartUpsData(StartupName: self.startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: self.startUp_ImageURl ?? "Image" , StartUpAbout: self.startUp_About ?? "About", AppoimentStatus: self.startUp_Appoimentstatus ?? "appoimentstatus" , AppoimentTime: self.startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
-                
-                self.startUpName.text = self.startUp_Name
-                self.startUpMail.text = self.startUp_Email
-                self.startUpPhone.text = self.startUp_Phone
-                self.startUpLinkedIn.text = self.startUp_Linkedin
-                self.aboutStartUp.text  = self.startUp_About
-                // self.sureMessageTxt
-                Helper.loadImagesKingFisher(imgUrl: (self.startUp_ImageURl)!, ImgView: self.startUpLogo)
-
-                if self.startUp_Appoimentstatus != nil && self.startUp_Appoimentstatus != "notSent" {
-                    self.afterRescadualeFrame()
-                } else {
-                    self.defaultFrame()
-                }
-            }
-        }
-    }
     
+   
 }
 
 extension StartupDetailsVC : MFMailComposeViewControllerDelegate {

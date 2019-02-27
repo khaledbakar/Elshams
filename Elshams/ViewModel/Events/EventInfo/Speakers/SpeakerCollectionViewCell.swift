@@ -51,7 +51,7 @@ class SpeakerCollectionViewCell: UICollectionViewCell {
         speakerColName.text = speakerList.name
         speakerColJobTitle.text = speakerList.jobTitle
         speakerColJobDescribtion.text = speakerList.companyName
-        let linkedIn = speakerList.about
+        let linkedIn = speakerList.linkedIn
         if linkedIn == "" || linkedIn == nil {
             linkedInImgBtn.isHidden = true
             linkedInBtn.isHidden = true

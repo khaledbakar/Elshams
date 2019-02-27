@@ -71,21 +71,7 @@ class Service: NSObject {
             }
         }
     }
-    //image
- /*   static func imgUrl(imgUrl:String,imageSet:UIImage)  {
-        if let imagUrlAl = imgUrl as? String {
-            Alamofire.request(imagUrlAl).responseImage(completionHandler: { (response) in
-                print(response)
-                if let image = response.result.value {
-                    DispatchQueue.main.async{
-                        imageSet.image = image
-                    }
-                }
-            })
-        }
-    }
-    */
-    
+
     // POST Services
     static func postService(url: String, parameters: [String:Any], callback: @escaping (JSON?) -> ()) {
         

@@ -14,11 +14,14 @@ class QuestionsData {
         var answer : String?
        // var answerArr :[String]?
         var questionTimeStamp : String?
-    init(Questions:String,Answer:String,QuestionsID:String,QuestionTimeStamp:String) { //,AnswerArr:[String]
+        var questionSpeaker : String?
+
+    init(Questions:String,Answer:String,QuestionsID:String,QuestionSpeaker:String,QuestionTimeStamp:String) { //,AnswerArr:[String]
             self.questions = Questions
             self.answer = Answer
             self.questionsID = QuestionsID
             self.questionTimeStamp = QuestionTimeStamp
+            self.questionSpeaker = QuestionSpeaker
         
         }
 }

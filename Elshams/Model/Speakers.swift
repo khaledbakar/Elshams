@@ -15,6 +15,8 @@ class Speakers {
     var companyName : String?
     var contectInforamtion :[String:Any]?
     var speakerImageUrl :String?
+    var linkedIn : String?
+
 /*
     var jobDescribition : String?
     var facebookLink :String?
@@ -24,7 +26,7 @@ class Speakers {
     var activeOrNot :Bool?*/
 
 
-    init(SpeakerName:String,JobTitle:String,CompanyName:String,SpImageUrl:String,Speaker_id : String,ContectInforamtion:[String:Any],About:String) {  //,FacebookInLink:String,Phone:String,Mail:String,About:String,Website:String,ActiveOrNot:Bool
+    init(SpeakerName:String,JobTitle:String,CompanyName:String,SpImageUrl:String,Speaker_id : String,ContectInforamtion:[String:Any],About:String,LinkedIn : String) {  //,FacebookInLink:String,Phone:String,Mail:String,About:String,Website:String,ActiveOrNot:Bool
         self.name = SpeakerName
         self.about = About
         self.jobTitle = JobTitle
@@ -32,6 +34,8 @@ class Speakers {
         self.speaker_id = Speaker_id
         self.contectInforamtion = ContectInforamtion
         self.companyName = CompanyName
+        self.linkedIn = LinkedIn
+
         /* self.facebookLink = FacebookInLink
          self.phone = Phone
          self.mail = Mail

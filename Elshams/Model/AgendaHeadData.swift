@@ -16,6 +16,4 @@ class AgendaHeadData {
         self.headDate = HeadDate
         self.headTitle = HeadTitle
     }
-
-
 }

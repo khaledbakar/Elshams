@@ -100,33 +100,28 @@ class AgendaCell: UITableViewCell {
          */
     //    let speaker1 = AgendaProgram.speakersSession![0]["imageUrl"]
         let speaker = AgendaProgram.speakersIdImg
-        if !(speaker?.isEmpty)! {
-            
-     //   }
-       // if speaker != nil {
+    if !(speaker?.isEmpty)! {
+       if speaker != nil {
         let sp1 = speaker![0].speakerImageUrl
-        let sp2 = speaker![1].speakerImageUrl
         if sp1 == nil {
-            speakerOneImage.isHidden = true
-        }else {
-            speakerOneImage.isHidden = false
-
-         //   imgUrl(imgUrl: sp1!, imageSpeakerView: speakerOneImage)
-            Helper.loadImagesKingFisher(imgUrl: sp1!, ImgView: speakerOneImage)
-
-        }
-        if sp2 == nil {
             speakerTwoImage.isHidden = true
         }else {
             speakerTwoImage.isHidden = false
-            Helper.loadImagesKingFisher(imgUrl: sp2!, ImgView: speakerTwoImage)
-
+            Helper.loadImagesKingFisher(imgUrl: sp1!, ImgView: speakerTwoImage)
+        }
+        if (speaker?.count)! > 1 {
+        let sp2 = speaker![1].speakerImageUrl
+        if sp2 == nil {
+            speakerOneImage.isHidden = true
+        }else {
+            speakerOneImage.isHidden = false
+            Helper.loadImagesKingFisher(imgUrl: sp2!, ImgView: speakerOneImage)
+        }
         }
         } else {
             speakerOneImage.isHidden = true
-
             speakerTwoImage.isHidden = true
-
+        }
         }
         
      /*  switch IndexPath % 3 {
