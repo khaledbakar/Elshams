@@ -119,24 +119,21 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
                     self.agendaHeadCount.append(AgenaHeadCountIndex(HeadCount: self.AgendaHeadCounter!))
                 }
                 self.AgendaHeadCounter = 0
-                
             }
             else if agenda_Type == "session" {
                 self.AgendaHeadCounter =  self.AgendaHeadCounter!  + 1
-
                 self.agendaSessionList.append(ProgramAgendaItems(Agenda_ID: agenda_ID!, SessionTitle: agenda_sessionTitle ?? "", SessionTime: agenda_Time ?? "", SessionLocation: agenda_SessionLocation ?? "", SpeakersSession: agenda_SpeakersDict ?? ["":""]
                     , AgendaDate: agenda_date ?? "", FavouriteSession: agenda_isFavourate ?? true , FavouriteSessionStr: agenda_IsFavourate_String ?? "" , RondomColor: agenda_rondomColor ?? "", AgendaType: agenda_Type ?? "", SpeakersIdImg: self.agendaSpeakerIDImgList))
-                
                  // ?? [[ "ID" : "314","imageUrl" : "http:-b01d-582382a5795e.jpg"]] as! [[String : Any]]
             }
-            
             index = index + 1
+            self.agendaSpeakerIDImgList.removeAll()
+
             self.favourSessionTableView.reloadData()
             self.activeLoader.isHidden = true
             self.activeLoader.stopAnimating()
             self.favourSessionTableView.isHidden = false
             self.noDataErrorContainer.isHidden = true
-
         }
         }
         else {
@@ -217,6 +214,9 @@ class MyFavouritesVC: BaseViewController , UITableViewDelegate , UITableViewData
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "myfavacell", for: indexPath) as! MyFavouritesCell
+        cell.speakerOneImage.image = nil
+        cell.speakerTwoImage.image = nil
+        cell.cellColor.backgroundColor = nil
 
         for i in 0..<agendaHeadList.count {
             if indexPath.section == i {

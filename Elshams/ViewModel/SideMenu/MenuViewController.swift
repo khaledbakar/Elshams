@@ -32,8 +32,8 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
     @IBOutlet weak var userProfile: UIImageView!
     
     var btnMenu : UIButton!
-    var SideMenuTitles = ["TimeLine","Myfavorites","Agenda","Innovation Day","Cyber Security","Digital Markting","Speakers","Sponsers","Exhibitors","News","Notifications","Questions","Appointment","Settings","Logout"] //,"AllEvents" "Networks","Startups",
-    var SideMenuIcons = ["home","favourite","agenda","agenda","agenda","agenda","speaker","sponsers","startup","news","notifications","questation","appointment","home","logout"]//"events", "networks","startup",
+    var SideMenuTitles = ["TimeLine","Myfavorites","Agenda","Innovation Day","Cyber Security","Digital Markting","Speakers","Sponsers","Exhibitors","News","Notifications","Questions","ExhibitorsQuestions","Settings","Logout"] //,"AllEvents" "Networks","Startups","Appointment"
+    var SideMenuIcons = ["home","favourite","agenda","agenda","agenda","agenda","speaker","sponsers","startup","news","notifications","questation","questation","home","logout"]//"events", "networks","startup", "appointment",
     @IBOutlet weak var btnCloseMenuOverlay: UIButton!
     var delegate : SlideMenuDelegate?
     override func viewDidLoad() {
@@ -212,16 +212,19 @@ class MenuViewController: UIViewController , UITableViewDelegate , UITableViewDa
     
     }
         
-        case 12 :
+       /* case 12 :
             if let  apiToken  = Helper.getApiToken() {
             controllerSelect = "AppointmentContainer"
             } else {
                 controllerSelect = "NotLogin"
                
-            }
+            } */
     /*    case 11 :
             controllerSelect = "AllMainEvents" //EventContainer
             MenuViewController.agendaEventOrMenu = true */
+        case 12 :
+            controllerSelect = "ExhabitorsQuestions"
+
         case 13 :
              if let  apiToken  = Helper.getApiToken() {
             controllerSelect = "Settings"

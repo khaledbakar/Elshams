@@ -69,6 +69,7 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        imageProfileB64 = ""
         profileImg.layer.cornerRadius = profileImg.frame.width / 2
         profileImg.clipsToBounds = true
         
@@ -93,6 +94,7 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
         }
         
          NotificationCenter.default.addObserver(self, selector: #selector(succesUpdate), name: NSNotification.Name("SuccesUpdate"), object: nil)
+          NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
@@ -133,6 +135,27 @@ class SettingsVC: UIViewController  , UIImagePickerControllerDelegate, UINavigat
         let alert = UIAlertController(title: "Succes!", message: "Your data is Updated!", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    @objc func errorAlert(){
+        if  SettingsVC.udapatedMessage == "" {
+            let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            // startupTableView.isHidden = true
+            activityLoader.isHidden = true
+            activityLoader.stopAnimating()
+            //reload after
+        } else {
+            let alert = UIAlertController(title: "Error!", message: "Check Your Data !", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            // startupTableView.isHidden = true
+            activityLoader.isHidden = true
+            activityLoader.stopAnimating()
+            //reload after
+            //
+        }
     }
     
     deinit {

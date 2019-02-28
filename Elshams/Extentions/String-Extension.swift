@@ -23,4 +23,12 @@ extension String {
     var trimmed: String {
         return self.trimmingCharacters(in: .whitespaces)
     }
+    
+    func fillZeroLeft(_ length: Int) -> String {
+        if self.characters.count < length {
+            return String.init(repeating: "0", count: length-self.characters.count) + self
+        } else {
+            return self
+        }
+    }
 }

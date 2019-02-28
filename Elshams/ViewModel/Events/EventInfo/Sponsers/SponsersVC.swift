@@ -18,7 +18,8 @@ class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSour
     @IBOutlet weak var activeLoader: UIActivityIndicatorView!
     @IBOutlet weak var sponserTableView: UITableView!
     @IBOutlet weak var sponserCollectionView: UICollectionView!
-    
+    var refreshControl : UIRefreshControl?
+
     @IBOutlet weak var shapesContainerView: UIView!
     var sponserList = Array<Sponsers>()
     override func viewDidLoad() {
@@ -36,11 +37,26 @@ class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSour
         noDataErrorContainer.isHidden = true
 
           NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
+       // addRefreshControl()
+
         loadAllSponserData()
      //   self.navigationItem.bar
 
     }
-    
+    func addRefreshControl() {
+        refreshControl = UIRefreshControl()
+        //  refreshControl?.tintColor = UIColor.red
+        refreshControl?.addTarget(self, action: #selector(refreshList), for: .valueChanged)
+        sponserTableView.addSubview(refreshControl!)
+    }
+    @objc func refreshList (){
+        //  list
+        
+        sponserList.removeAll()
+       
+        loadAllSponserData()
+        refreshControl?.endRefreshing()
+    }
     @objc func errorAlert(){
         
         let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
@@ -65,6 +81,8 @@ class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSour
                 var index = 0
                 while iDNotNull {
                     let sponser_ID = result[index]["ID"].string
+                    let sponser_Order = result[index]["order"].string
+                    
                     let sponser_Name = result[index]["name"].string
                     let sponser_Address = result[index]["address"].string
                     let sponser_ImageUrl = result[index]["imageUrl"].string
@@ -88,19 +106,23 @@ class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSour
                         iDNotNull = false
                         break
                     }
-                    self.sponserList.append(Sponsers(SponserName: sponser_Name ?? "name", SponserAddress: sponser_Address ?? "address", SponserImageURL: sponser_ImageUrl ?? "Image", SponserAbout: sponser_About ?? "ABout", SponserID: sponser_ID ?? "ID", ContectInforamtion: sponser_ContectInforamtion ?? contectOptionNil, Sponsertype: sponser_Sponsertype ?? sponserTypeOptionNil))
+                    self.sponserList.append(Sponsers(SponserName: sponser_Name ?? "", SponserAddress: sponser_Address ?? "", SponserImageURL: sponser_ImageUrl ?? "", SponserAbout: sponser_About ?? "", SponserID: sponser_ID ?? "", SponserOrder: sponser_Order ?? "", ContectInforamtion: sponser_ContectInforamtion ?? contectOptionNil, Sponsertype: sponser_Sponsertype ?? sponserTypeOptionNil))
                     index = index + 1
+                 /*
                     self.sponserTableView.reloadData()
                     self.sponserCollectionView.reloadData()
                     self.activeLoader.isHidden = true
                     self.activeLoader.stopAnimating()
                     self.sponserTableView.isHidden = false
                     self.sponserCollectionView.isHidden = true
-                    self.noDataErrorContainer.isHidden = true
+                    self.noDataErrorContainer.isHidden = true */
 
                     
                // }
             }
+                   
+                    self.filterSort()
+
             
         }
                 else {
@@ -114,7 +136,29 @@ class SponsersVC: BaseViewController , UITableViewDelegate , UITableViewDataSour
         }
     }
     
-    
+    func filterSort()  {
+       // sponserList.sorted(by:  { $0.sponserOrderInt > $1.sponserOrderInt } )
+        //sponserList.sorted(by:  { $0.sponserOrderInt > $1.sponserOrderInt } )
+        sponserList.sort { $0.sponserOrder!.localizedStandardCompare(($1.sponserOrder) ?? "") == .orderedAscending }
+        //  sponserList.sorted(by: { Float(($0.sponserOrder)!) ?? 0 > Float(($1.sponserOrder)!) ?? 0  })  //"\(0)\ "  "\(0)\ "
+//let sorTAR =
+     //   let maxLen = sponserList.lazy.map{$0.sponserOrder!.count}.max()!
+       //  sponserList.sorted(by: { (($0.sponserOrder?.fillZeroLeft(maxLen))!) > (($1.sponserOrder?.fillZeroLeft(maxLen))!)  })  //"\(0)\ "  "\(0)\ "
+       //  sponserList.sort {(0$.)}
+       // sponserList.sorted(by: { (($0.sponserOrder)!) > (($1.sponserOrder)!)  })  //"\(0)\ "  "\(0)\ "
+        //  sponserList.sorted(by: { Int(($0.sponserOrder)!) > Int(($1.sponserOrder)!)  })  //"\(0)\ "  "\(0)\ "
+
+       //sponserList.sorted(by:  { (($0.sponserOrderInt)) ?? 0 > ($1.sponserOrderInt) ?? 0 } )
+        //sponserList.sort()
+        print(sponserList)
+        self.sponserTableView.reloadData()
+        self.sponserCollectionView.reloadData()
+        self.activeLoader.isHidden = true
+        self.activeLoader.stopAnimating()
+        self.sponserTableView.isHidden = false
+        self.sponserCollectionView.isHidden = true
+        self.noDataErrorContainer.isHidden = true
+    }
     func btnRightBar()  {
         //  let btnSearch = UIButton(type: UIButton.ButtonType.system)
         let btnSearch = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.search, target: nil, action:  #selector(searchTool))

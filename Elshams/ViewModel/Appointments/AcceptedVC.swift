@@ -57,6 +57,8 @@ class AcceptedVC: BaseViewController , UITableViewDataSource ,UITableViewDelegat
             while iDNotNull {
                 let startUp_ID = result[index]["id"].string
                 let startUp_Name = result[index]["title"].string
+                let startUp_RankNo = result[index]["rankNo"].string
+
                 let startUp_Appoimentstatus = result[index]["appoimentstatus"].string
                 let startUp_AppoimentTime = result[index]["AppoimentTime"].string
                 let startUp_ImageUrl = result[index]["imageURl"].string
@@ -71,7 +73,7 @@ class AcceptedVC: BaseViewController , UITableViewDataSource ,UITableViewDelegat
                     iDNotNull = false
                     break
                 }
-                self.acceptedList.append(StartUpsData(StartupName: startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: startUp_ImageUrl ?? "Image", StartUpAbout: startUp_About ?? "about", AppoimentStatus: startUp_Appoimentstatus ?? "Appointmentstatus", AppoimentTime: startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                self.acceptedList.append(StartUpsData(StartupName: startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: startUp_ImageUrl ?? "Image", StartUpAbout: startUp_About ?? "about", AppoimentStatus: startUp_Appoimentstatus ?? "Appointmentstatus", AppoimentTime: startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect, StartupOrder: startUp_RankNo ?? ""))
                 index = index + 1
                 self.acceptedTableView.reloadData()
                 self.activeLoader.isHidden = true

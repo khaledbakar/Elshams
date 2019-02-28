@@ -83,8 +83,10 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         addSlideMenuButton()
         loadAboutData()
 
-        hideShowFixedSponser(Order: true)
-        hideShowFixedSpeaker(Order: true)
+        hideShowFixedSponser(Order: false)
+        hideShowFixedSpeaker(Order: false)
+        speakerCollectionView.isHidden = true
+        sponserCollectionView.isHidden = true
 
         viewPostContols.isHidden = true
         imagePicker = UIImagePickerController()
@@ -328,6 +330,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
     
     //MARK:- Error Methods
     @objc func errorSignLikeAlert(){
+        
     let alert = UIAlertController(title: "Error", message: "You must sign in to Do this Part", preferredStyle: UIAlertControllerStyle.alert)
     alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
     self.present(alert, animated: true, completion: nil)
@@ -338,6 +341,8 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
         scrollSpeakerContainer.isHidden = true
         hideShowFixedSponser(Order: false)
         hideShowFixedSpeaker(Order: false)
+        sponserCollectionView.isHidden = true
+        speakerCollectionView.isHidden = true
         // is this error for Interner only ??
         let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
@@ -378,6 +383,9 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
              
             }
                 if !(self.speakerList.isEmpty){
+                    self.hideShowFixedSpeaker(Order: true)
+
+                    self.speakerCollectionView.isHidden = false
                     self.speakerCollectionView.reloadData()
 
                    // self.loadSpeakerScroll()
@@ -412,6 +420,8 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
             var index = 0
             while index < 8 {
                 let sponser_ID = result[index]["ID"].string
+                let sponser_Order = result[index]["order"].string
+              
                 let sponser_Name = result[index]["name"].string
                 let sponser_Address = result[index]["address"].string
                 let sponser_ImageUrl = result[index]["imageUrl"].string
@@ -435,7 +445,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
                     iDNotNull = false
                     break
                 }
-                self.sponserList.append(Sponsers(SponserName: sponser_Name ?? "", SponserAddress: sponser_Address ?? "", SponserImageURL: sponser_ImageUrl ?? "", SponserAbout: sponser_About ?? "", SponserID: sponser_ID ?? "", ContectInforamtion: sponser_ContectInforamtion ?? contectOptionNil, Sponsertype: sponser_Sponsertype ?? sponserTypeOptionNil))
+                self.sponserList.append(Sponsers(SponserName: sponser_Name ?? "", SponserAddress: sponser_Address ?? "", SponserImageURL: sponser_ImageUrl ?? "", SponserAbout: sponser_About ?? "", SponserID: sponser_ID ?? "", SponserOrder: sponser_Order ?? "", ContectInforamtion: sponser_ContectInforamtion ?? contectOptionNil, Sponsertype: sponser_Sponsertype ?? sponserTypeOptionNil))
                 index = index + 1
                
              
@@ -444,7 +454,12 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
             
                 if !(self.sponserList.isEmpty) {
                  //   self.loadSponserScroll()
-                    self.sponserCollectionView.reloadData()
+                    self.hideShowFixedSponser(Order: true)
+
+                    self.sponserCollectionView.isHidden = false
+
+                    self.filterSort()
+
 
           /*  self.sponserName1.text = self.sponserList[0].sponserName
             self.sponserName2.text = self.sponserList[1].sponserName
@@ -462,7 +477,15 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
             }
         }
     }
+    func filterSort()  {
+        
+        sponserList.sort { $0.sponserOrder!.localizedStandardCompare(($1.sponserOrder) ?? "") == .orderedAscending }
+        self.sponserCollectionView.reloadData()
+
+    }
+    
     //MARK:- AboutDataLoading
+        
     func loadAboutData()  {
         if let casheAbout = Helper.getCITAbout(){
             self.homeAbout.text = casheAbout
@@ -666,6 +689,7 @@ class TimeLineHomeVC: BaseViewController , UICollectionViewDataSource , UICollec
             return cell
         }
     }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
       //  NewsDetails.PostOrNews == true
         if collectionView == self.timeLineCollView {

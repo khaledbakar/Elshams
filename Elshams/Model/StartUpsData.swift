@@ -3,6 +3,7 @@ import Foundation
 class StartUpsData {
     var startupName : String?
     var startup_id : String?
+    var startupOrder : String?
     var about :String?
     var startupImageUrl :String?
     var appoimentStatus : String?
@@ -10,7 +11,7 @@ class StartUpsData {
     var contectInforamtion :[String:Any]?
     
     init(StartupName:String,StartupID:String,StartupImageURL:String,StartUpAbout:String,AppoimentStatus:String
-        ,AppoimentTime:String,ContectInforamtion :[String:Any]) {
+        ,AppoimentTime:String,ContectInforamtion :[String:Any],StartupOrder : String) {
         self.startup_id = StartupID
         self.startupName = StartupName
         self.startupImageUrl = StartupImageURL
@@ -18,6 +19,7 @@ class StartUpsData {
         self.appoimentStatus = AppoimentStatus
         self.appoimentTime = AppoimentTime
         self.contectInforamtion = ContectInforamtion
+        self.startupOrder = StartupOrder
 
     }
 }

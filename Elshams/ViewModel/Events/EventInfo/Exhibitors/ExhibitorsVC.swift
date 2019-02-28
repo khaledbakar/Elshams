@@ -20,6 +20,7 @@ class ExhibitorsVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
     
     @IBOutlet weak var activeLoader: UIActivityIndicatorView!
     @IBOutlet weak var noDataErrorContainer: UIView!
+    var refreshControl : UIRefreshControl?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +36,8 @@ class ExhibitorsVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
         noDataErrorContainer.isHidden = true
 
         NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
+      //  addRefreshControl() el tartib el 3shwa2i by5leha out of range
+
         loadAllStartUpData()
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -52,7 +55,20 @@ class ExhibitorsVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
         //
     }
     
-    
+    func addRefreshControl() {
+        refreshControl = UIRefreshControl()
+        //  refreshControl?.tintColor = UIColor.red
+        refreshControl?.addTarget(self, action: #selector(refreshList), for: .valueChanged)
+        startupTableView.addSubview(refreshControl!)
+    }
+    @objc func refreshList (){
+        //  list
+        
+        startUpList.removeAll()
+        
+        loadAllStartUpData()
+        refreshControl?.endRefreshing()
+    }
     func loadAllStartUpData()  {
         if let  apiToken  = Helper.getApiToken() {
             
@@ -67,6 +83,8 @@ class ExhibitorsVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
                     while iDNotNull {
                         let startUp_ID = result[index]["id"].string
                         let startUp_Name = result[index]["startupName"].string
+                        let startUp_RankNo = result[index]["rankNo"].string
+
                         let startUp_Appoimentstatus = result[index]["appoimentstatus"].string
                         let startUp_AppoimentTime = result[index]["AppoimentTime"].string
                         let startUp_ImageUrl = result[index]["imageURl"].string
@@ -81,15 +99,13 @@ class ExhibitorsVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
                             iDNotNull = false
                             break
                         }
-                        self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                        self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect, StartupOrder: startUp_RankNo ?? ""))
                         index = index + 1
-                        self.startupTableView.reloadData()
-                        self.activeLoader.isHidden = true
-                        self.activeLoader.stopAnimating()
-                        self.startupTableView.isHidden = false
-                        self.noDataErrorContainer.isHidden = true
+
 
                     }
+                    self.filterSort()
+
                 }
                     
                 else {
@@ -114,6 +130,8 @@ class ExhibitorsVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
                     while iDNotNull {
                         let startUp_ID = result[index]["id"].string
                         let startUp_Name = result[index]["startupName"].string
+                        let startUp_RankNo = result[index]["rankNo"].string
+
                         let startUp_Appoimentstatus = result[index]["appoimentstatus"].string
                         let startUp_AppoimentTime = result[index]["AppoimentTime"].string
                         let startUp_ImageUrl = result[index]["imageURl"].string
@@ -128,15 +146,12 @@ class ExhibitorsVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
                             iDNotNull = false
                             break
                         }
-                        self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                        self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect, StartupOrder: startUp_RankNo ?? ""))
                         index = index + 1
-                        self.startupTableView.reloadData()
-                        self.activeLoader.isHidden = true
-                        self.activeLoader.stopAnimating()
-                        self.startupTableView.isHidden = false
-                        self.noDataErrorContainer.isHidden = true
 
                     }
+                    self.filterSort()
+
                 } else {
                     self.noDataErrorContainer.isHidden = false
 
@@ -149,7 +164,14 @@ class ExhibitorsVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
             
         }
     }
-    
+    func filterSort()  {
+        startUpList.sort { $0.startupOrder!.localizedStandardCompare(($1.startupOrder) ?? "") == .orderedAscending }
+        self.startupTableView.reloadData()
+        self.activeLoader.isHidden = true
+        self.activeLoader.stopAnimating()
+        self.startupTableView.isHidden = false
+        self.noDataErrorContainer.isHidden = true
+    }
     func btnRightBar()  {
         //  let btnSearch = UIButton(type: UIButton.ButtonType.system)
         let btnSearch = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.search, target: nil, action:  #selector(searchTool))

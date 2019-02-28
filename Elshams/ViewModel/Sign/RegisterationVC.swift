@@ -60,6 +60,8 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
    // var userTriming:String?
     var passwordTriming:String?
     var emailTrim:String?
+   static var registerError:String?
+
     
     @IBOutlet weak var activeLoader: UIActivityIndicatorView!
     override func viewDidLoad() {
@@ -75,6 +77,7 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
         textFieldsDelegats()
         firstHideErrors()
         firstHideHintLabel()
+        RegisterationVC.registerError = ""
         NotificationCenter.default.addObserver(self, selector: #selector(succesRegister), name: NSNotification.Name("SuccesRegister"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
         activeLoader.isHidden = true
@@ -89,8 +92,16 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
 
     }
     @objc func errorAlert(){
-        
-        let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
+        if  RegisterationVC.registerError == "" {
+            let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            // startupTableView.isHidden = true
+            activeLoader.isHidden = true
+            activeLoader.stopAnimating()
+            //reload after
+            } else {
+        let alert = UIAlertController(title: "Error!", message: "Check Your Data !", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
        // startupTableView.isHidden = true
@@ -98,6 +109,7 @@ class RegisterationVC: UIViewController , UIImagePickerControllerDelegate, UINav
         activeLoader.stopAnimating()
         //reload after
         //
+    }
     }
     
     func textFieldsDelegats()  {

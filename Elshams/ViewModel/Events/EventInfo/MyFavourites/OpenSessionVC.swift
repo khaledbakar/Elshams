@@ -166,6 +166,7 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         questionTxt.layer.borderColor = UIColor.red.cgColor
         favouriteIcon.image = UIImage(named: "unlike-session")
         loadSessionData(SessionID: (singleItem?.agenda_ID)!)
+        
         self.navigationItem.title = OpenSessionVC.AgednaOrFavourite
 
        /* if  OpenSessionVC.AgednaOrFavourite == "Agenda" {
@@ -221,7 +222,7 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         if  OpenSessionVC.AgednaOrFavourite == "Agenda" {
            urlSession = URLs.getSessionDetails
         } else if OpenSessionVC.AgednaOrFavourite == "MyFavourites" {
-            urlSession = URLs.getSessionDetails
+            urlSession = URLs.getFavoriteSessionDetail
         }
         else if OpenSessionVC.AgednaOrFavourite == "Innovation Day" {
             urlSession = URLs.getInnovationSessionDetailsByID
@@ -418,7 +419,7 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
                     self.favouriteIcon.image = UIImage(named: "unlike-session")
                 }
                 //fix question
-                self.questionTxt.text = self.questVotes[0].question
+              //  self.questionTxt.text = self.questVotes[0].question
                 
                 self.mangeSessionDetails(SeseionTitle: self.session_Title ?? "", AgendaDate: self.session_Date ?? "", SessionTime:  self.session_Time ?? "", SessionLocation: self.session_Location ?? "", SessionDescribtion: self.session_Description ?? "", SpeakerName: self.speaker_Name ?? "", SpeakerJobTitle: self.speaker_JobTitle ?? "", SpeakerImgUrl: self.speaker_ImageUrl ?? "", QestionHead: self.question_head ?? "", Speakers: self.speakerList, QuestVotesParam: self.questVotes)
                 
@@ -659,13 +660,12 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         print(answerSelect)
         print(answerSelectTitle)
         print(tag - 1)
- 
         //  performSegue(withIdentifier: "newsdetail", sender: topNewsList[tag - 1]) //topNewsList[]
     }
     
     
     @objc func butClic (_ sender: UIButton){
-        for ind in 2..<questionAnsContainer.subviews.count {
+        for ind in 1..<questionAnsContainer.subviews.count {
             if ind % 2 == 1 {
                 print(ind)
                 print(questionAnsContainer.subviews[ind])
@@ -680,6 +680,7 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         //appointmentSelect = appointmentBooking[buTitleInt]
        // appointmentSelect = availableAppointmentList[buTitleInt].appoimentID
        // appointmentSelect_Name = availableAppointmentList[buTitleInt].appoimentName
+       // questVotes[initQuestion].questionAnswer[f]
         answerSelect = questVotes[initQuestion].questionAnswer[buTitleInt].answerID
         answerSelectTitle = questVotes[initQuestion].questionAnswer[buTitleInt].answerTitle
         print(answerSelect)
@@ -703,7 +704,6 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
         let buTitleInt = sender.tag - 1
         print(buTitleInt)
         print(answerSelect)
-
     }
     
     //MARK:- SpeakerNextBackButtons
@@ -775,7 +775,6 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
                     "speakerID": "\((speakerList[speakerCounterIndex].speaker_id)!)",
                     "question": "\((questionTextSend)!)"]
             OpenSessionVC.likeFlag = "faveMethod"
-
             Service.postServiceWithAuth(url: URLs.askQuestion, parameters: questionCheckParam) {
                 (response) in
                 print(response)
@@ -786,7 +785,6 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
                     alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                     self.present(alert, animated: true, completion: nil)
              //        self.sendQuestMainContainer.isHidden = true
-
                 }
             }
             
@@ -813,6 +811,39 @@ class OpenSessionVC: UIViewController , UITextViewDelegate{
     }
     
     @IBAction func vote(_ sender: Any) {
+        
+        if let  apiToken  = Helper.getApiToken() {
+            if initQuestion == nil || answerSelect == nil || answerSelect == "" {
+                let alert = UIAlertController(title: "oPP's!", message: "You didn't select the answer!", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            } else {
+                let questionCheckParam : Parameters =
+                    ["sessionID": "\((self.singleItem?.agenda_ID)!)",
+                        "questionID":  (questVotes[initQuestion].questionsID)!,
+                        "answerID": answerSelect!]
+                OpenSessionVC.likeFlag = "faveMethod"
+                
+                Service.postServiceWithAuth(url: URLs.voteAnswerQuesiton, parameters: questionCheckParam) {
+                    (response) in
+                    print(response)
+                    if response == nil {
+                        OpenSessionVC.likeFlag = ""
+                        self.questionTxt.text = ""
+                        let alert = UIAlertController(title: "Succes!", message: "your question is send!", preferredStyle: UIAlertControllerStyle.alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                        //        self.sendQuestMainContainer.isHidden = true
+                        
+                    }
+                }
+                
+            }        } else {
+            let alert = UIAlertController(title: "Not Available", message: "You must at first sign in!", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+      
     }
     
     //MARK:- NavTOSpeakerProfile

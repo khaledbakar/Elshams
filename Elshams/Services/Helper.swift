@@ -33,12 +33,15 @@ import UIKit
                 let user_Ispublic_str = result["isPublic"].string
                 
                 let settingUserData : [String] = [user_Email ?? "",user_Password ?? "",user_JobTitle ?? "",user_Phone ?? "",user_about ?? "",user_Name ?? "",user_CompanyName ?? "",user_Linkedin ?? "",user_ImageUrl ?? ""]
-                
+                if user_Email == nil && user_Email == ""{
+                   //
+                } else {
                 Helper.saveSettingUserData(UserData: settingUserData)
+                
                 Helper.saveUserName(UserName: user_Name!)
                 Helper.saveUserImageUrl(UserProfileUrl: user_ImageUrl!)
                 Helper.saveUserJobTitle(UserJobTitle: user_JobTitle!)
-           
+                }
             }
         }
     }

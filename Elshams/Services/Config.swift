@@ -13,7 +13,7 @@ import Alamofire
 
 struct URLs {
     static let main = "http://68.168.111.23:9603/api"
-    //static let main = "http://68.168.111.23:9700/api"
+  //static let main = "http://68.168.111.23:9700/api"
 
     static let login = main + "/account/Login"
     static let register = main + "/account/register"
@@ -25,9 +25,8 @@ struct URLs {
     static let getNews = main + "/Event/GetHome"
     // have item number and page number some issue that don't resposne page numers and current number
 
-    
-    
     static let getAgenda = main + "/Event/getAgenda"
+
     static let askQuestion = main + "/Event/askQuestion"
 
     static let getAllSpeaker = main + "/Event/getAllSpeaker" 
@@ -36,11 +35,15 @@ struct URLs {
     
     static let getAllStartups = main + "/Event/getAllStartups"
     static let getInnovation = main + "/Event/getInnovation"
+    static let voteAnswerQuesiton = main + "/Event/answerQuesiton"
+
+    
     static let getCyberSecurity = main + "/Event/getCyberSecurity"
     static let getDigitalMarketing = main + "/Event/getDigitalMarketing"
     static let getAllExhibitors = main + "/Event/getAllExhibitors"
 
-    static let askStartupExhibtorQuestion = main + "/Event/AddQuestionToStartUp"
+    static let askStartupExhibtorQuestion = main + "/Event/AddQuestionToExhibitors"
+    static let getQuestionsStratupExhibitors = main + "/Event/getQuestions_Stratup_Exhibitors"
 
 
 
@@ -59,6 +62,8 @@ struct URLs {
     
     static let getAllfavourate = main + "/Event/getAllfavourate"
     static let getSessionDetails = main + "/Event/getSessionDetails"
+    static let getFavoriteSessionDetail = main + "/Event/getFavoriteSessionDetails"
+
     static let getQuestions = main + "/Event/getQuestions"
     static let getAllNotification = main + "/Event/getAllNotification"
 

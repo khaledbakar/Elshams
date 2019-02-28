@@ -56,6 +56,8 @@ class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegat
             while iDNotNull {
                 let startUp_ID = result[index]["id"].string
                 let startUp_Name = result[index]["title"].string
+                let startUp_RankNo = result[index]["rankNo"].string
+
                 let startUp_Appoimentstatus = result[index]["appoimentstatus"].string
                 let startUp_AppoimentTime = result[index]["AppoimentTime"].string
                 let startUp_ImageUrl = result[index]["imageURl"].string
@@ -70,7 +72,7 @@ class PendingVC: BaseViewController , UITableViewDataSource , UITableViewDelegat
                     iDNotNull = false
                     break
                 }
-                self.pendingList.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                self.pendingList.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect, StartupOrder: startUp_RankNo ?? ""))
                 index = index + 1
                 self.pendingTableView.reloadData()
                 self.activeLoader.isHidden = true

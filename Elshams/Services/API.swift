@@ -136,6 +136,13 @@ class API: NSObject {
                 Helper.saveApiToken(Token: apiToken)
           //      completion(nil , true)
        
+            } else {
+                
+                let messageError = json["Message"].string
+                RegisterationVC.registerError = messageError
+                NotificationCenter.default.post(name: NSNotification.Name("ErrorConnections"), object: nil)
+
+                
             }
            
             /*  Alamofire.request(URLs.register, method: .post, parameters: paramRegister, encoding: URLEncoding.default, headers: nil).responseJSON { response in
@@ -188,11 +195,23 @@ class API: NSObject {
             print("This is response request : ")
             print(response)
             let json = JSON(response)
-            let message = json["message"].string
-            SettingsVC.udapatedMessage = message! //  "Message" : "An error has occurred." setting error
+            let message = json["message"].string  //   "message" : "Updated"
+
+            let messageError = json["Message"].string
+
             // in activity
-            NotificationCenter.default.post(name: NSNotification.Name("SuccesUpdate"), object: nil)
-            Helper.loadUserData()
+            if messageError == nil || messageError == ""{
+                SettingsVC.udapatedMessage = message! //  "Message" : "An error has occurred." setting error
+
+                NotificationCenter.default.post(name: NSNotification.Name("SuccesUpdate"), object: nil)
+                Helper.loadUserData()
+            }
+            else {
+                SettingsVC.udapatedMessage = messageError! //  "Message" : "An error has occurred." setting error
+
+                NotificationCenter.default.post(name: NSNotification.Name("ErrorConnections"), object: nil)
+
+            }
 
         
         }

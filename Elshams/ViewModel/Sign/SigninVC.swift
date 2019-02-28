@@ -13,7 +13,9 @@ import Alamofire
 //import AlamofireImage
 //import  MaterialComponents.MDCTextInputControllerFilled
 
-class SigninVC: UIViewController ,  UITextFieldDelegate { 
+class SigninVC: UIViewController ,  UITextFieldDelegate {
+    
+    @IBOutlet weak var forgetPassword: UIButton!
     @IBOutlet weak var signInView: UIView!
     @IBOutlet weak var activeLoginLoader: UIActivityIndicatorView!
     
@@ -41,7 +43,7 @@ class SigninVC: UIViewController ,  UITextFieldDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(loginError), name: NSNotification.Name("LoginError"), object: nil)
         //speaker static list
         
-   
+   forgetPassword.isHidden = true
        // userNameInputlTxt = MDCTextField()
       
      //   userNameInputlTxt.tintColor = UIColor.white

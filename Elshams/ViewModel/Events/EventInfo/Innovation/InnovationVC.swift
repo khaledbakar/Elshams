@@ -28,6 +28,7 @@ class InnovationVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
     var innovationSpeakerIDImgList = Array<AgendaSpeakerIdPic>()
     var innovationHeadCount = Array<AgenaHeadCountIndex>()
     var innovationHeadCounter :Int?
+    var refreshControl : UIRefreshControl?
 
     
     var innovationDate = Array<String>()
@@ -37,8 +38,19 @@ class InnovationVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
         super.viewDidLoad()
         addSlideMenuButton()
         //  btnRightBar()
-    
-        self.navigationItem.title = InnovationVC.pageSelect
+        if  InnovationVC.pageSelect == "Innovation" {
+             self.navigationItem.title = "Innovation Day"
+        } else if InnovationVC.pageSelect == "Cyber" {
+             self.navigationItem.title = "Cyber Security"
+        }
+        else if InnovationVC.pageSelect == "Markting" {
+            self.navigationItem.title = "Digital Markting"
+
+        }
+        else {
+            self.navigationItem.title = "Innovation Day"
+            
+        }
         innovationTableView.isHidden = true
         activeLoader.startAnimating()
         reloadBtnShow.isHidden = true
@@ -46,6 +58,7 @@ class InnovationVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
         noDataErrorContainer.isHidden = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
+        addRefreshControl()
         loadInnovationData()
         
     }
@@ -66,7 +79,23 @@ class InnovationVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
         activeLoader.stopAnimating()
         //reload
     }
+    func addRefreshControl() {
+        refreshControl = UIRefreshControl()
+      //  refreshControl?.tintColor = UIColor.red
+        refreshControl?.addTarget(self, action: #selector(refreshList), for: .valueChanged)
+        innovationTableView.addSubview(refreshControl!)
+    }
     
+    @objc func refreshList (){
+      //  list
+        
+        innovationSessionList.removeAll()
+         innovationHeadList.removeAll()
+         innovationSpeakerIDImgList.removeAll()
+         innovationHeadCount.removeAll()
+        loadInnovationData()
+        refreshControl?.endRefreshing()
+    }
     @IBAction func reloadDataConnection(_ sender: Any) {
         innovationTableView.isHidden = true
         activeLoader.isHidden = true
@@ -322,7 +351,10 @@ class InnovationVC: BaseViewController , UITableViewDelegate , UITableViewDataSo
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // el pic w el view byt8iro
         let cell = tableView.dequeueReusableCell(withIdentifier: "innovationcell", for: indexPath) as! InnovationCell
-        
+        cell.speakerOneImage.image = nil
+        cell.speakerTwoImage.image = nil
+        cell.cellColor.backgroundColor = nil
+
         for i in 0..<innovationHeadList.count {
             if indexPath.section == i {
                 let filt = innovationSessionList.filter { (($0.agendaDate?.contains(innovationHeadList[i].headDate as! String))!) } //{ ($0.agendaDate?.contains(agendaAllDate[i]))! }

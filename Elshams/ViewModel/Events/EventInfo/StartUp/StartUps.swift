@@ -78,6 +78,8 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
             while iDNotNull {
                 let startUp_ID = result[index]["id"].string
                 let startUp_Name = result[index]["startupName"].string
+                let startUp_RankNo = result[index]["rankNo"].string
+
                 let startUp_Appoimentstatus = result[index]["appoimentstatus"].string
                 let startUp_AppoimentTime = result[index]["AppoimentTime"].string
                 let startUp_ImageUrl = result[index]["imageURl"].string
@@ -92,9 +94,9 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
                     iDNotNull = false
                     break
                 }
-                self.startUpListPaging.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                self.startUpListPaging.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect, StartupOrder: startUp_RankNo ?? ""))
                 if index <= 10 {
-                   self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                    self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect, StartupOrder: startUp_RankNo ?? ""))
                 }
                 index = index + 1
                 
@@ -129,6 +131,8 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
                 while iDNotNull {
                     let startUp_ID = result[index]["id"].string
                     let startUp_Name = result[index]["startupName"].string
+                    let startUp_RankNo = result[index]["rankNo"].string
+
                     let startUp_Appoimentstatus = result[index]["appoimentstatus"].string
                     let startUp_AppoimentTime = result[index]["AppoimentTime"].string
                     let startUp_ImageUrl = result[index]["imageURl"].string
@@ -145,9 +149,9 @@ class StartUps: BaseViewController , UITableViewDelegate , UITableViewDataSource
                         iDNotNull = false
                         break
                     }
-                    self.startUpListPaging.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                    self.startUpListPaging.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect, StartupOrder: startUp_RankNo ?? ""))
                     if index <= 10 {
-                        self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                        self.startUpList.append(StartUpsData(StartupName: startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: startUp_ImageUrl ?? "", StartUpAbout: startUp_About ?? "", AppoimentStatus: startUp_Appoimentstatus ?? "", AppoimentTime: startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect, StartupOrder: startUp_RankNo ?? ""))
                     }
                     index = index + 1
                    

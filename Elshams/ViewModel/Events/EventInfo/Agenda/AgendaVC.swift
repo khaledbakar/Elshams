@@ -23,6 +23,7 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
     var agendaSessionList = Array<ProgramAgendaItems>()
     var agendaHeadList = Array<AgendaHeadData>()
     var agendaHeadCount = Array<AgenaHeadCountIndex>()
+    var refreshControl : UIRefreshControl?
 
     var agendaSpeakerIDImgList = Array<AgendaSpeakerIdPic>()
     var AgendaHeadCounter :Int?
@@ -47,6 +48,8 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
     noDataErrorContainer.isHidden = true
 
       NotificationCenter.default.addObserver(self, selector: #selector(errorAlert), name: NSNotification.Name("ErrorConnections"), object: nil)
+    addRefreshControl()
+
     loadTableData()
  /*   if TimeLineHomeVC.failMessage ==  "fail"
     {
@@ -63,7 +66,23 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
     override func viewWillAppear(_ animated: Bool) {
         UIApplication.shared.isStatusBarHidden = false
     }
+    func addRefreshControl() {
+        refreshControl = UIRefreshControl()
+        //  refreshControl?.tintColor = UIColor.red
+        refreshControl?.addTarget(self, action: #selector(refreshList), for: .valueChanged)
+        tableViewAgenda.addSubview(refreshControl!)
+    }
     
+    @objc func refreshList (){
+        //  list
+        
+        agendaSessionList.removeAll()
+        agendaHeadList.removeAll()
+        agendaSpeakerIDImgList.removeAll()
+        agendaHeadCount.removeAll()
+        loadTableData()
+        refreshControl?.endRefreshing()
+    }
     @objc func errorAlert(){
         
         let alert = UIAlertController(title: "Error!", message: Service.errorConnection, preferredStyle: UIAlertControllerStyle.alert)
@@ -314,11 +333,17 @@ class AgendaVC: BaseViewController , UITableViewDataSource , UITableViewDelegate
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "agendacell", for: indexPath) as! AgendaCell
- 
+        var cell = tableView.dequeueReusableCell(withIdentifier: "agendacell", for: indexPath) as! AgendaCell
+   /*    if cell == nil {
+            cell = UITableViewCell(style: .default, reuseIdentifier: "agendacell") as! AgendaCell 
+        } */
+        cell.speakerOneImage.image = nil
+        cell.speakerTwoImage.image = nil
+        cell.cellColor.backgroundColor = nil
         for i in 0..<agendaHeadList.count {
             if indexPath.section == i {
                let filt = agendaSessionList.filter { (($0.agendaDate?.contains(agendaHeadList[i].headDate as! String))!) } //{ ($0.agendaDate?.contains(agendaAllDate[i]))! }
+              
                 cell.setAgendaCell(AgendaProgram: filt[indexPath.row], IndexPath: indexPath.row)
                 break
             }

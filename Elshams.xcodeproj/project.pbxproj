@@ -81,6 +81,9 @@
 		047970DA21CFF46400C5BAFD /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047970D921CFF46400C5BAFD /* UIColor.swift */; };
 		04802E6C2226181D00E252B4 /* SponserTimeLineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04802E6B2226181D00E252B4 /* SponserTimeLineCell.swift */; };
 		04802E6E22261D7100E252B4 /* SpeakerTimeLineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04802E6D22261D7100E252B4 /* SpeakerTimeLineCell.swift */; };
+		04802E712226F30300E252B4 /* ExhibitorsQuestionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04802E702226F30300E252B4 /* ExhibitorsQuestionVC.swift */; };
+		04802E732226F32B00E252B4 /* ExhibitorsQuestionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04802E722226F32B00E252B4 /* ExhibitorsQuestionCell.swift */; };
+		04802E752226F37300E252B4 /* StartupExhibitorsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04802E742226F37300E252B4 /* StartupExhibitorsData.swift */; };
 		048128182214A39500DDEE05 /* CommentsNewsFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 048128172214A39500DDEE05 /* CommentsNewsFeed.swift */; };
 		0492F99B2222D07F0014A492 /* AgenaHeadCountIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0492F99A2222D07F0014A492 /* AgenaHeadCountIndex.swift */; };
 		049BF7BC21CBBFF70086F569 /* SponserCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049BF7BB21CBBFF70086F569 /* SponserCollectionViewCell.swift */; };
@@ -185,6 +188,9 @@
 		047970D921CFF46400C5BAFD /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		04802E6B2226181D00E252B4 /* SponserTimeLineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponserTimeLineCell.swift; sourceTree = "<group>"; };
 		04802E6D22261D7100E252B4 /* SpeakerTimeLineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeakerTimeLineCell.swift; sourceTree = "<group>"; };
+		04802E702226F30300E252B4 /* ExhibitorsQuestionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExhibitorsQuestionVC.swift; sourceTree = "<group>"; };
+		04802E722226F32B00E252B4 /* ExhibitorsQuestionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExhibitorsQuestionCell.swift; sourceTree = "<group>"; };
+		04802E742226F37300E252B4 /* StartupExhibitorsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartupExhibitorsData.swift; sourceTree = "<group>"; };
 		048128172214A39500DDEE05 /* CommentsNewsFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsNewsFeed.swift; sourceTree = "<group>"; };
 		0492F99A2222D07F0014A492 /* AgenaHeadCountIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgenaHeadCountIndex.swift; sourceTree = "<group>"; };
 		049BF7BB21CBBFF70086F569 /* SponserCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SponserCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -371,6 +377,7 @@
 				04AD60E4221239CB00648C7E /* SpeakerSessions.swift */,
 				04AD60E82212446000648C7E /* QuestionsVote.swift */,
 				04AD60EA221244E200648C7E /* MultiAnswers.swift */,
+				04802E742226F37300E252B4 /* StartupExhibitorsData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -387,6 +394,7 @@
 		0466C05D21B5793D00C9C555 /* EventInfo */ = {
 			isa = PBXGroup;
 			children = (
+				04802E6F2226F07400E252B4 /* ExahibitorQuestion */,
 				04802E682225949D00E252B4 /* DigitalMarkting */,
 				04802E672225948D00E252B4 /* CyberSecurity */,
 				04E288682217BE970050557C /* Innovation */,
@@ -522,6 +530,15 @@
 			children = (
 			);
 			path = DigitalMarkting;
+			sourceTree = "<group>";
+		};
+		04802E6F2226F07400E252B4 /* ExahibitorQuestion */ = {
+			isa = PBXGroup;
+			children = (
+				04802E702226F30300E252B4 /* ExhibitorsQuestionVC.swift */,
+				04802E722226F32B00E252B4 /* ExhibitorsQuestionCell.swift */,
+			);
+			path = ExahibitorQuestion;
 			sourceTree = "<group>";
 		};
 		04B8729721AC320E00C6629E /* ViewModel */ = {
@@ -759,6 +776,7 @@
 				04AD60E5221239CB00648C7E /* SpeakerSessions.swift in Sources */,
 				04B2C5A82200C1B70039D6AD /* AvailableAppointment.swift in Sources */,
 				045EF19121B93C24009DCA7A /* AcceptedCell.swift in Sources */,
+				04802E752226F37300E252B4 /* StartupExhibitorsData.swift in Sources */,
 				044C648321FF342600434BB1 /* Config.swift in Sources */,
 				0439DAC721C111510041CDCB /* AllNewsCell.swift in Sources */,
 				04E2886A2217BEBA0050557C /* InnovationCell.swift in Sources */,
@@ -788,10 +806,12 @@
 				0466C07E21B691A500C9C555 /* NotificationCell.swift in Sources */,
 				04E994F621EB438E006070B3 /* Service.swift in Sources */,
 				048128182214A39500DDEE05 /* CommentsNewsFeed.swift in Sources */,
+				04802E712226F30300E252B4 /* ExhibitorsQuestionVC.swift in Sources */,
 				0469B49821AC1674000A337B /* Elshams.xcdatamodeld in Sources */,
 				0466C06D21B58B5D00C9C555 /* SpeakersCell.swift in Sources */,
 				04E994F821EB89D2006070B3 /* MdcText.swift in Sources */,
 				04E994FA21ECB7B0006070B3 /* AgendaSectionDate.swift in Sources */,
+				04802E732226F32B00E252B4 /* ExhibitorsQuestionCell.swift in Sources */,
 				0466C08521B6A90800C9C555 /* SigninVC.swift in Sources */,
 				0469B49021AC1674000A337B /* AppDelegate.swift in Sources */,
 				045EF18621B8590D009DCA7A /* StartUpsData.swift in Sources */,
@@ -888,7 +908,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -943,7 +963,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

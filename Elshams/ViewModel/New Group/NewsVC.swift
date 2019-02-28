@@ -106,7 +106,7 @@ class NewsVC: BaseViewController , UIScrollViewDelegate ,  UITableViewDelegate ,
     }
     
     func loadNewsData()  {
-        Service.getService(url: "\(URLs.getNews)/50/1"){ //because no pagging refernce fixed number of news
+        Service.getService(url: "\(URLs.getNews)/99/1"){ //because no pagging refernce fixed number of news
             (response) in
            print(response)
             let result = JSON(response)

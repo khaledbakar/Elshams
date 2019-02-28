@@ -278,6 +278,8 @@ class StartupDetailsVC: UIViewController ,UITextViewDelegate{
                 // get startUp
                 let startUp_ID = result["id"].string
                 self.startUp_Name = result["startupName"].string
+                let startUp_RankNo = result["rankNo"].string
+
                 self.startUp_About = result["about"].string
                 self.startUp_ImageURl = result["imageURl"].string
                 self.startUp_Appoimentstatus = result["appoimentstatus"].string
@@ -291,7 +293,7 @@ class StartupDetailsVC: UIViewController ,UITextViewDelegate{
                                "linkedin": "",
                                "phone": ""]
                 
-                self.startUpList.append(StartUpsData(StartupName: self.startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: self.startUp_ImageURl ?? "" , StartUpAbout: self.startUp_About ?? "", AppoimentStatus: self.startUp_Appoimentstatus ?? "" , AppoimentTime: self.startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                self.startUpList.append(StartUpsData(StartupName: self.startUp_Name ?? "", StartupID: startUp_ID ?? "", StartupImageURL: self.startUp_ImageURl ?? "" , StartUpAbout: self.startUp_About ?? "", AppoimentStatus: self.startUp_Appoimentstatus ?? "" , AppoimentTime: self.startUp_AppoimentTime ?? "", ContectInforamtion: startUp_ContectInforamtion ?? contect, StartupOrder: startUp_RankNo ?? ""))
                 
                 self.startUpName.text = self.startUp_Name
                 self.startUpMail.text = self.startUp_Email
@@ -323,6 +325,8 @@ class StartupDetailsVC: UIViewController ,UITextViewDelegate{
                 // get startUp
                 let startUp_ID = result["id"].string
                 self.startUp_Name = result["startupName"].string
+                let startUp_RankNo = result["rankNo"].string
+
                 self.startUp_About = result["about"].string
                 self.startUp_ImageURl = result["imageURl"].string
                 self.startUp_Appoimentstatus = result["appoimentstatus"].string
@@ -336,7 +340,7 @@ class StartupDetailsVC: UIViewController ,UITextViewDelegate{
                                "linkedin": "",
                                "phone": ""]
                 
-                self.startUpList.append(StartUpsData(StartupName: self.startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: self.startUp_ImageURl ?? "Image" , StartUpAbout: self.startUp_About ?? "About", AppoimentStatus: self.startUp_Appoimentstatus ?? "appoimentstatus" , AppoimentTime: self.startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect))
+                self.startUpList.append(StartUpsData(StartupName: self.startUp_Name ?? "name", StartupID: startUp_ID ?? "ID", StartupImageURL: self.startUp_ImageURl ?? "Image" , StartUpAbout: self.startUp_About ?? "About", AppoimentStatus: self.startUp_Appoimentstatus ?? "appoimentstatus" , AppoimentTime: self.startUp_AppoimentTime ?? "AppoimentTime", ContectInforamtion: startUp_ContectInforamtion ?? contect, StartupOrder: startUp_RankNo ?? ""))
                 
                 self.startUpName.text = self.startUp_Name
                 self.startUpMail.text = self.startUp_Email
@@ -354,12 +358,9 @@ class StartupDetailsVC: UIViewController ,UITextViewDelegate{
             }
         }
     }
-    
-    
    
     
     //MARK:- RadioButtonsSelection
-
     @objc func labelChoiseFunc(sender:UIGestureRecognizer) {//UIGestureRecognizer
         //  guard let TagRe = (sender.view as? UILabel)?.text else { return }
         guard let tag = (sender.view as? UILabel)?.tag else { return }
@@ -427,7 +428,6 @@ class StartupDetailsVC: UIViewController ,UITextViewDelegate{
             } else {
                 let questionCheckParam : Parameters =
                     ["StartUPID": "\((self.singleItem?.startup_id)!)",
-                        
                         "QuestionDescription": "\((questionTextSend)!)"]
                 OpenSessionVC.likeFlag = "faveMethod"
                 
